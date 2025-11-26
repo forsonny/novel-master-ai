@@ -2,7 +2,7 @@
 
 /**
  * dev.js
- * Task Master CLI - AI-driven development task management
+ * Novel Master CLI - AI-driven development task management
  *
  * This is the refactored entry point that uses the modular architecture.
  * It imports functionality from the modules directory and provides a CLI.
@@ -24,7 +24,7 @@ const projectRoot = findProjectRoot();
 dotenv.config({ path: join(projectRoot, '.env') });
 
 // Make original cwd available to commands that need it
-process.env.TASKMASTER_ORIGINAL_CWD = originalCwd;
+process.env.NOVELMASTER_ORIGINAL_CWD = originalCwd;
 
 // Add at the very beginning of the file
 if (process.env.DEBUG === '1') {

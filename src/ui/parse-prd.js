@@ -1,6 +1,6 @@
 /**
  * parse-prd.js
- * UI functions specifically for PRD parsing operations
+ * UI functions specifically for NRD (Novel Requirements Document) parsing operations
  */
 
 import chalk from 'chalk';
@@ -59,7 +59,7 @@ const BOX_STYLES = {
 /**
  * Helper function for building main message content
  * @param {Object} params - Message parameters
- * @param {string} params.prdFilePath - Path to the PRD file
+ * @param {string} params.prdFilePath - Path to the NRD (Novel Requirements Document) file
  * @param {string} params.outputPath - Path where tasks will be saved
  * @param {number} params.numTasks - Number of tasks to generate
  * @param {string} params.model - AI model name
@@ -85,7 +85,7 @@ function buildMainMessage({
 	}
 
 	return (
-		chalk.bold(`🤖 Parsing PRD and ${actionVerb} Tasks`) +
+		chalk.bold(`🤖 Parsing NRD and ${actionVerb} Story Arcs`) +
 		'\n' +
 		chalk.dim(modelLine) +
 		'\n\n' +
@@ -130,9 +130,9 @@ function createForceMessage(append) {
 }
 
 /**
- * Display the start of PRD parsing with a boxen announcement
- * @param {Object} options - Options for PRD parsing start
- * @param {string} options.prdFilePath - Path to the PRD file being parsed
+ * Display the start of NRD parsing with a boxen announcement
+ * @param {Object} options - Options for NRD parsing start
+ * @param {string} options.prdFilePath - Path to the NRD (Novel Requirements Document) file being parsed
  * @param {string} options.outputPath - Path where the tasks will be saved
  * @param {number} options.numTasks - Number of tasks to generate
  * @param {string} [options.model] - AI model name
@@ -333,10 +333,10 @@ function buildPriorityRow(priorityStats) {
 }
 
 /**
- * Display a summary of the PRD parsing results
+ * Display a summary of the NRD parsing results
  * @param {Object} summary - Summary of the parsing results
- * @param {number} summary.totalTasks - Total number of tasks generated
- * @param {string} summary.prdFilePath - Path to the PRD file
+ * @param {number} summary.totalTasks - Total number of story arcs/chapters generated
+ * @param {string} summary.prdFilePath - Path to the NRD (Novel Requirements Document) file
  * @param {string} summary.outputPath - Path where the tasks were saved
  * @param {number} summary.elapsedTime - Total elapsed time in seconds
  * @param {Object} summary.taskPriorities - Breakdown of tasks by category/priority
@@ -401,7 +401,7 @@ function displayParsePrdSummary(summary) {
 
 	// Add file paths
 	table.push(
-		[chalk.cyan('PRD source:'), chalk.italic(prdFilePath)],
+		[chalk.cyan('NRD source:'), chalk.italic(prdFilePath)],
 		[chalk.cyan('Tasks file:'), chalk.italic(outputPath)]
 	);
 
@@ -416,7 +416,7 @@ function displayParsePrdSummary(summary) {
 	// Final string output with title and footer
 	const output = [
 		chalk.bold.underline(
-			`PRD Parsing Complete - Tasks ${actionVerb.charAt(0).toUpperCase() + actionVerb.slice(1)}`
+			`NRD Parsing Complete - Story Arcs ${actionVerb.charAt(0).toUpperCase() + actionVerb.slice(1)}`
 		),
 		'',
 		table.toString()
@@ -467,9 +467,9 @@ function displayNextSteps() {
 	const stepsContent =
 		chalk.white.bold('Next Steps:') +
 		'\n\n' +
-		`${chalk.cyan('1.')} Run ${chalk.yellow('task-master list')} to view all tasks\n` +
-		`${chalk.cyan('2.')} Run ${chalk.yellow('task-master expand --id=<id>')} to break down a task into subtasks\n` +
-		`${chalk.cyan('3.')} Run ${chalk.yellow('task-master analyze-complexity')} to analyze task complexity`;
+		`${chalk.cyan('1.')} Run ${chalk.yellow('novel-master list')} to view all tasks\n` +
+		`${chalk.cyan('2.')} Run ${chalk.yellow('novel-master expand --id=<id>')} to break down a task into subtasks\n` +
+		`${chalk.cyan('3.')} Run ${chalk.yellow('novel-master analyze-complexity')} to analyze task complexity`;
 
 	console.log(boxen(stepsContent, BOX_STYLES.nextSteps));
 }

@@ -1,0 +1,277 @@
+---
+description: Guide for using AI services effectively in novel writing workflows
+globs: **/*
+alwaysApply: true
+---
+
+# Novel Master AI Services Guide
+
+This guide outlines how to effectively use AI services (LLMs) with Novel Master for novel writing tasks.
+
+## AI Service Roles
+
+### Main Model (Primary Writing Assistant)
+
+**Purpose**: Primary model for chapter/scene generation, task expansion, and narrative updates.
+
+**When to Use**:
+- Parsing NRDs into story arcs
+- Expanding chapters into scenes
+- Updating narrative tasks
+- Generating prose drafts
+- Character development
+
+**Recommended Models**:
+- Claude Sonnet 4 (default): Excellent for narrative structure and character development
+- GPT-4: Strong for dialogue and prose generation
+- Claude Opus: Best for complex narrative analysis
+
+**Configuration**:
+```json
+{
+  "models": {
+    "main": {
+      "provider": "anthropic",
+      "modelId": "claude-sonnet-4-20250514",
+      "maxTokens": 64000,
+      "temperature": 0.2
+    }
+  }
+}
+```
+
+### Research Model (Worldbuilding & Genre Research)
+
+**Purpose**: Research-backed operations for genre conventions, worldbuilding, and narrative techniques.
+
+**When to Use**:
+- Genre research (`--research` flag)
+- Worldbuilding queries
+- Writing technique research
+- Publishing trend analysis
+
+**Recommended Models**:
+- Perplexity Sonar (default): Excellent for real-time research
+- Claude with web search: Good for comprehensive research
+
+**Configuration**:
+```json
+{
+  "models": {
+    "research": {
+      "provider": "perplexity",
+      "modelId": "sonar",
+      "maxTokens": 8700,
+      "temperature": 0.1
+    }
+  }
+}
+```
+
+### Fallback Model (Backup)
+
+**Purpose**: Used when primary model fails or is unavailable.
+
+**When to Use**:
+- Automatic fallback on primary model failure
+- High-volume operations where cost matters
+- Extended context needs
+
+**Recommended Models**:
+- Claude 3.7 Sonnet: Good balance of capability and cost
+- GPT-4 Turbo: Reliable fallback option
+
+## Using Research Mode
+
+### When to Enable Research
+
+Enable research mode (`--research` flag) for:
+
+1. **Genre-Specific Work**: When writing genre fiction (fantasy, thriller, etc.)
+2. **Worldbuilding**: When developing complex worlds or settings
+3. **Historical Fiction**: When accuracy matters
+4. **Technical Details**: When story requires accurate technical information
+
+### Research-Enabled Commands
+
+```bash
+# Parse NRD with research
+novel-master parse-prd nrd.txt --research
+
+# Expand chapter with research
+novel-master expand --id=1 --research
+
+# Update task with research
+novel-master update-task --id=3 --research --prompt="..."
+```
+
+### What Research Provides
+
+- **Genre Conventions**: Expected pacing, structure, tropes
+- **Worldbuilding Insights**: Real-world analogs, cultural details
+- **Writing Techniques**: Proven methods for specific narrative challenges
+- **Publishing Trends**: Current market expectations
+- **Thematic Touchstones**: Similar works, thematic comparisons
+
+## Temperature Settings
+
+### Low Temperature (0.1-0.3)
+
+**Use for**:
+- Structural planning (parse-prd, expand-task)
+- Continuity checks
+- Factual research
+- Revision planning
+
+**Characteristics**:
+- More consistent output
+- Better adherence to instructions
+- Less creative variation
+
+### Medium Temperature (0.4-0.7)
+
+**Use for**:
+- Prose generation
+- Character development
+- Scene writing
+- Dialogue creation
+
+**Characteristics**:
+- Balanced creativity and consistency
+- Natural prose flow
+- Appropriate variation
+
+### High Temperature (0.8-1.0)
+
+**Use for**:
+- Creative brainstorming
+- Experimental prose
+- Unique voice development
+- Stylistic exploration
+
+**Characteristics**:
+- More creative output
+- Greater variation
+- Less predictable
+
+## Token Limits
+
+### Context Window Management
+
+**Short Context (4K-8K tokens)**:
+- Simple task updates
+- Single scene expansion
+- Quick research queries
+
+**Medium Context (16K-32K tokens)**:
+- Chapter expansion
+- Multi-scene updates
+- Complex research
+
+**Long Context (64K+ tokens)**:
+- Full NRD parsing
+- Complete manuscript analysis
+- Comprehensive research
+
+### Best Practices
+
+1. **Be specific**: Provide clear, focused prompts
+2. **Use context efficiently**: Include only relevant information
+3. **Break down large tasks**: Don't exceed context limits
+4. **Leverage manuscript context**: Use `hasManuscriptContext` flag
+
+## Cost Management
+
+### Cost-Effective Strategies
+
+1. **Use research model selectively**: Only when research adds value
+2. **Batch operations**: Group similar tasks together
+3. **Cache results**: Save research findings for reuse
+4. **Use fallback model**: For non-critical operations
+
+### Model Cost Comparison
+
+- **Claude Sonnet 4**: Higher cost, best quality
+- **GPT-4**: Moderate cost, good quality
+- **Claude 3.7 Sonnet**: Lower cost, good quality
+- **Perplexity Sonar**: Low cost, research-focused
+
+## Prompt Engineering for Novels
+
+### Effective Prompt Structure
+
+1. **Context**: Provide relevant story context
+2. **Task**: Clearly state what you want
+3. **Constraints**: Specify narrative requirements
+4. **Examples**: Include examples when helpful
+5. **Output Format**: Specify desired output structure
+
+### Narrative-Specific Prompts
+
+**Good Prompt**:
+```
+Update Chapter 3 to include a confrontation scene between the protagonist and antagonist. 
+The scene should:
+- Maintain first-person POV from protagonist
+- Increase tension from 5 to 8
+- Include sensory details (sight, sound, touch)
+- Advance the character arc (protagonist learns to trust)
+- Target 2,000 words
+```
+
+**Poor Prompt**:
+```
+Update chapter 3
+```
+
+## Error Handling
+
+### Common Issues
+
+1. **API Key Missing**: Ensure API keys are configured
+2. **Rate Limits**: Implement retry logic for rate-limited requests
+3. **Context Overflow**: Break down large tasks
+4. **Invalid Output**: Use schema validation
+
+### Recovery Strategies
+
+- **Automatic Retry**: Novel Master retries failed requests
+- **Fallback Model**: Switches to fallback on failure
+- **Partial Results**: Saves progress on partial failures
+- **Error Logging**: Logs errors for debugging
+
+## Best Practices
+
+1. **Start with defaults**: Use recommended model configurations
+2. **Enable research selectively**: Only when it adds value
+3. **Monitor costs**: Track token usage and costs
+4. **Iterate on prompts**: Refine prompts based on results
+5. **Use manuscript context**: Leverage existing manuscript files
+6. **Save research**: Document research findings for reuse
+7. **Validate output**: Always review AI-generated content
+
+## Integration with Novel Master Workflow
+
+### Typical Workflow
+
+1. **Parse NRD**: Use main model with research if needed
+2. **Expand Chapters**: Use main model, medium temperature
+3. **Generate Prose**: Use main model, higher temperature
+4. **Research**: Use research model for worldbuilding queries
+5. **Revise**: Use main model, lower temperature for consistency
+
+### Command Examples
+
+```bash
+# Parse with research
+novel-master parse-prd nrd.txt --research
+
+# Expand without research (faster, cheaper)
+novel-master expand --id=1
+
+# Update with research for genre accuracy
+novel-master update-task --id=3 --research --prompt="..."
+
+# Research specific topic
+novel-master research --prompt="Medieval castle architecture"
+```

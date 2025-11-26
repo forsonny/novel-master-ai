@@ -1,327 +1,163 @@
 ---
-description: Guidelines for implementing task management operations
+description: Story arc, chapter, and scene task patterns for Novel Master
 globs: scripts/modules/task-manager.js
 alwaysApply: false
 ---
-# Task Management Guidelines
 
-## Tagged Task Lists System
+# Story Task Structure Guidelines
 
-Task Master now uses a **tagged task lists system** for multi-context task management:
+This rule defines how **tasks** and **subtasks** should be used to represent **story structure** in Novel Master.
+Treat tasks as the **spine of the novel** (acts, arcs, chapters, scenes, beats, revisions), not as code tickets.
 
-- **Data Structure**: Tasks are organized into separate contexts (tags) within `tasks.json`
-- **Legacy Format**: `{"tasks": [...]}`
-- **Tagged Format**: `{"master": {"tasks": [...]}, "feature-branch": {"tasks": [...]}}`
-- **Silent Migration**: Legacy format automatically converts to tagged format on first use
-- **Tag Resolution**: Core functions receive legacy format for 100% backward compatibility
-- **Default Tag**: "master" is used for all existing and new tasks unless otherwise specified
+---
 
-## Task Structure Standards
+## Narrative Task Hierarchy
 
-- **Core Task Properties**:
-  - ✅ DO: Include all required properties in each task object
-  - ✅ DO: Provide default values for optional properties
-  - ❌ DON'T: Add extra properties that aren't in the standard schema
+- **Top-level tasks**:
+  - Represent **acts**, major **story arcs**, or occasionally **chapters**.
+  - Examples:
+    - `Act I – Arrival at the Glass Orbit`
+    - `Lena's Redemption Arc`
+    - `Chapter 7 – The Bazaar Riot`
+- **Subtasks**:
+  - Represent **scenes** or **beats** within those arcs/chapters.
+  - Can also represent **revision passes** on a specific chapter or sequence.
 
-  ```javascript
-  // ✅ DO: Follow this structure for task objects
-  const task = {
-    id: nextId,
-    title: "Task title",
-    description: "Brief task description",
-    status: "pending", // "pending", "in-progress", "done", etc.
-    dependencies: [], // Array of task IDs
-    priority: "medium", // "high", "medium", "low"
-    details: "Detailed implementation instructions",
-    testStrategy: "Verification approach",
-    subtasks: [] // Array of subtask objects
-  };
-  ```
+You can mix both approaches in a single project:
 
-- **Tagged Data Structure**:
-  - ✅ DO: Access tasks through tag resolution layer
-  - ✅ DO: Use `getTasksForTag(data, tagName)` to retrieve tasks for a specific tag
-  - ✅ DO: Use `setTasksForTag(data, tagName, tasks)` to update tasks for a specific tag
-  - ❌ DON'T: Directly manipulate the tagged structure in core functions
+- Some top-level tasks are arcs with scene subtasks.
+- Others are direct chapter tasks with scene or revision subtasks.
 
-  ```javascript
-  // ✅ DO: Use tag resolution functions
-  const tasksData = readJSON(tasksPath);
-  const currentTag = getCurrentTag() || 'master';
-  const tasks = getTasksForTag(tasksData, currentTag);
-  
-  // Manipulate tasks as normal...
-  
-  // Save back to the tagged structure
-  setTasksForTag(tasksData, currentTag, tasks);
-  writeJSON(tasksPath, tasksData);
-  ```
+---
 
-- **Subtask Structure**:
-  - ✅ DO: Use consistent properties across subtasks
-  - ✅ DO: Maintain simple numeric IDs within parent tasks
-  - ❌ DON'T: Duplicate parent task properties in subtasks
+## Standard Task Fields (Narrative)
 
-  ```javascript
-  // ✅ DO: Structure subtasks consistently
-  const subtask = {
-    id: nextSubtaskId, // Simple numeric ID, unique within the parent task
-    title: "Subtask title",
-    description: "Brief subtask description",
-    status: "pending",
-    dependencies: [], // Can include numeric IDs (other subtasks) or full task IDs
-    details: "Detailed implementation instructions"
-  };
-  ```
+Every task in `tasks.json` should follow this conceptual shape:
 
-## Task Creation and Parsing
-
-- **ID Management**:
-  - ✅ DO: Assign unique sequential IDs to tasks within each tag context
-  - ✅ DO: Calculate the next ID based on existing tasks in the current tag
-  - ❌ DON'T: Hardcode or reuse IDs within the same tag
-
-  ```javascript
-  // ✅ DO: Calculate the next available ID within the current tag
-  const tasksData = readJSON(tasksPath);
-  const currentTag = getCurrentTag() || 'master';
-  const tasks = getTasksForTag(tasksData, currentTag);
-  const highestId = Math.max(...tasks.map(t => t.id));
-  const nextTaskId = highestId + 1;
-  ```
-
-- **PRD Parsing**:
-  - ✅ DO: Extract tasks from PRD documents using AI
-  - ✅ DO: Create tasks in the current tag context (defaults to "master")
-  - ✅ DO: Provide clear prompts to guide AI task generation
-  - ✅ DO: Validate and clean up AI-generated tasks
-
-  ```javascript
-  // ✅ DO: Parse into current tag context
-  const tasksData = readJSON(tasksPath) || {};
-  const currentTag = getCurrentTag() || 'master';
-  
-  // Parse tasks and add to current tag
-  const newTasks = await parseTasksFromPRD(prdContent);
-  setTasksForTag(tasksData, currentTag, newTasks);
-  writeJSON(tasksPath, tasksData);
-  ```
-
-## Task Updates and Modifications
-
-- **Status Management**:
-  - ✅ DO: Provide functions for updating task status within current tag context
-  - ✅ DO: Handle both individual tasks and subtasks
-  - ✅ DO: Consider subtask status when updating parent tasks
-
-  ```javascript
-  // ✅ DO: Handle status updates within tagged context
-  async function setTaskStatus(tasksPath, taskIdInput, newStatus) {
-    const tasksData = readJSON(tasksPath);
-    const currentTag = getCurrentTag() || 'master';
-    const tasks = getTasksForTag(tasksData, currentTag);
-    
-    // Check if it's a subtask (e.g., "1.2")
-    if (taskIdInput.includes('.')) {
-      const [parentId, subtaskId] = taskIdInput.split('.').map(id => parseInt(id, 10));
-      
-      // Find the parent task and subtask
-      const parentTask = tasks.find(t => t.id === parentId);
-      const subtask = parentTask.subtasks.find(st => st.id === subtaskId);
-      
-      // Update subtask status
-      subtask.status = newStatus;
-      
-      // Check if all subtasks are done
-      if (newStatus === 'done') {
-        const allSubtasksDone = parentTask.subtasks.every(st => st.status === 'done');
-        if (allSubtasksDone) {
-          // Suggest updating parent task
-        }
-      }
-    } else {
-      // Handle regular task
-      const task = tasks.find(t => t.id === parseInt(taskIdInput, 10));
-      task.status = newStatus;
-      
-      // If marking as done, also mark subtasks
-      if (newStatus === 'done' && task.subtasks && task.subtasks.length > 0) {
-        task.subtasks.forEach(subtask => {
-          subtask.status = newStatus;
-        });
-      }
+```json
+{
+  "id": 7,
+  "title": "Chapter 7 – The Bazaar Riot",
+  "description": "Protagonist's first major public failure; stakes of rebellion escalate.",
+  "status": "pending",
+  "dependencies": [5, 6],
+  "priority": "high",
+  "details": "POV: Mina.\nSetting: Glass Orbit bazaar at dusk.\nGoal: Secure counterfeit passes.\nOpposition: Station security & hidden saboteur.\nEmotional target: fear → humiliation → grim resolve.\nForeshadow: hint at traitor in Lena's cell.\nResearch hooks: crowd control tactics, zero-g market layouts.",
+  "testStrategy": "Check continuity with chapter 6 (arrival) and chapter 8 (aftermath).\nVerify that Mina's arc shifts plausibly from naivety to hardened resolve.\nEnsure worldbuilding rules (gravity, security tech) are applied consistently.",
+  "subtasks": [
+    {
+      "id": 1,
+      "title": "Opening beat – Crowded market and rising tension",
+      "description": "Mina navigates the market; subtle signs of unrest.",
+      "status": "pending",
+      "dependencies": [],
+      "details": "Introduce sensory details and establish layout of the bazaar.",
+      "testStrategy": "Ensure the geography matches later chase beats; POV is tight third."
     }
-    
-    // Save updated tasks back to tagged structure
-    setTasksForTag(tasksData, currentTag, tasks);
-    writeJSON(tasksPath, tasksData);
-  }
-  ```
+  ]
+}
+```
 
-- **Task Expansion**:
-  - ✅ DO: Use AI to generate detailed subtasks within current tag context
-  - ✅ DO: Consider complexity analysis for subtask counts
-  - ✅ DO: Ensure proper IDs for newly created subtasks
+Key narrative uses:
 
-  ```javascript
-  // ✅ DO: Generate appropriate subtasks based on complexity
-  const tasksData = readJSON(tasksPath);
-  const currentTag = getCurrentTag() || 'master';
-  const tasks = getTasksForTag(tasksData, currentTag);
-  
-  if (taskAnalysis) {
-    log('info', `Found complexity analysis for task ${taskId}: Score ${taskAnalysis.complexityScore}/10`);
-    
-    // Use recommended number of subtasks if available
-    if (taskAnalysis.recommendedSubtasks && numSubtasks === CONFIG.defaultSubtasks) {
-      numSubtasks = taskAnalysis.recommendedSubtasks;
-      log('info', `Using recommended number of subtasks: ${numSubtasks}`);
-    }
-  }
-  
-  // Generate subtasks and save back
-  // ... subtask generation logic ...
-  setTasksForTag(tasksData, currentTag, tasks);
-  writeJSON(tasksPath, tasksData);
-  ```
+- `title` → clearly identifies act/chapter or scene name.
+- `description` → one-sentence story function.
+- `details` → rich narrative brief (POV, tone, setting, sensory prompts, research hooks).
+- `testStrategy` → how to \"test\" this story unit for consistency (continuity, character arc, pacing).
 
-## Task File Generation
+---
 
-- **File Formatting**:
-  - ✅ DO: Use consistent formatting for task files
-  - ✅ DO: Include all task properties in text files
-  - ✅ DO: Format dependencies with status indicators
+## ID & Tag Conventions
 
-  ```javascript
-  // ✅ DO: Use consistent file formatting
-  let content = `# Task ID: ${task.id}\n`;
-  content += `# Title: ${task.title}\n`;
-  content += `# Status: ${task.status || 'pending'}\n`;
-  
-  // Format dependencies with their status
-  if (task.dependencies && task.dependencies.length > 0) {
-    content += `# Dependencies: ${formatDependenciesWithStatus(task.dependencies, tasks)}\n`;
-  } else {
-    content += '# Dependencies: None\n';
-  }
-  ```
+- **IDs**:
+  - Still simple integers (`1`, `2`, `3`, …) for tasks.
+  - Subtasks use dotted notation when referred to externally (`7.1`, `7.2`), but store numeric `id` under the parent.
+- **Tags**:
+  - Use tags to separate **phases** and **focus passes**:
+    - `outline` – structural planning.
+    - `draft` – first-pass prose.
+    - `rev-1` – first global revision.
+    - `character-<name>` – character-specific passes.
+    - `timeline-<period>` – timeline/continuity passes.
+  - Internally, tasks live under `{"<tag>": { "tasks": [...] }}` in `tasks.json`.
 
-- **Tagged Context Awareness**:
-  - ✅ DO: Generate task files from current tag context
-  - ✅ DO: Include tag information in generated files
-  - ❌ DON'T: Mix tasks from different tags in file generation
+Core functions should always:
 
-  ```javascript
-  // ✅ DO: Generate files for current tag context
-  async function generateTaskFiles(tasksPath, outputDir) {
-    const tasksData = readJSON(tasksPath);
-    const currentTag = getCurrentTag() || 'master';
-    const tasks = getTasksForTag(tasksData, currentTag);
-    
-    // Add tag context to file header
-    let content = `# Tag Context: ${currentTag}\n`;
-    content += `# Task ID: ${task.id}\n`;
-    // ... rest of file generation
-  }
-  ```
+- Resolve the current tag (`getCurrentTag(projectRoot) || 'master'`).
+- Read/write through tag helpers (see `tags.mdc` for patterns).
 
-## Task Listing and Display
+---
 
-- **Filtering and Organization**:
-  - ✅ DO: Allow filtering tasks by status within current tag context
-  - ✅ DO: Handle subtask display in lists
-  - ✅ DO: Use consistent table formats
+## Task Creation from NRDs
 
-  ```javascript
-  // ✅ DO: Implement clear filtering within tag context
-  const tasksData = readJSON(tasksPath);
-  const currentTag = getCurrentTag() || 'master';
-  const tasks = getTasksForTag(tasksData, currentTag);
-  
-  // Filter tasks by status if specified
-  const filteredTasks = statusFilter 
-    ? tasks.filter(task => 
-        task.status && task.status.toLowerCase() === statusFilter.toLowerCase())
-    : tasks;
-  ```
+When parsing NRDs with `parse_prd`:
 
-- **Progress Tracking**:
-  - ✅ DO: Calculate and display completion statistics for current tag
-  - ✅ DO: Track both task and subtask completion
-  - ✅ DO: Use visual progress indicators
+- **Top-level tasks** usually map to:
+  - Acts (Three-Act, Four-Act, Hero’s Journey stages), or
+  - Major arcs (e.g., \"Rebellion arc\", \"Romance arc\").
+- **Subtasks**:
+  - Optional at this stage; often just the most important scenes called out in the NRD.
 
-  ```javascript
-  // ✅ DO: Track and display progress within tag context
-  const tasksData = readJSON(tasksPath);
-  const currentTag = getCurrentTag() || 'master';
-  const tasks = getTasksForTag(tasksData, currentTag);
-  
-  // Calculate completion statistics
-  const totalTasks = tasks.length;
-  const completedTasks = tasks.filter(task => 
-    task.status === 'done' || task.status === 'completed').length;
-  const completionPercentage = totalTasks > 0 ? (completedTasks / totalTasks) * 100 : 0;
-  
-  // Count subtasks
-  let totalSubtasks = 0;
-  let completedSubtasks = 0;
-  
-  tasks.forEach(task => {
-    if (task.subtasks && task.subtasks.length > 0) {
-      totalSubtasks += task.subtasks.length;
-      completedSubtasks += task.subtasks.filter(st => 
-        st.status === 'done' || st.status === 'completed').length;
-    }
-  });
-  ```
+Best practices:
 
-## Migration and Compatibility
+- Keep initial tasks **broad**; use `expand_task` later to add detailed beats.
+- Preserve NRD constraints explicitly in `details` and `dependencies`:
+  - \"This reveal must come after X\" → dependency.
+  - \"Must foreshadow Y\" → part of `details`/`testStrategy`.
 
-- **Silent Migration Handling**:
-  - ✅ DO: Implement silent migration in `readJSON()` function
-  - ✅ DO: Detect legacy format and convert automatically
-  - ✅ DO: Preserve all existing task data during migration
+---
 
-  ```javascript
-  // ✅ DO: Handle silent migration (implemented in utils.js)
-  function readJSON(filepath) {
-    let data = JSON.parse(fs.readFileSync(filepath, 'utf8'));
-    
-    // Silent migration for tasks.json files
-    if (data.tasks && Array.isArray(data.tasks) && !data.master && isTasksFile) {
-      const migratedData = {
-        master: {
-          tasks: data.tasks
-        }
-      };
-      writeJSON(filepath, migratedData);
-      data = migratedData;
-    }
-    
-    return data;
-  }
-  ```
+## Expansion into Scenes & Beats
 
-- **Tag Resolution**:
-  - ✅ DO: Use tag resolution functions to maintain backward compatibility
-  - ✅ DO: Return legacy format to core functions
-  - ❌ DON'T: Expose tagged structure to existing core logic
+`expand_task` and `expand_all` should:
 
-  ```javascript
-  // ✅ DO: Use tag resolution layer
-  function getTasksForTag(data, tagName) {
-    if (data.tasks && Array.isArray(data.tasks)) {
-      // Legacy format - return as-is
-      return data.tasks;
-    }
-    
-    if (data[tagName] && data[tagName].tasks) {
-      // Tagged format - return tasks for specified tag
-      return data[tagName].tasks;
-    }
-    
-    return [];
-  }
-  ```
+- Turn broad chapter/arc tasks into **ordered scene/beat subtasks**.
+- Add narrative-specific metadata:
+  - POV, setting, emotional state at start/end.
+  - Beat type (action, reaction, reveal, decision).
 
-Refer to [`task-manager.js`](mdc:scripts/modules/task-manager.js) for implementation examples and [`new_features.mdc`](mdc:.cursor/rules/new_features.mdc) for integration guidelines. 
+Example subtask after expansion:
+
+```json
+{
+  "id": 3,
+  "title": "Climax of bazaar riot – Mina chooses to save strangers",
+  "description": "Mina sacrifices her escape route to save trapped vendors.",
+  "status": "pending",
+  "dependencies": [1, 2],
+  "details": "POV: Mina.\nEmotion: terror → empathy → determination.\nBeat purpose: lock in new moral commitment; raise cost of rebellion.",
+  "testStrategy": "Verify choice feels earned based on prior scenes; ensure consequences ripple into next chapter."
+}
+```
+
+---
+
+## Revision Tasks
+
+For revision passes (`rev-1`, `rev-2`, etc.), treat tasks as **slices across the manuscript**:
+
+- A revision task might span many chapters:
+  - \"Tighten early exposition in chapters 1–3.\"
+  - \"Clarify magic system limitations wherever used.\"
+- Subtasks can then target specific scenes:
+  - \"Cut repeat explanation in chapter 2, scene 3.\"
+  - \"Adjust spell costs in chapter 5 duel.\"
+
+In these tasks:
+
+- `details` should describe **what to change and why**, not re-outline the plot from scratch.
+- `testStrategy` should specify how to confirm the change works (e.g., reread sequence, compare before/after stakes).
+
+---
+
+## Agent Responsibilities
+
+When you create or modify tasks:
+
+- Keep `title` and `description` **short and clear**; keep prose and nuance in `details`.
+- Always consider **character and thematic arcs**, not just plot events.
+- Use `testStrategy` to encode how to validate the story change, not automated code tests.
+- Align task structure with the user’s preferred outline model (three-act, Hero’s Journey, etc.), as seen in the NRD.
+
+See [`taskmaster.mdc`](mdc:.cursor/rules/taskmaster.mdc) for concrete MCP tool/command mappings, and [`dev_workflow.mdc`](mdc:.cursor/rules/dev_workflow.mdc) for how these tasks fit into the full novel loop.
+

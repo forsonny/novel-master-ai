@@ -1,0 +1,260 @@
+# Genre Best Practices for Novel Writing
+
+This reference guide outlines genre-specific conventions, expectations, and best practices to help Novel Master generate appropriate story structures and narrative elements.
+
+## Fantasy
+
+### Conventions
+- **World-building:** Extensive world-building with magic systems, mythical creatures, or alternate realities
+- **Pacing:** Slower opening to establish world, faster pacing in action sequences
+- **Word Count:** 80,000 - 120,000 words (adult), 60,000 - 90,000 (YA)
+- **Structure:** Often follows hero's journey or quest narrative
+
+### Key Elements
+- Magic system with clear rules and limitations
+- Mythical creatures or races with defined characteristics
+- Political systems or power structures
+- Prophecies or ancient lore
+- Good vs. evil conflicts (though modern fantasy often subverts this)
+
+### POV Considerations
+- Multiple POVs common in epic fantasy
+- Single POV more common in urban fantasy
+- Third person limited most common
+
+### Research Needs
+- Mythology and folklore
+- Historical periods (for secondary world inspiration)
+- Linguistics (for constructed languages)
+- Cultural anthropology
+
+## Science Fiction
+
+### Conventions
+- **World-building:** Technology, scientific concepts, future or alternate timelines
+- **Pacing:** Fast-paced, action-oriented, but with room for scientific explanation
+- **Word Count:** 80,000 - 120,000 words
+- **Structure:** Often follows problem-solving or discovery narrative
+
+### Key Elements
+- Scientific or technological concepts (hard SF) or speculative elements (soft SF)
+- Exploration of "what if" scenarios
+- Social commentary through futuristic lens
+- Technology as both solution and problem
+- Alien species or AI with defined characteristics
+
+### POV Considerations
+- Multiple POVs common in space operas
+- Single POV more common in near-future SF
+- Third person limited or omniscient
+
+### Research Needs
+- Current scientific research
+- Technology trends
+- Space exploration
+- AI and robotics
+- Climate science
+
+## Thriller
+
+### Conventions
+- **World-building:** Realistic contemporary or near-future settings
+- **Pacing:** Fast-paced, high tension, short chapters
+- **Word Count:** 70,000 - 100,000 words
+- **Structure:** Linear timeline with escalating tension
+
+### Key Elements
+- High stakes and immediate danger
+- Time pressure or ticking clock
+- Plot twists and reveals
+- Moral ambiguity
+- Action sequences balanced with investigation
+
+### POV Considerations
+- Multiple POVs common (protagonist, antagonist, victims)
+- First person or third person limited
+- Short, punchy chapters
+
+### Research Needs
+- Police procedures
+- Forensic science
+- Technology (hacking, surveillance)
+- Psychology (criminal behavior)
+- Current events
+
+## Literary Fiction
+
+### Conventions
+- **World-building:** Realistic, often contemporary settings
+- **Pacing:** Slower, character-driven, contemplative
+- **Word Count:** 60,000 - 100,000 words
+- **Structure:** Less plot-driven, more character and theme-focused
+
+### Key Elements
+- Character development over plot
+- Exploration of themes and human condition
+- Beautiful prose and literary techniques
+- Ambiguity and open endings
+- Social commentary
+
+### POV Considerations
+- Single POV most common
+- First person or third person limited
+- Deep character interiority
+
+### Research Needs
+- Historical periods (if period piece)
+- Cultural contexts
+- Psychology and human behavior
+- Literary techniques
+- Social issues
+
+## Romance
+
+### Conventions
+- **World-building:** Contemporary, historical, or fantasy settings
+- **Pacing:** Moderate, with emotional beats
+- **Word Count:** 50,000 - 100,000 words (varies by subgenre)
+- **Structure:** Meet-cute, obstacles, resolution (HEA/HFN)
+
+### Key Elements
+- Central romantic relationship
+- Emotional conflict and growth
+- Happy ending (HEA) or happy for now (HFN)
+- Chemistry and tension between leads
+- External and internal obstacles
+
+### POV Considerations
+- Dual POV common (both love interests)
+- First person or third person limited
+- Alternating chapters between POVs
+
+### Research Needs
+- Historical periods (for historical romance)
+- Cultural contexts
+- Relationship psychology
+- Setting details
+
+## Mystery
+
+### Conventions
+- **World-building:** Realistic settings, often small communities
+- **Pacing:** Moderate, with reveals at key points
+- **Word Count:** 70,000 - 90,000 words
+- **Structure:** Investigation, red herrings, reveal
+
+### Key Elements
+- Central mystery or crime
+- Investigation process
+- Clues and red herrings
+- Fair play (reader can solve it)
+- Resolution that explains everything
+
+### POV Considerations
+- Single POV (detective/investigator)
+- First person or third person limited
+- Occasional POV from other characters
+
+### Research Needs
+- Police procedures
+- Forensic science
+- Legal processes
+- Psychology (criminal behavior, investigation techniques)
+
+## Horror
+
+### Conventions
+- **World-building:** Realistic or supernatural settings
+- **Pacing:** Slow build to intense climax, atmospheric tension
+- **Word Count:** 70,000 - 100,000 words
+- **Structure:** Escalating fear, reveal, confrontation
+
+### Key Elements
+- Atmosphere and mood
+- Fear and dread
+- Supernatural or psychological horror
+- Isolation or vulnerability
+- Unsettling reveals
+
+### POV Considerations
+- Single POV most common
+- First person or third person limited
+- Deep psychological interiority
+
+### Research Needs
+- Psychology of fear
+- Historical events (for period horror)
+- Supernatural beliefs
+- Medical/forensic details
+
+## Young Adult (YA)
+
+### Conventions (across genres)
+- **World-building:** Varies by genre
+- **Pacing:** Fast-paced, action-oriented
+- **Word Count:** 60,000 - 90,000 words
+- **Structure:** Coming-of-age arc, often with genre elements
+
+### Key Elements
+- Teen protagonist (typically 16-18)
+- Coming-of-age themes
+- First love or relationships
+- Identity exploration
+- Agency and empowerment
+
+### POV Considerations
+- Single POV most common
+- First person very popular
+- Present tense common
+
+### Research Needs
+- Teen culture and language
+- School systems
+- Social media trends
+- Issues affecting teens
+
+## General Best Practices Across Genres
+
+### Pacing Guidelines
+- **Opening:** Hook within first page, inciting incident by chapter 3
+- **Middle:** Escalate tension, raise stakes, develop characters
+- **Ending:** Satisfying resolution that addresses main conflict
+
+### Chapter Length
+- **Thriller:** 2,000 - 3,000 words (short, punchy)
+- **Literary:** 3,000 - 5,000 words (longer, contemplative)
+- **Fantasy/SF:** 3,000 - 5,000 words (world-building space)
+- **Romance:** 2,500 - 4,000 words (emotional beats)
+- **Mystery:** 2,500 - 4,000 words (investigation pacing)
+
+### Scene Structure
+- **Goal:** What does the character want?
+- **Conflict:** What stands in their way?
+- **Disaster:** What goes wrong?
+- **Reaction:** How do they respond?
+- **Dilemma:** What choice do they face?
+- **Decision:** What do they decide?
+
+### Dialogue
+- **Purpose:** Advance plot, reveal character, create conflict
+- **Voice:** Distinct voices for each character
+- **Subtext:** What's not being said
+- **Pacing:** Vary dialogue with action and description
+
+### Description
+- **Sensory details:** Sight, sound, smell, touch, taste
+- **Specificity:** Concrete details over abstract
+- **Pacing:** Balance description with action
+- **Purpose:** Every description should serve story or character
+
+## Using Genre Conventions in Novel Master
+
+When creating your NRD:
+1. **Specify genre** in the Overview section
+2. **Reference conventions** in your act structure
+3. **Include genre-specific elements** in world rules
+4. **Note pacing preferences** in revision priorities
+5. **Use genre templates** as starting points
+
+Novel Master's AI prompts are tuned to recognize genre conventions and generate appropriate narrative structures, pacing, and elements based on your NRD's genre specification.
+

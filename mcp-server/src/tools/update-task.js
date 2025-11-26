@@ -9,7 +9,7 @@ import {
 	createErrorResponse,
 	withNormalizedProjectRoot
 } from './utils.js';
-import { updateTaskByIdDirect } from '../core/task-master-core.js';
+import { updateTaskByIdDirect } from '../core/novel-master-core.js';
 import { findTasksPath } from '../core/utils/path-utils.js';
 import { resolveTag } from '../../../scripts/modules/utils.js';
 
@@ -21,25 +21,25 @@ export function registerUpdateTaskTool(server) {
 	server.addTool({
 		name: 'update_task',
 		description:
-			'Updates a single task by ID with new information or context provided in the prompt.',
+			'Update a single chapter/scene task by ID when that beat’s outline needs to change.',
 		parameters: z.object({
 			id: z
 				.string() // ID can be number or string like "1.2"
 				.describe(
-					"ID of the task (e.g., '15') to update. Subtasks are supported using the update-subtask tool."
+					"ID of the chapter/scene to update (e.g., '12' or '12.3'). Use update_subtask for beat-level note logging."
 				),
 			prompt: z
 				.string()
-				.describe('New information or context to incorporate into the task'),
+				.describe('Narrative context to incorporate (tone shift, POV change, new stakes, etc.)'),
 			research: z
 				.boolean()
 				.optional()
-				.describe('Use Perplexity AI for research-backed updates'),
+				.describe('Enable lore/genre research before rewriting the task'),
 			append: z
 				.boolean()
 				.optional()
 				.describe(
-					'Append timestamped information to task details instead of full update'
+					'Append timestamped notes instead of replacing the task (good for progress logs)'
 				),
 			file: z.string().optional().describe('Absolute path to the tasks file'),
 			projectRoot: z

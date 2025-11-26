@@ -9,10 +9,11 @@ import {
 	createErrorResponse,
 	withNormalizedProjectRoot
 } from './utils.js';
-import { generateTaskFilesDirect } from '../core/task-master-core.js';
+import { generateTaskFilesDirect } from '../core/novel-master-core.js';
 import { findTasksPath } from '../core/utils/path-utils.js';
 import { resolveTag } from '../../../scripts/modules/utils.js';
 import path from 'path';
+import { NOVELMASTER_MANUSCRIPT_DIR } from '../../../src/constants/paths.js';
 
 /**
  * Register the generate tool with the MCP server
@@ -22,17 +23,26 @@ export function registerGenerateTool(server) {
 	server.addTool({
 		name: 'generate',
 		description:
-			'Generates individual task files in tasks/ directory based on tasks.json',
+			'Generate chapter/scene markdown files plus compiled manuscripts from tasks.json',
 		parameters: z.object({
 			file: z.string().optional().describe('Absolute path to the tasks file'),
 			output: z
 				.string()
 				.optional()
-				.describe('Output directory (default: same directory as tasks file)'),
+				.describe(
+					'Output directory (default: .novelmaster/manuscript inside the project)'
+				),
 			projectRoot: z
 				.string()
 				.describe('The directory of the project. Must be an absolute path.'),
-			tag: z.string().optional().describe('Tag context to operate on')
+			tag: z.string().optional().describe('Tag context to operate on'),
+			format: z
+				.enum(['md', 'txt'])
+				.optional()
+				.default('md')
+				.describe(
+					'Export format for compiled manuscript: "md" (markdown) or "txt" (plain text). Default: "md"'
+				)
 		}),
 		execute: withNormalizedProjectRoot(async (args, { log, session }) => {
 			try {
@@ -56,16 +66,21 @@ export function registerGenerateTool(server) {
 					);
 				}
 
+				const defaultOutputDir = path.join(
+					args.projectRoot,
+					NOVELMASTER_MANUSCRIPT_DIR
+				);
 				const outputDir = args.output
 					? path.resolve(args.projectRoot, args.output)
-					: path.dirname(tasksJsonPath);
+					: defaultOutputDir;
 
 				const result = await generateTaskFilesDirect(
 					{
 						tasksJsonPath: tasksJsonPath,
 						outputDir: outputDir,
 						projectRoot: args.projectRoot,
-						tag: resolvedTag
+						tag: resolvedTag,
+						format: args.format || 'md'
 					},
 					log,
 					{ session }

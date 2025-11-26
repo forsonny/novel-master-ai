@@ -12,7 +12,7 @@ The primary benefit of using the `gemini-cli` provider is to leverage your exist
 
 ## Installation
 
-The provider is already included in Task Master. However, you need to install the Gemini CLI tool:
+The provider is already included in Novel Master. However, you need to install the Gemini CLI tool:
 
 ```bash
 # Install gemini CLI globally
@@ -30,7 +30,7 @@ The Gemini CLI provider is designed to use your pre-configured OAuth authenticat
 gemini
 ```
 
-For OAuth use, select `Login with Google` - This will open a browser window for OAuth authentication. Once authenticated, Task Master will automatically use these credentials when you select the `gemini-cli` provider and models.
+For OAuth use, select `Login with Google` - This will open a browser window for OAuth authentication. Once authenticated, Novel Master will automatically use these credentials when you select the `gemini-cli` provider and models.
 
 ### Alternative Method: API Key
 
@@ -46,25 +46,25 @@ More details on authentication steps and options can be found in the [gemini-cli
 
 ## Configuration
 
-Use the `task-master init` command to run through the guided initialization:
+Use the `novel-master init` command to run through the guided initialization:
 
 ```bash
-task-master init
+novel-master init
 ```
 
 **OR**
 
-Configure `gemini-cli` as a provider using the Task Master models command:
+Configure `gemini-cli` as a provider using the Novel Master models command:
 
 ```bash
 # Set gemini-cli as your main provider with gemini-2.5-pro
-task-master models --set-main gemini-2.5-pro --gemini-cli
+novel-master models --set-main gemini-2.5-pro --gemini-cli
 
 # Or use the faster gemini-2.5-flash model
-task-master models --set-main gemini-2.5-flash --gemini-cli
+novel-master models --set-main gemini-2.5-flash --gemini-cli
 ```
 
-You can also manually edit your `.taskmaster/config.json`:
+You can also manually edit your `.novelmaster/config.json`:
 
 ```json
 {
@@ -94,7 +94,7 @@ You can also manually edit your `.taskmaster/config.json`:
     "defaultNumTasks": 10,
     "defaultSubtasks": 5,
     "defaultPriority": "medium",
-    "projectName": "Taskmaster",
+    "projectName": "Novel Master",
     "ollamaBaseURL": "http://localhost:11434/api",
     "bedrockBaseURL": "https://bedrock.us-east-1.amazonaws.com",
     "responseLanguage": "English",
@@ -115,11 +115,11 @@ The gemini-cli provider supports only two models:
 
 ### Basic Usage
 
-Once gemini-cli is installed and authenticated, and Task Master  simply use Task Master as normal:
+Once gemini-cli is installed and authenticated, and Novel Master  simply use Novel Master as normal:
 
 ```bash
 # The provider will automatically use your OAuth credentials
-task-master parse-prd my-prd.txt
+novel-master parse-prd my-prd.txt
 ```
 
 ## Troubleshooting
@@ -158,4 +158,4 @@ gemini --version
 - **Limited Model Support**: Only `gemini-2.5-pro` and `gemini-2.5-flash` are available through gemini-cli.
 - **Subscription Benefits**: Using OAuth authentication allows you to leverage any subscription benefits associated with your Google account.
 - The provider uses the `ai-sdk-provider-gemini-cli` npm package internally.
-- Supports all standard Task Master features: text generation, streaming, and structured object generation.
+- Supports all standard Novel Master features: text generation, streaming, and structured object generation.

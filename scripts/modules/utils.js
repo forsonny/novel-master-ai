@@ -1,14 +1,12 @@
 /**
  * utils.js
- * Utility functions for the Task Master CLI
+ * Utility functions for the Novel Master CLI
  */
 
 import fs from 'fs';
 import path from 'path';
 import chalk from 'chalk';
 import dotenv from 'dotenv';
-// Import specific config getters needed here
-import { getLogLevel, getDebugFlag } from './config-manager.js';
 import * as gitUtils from './utils/git-utils.js';
 import {
 	COMPLEXITY_REPORT_FILE,
@@ -18,6 +16,43 @@ import {
 
 // Global silent mode flag
 let silentMode = false;
+// Global log level and debug flag (dependency injected to avoid circular deps)
+let globalLogLevel = 'info';
+let globalDebug = false;
+
+/**
+ * Sets the global log level
+ * @param {string} level - The log level (debug, info, warn, error)
+ */
+export function setGlobalLogLevel(level) {
+	if (level && LOG_LEVELS.hasOwnProperty(level)) {
+		globalLogLevel = level;
+	}
+}
+
+/**
+ * Sets the global debug flag
+ * @param {boolean} debug - True to enable debug mode
+ */
+export function setGlobalDebug(debug) {
+	globalDebug = !!debug;
+}
+
+/**
+ * Gets the current debug flag
+ * @returns {boolean} True if debug mode is enabled
+ */
+export function getDebugFlag() {
+	return globalDebug;
+}
+
+/**
+ * Gets the current log level
+ * @returns {string} The current log level
+ */
+export function getLogLevel() {
+	return globalLogLevel;
+}
 
 // --- Environment Variable Resolution Utility ---
 /**
@@ -86,9 +121,27 @@ function slugifyTagForFilePath(tagName) {
 }
 
 /**
+ * Canonical tag presets for narrative workflows.
+ */
+const NARRATIVE_TAG_PRESETS = [
+	{
+		name: 'outline',
+		description: 'Story arc scaffolding parsed from NRDs'
+	},
+	{
+		name: 'draft',
+		description: 'Working manuscript tasks for scene/beat drafting'
+	},
+	{
+		name: 'rev-1',
+		description: 'First revision pass (continuity, pacing, character arcs)'
+	}
+];
+
+/**
  * Resolves a file path to be tag-aware, following the pattern used by other commands.
  * For non-master tags, appends _slugified-tagname before the file extension.
- * @param {string} basePath - The base file path (e.g., '.taskmaster/reports/task-complexity-report.json')
+ * @param {string} basePath - The base file path (e.g., '.novelmaster/reports/task-complexity-report.json')
  * @param {string|null} tag - The tag name (null, undefined, or 'master' uses base path)
  * @param {string} [projectRoot='.'] - The project root directory
  * @returns {string} The resolved file path
@@ -578,13 +631,13 @@ function performCompleteTagMigration(tasksJsonPath) {
 			path.dirname(tasksJsonPath);
 
 		// 1. Migrate config.json - add defaultTag and tags section
-		const configPath = path.join(projectRoot, '.taskmaster', 'config.json');
+		const configPath = path.join(projectRoot, '.novelmaster', 'config.json');
 		if (fs.existsSync(configPath)) {
 			migrateConfigJson(configPath);
 		}
 
 		// 2. Create state.json if it doesn't exist
-		const statePath = path.join(projectRoot, '.taskmaster', 'state.json');
+		const statePath = path.join(projectRoot, '.novelmaster', 'state.json');
 		if (!fs.existsSync(statePath)) {
 			createStateJson(statePath);
 		}
@@ -625,21 +678,21 @@ function migrateConfigJson(configPath) {
 
 		if (modified) {
 			fs.writeFileSync(configPath, JSON.stringify(config, null, 2), 'utf8');
-			if (process.env.TASKMASTER_DEBUG === 'true') {
+			if (process.env.NOVELMASTER_DEBUG === 'true') {
 				console.log(
 					'[DEBUG] Updated config.json with tagged task system settings'
 				);
 			}
 		}
 	} catch (error) {
-		if (process.env.TASKMASTER_DEBUG === 'true') {
+		if (process.env.NOVELMASTER_DEBUG === 'true') {
 			console.warn(`[WARN] Error migrating config.json: ${error.message}`);
 		}
 	}
 }
 
 /**
- * Creates initial state.json file for tagged task system
+ * Creates initial state.json file for tagged task system with manuscript progress tracking
  * @param {string} statePath - Path where state.json should be created
  */
 function createStateJson(statePath) {
@@ -648,15 +701,40 @@ function createStateJson(statePath) {
 			currentTag: 'master',
 			lastSwitched: new Date().toISOString(),
 			branchTagMapping: {},
-			migrationNoticeShown: false
+			migrationNoticeShown: false,
+			manuscriptProgress: {
+				// Track progress per tag
+				tags: {},
+				// Global manuscript statistics
+				lastGenerated: null,
+				totalChapters: 0,
+				totalWords: 0,
+				targetWords: null,
+				// Chapter completion breakdown
+				chapterCompletion: {
+					completed: 0,
+					inProgress: 0,
+					pending: 0,
+					draft: 0,
+					revision: 0
+				},
+				// Word count tracking
+				wordCounts: {
+					total: 0,
+					byChapter: {},
+					byTag: {}
+				},
+				// Progress percentage (0-100)
+				progressPercentage: null
+			}
 		};
 
 		fs.writeFileSync(statePath, JSON.stringify(initialState, null, 2), 'utf8');
-		if (process.env.TASKMASTER_DEBUG === 'true') {
-			console.log('[DEBUG] Created initial state.json for tagged task system');
+		if (process.env.NOVELMASTER_DEBUG === 'true') {
+			console.log('[DEBUG] Created initial state.json for tagged task system with manuscript progress tracking');
 		}
 	} catch (error) {
-		if (process.env.TASKMASTER_DEBUG === 'true') {
+		if (process.env.NOVELMASTER_DEBUG === 'true') {
 			console.warn(`[WARN] Error creating state.json: ${error.message}`);
 		}
 	}
@@ -669,7 +747,7 @@ function createStateJson(statePath) {
 function markMigrationForNotice(tasksJsonPath) {
 	try {
 		const projectRoot = path.dirname(path.dirname(tasksJsonPath));
-		const statePath = path.join(projectRoot, '.taskmaster', 'state.json');
+		const statePath = path.join(projectRoot, '.novelmaster', 'state.json');
 
 		// Ensure state.json exists
 		if (!fs.existsSync(statePath)) {
@@ -686,14 +764,14 @@ function markMigrationForNotice(tasksJsonPath) {
 				fs.writeFileSync(statePath, JSON.stringify(stateData, null, 2), 'utf8');
 			}
 		} catch (stateError) {
-			if (process.env.TASKMASTER_DEBUG === 'true') {
+			if (process.env.NOVELMASTER_DEBUG === 'true') {
 				console.warn(
 					`[WARN] Error updating state for migration notice: ${stateError.message}`
 				);
 			}
 		}
 	} catch (error) {
-		if (process.env.TASKMASTER_DEBUG === 'true') {
+		if (process.env.NOVELMASTER_DEBUG === 'true') {
 			console.warn(
 				`[WARN] Error marking migration for notice: ${error.message}`
 			);
@@ -709,7 +787,7 @@ function markMigrationForNotice(tasksJsonPath) {
  * @param {string} tag - Optional tag for tag context
  */
 function writeJSON(filepath, data, projectRoot = null, tag = null) {
-	const isDebug = process.env.TASKMASTER_DEBUG === 'true';
+	const isDebug = process.env.NOVELMASTER_DEBUG === 'true';
 
 	try {
 		let finalData = data;
@@ -1377,7 +1455,7 @@ function aggregateTelemetry(telemetryArray, overallCommandName) {
 }
 
 /**
- * @deprecated Use TaskMaster.getCurrentTag() instead
+ * @deprecated Use NovelMaster.getCurrentTag() instead
  * Gets the current tag from state.json or falls back to defaultTag from config
  * @param {string} projectRoot - The project root directory (required)
  * @returns {string} The current tag name
@@ -1389,7 +1467,7 @@ function getCurrentTag(projectRoot) {
 
 	try {
 		// Try to read current tag from state.json using fs directly
-		const statePath = path.join(projectRoot, '.taskmaster', 'state.json');
+		const statePath = path.join(projectRoot, '.novelmaster', 'state.json');
 		if (fs.existsSync(statePath)) {
 			const rawState = fs.readFileSync(statePath, 'utf8');
 			const stateData = JSON.parse(rawState);
@@ -1403,7 +1481,7 @@ function getCurrentTag(projectRoot) {
 
 	// Fall back to defaultTag from config using fs directly
 	try {
-		const configPath = path.join(projectRoot, '.taskmaster', 'config.json');
+		const configPath = path.join(projectRoot, '.novelmaster', 'config.json');
 		if (fs.existsSync(configPath)) {
 			const rawConfig = fs.readFileSync(configPath, 'utf8');
 			const configData = JSON.parse(rawConfig);
@@ -1564,6 +1642,41 @@ function ensureTagMetadata(tagObj, opts = {}) {
 }
 
 /**
+ * Ensures that the canonical narrative tags (outline/draft/rev-1) exist in the
+ * provided tagged tasks object. Missing tags are created with empty task arrays
+ * and helpful descriptions so downstream commands can rely on their presence.
+ * @param {Object} data - Parsed tasks.json object
+ * @returns {Object} The mutated tasks object with guaranteed canonical tags
+ */
+function ensureNarrativeTagDefaults(data = {}) {
+	if (!data || typeof data !== 'object') {
+		return {};
+	}
+
+	const now = new Date().toISOString();
+
+	NARRATIVE_TAG_PRESETS.forEach((preset) => {
+		if (!data[preset.name]) {
+			data[preset.name] = {
+				tasks: [],
+				metadata: {
+					created: now,
+					updated: now,
+					description: preset.description
+				}
+			};
+		}
+
+		ensureTagMetadata(data[preset.name], {
+			description: preset.description,
+			skipUpdate: true
+		});
+	});
+
+	return data;
+}
+
+/**
  * Strip ANSI color codes from a string
  * Useful for testing, logging to files, or when clean text output is needed
  * @param {string} text - The text that may contain ANSI color codes
@@ -1575,6 +1688,58 @@ function stripAnsiCodes(text) {
 	}
 	// Remove ANSI escape sequences (color codes, cursor movements, etc.)
 	return text.replace(/\x1b\[[0-9;]*m/g, '');
+}
+
+/**
+ * Update manuscript progress in state.json
+ * @param {string} projectRoot - Project root directory
+ * @param {string} tag - Tag context
+ * @param {Object} progress - Progress data to update
+ */
+function updateManuscriptProgress(projectRoot, tag, progress) {
+	const statePath = path.join(projectRoot, '.novelmaster', 'state.json');
+	let state = {};
+	try {
+		if (fs.existsSync(statePath)) {
+			state = JSON.parse(fs.readFileSync(statePath, 'utf-8'));
+		}
+	} catch (error) {
+		log('warn', `Could not read state.json: ${error.message}`);
+	}
+	
+	if (!state.manuscriptProgress) {
+		state.manuscriptProgress = {};
+	}
+	state.manuscriptProgress[tag] = {
+		...state.manuscriptProgress[tag],
+		...progress,
+		lastUpdated: new Date().toISOString()
+	};
+	
+	try {
+		fs.writeFileSync(statePath, JSON.stringify(state, null, 2));
+	} catch (error) {
+		log('warn', `Could not update manuscript progress: ${error.message}`);
+	}
+}
+
+/**
+ * Get manuscript progress from state.json
+ * @param {string} projectRoot - Project root directory
+ * @param {string} tag - Tag context
+ * @returns {Object|null} Progress data or null
+ */
+function getManuscriptProgress(projectRoot, tag) {
+	const statePath = path.join(projectRoot, '.novelmaster', 'state.json');
+	try {
+		if (fs.existsSync(statePath)) {
+			const state = JSON.parse(fs.readFileSync(statePath, 'utf-8'));
+			return state.manuscriptProgress?.[tag] || null;
+		}
+	} catch (error) {
+		log('warn', `Could not read manuscript progress: ${error.message}`);
+	}
+	return null;
 }
 
 // Export all utility functions and configuration
@@ -1615,6 +1780,9 @@ export {
 	markMigrationForNotice,
 	flattenTasksWithSubtasks,
 	ensureTagMetadata,
+	ensureNarrativeTagDefaults,
 	stripAnsiCodes,
-	normalizeTaskIds
+	normalizeTaskIds,
+	updateManuscriptProgress,
+	getManuscriptProgress
 };

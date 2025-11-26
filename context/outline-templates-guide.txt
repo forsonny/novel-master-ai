@@ -1,0 +1,344 @@
+# Outline Templates Guide for Novel Master
+
+This guide provides templates and patterns for creating novel outlines that Novel Master can parse into structured story arcs, chapters, and scenes.
+
+## Outline Structure Levels
+
+Novel Master works with hierarchical outlines:
+
+1. **Story Level:** Overall novel structure (acts, major arcs)
+2. **Chapter Level:** Individual chapters within acts/arcs
+3. **Scene Level:** Individual scenes within chapters
+
+## Template 1: Three-Act Structure Outline
+
+```
+# Novel Title
+
+## Act I: Setup (Chapters 1-6, ~25% of word count)
+
+### Chapter 1: [Title]
+- **Purpose:** Hook, introduce protagonist, establish normal world
+- **Key Events:** [Main events]
+- **Character Introductions:** [Characters]
+- **Ending:** [How chapter ends]
+
+### Chapter 2: [Title]
+- **Purpose:** Develop character, introduce conflict
+- **Key Events:** [Main events]
+- **Character Development:** [What we learn]
+- **Ending:** [How chapter ends]
+
+### Chapter 3: [Title]
+- **Purpose:** Inciting incident
+- **Key Events:** [Event that changes everything]
+- **Stakes:** [What's at risk]
+- **Ending:** [How chapter ends]
+
+### Chapters 4-6: [Continue pattern]
+- [Brief descriptions]
+
+**Act I Climax:** [Event propelling into Act II]
+
+## Act II: Confrontation (Chapters 7-18, ~50% of word count)
+
+### Chapter 7: [Title]
+- **Purpose:** Enter new world/situation
+- **Key Events:** [Main events]
+- **New Challenges:** [What protagonist faces]
+- **Ending:** [How chapter ends]
+
+### Chapters 8-12: Rising Action
+- [Brief descriptions of obstacles and complications]
+
+### Chapter 13: Midpoint
+- **Purpose:** Major turning point
+- **Key Events:** [Revelation or major event]
+- **Stakes Raised:** [How stakes increase]
+- **Ending:** [How chapter ends]
+
+### Chapters 14-17: Crisis Builds
+- [Brief descriptions of escalating problems]
+
+### Chapter 18: Crisis
+- **Purpose:** Darkest moment
+- **Key Events:** [Everything seems lost]
+- **Emotional Beat:** [Character's lowest point]
+- **Ending:** [How chapter ends]
+
+**Act II Climax:** [Event leading to final confrontation]
+
+## Act III: Resolution (Chapters 19-24, ~25% of word count)
+
+### Chapter 19: [Title]
+- **Purpose:** Final preparation
+- **Key Events:** [Gathering resources/allies]
+- **Decision:** [Protagonist's choice]
+- **Ending:** [How chapter ends]
+
+### Chapters 20-22: Climax
+- **Purpose:** Final confrontation
+- **Key Events:** [Main conflict resolution]
+- **Stakes:** [What's resolved]
+- **Ending:** [How chapter ends]
+
+### Chapters 23-24: Resolution
+- **Purpose:** Aftermath and new equilibrium
+- **Key Events:** [How story winds down]
+- **Character Arc:** [How protagonist changed]
+- **Ending:** [Final image]
+
+```
+
+## Template 2: Hero's Journey Outline
+
+```
+# Novel Title
+
+## Part 1: Departure
+
+### Chapter 1: Ordinary World
+- [Protagonist's normal life]
+
+### Chapter 2: Call to Adventure
+- [Challenge presented]
+
+### Chapter 3: Refusal of Call
+- [Protagonist hesitates]
+
+### Chapter 4: Meeting Mentor
+- [Guide appears]
+
+### Chapter 5: Crossing Threshold
+- [Enters special world]
+
+## Part 2: Initiation
+
+### Chapters 6-10: Tests, Allies, Enemies
+- [Challenges and helpers]
+
+### Chapter 11: Approach to Inmost Cave
+- [Preparation for ordeal]
+
+### Chapter 12: Ordeal
+- [Greatest challenge]
+
+### Chapter 13: Reward
+- [Gains something valuable]
+
+## Part 3: Return
+
+### Chapter 14: Road Back
+- [Return journey begins]
+
+### Chapter 15: Resurrection
+- [Final test]
+
+### Chapter 16: Return with Elixir
+- [Transformed, brings wisdom]
+
+```
+
+## Template 3: Multiple POV Outline
+
+```
+# Novel Title
+
+## Character A Arc (Chapters 1, 4, 7, 10, 13, 16, 19, 22)
+
+### Chapter 1: Character A POV
+- **POV:** Character A
+- **Purpose:** [Chapter purpose]
+- **Key Events:** [Main events]
+- **Character Arc:** [Development]
+- **Ending:** [How chapter ends]
+
+[Continue for all Character A chapters]
+
+## Character B Arc (Chapters 2, 5, 8, 11, 14, 17, 20, 23)
+
+### Chapter 2: Character B POV
+- **POV:** Character B
+- **Purpose:** [Chapter purpose]
+- **Key Events:** [Main events]
+- **Character Arc:** [Development]
+- **Ending:** [How chapter ends]
+
+[Continue for all Character B chapters]
+
+## Character C Arc (Chapters 3, 6, 9, 12, 15, 18, 21, 24)
+
+[Continue pattern]
+
+## Convergent Chapters (Chapters 25-30)
+
+### Chapter 25: Multiple POVs
+- **POV:** All characters
+- **Purpose:** Convergence
+- **Key Events:** [Main events]
+- **Ending:** [How chapter ends]
+
+```
+
+## Template 4: Timeline-Based Outline
+
+```
+# Novel Title
+
+## Timeline: Past (Chapters 1, 3, 5, 7, 9)
+
+### Chapter 1: Past Event
+- **Timeline:** 20 years ago
+- **Purpose:** [Why this flashback]
+- **Key Events:** [Main events]
+- **Connection to Present:** [How it relates]
+- **Ending:** [How chapter ends]
+
+## Timeline: Present (Chapters 2, 4, 6, 8, 10)
+
+### Chapter 2: Present Day
+- **Timeline:** Current day
+- **Purpose:** [Chapter purpose]
+- **Key Events:** [Main events]
+- **Connection to Past:** [How past affects present]
+- **Ending:** [How chapter ends]
+
+## Timeline: Convergence (Chapters 11-15)
+
+### Chapter 11: Past Meets Present
+- **Timeline:** Both timelines
+- **Purpose:** [Revelation]
+- **Key Events:** [Main events]
+- **Ending:** [How chapter ends]
+
+```
+
+## Scene-Level Breakdown Template
+
+For each chapter, break down into scenes:
+
+```
+### Chapter 1: [Title]
+
+#### Scene 1.1: [Scene Title]
+- **Purpose:** [What scene accomplishes]
+- **POV:** [Character]
+- **Location:** [Setting]
+- **Time:** [When]
+- **Goal:** [What character wants]
+- **Conflict:** [What stands in way]
+- **Outcome:** [What happens]
+- **Emotional Beat:** [Emotional moment]
+- **Word Count Target:** [e.g., 1,500 words]
+
+#### Scene 1.2: [Scene Title]
+[Continue pattern]
+
+#### Scene 1.3: [Scene Title]
+[Continue pattern]
+
+**Chapter Arc:** [How chapter develops character/plot]
+**Chapter Ending:** [How chapter ends]
+**Word Count Target:** [e.g., 4,000 words]
+```
+
+## Outline Best Practices
+
+### 1. Be Specific
+- **Bad:** "Character faces obstacle"
+- **Good:** "Character must choose between saving friend or completing mission"
+
+### 2. Include Emotional Beats
+- Note key emotional moments
+- Track character emotional arc
+- Plan emotional peaks and valleys
+
+### 3. Define Scene Purpose
+- Every scene should advance plot or character
+- Cut scenes that don't serve story
+- Combine scenes with similar purposes
+
+### 4. Plan Pacing
+- Vary scene length and intensity
+- Balance action with reflection
+- Build tension toward climax
+
+### 5. Track Character Arcs
+- Note character development in each chapter
+- Plan arc milestones
+- Ensure satisfying arc completion
+
+### 6. Establish Stakes
+- Define what's at risk
+- Raise stakes throughout
+- Resolve stakes at climax
+
+## Using Outlines with Novel Master
+
+### Step 1: Create NRD
+Include your outline structure in the NRD's "Chapter-Level Beats" section.
+
+### Step 2: Parse NRD
+```
+novel-master parse-prd .novelmaster/docs/nrd.txt --tag outline
+```
+
+This creates top-level tasks representing your chapters or major story beats.
+
+### Step 3: Expand Chapters
+```
+novel-master expand --id 1 --num 5 --tag outline
+```
+
+This breaks chapters into scenes based on your scene-level breakdown.
+
+### Step 4: Refine Structure
+Use `update_task` to refine chapter purposes and scene breakdowns based on your outline.
+
+### Step 5: Generate Manuscript
+```
+novel-master generate --tag draft
+```
+
+This creates chapter files with scene sections matching your outline structure.
+
+## Outline Validation
+
+Before parsing, ensure your outline:
+- ✅ Has clear act structure
+- ✅ Defines chapter purposes
+- ✅ Includes scene breakdowns
+- ✅ Tracks character arcs
+- ✅ Plans pacing and tension
+- ✅ Establishes stakes
+- ✅ Defines emotional beats
+
+## Common Outline Patterns
+
+### Linear Chronological
+- Simple timeline
+- One POV
+- Clear cause and effect
+
+### Multiple Timeline
+- Past and present
+- Flashbacks
+- Parallel storylines
+
+### Multiple POV
+- Different perspectives
+- Converging storylines
+- Character-specific arcs
+
+### Episodic
+- Standalone chapters
+- Connected by theme
+- Less linear plot
+
+### Circular
+- Story returns to beginning
+- Changed perspective
+- Full circle resolution
+
+Choose the pattern that best serves your story, and structure your outline accordingly.
+

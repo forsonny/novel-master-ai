@@ -24,7 +24,7 @@ describe('Gemini Profile Integration', () => {
 		jest.clearAllMocks();
 
 		// Create a temporary directory for testing
-		tempDir = fs.mkdtempSync(path.join(os.tmpdir(), 'task-master-test-'));
+		tempDir = fs.mkdtempSync(path.join(os.tmpdir(), 'novel-master-test-'));
 
 		// Spy on fs methods
 		jest.spyOn(fs, 'writeFileSync').mockImplementation(() => {});
@@ -60,9 +60,9 @@ describe('Gemini Profile Integration', () => {
 		const settingsContent = JSON.stringify(
 			{
 				mcpServers: {
-					'task-master-ai': {
+					'novel-master-ai': {
 						command: 'npx',
-						args: ['-y', 'task-master-ai'],
+						args: ['-y', 'novel-master-ai'],
 						env: {
 							YOUR_ANTHROPIC_API_KEY: 'your-api-key-here',
 							YOUR_PERPLEXITY_API_KEY: 'your-api-key-here',

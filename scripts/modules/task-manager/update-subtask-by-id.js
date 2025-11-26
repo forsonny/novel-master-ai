@@ -26,6 +26,7 @@ import generateTaskFiles from './generate-task-files.js';
 import { ContextGatherer } from '../utils/contextGatherer.js';
 import { FuzzyTaskSearch } from '../utils/fuzzyTaskSearch.js';
 import { tryUpdateViaRemote } from '@tm/bridge';
+import { getAutoRegenerateManuscript } from '../config-manager.js';
 
 /**
  * Update a subtask by appending additional timestamped information using the unified AI service.
@@ -367,11 +368,21 @@ async function updateSubtaskById(
 		}
 
 		report('success', `Successfully updated subtask ${subtaskId}`);
-		// Updated  function call to make sure if uncommented it will generate the task files for the updated subtask based on the tag
-		// await generateTaskFiles(tasksPath, path.dirname(tasksPath), {
-		// 	tag: tag,
-		// 	projectRoot: projectRoot
-		// });
+		
+		// Auto-regenerate manuscript if enabled in config
+		if (getAutoRegenerateManuscript(projectRoot)) {
+			try {
+				report('info', 'Auto-regenerating manuscript files...');
+				await generateTaskFiles(tasksPath, undefined, {
+					projectRoot,
+					tag,
+					mcpLog: logFn
+				});
+				report('success', 'Manuscript files regenerated successfully');
+			} catch (genError) {
+				report('warn', `Failed to auto-regenerate manuscript: ${genError.message}`);
+			}
+		}
 
 		if (outputFormat === 'text') {
 			if (loadingIndicator) {
@@ -422,7 +433,7 @@ async function updateSubtaskById(
 					'  1. Set your Perplexity API key: export PERPLEXITY_API_KEY=your_api_key_here'
 				);
 				console.log(
-					'  2. Or run without the research flag: task-master update-subtask --id=<id> --prompt="..."'
+					'  2. Or run without the research flag: novel-master update-subtask --id=<id> --prompt="..."'
 				);
 			} else if (error.message?.includes('overloaded')) {
 				console.log(
@@ -435,7 +446,7 @@ async function updateSubtaskById(
 			} else if (error.message?.includes('not found')) {
 				console.log(chalk.yellow('\nTo fix this issue:'));
 				console.log(
-					'  1. Run task-master list --with-subtasks to see all available subtask IDs'
+					'  1. Run novel-master list --with-subtasks to see all available subtask IDs'
 				);
 				console.log(
 					'  2. Use a valid subtask ID with the --id parameter in format "parentId.subtaskId"'

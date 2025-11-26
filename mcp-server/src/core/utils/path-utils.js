@@ -31,8 +31,8 @@ const silentLogger = {
 export const lastFoundProjectRoot = null;
 
 /**
- * Find PRD file with MCP support
- * @param {string} [explicitPath] - Explicit path to PRD file (highest priority)
+ * Find NRD file with MCP support
+ * @param {string} [explicitPath] - Explicit path to NRD file (highest priority)
  * @param {Object} [args] - Arguments object for context
  * @param {Object} [log] - Logger object to prevent console logging
  * @returns {string|null} - Resolved path to PRD file or null if not found
@@ -76,7 +76,7 @@ export function resolveTasksPath(args, log = silentLogger) {
 		if (foundPath === null && !explicitPath) {
 			const defaultPath = path.join(
 				projectRoot,
-				'.taskmaster',
+				'.novelmaster',
 				'tasks',
 				'tasks.json'
 			);
@@ -96,10 +96,10 @@ export function resolveTasksPath(args, log = silentLogger) {
 }
 
 /**
- * Resolve PRD path from arguments
+ * Resolve NRD path from arguments
  * @param {Object} args - Arguments object containing projectRoot and optional input path
  * @param {Object} [log] - Logger object to prevent console logging
- * @returns {string|null} - Resolved path to PRD file or null if not found
+ * @returns {string|null} - Resolved path to NRD file or null if not found
  */
 export function resolvePrdPath(args, log = silentLogger) {
 	// Get explicit path from args.input if provided
@@ -182,7 +182,7 @@ export function resolveProjectPath(relativePath, args) {
 		throw new Error('projectRoot is required in args to resolve project paths');
 	}
 
-	// Normalize the project root to prevent double .taskmaster paths
+	// Normalize the project root to prevent double .novelmaster paths
 	const projectRoot = normalizeProjectRoot(args.projectRoot);
 
 	// If already absolute, return as-is

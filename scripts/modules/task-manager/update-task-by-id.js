@@ -33,6 +33,8 @@ import { ContextGatherer } from '../utils/contextGatherer.js';
 import { FuzzyTaskSearch } from '../utils/fuzzyTaskSearch.js';
 import { tryUpdateViaRemote } from '@tm/bridge';
 import { createBridgeLogger } from '../bridge-utils.js';
+import { getAutoRegenerateManuscript } from '../config-manager.js';
+import generateTaskFiles from './generate-task-files.js';
 
 /**
  * Update a task by ID with new information using the unified AI service.
@@ -529,7 +531,21 @@ async function updateTaskById(
 			// --- Write File and Generate (Unchanged) ---
 			writeJSON(tasksPath, data, projectRoot, tag);
 			report('success', `Successfully updated task ${taskId}`);
-			// await generateTaskFiles(tasksPath, path.dirname(tasksPath));
+			
+			// Auto-regenerate manuscript if enabled in config
+			if (getAutoRegenerateManuscript(projectRoot)) {
+				try {
+					report('info', 'Auto-regenerating manuscript files...');
+					await generateTaskFiles(tasksPath, undefined, {
+						projectRoot,
+						tag,
+						mcpLog: mcpLog
+					});
+					report('success', 'Manuscript files regenerated successfully');
+				} catch (genError) {
+					report('warn', `Failed to auto-regenerate manuscript: ${genError.message}`);
+				}
+			}
 			// --- End Write File ---
 
 			// --- Display CLI Telemetry ---

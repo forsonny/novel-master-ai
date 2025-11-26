@@ -2,12 +2,12 @@ View current AI model configuration.
 
 ## Model Configuration Display
 
-Shows the currently configured AI providers and models for Task Master.
+Shows the currently configured AI providers and models for Novel Master.
 
 ## Execution
 
 ```bash
-task-master models
+novel-master models
 ```
 
 ## Information Displayed
@@ -15,7 +15,7 @@ task-master models
 1. **Main Provider**
    - Model ID and name
    - API key status (configured/missing)
-   - Usage: Primary task generation
+   - Usage: Primary chapter generation
 
 2. **Research Provider**
    - Model ID and name  
@@ -30,7 +30,7 @@ task-master models
 ## Visual Status
 
 ```
-Task Master AI Model Configuration
+Novel Master AI Model Configuration
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 Main:     ✅ claude-3-5-sonnet (configured)
 Research: ✅ perplexity-sonar (configured)  

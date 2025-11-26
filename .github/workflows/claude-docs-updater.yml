@@ -54,7 +54,7 @@ jobs:
             api.github.com
             .githubusercontent.com
             registry.npmjs.org
-            .task-master.dev
+            .novel-master.dev
           base_branch: "next"
           direct_prompt: |
             You are a documentation specialist. Analyze the recent changes pushed to the 'next' branch and update the documentation accordingly.

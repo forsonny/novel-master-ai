@@ -1,6 +1,6 @@
 /**
  * use-tag.js
- * Direct function implementation for switching to a tag
+ * Direct function implementation for switching to a tag context (e.g., outline → draft, draft → revision)
  */
 
 import { useTag } from '../../../../scripts/modules/task-manager/tag-management.js';
@@ -11,10 +11,10 @@ import {
 import { createLogWrapper } from '../../tools/utils.js';
 
 /**
- * Direct function wrapper for switching to a tag with error handling.
+ * Direct function wrapper for switching to a tag context (e.g., outline → draft, draft → revision) with error handling.
  *
  * @param {Object} args - Command arguments
- * @param {string} args.name - Name of the tag to switch to
+ * @param {string} args.name - Name of the tag context to switch to (e.g., "draft", "rev-1")
  * @param {string} [args.tasksJsonPath] - Path to the tasks.json file (resolved by tool)
  * @param {string} [args.projectRoot] - Project root path
  * @param {Object} log - Logger object
@@ -41,7 +41,7 @@ export async function useTagDirect(args, log, context = {}) {
 				success: false,
 				error: {
 					code: 'MISSING_ARGUMENT',
-					message: 'tasksJsonPath is required'
+					message: 'Tasks file path is required to switch tag contexts'
 				}
 			};
 		}
@@ -54,12 +54,12 @@ export async function useTagDirect(args, log, context = {}) {
 				success: false,
 				error: {
 					code: 'MISSING_PARAMETER',
-					message: 'Tag name is required and must be a string'
+					message: 'Tag context name is required and must be a string (e.g., "draft", "rev-1")'
 				}
 			};
 		}
 
-		log.info(`Switching to tag: ${name}`);
+		log.info(`Switching to tag context: ${name}`);
 
 		// Call the useTag function
 		const result = await useTag(
@@ -83,8 +83,8 @@ export async function useTagDirect(args, log, context = {}) {
 				tagName: result.currentTag,
 				switched: result.switched,
 				previousTag: result.previousTag,
-				taskCount: result.taskCount,
-				message: `Successfully switched to tag "${result.currentTag}"`
+				chapterCount: result.taskCount,
+				message: `Successfully switched to tag context "${result.currentTag}"`
 			}
 		};
 	} catch (error) {

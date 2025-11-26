@@ -1,5 +1,6 @@
 /**
- * Direct function wrapper for clearSubtasks
+ * clear-subtasks.js
+ * Direct function implementation for clearing beats/scenes from chapters
  */
 
 import { clearSubtasks } from '../../../../scripts/modules/task-manager.js';
@@ -12,12 +13,12 @@ import fs from 'fs';
 import path from 'path';
 
 /**
- * Clear subtasks from specified tasks
+ * Clear beats/scenes from specified chapters
  * @param {Object} args - Function arguments
  * @param {string} args.tasksJsonPath - Explicit path to the tasks.json file.
- * @param {string} [args.id] - Task IDs (comma-separated) to clear subtasks from
- * @param {boolean} [args.all] - Clear subtasks from all tasks
- * @param {string} [args.tag] - Tag context to operate on (defaults to current active tag)
+ * @param {string} [args.id] - Chapter IDs (comma-separated) to clear beats from (e.g., "5" or "5,6,7")
+ * @param {boolean} [args.all] - Clear beats from all chapters
+ * @param {string} [args.tag] - Tag context (outline, draft, revision) to operate on (defaults to current active tag)
  * @param {string} [args.projectRoot] - Project root path (for MCP/env fallback)
  * @param {Object} log - Logger object
  * @returns {Promise<{success: boolean, data?: Object, error?: {code: string, message: string}}>}
@@ -35,7 +36,7 @@ export async function clearSubtasksDirect(args, log) {
 				success: false,
 				error: {
 					code: 'MISSING_ARGUMENT',
-					message: 'tasksJsonPath is required'
+					message: 'Tasks file path is required to clear beats/scenes'
 				}
 			};
 		}
@@ -47,7 +48,7 @@ export async function clearSubtasksDirect(args, log) {
 				error: {
 					code: 'INPUT_VALIDATION_ERROR',
 					message:
-						'Either task IDs with id parameter or all parameter must be provided'
+						'Either provide chapter IDs with id parameter (e.g., "5" or "5,6,7") or use all parameter to clear beats from all chapters'
 				}
 			};
 		}
@@ -76,7 +77,7 @@ export async function clearSubtasksDirect(args, log) {
 				success: false,
 				error: {
 					code: 'INPUT_VALIDATION_ERROR',
-					message: `No tasks found in tasks file: ${tasksPath}`
+					message: `No chapters found in tasks file: ${tasksPath}`
 				}
 			};
 		}
@@ -84,25 +85,25 @@ export async function clearSubtasksDirect(args, log) {
 		const currentTag = data.tag || tag;
 		const tasks = data.tasks;
 
-		// If all is specified, get all task IDs
+		// If all is specified, get all chapter IDs
 		if (all) {
-			log.info(`Clearing subtasks from all tasks in tag '${currentTag}'`);
+			log.info(`Clearing beats/scenes from all chapters in tag '${currentTag}'`);
 			if (tasks.length === 0) {
 				return {
 					success: false,
 					error: {
 						code: 'INPUT_VALIDATION_ERROR',
-						message: `No tasks found in tag context '${currentTag}'`
+						message: `No chapters found in tag context '${currentTag}'`
 					}
 				};
 			}
 			taskIds = tasks.map((t) => t.id).join(',');
 		} else {
-			// Use the provided task IDs
+			// Use the provided chapter IDs
 			taskIds = id;
 		}
 
-		log.info(`Clearing subtasks from tasks: ${taskIds} in tag '${currentTag}'`);
+		log.info(`Clearing beats/scenes from chapters: ${taskIds} in tag '${currentTag}'`);
 
 		// Enable silent mode to prevent console logs from interfering with JSON response
 		enableSilentMode();
@@ -129,7 +130,7 @@ export async function clearSubtasksDirect(args, log) {
 		return {
 			success: true,
 			data: {
-				message: `Successfully cleared subtasks from ${clearedTasksCount} task(s) in tag '${currentTag}'`,
+				message: `Successfully cleared beats/scenes from ${clearedTasksCount} chapter(s) in tag '${currentTag}'`,
 				tasksCleared: taskSummary,
 				tag: currentTag
 			}

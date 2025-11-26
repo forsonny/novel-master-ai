@@ -20,8 +20,6 @@ import {
 
 import { displayBanner } from './ui.js';
 
-import generateTaskFiles from './task-manager/generate-task-files.js';
-
 /**
  * Structured error class for dependency operations
  */
@@ -1724,7 +1722,7 @@ function validateSubtaskMove(taskId, sourceTag, targetTag) {
 			`Cannot move subtask ${taskId} directly between tags.
 
 First promote it to a full task using:
-  task-master remove-subtask --id=${taskId} --convert`,
+  novel-master remove-subtask --id=${taskId} --convert`,
 			{
 				taskId,
 				sourceTag,

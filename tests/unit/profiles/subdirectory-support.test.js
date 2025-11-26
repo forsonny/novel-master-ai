@@ -2,21 +2,21 @@
 import { getRulesProfile } from '../../../src/utils/rule-transformer.js';
 
 describe('Rules Subdirectory Support Feature', () => {
-	it('should support taskmaster subdirectories only for Cursor profile', () => {
+	it('should support novelmaster subdirectories only for Cursor profile', () => {
 		// Test Cursor profile - should use subdirectories
 		const cursorProfile = getRulesProfile('cursor');
 		expect(cursorProfile.supportsRulesSubdirectories).toBe(true);
 
-		// Verify that Cursor uses taskmaster subdirectories in its file mapping
+		// Verify that Cursor uses novelmaster subdirectories in its file mapping
 		expect(cursorProfile.fileMap['rules/dev_workflow.mdc']).toBe(
-			'taskmaster/dev_workflow.mdc'
+			'novelmaster/dev_workflow.mdc'
 		);
-		expect(cursorProfile.fileMap['rules/taskmaster.mdc']).toBe(
-			'taskmaster/taskmaster.mdc'
+		expect(cursorProfile.fileMap['rules/novelmaster.mdc']).toBe(
+			'novelmaster/novelmaster.mdc'
 		);
 	});
 
-	it('should not use taskmaster subdirectories for other profiles', () => {
+	it('should not use novelmaster subdirectories for other profiles', () => {
 		// Test profiles that should NOT use subdirectories (new default)
 		const profiles = ['roo', 'vscode', 'cline', 'windsurf', 'trae'];
 
@@ -24,13 +24,13 @@ describe('Rules Subdirectory Support Feature', () => {
 			const profile = getRulesProfile(profileName);
 			expect(profile.supportsRulesSubdirectories).toBe(false);
 
-			// Verify that these profiles do NOT use taskmaster subdirectories in their file mapping
+			// Verify that these profiles do NOT use novelmaster subdirectories in their file mapping
 			const expectedExt = profile.targetExtension || '.md';
 			expect(profile.fileMap['rules/dev_workflow.mdc']).toBe(
 				`dev_workflow${expectedExt}`
 			);
-			expect(profile.fileMap['rules/taskmaster.mdc']).toBe(
-				`taskmaster${expectedExt}`
+			expect(profile.fileMap['rules/novelmaster.mdc']).toBe(
+				`novelmaster${expectedExt}`
 			);
 		});
 	});

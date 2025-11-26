@@ -1,29 +1,29 @@
-List all tasks including their subtasks in a hierarchical view.
+List all chapters including their scenes in a hierarchical view.
 
-This command shows all tasks with their nested subtasks, providing a complete project overview.
+This command shows all chapters with their nested scenes, providing a complete project overview.
 
 ## Execution
 
-Run the Task Master list command with subtasks flag:
+Run the Novel Master list command with scenes flag:
 ```bash
-task-master list --with-subtasks
+novel-master list --with-subtasks
 ```
 
 ## Enhanced Display
 
 I'll organize the output to show:
-- Parent tasks with clear indicators
-- Nested subtasks with proper indentation
+- Parent chapters with clear indicators
+- Nested scenes with proper indentation
 - Status badges for quick scanning
 - Dependencies and blockers highlighted
-- Progress indicators for tasks with subtasks
+- Progress indicators for chapters with scenes
 
 ## Smart Filtering
 
-Based on the task hierarchy:
-- Show completion percentage for parent tasks
-- Highlight blocked subtask chains
-- Group by functional areas
+Based on the chapter hierarchy:
+- Show completion percentage for parent chapters
+- Highlight blocked scene chains
+- Group by story arcs
 - Indicate critical path items
 
 This gives you a complete tree view of your project structure.

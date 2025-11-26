@@ -11,7 +11,7 @@ import { PrdParseConfig, LoggingConfig } from './parse-prd-config.js';
 
 // Import helper functions
 import {
-	readPrdContent,
+	readNrdContent,
 	loadExistingTasks,
 	validateFileOperations,
 	processTasks,
@@ -40,7 +40,7 @@ async function parsePRDCore(config, serviceHandler, isStreaming) {
 	const logger = new LoggingConfig(config.mcpLog, config.reportProgress);
 
 	logger.report(
-		`Parsing PRD file: ${config.prdPath}, Force: ${config.force}, Append: ${config.append}, Research: ${config.research}`,
+		`Parsing NRD file: ${config.prdPath}, Force: ${config.force}, Append: ${config.append}, Research: ${config.research}`,
 		'debug'
 	);
 
@@ -61,8 +61,8 @@ async function parsePRDCore(config, serviceHandler, isStreaming) {
 			logger
 		});
 
-		// Read PRD content and build prompts
-		const prdContent = readPrdContent(config.prdPath);
+		// Read NRD content and build prompts
+		const prdContent = readNrdContent(config.prdPath);
 		const prompts = await buildPrompts(config, prdContent, nextId);
 
 		// Call the appropriate service handler
@@ -106,7 +106,7 @@ async function parsePRDCore(config, serviceHandler, isStreaming) {
 			tagInfo: serviceResult.aiServiceResponse?.tagInfo
 		};
 	} catch (error) {
-		logger.report(`Error parsing PRD: ${error.message}`, 'error');
+		logger.report(`Error parsing NRD: ${error.message}`, 'error');
 
 		if (!config.isMCP) {
 			console.error(chalk.red(`Error: ${error.message}`));

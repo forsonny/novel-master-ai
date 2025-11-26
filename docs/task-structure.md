@@ -1,22 +1,22 @@
 # Task Structure
 
-Tasks in Task Master follow a specific format designed to provide comprehensive information for both humans and AI assistants.
+Tasks in Novel Master follow a specific format designed to provide comprehensive information for both humans and AI assistants.
 
 ## Task Fields in tasks.json
 
 Tasks in tasks.json have the following structure:
 
 - `id`: Unique identifier for the task (Example: `1`)
-- `title`: Brief, descriptive title of the task (Example: `"Initialize Repo"`)
-- `description`: Concise description of what the task involves (Example: `"Create a new repository, set up initial structure."`)
+- `title`: Brief, descriptive title of the task (Example: `"Chapter 1: The Arrival"`)
+- `description`: Concise description of what the task involves (Example: `"Introduce the protagonist in their ordinary world, establish the setting, and hint at the coming conflict."`)
 - `status`: Current state of the task (Example: `"pending"`, `"done"`, `"deferred"`)
 - `dependencies`: IDs of tasks that must be completed before this task (Example: `[1, 2]`)
   - Dependencies are displayed with status indicators (✅ for completed, ⏱️ for pending)
-  - This helps quickly identify which prerequisite tasks are blocking work
+  - This helps quickly identify which prerequisite chapters/scenes are blocking work
 - `priority`: Importance level of the task (Example: `"high"`, `"medium"`, `"low"`)
-- `details`: In-depth implementation instructions (Example: `"Use GitHub client ID/secret, handle callback, set session token."`)
-- `testStrategy`: Verification approach (Example: `"Deploy and call endpoint to confirm 'Hello World' response."`)
-- `subtasks`: List of smaller, more specific tasks that make up the main task (Example: `[{"id": 1, "title": "Configure OAuth", ...}]`)
+- `details`: In-depth scene development instructions (Example: `"POV: First person, Protagonist. Setting: Small coastal town, present day. Emotional beat: Contentment turning to unease. Research hooks: Coastal town architecture, fishing industry."`)
+- `testStrategy`: Continuity/pacing validation approach (Example: `"Review timeline consistency, verify POV voice matches established character, check pacing against target word count."`)
+- `subtasks`: List of smaller, more specific scenes/beats that make up the main task (Example: `[{"id": 1, "title": "Opening: Protagonist's morning routine", ...}]`)
 
 ## Task File Format
 
@@ -30,10 +30,10 @@ Individual task files follow this format:
 # Priority: <priority>
 # Description: <brief description>
 # Details:
-<detailed implementation notes>
+<detailed scene development notes>
 
 # Test Strategy:
-<verification approach>
+<continuity/pacing validation approach>
 ```
 
 ## Features in Detail
@@ -42,17 +42,17 @@ Individual task files follow this format:
 
 The `analyze-complexity` command:
 
-- Analyzes each task using AI to assess its complexity on a scale of 1-10
-- Recommends optimal number of subtasks based on configured DEFAULT_SUBTASKS
-- Generates tailored prompts for expanding each task
+- Analyzes each task using AI to assess its narrative complexity (pacing, POV load, plot density) on a scale of 1-10
+- Recommends optimal number of subtasks (scenes/beats) based on configured DEFAULT_SUBTASKS
+- Generates tailored prompts for expanding each chapter into scenes
 - Creates a comprehensive JSON report with ready-to-use commands
-- Saves the report to scripts/task-complexity-report.json by default
+- Saves the report to .novelmaster/reports/task-complexity-report.json by default
 
 The generated report contains:
 
-- Complexity analysis for each task (scored 1-10)
-- Recommended number of subtasks based on complexity
-- AI-generated expansion prompts customized for each task
+- Complexity analysis for each task (pacing, plot density, POV load scored 1-10)
+- Recommended number of subtasks (scenes/beats) based on complexity
+- AI-generated expansion prompts customized for each chapter
 - Ready-to-run expansion commands directly within each task analysis
 
 ### Viewing Complexity Report
@@ -81,15 +81,15 @@ Example workflow:
 
 ```bash
 # Generate the complexity analysis report with research capabilities
-task-master analyze-complexity --research
+novel-master analyze-complexity --research
 
 # Review the report in a readable format
-task-master complexity-report
+novel-master complexity-report
 
 # Expand tasks using the optimized recommendations
-task-master expand --id=8
+novel-master expand --id=8
 # or expand all tasks
-task-master expand --all
+novel-master expand --all
 ```
 
 ### Finding the Next Task
@@ -100,51 +100,51 @@ The `next` command:
 - Prioritizes tasks by priority level, dependency count, and task ID
 - Displays comprehensive information about the selected task:
   - Basic task details (ID, title, priority, dependencies)
-  - Implementation details
-  - Subtasks (if they exist)
+  - Scene development details
+  - Subtasks/scenes (if they exist)
 - Provides contextual suggested actions:
   - Command to mark the task as in-progress
   - Command to mark the task as done
-  - Commands for working with subtasks
+  - Commands for working with subtasks/scenes
 
 ### Viewing Specific Task Details
 
 The `show` command:
 
 - Displays comprehensive details about a specific task or subtask
-- Shows task status, priority, dependencies, and detailed implementation notes
-- For parent tasks, displays all subtasks and their status
-- For subtasks, shows parent task relationship
+- Shows task status, priority, dependencies, and detailed scene development notes
+- For parent tasks (chapters), displays all subtasks (scenes) and their status
+- For subtasks (scenes), shows parent task (chapter) relationship
 - Provides contextual action suggestions based on the task's state
 - Works with both regular tasks and subtasks (using the format taskId.subtaskId)
 
-## Best Practices for AI-Driven Development
+## Best Practices for AI-Driven Novel Development
 
-1. **Start with a detailed PRD**: The more detailed your PRD, the better the generated tasks will be.
+1. **Start with a detailed NRD**: The more detailed your Novel Requirements Document (NRD), the better the generated story structure will be.
 
-2. **Review generated tasks**: After parsing the PRD, review the tasks to ensure they make sense and have appropriate dependencies.
+2. **Review generated tasks**: After parsing the NRD, review the tasks to ensure they make sense and have appropriate narrative dependencies.
 
-3. **Analyze task complexity**: Use the complexity analysis feature to identify which tasks should be broken down further.
+3. **Analyze task complexity**: Use the complexity analysis feature to identify which chapters should be broken down into scenes/beats.
 
-4. **Follow the dependency chain**: Always respect task dependencies - the Cursor agent will help with this.
+4. **Follow the dependency chain**: Always respect task dependencies - the Cursor agent will help with this to maintain proper story flow.
 
-5. **Update as you go**: If your implementation diverges from the plan, use the update command to keep future tasks aligned with your current approach.
+5. **Update as you go**: If your story direction diverges from the plan, use the update command to keep future tasks aligned with your current narrative approach.
 
-6. **Break down complex tasks**: Use the expand command to break down complex tasks into manageable subtasks.
+6. **Break down complex tasks**: Use the expand command to break down complex chapters into manageable scenes/beats.
 
-7. **Regenerate task files**: After any updates to tasks.json, regenerate the task files to keep them in sync.
+7. **Regenerate manuscript files**: After any updates to tasks.json, regenerate the manuscript files to keep them in sync.
 
-8. **Communicate context to the agent**: When asking the Cursor agent to help with a task, provide context about what you're trying to achieve.
+8. **Communicate context to the agent**: When asking the Cursor agent to help with a task, provide context about what you're trying to achieve in the story.
 
-9. **Validate dependencies**: Periodically run the validate-dependencies command to check for invalid or circular dependencies.
+9. **Validate dependencies**: Periodically run the validate-dependencies command to check for invalid or circular dependencies in your story structure.
 
 # Task Structure Documentation
 
-Task Master uses a structured JSON format to organize and manage tasks. As of version 0.16.2, Task Master introduces **Tagged Task Lists** for multi-context task management while maintaining full backward compatibility.
+Novel Master uses a structured JSON format to organize and manage tasks. As of version 0.16.2, Novel Master introduces **Tagged Task Lists** for multi-context task management while maintaining full backward compatibility.
 
 ## Tagged Task Lists System
 
-Task Master now organizes tasks into separate contexts called **tags**. This enables working across multiple contexts such as different branches, environments, or project phases without conflicts.
+Novel Master now organizes tasks into separate contexts called **tags**. This enables working across multiple contexts such as different branches, environments, or project phases without conflicts.
 
 ### Data Structure Overview
 
@@ -152,14 +152,14 @@ Task Master now organizes tasks into separate contexts called **tags**. This ena
 
 ```json
 {
-  "master": {
+  "outline": {
     "tasks": [
-      { "id": 1, "title": "Setup API", "status": "pending", ... }
+      { "id": 1, "title": "Chapter 1: The Arrival", "status": "pending", ... }
     ]
   },
-  "feature-branch": {
+  "draft": {
     "tasks": [
-      { "id": 1, "title": "New Feature", "status": "pending", ... }
+      { "id": 1, "title": "Chapter 1: The Arrival", "status": "in-progress", ... }
     ]
   }
 }
@@ -170,7 +170,7 @@ Task Master now organizes tasks into separate contexts called **tags**. This ena
 ```json
 {
   "tasks": [
-    { "id": 1, "title": "Setup API", "status": "pending", ... }
+    { "id": 1, "title": "Chapter 1: The Arrival", "status": "pending", ... }
   ]
 }
 ```
@@ -197,13 +197,13 @@ Each task within a tag context contains the following properties:
 - **`title`** (string): Brief, descriptive title
 
   ```json
-  "title": "Implement user authentication"
+  "title": "Chapter 1: The Arrival"
   ```
 
 - **`description`** (string): Concise summary of what the task involves
 
   ```json
-  "description": "Create a secure authentication system using JWT tokens"
+  "description": "Introduce the protagonist in their ordinary world, establish the setting, and hint at the coming conflict"
   ```
 
 - **`status`** (string): Current state of the task
@@ -229,24 +229,24 @@ Each task within a tag context contains the following properties:
   "priority": "high"
   ```
 
-- **`details`** (string): In-depth implementation instructions
+- **`details`** (string): In-depth scene development instructions
 
   ```json
-  "details": "Use GitHub OAuth client ID/secret, handle callback, set session token"
+  "details": "POV: First person, Protagonist. Setting: Small coastal town, present day. Emotional beat: Contentment turning to unease. Research hooks: Coastal town architecture, fishing industry."
   ```
 
-- **`testStrategy`** (string): Verification approach
+- **`testStrategy`** (string): Continuity/pacing validation approach
 
   ```json
-  "testStrategy": "Deploy and call endpoint to confirm authentication flow"
+  "testStrategy": "Review timeline consistency, verify POV voice matches established character, check pacing against target word count"
   ```
 
-- **`subtasks`** (array): List of smaller, more specific tasks
+- **`subtasks`** (array): List of smaller, more specific scenes/beats
   ```json
   "subtasks": [
     {
       "id": 1,
-      "title": "Configure OAuth",
+      "title": "Opening: Protagonist's morning routine",
       "description": "Set up OAuth configuration",
       "status": "pending",
       "dependencies": [],
@@ -352,9 +352,9 @@ Here's a complete example showing the tagged task structure:
 
 ### Current Tag Resolution
 
-Task Master automatically determines the current tag context based on:
+Novel Master automatically determines the current tag context based on:
 
-1. **State Configuration**: Current tag stored in `.taskmaster/state.json`
+1. **State Configuration**: Current tag stored in `.novelmaster/state.json`
 2. **Default Fallback**: "master" tag when no context is specified
 3. **Future Enhancement**: Git branch-based tag switching (Part 2)
 
@@ -366,7 +366,7 @@ Task Master automatically determines the current tag context based on:
 
 ## Data Validation
 
-Task Master validates the following aspects of task data:
+Novel Master validates the following aspects of task data:
 
 ### Required Validations
 
@@ -383,7 +383,7 @@ Task Master validates the following aspects of task data:
 
 ## File Generation
 
-Task Master can generate individual markdown files for each task based on the JSON structure. These files include:
+Novel Master can generate individual markdown files for each task based on the JSON structure. These files include:
 
 - **Task Overview**: ID, title, status, dependencies
 - **Tag Context**: Which tag the task belongs to
@@ -393,12 +393,12 @@ Task Master can generate individual markdown files for each task based on the JS
 
 ## Migration Process
 
-When Task Master encounters a legacy format `tasks.json` file:
+When Novel Master encounters a legacy format `tasks.json` file:
 
 1. **Detection**: Automatically detects `{"tasks": [...]}` format
 2. **Transformation**: Converts to `{"master": {"tasks": [...]}}` format
-3. **Configuration**: Updates `.taskmaster/config.json` with tagged system settings
-4. **State Creation**: Creates `.taskmaster/state.json` for tag management
+3. **Configuration**: Updates `.novelmaster/config.json` with tagged system settings
+4. **State Creation**: Creates `.novelmaster/state.json` for tag management
 5. **Notification**: Shows one-time friendly notice about the new system
 6. **Preservation**: All existing task data is preserved exactly as-is
 

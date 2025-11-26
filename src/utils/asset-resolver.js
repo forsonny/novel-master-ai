@@ -32,18 +32,18 @@ export function getAssetsDir() {
 		path.join(
 			process.cwd(),
 			'node_modules',
-			'task-master-ai',
+			'novel-master-ai',
 			'dist',
 			'assets'
 		),
-		path.join(process.cwd(), 'node_modules', 'task-master-ai', 'assets')
+		path.join(process.cwd(), 'node_modules', 'novel-master-ai', 'assets')
 	];
 
 	// Find the first existing assets directory
 	for (const assetPath of possiblePaths) {
 		if (fs.existsSync(assetPath)) {
 			// Verify it's actually the assets directory by checking for known files
-			const testFile = path.join(assetPath, 'rules', 'taskmaster.mdc');
+			const testFile = path.join(assetPath, 'rules', 'novelmaster.mdc');
 			if (fs.existsSync(testFile)) {
 				return assetPath;
 			}

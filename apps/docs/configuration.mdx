@@ -1,12 +1,12 @@
 ---
 title: "Configuration"
-description: "Configure Task Master through environment variables in a .env file"
+description: "Configure Novel Master through environment variables in a .env file"
 ---
 
 ## Required Configuration
 
 <Note>
-  Task Master requires an Anthropic API key to function. Add this to your `.env` file:
+  Novel Master requires an Anthropic API key to function. Add this to your `.env` file:
 
   ```bash
   ANTHROPIC_API_KEY=sk-ant-api03-your-api-key
@@ -73,19 +73,19 @@ TM_AUTO_COMMIT=true
 
 ## Troubleshooting
 
-### If `task-master init` doesn't respond:
+### If `novel-master init` doesn't respond:
 
 Try running it with Node directly:
 
 ```bash
-node node_modules/claude-task-master/scripts/init.js
+node node_modules/claude-novel-master/scripts/init.js
 ```
 
 Or clone the repository and run:
 
 ```bash
-git clone https://github.com/eyaltoledano/claude-task-master.git
-cd claude-task-master
+git clone https://github.com/eyaltoledano/claude-novel-master.git
+cd claude-novel-master
 node scripts/init.js
 ```
 

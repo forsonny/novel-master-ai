@@ -1,25 +1,25 @@
-Export tasks to README.md with professional formatting.
+Export chapters to README.md with professional formatting.
 
 Arguments: $ARGUMENTS
 
-Generate a well-formatted README with current task information.
+Generate a well-formatted README with current chapter information.
 
 ## README Synchronization
 
-Creates or updates README.md with beautifully formatted task information.
+Creates or updates README.md with beautifully formatted chapter information.
 
 ## Argument Parsing
 
 Optional filters:
-- "pending" → Only pending tasks
-- "with-subtasks" → Include subtask details
+- "pending" → Only pending chapters
+- "with-subtasks" → Include scene details
 - "by-priority" → Group by priority
-- "sprint" → Current sprint only
+- "story-arc" → Current story arc only
 
 ## Execution
 
 ```bash
-task-master sync-readme [--with-subtasks] [--status=<status>]
+novel-master sync-readme [--with-subtasks] [--status=<status>]
 ```
 
 ## README Generation
@@ -28,21 +28,21 @@ task-master sync-readme [--with-subtasks] [--status=<status>]
 ```markdown
 # Project Name
 
-## 📋 Task Progress
+## 📋 Chapter Progress
 
 Last Updated: 2024-01-15 10:30 AM
 
 ### Summary
-- Total Tasks: 45
+- Total Chapters: 45
 - Completed: 15 (33%)
 - In Progress: 5 (11%)
 - Pending: 25 (56%)
 ```
 
-### 2. **Task Sections**
+### 2. **Chapter Sections**
 Organized by status or priority:
 - Progress indicators
-- Task descriptions
+- Chapter descriptions
 - Dependencies noted
 - Time estimates
 
@@ -55,36 +55,36 @@ Organized by status or priority:
 ## Smart Features
 
 1. **Intelligent Grouping**
-   - By feature area
-   - By sprint/milestone
-   - By assigned developer
+   - By story arc
+   - By act/milestone
+   - By assigned writer
    - By priority
 
 2. **Progress Tracking**
    - Overall completion
-   - Sprint velocity
-   - Burndown indication
+   - Story arc progress
+   - Word count indication
    - Time tracking
 
 3. **Formatting Options**
    - GitHub-flavored markdown
-   - Task checkboxes
+   - Chapter checkboxes
    - Collapsible sections
    - Table format available
 
 ## Example Output
 
 ```markdown
-## 🚀 Current Sprint
+## 🚀 Current Story Arc
 
 ### In Progress
-- [ ] 🔄 #5 **Implement user authentication** (60% complete)
-  - Dependencies: API design (#3 ✅)
-  - Subtasks: 4 (2 completed)
+- [ ] 🔄 #5 **Chapter 5: The Confrontation** (60% complete)
+  - Dependencies: Chapter 3 (Setup ✅)
+  - Scenes: 4 (2 completed)
   - Est: 8h / Spent: 5h
 
 ### Pending (High Priority)
-- [ ] ⚡ #8 **Create dashboard UI**
+- [ ] ⚡ #8 **Chapter 8: The Revelation**
   - Blocked by: #5
   - Complexity: High
   - Est: 12h
@@ -114,4 +114,4 @@ Works well with:
 - CI/CD pipelines
 - Project documentation
 - Team updates
-- Client reports
+- Beta reader reports

@@ -14,7 +14,7 @@ const mockConfig = {
 		moveTasksBetweenTags: true,
 		generateTaskFiles: true,
 		readJSON: true,
-		initTaskMaster: true,
+		initNovelMaster: true,
 		findProjectRoot: true
 	},
 	// Console and process mocks
@@ -54,8 +54,8 @@ function createMockFactory(config = mockConfig) {
 	if (config.core?.readJSON) {
 		mocks.readJSON = createMock('readJSON');
 	}
-	if (config.core?.initTaskMaster) {
-		mocks.initTaskMaster = createMock('initTaskMaster');
+	if (config.core?.initNovelMaster) {
+		mocks.initNovelMaster = createMock('initNovelMaster');
 	}
 	if (config.core?.findProjectRoot) {
 		mocks.findProjectRoot = createMock('findProjectRoot');
@@ -96,9 +96,9 @@ function setupMocks(config = mockConfig) {
 		}));
 	}
 
-	if (config.core?.initTaskMaster) {
+	if (config.core?.initNovelMaster) {
 		jest.mock('../../../../../scripts/modules/config-manager.js', () => ({
-			initTaskMaster: mocks.initTaskMaster,
+			initNovelMaster: mocks.initNovelMaster,
 			isApiKeySet: jest.fn(() => true),
 			getConfig: jest.fn(() => ({}))
 		}));
@@ -214,7 +214,7 @@ describe('CLI Move Command Cross-Tag Functionality', () => {
 			getProjectRoot: jest.fn().mockReturnValue('/test/project')
 		};
 
-		mocks.initTaskMaster.mockReturnValue(mockTaskMaster);
+		mocks.initNovelMaster.mockReturnValue(mockTaskMaster);
 		mocks.findProjectRoot.mockReturnValue('/test/project');
 		mocks.generateTaskFiles.mockResolvedValue();
 		mocks.readJSON.mockReturnValue({

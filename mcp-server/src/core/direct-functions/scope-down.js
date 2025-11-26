@@ -1,6 +1,6 @@
 /**
  * scope-down.js
- * Direct function implementation for scoping down task complexity
+ * Direct function implementation for scoping down narrative complexity (simplifying chapters)
  */
 
 import { scopeDownTask } from '../../../../scripts/modules/task-manager.js';
@@ -11,16 +11,16 @@ import {
 import { createLogWrapper } from '../../tools/utils.js';
 
 /**
- * Direct function wrapper for scoping down task complexity with error handling.
+ * Direct function wrapper for scoping down narrative complexity (simplifying chapters) with error handling.
  *
  * @param {Object} args - Command arguments
- * @param {string} args.id - Comma-separated list of task IDs to scope down
- * @param {string} [args.strength='regular'] - Strength level (light, regular, heavy)
- * @param {string} [args.prompt] - Custom prompt for scoping adjustments
+ * @param {string} args.id - Comma-separated list of chapter IDs to scope down (e.g., "5" or "5,6,7")
+ * @param {string} [args.strength='regular'] - Strength level (light, regular, heavy) - how much to reduce complexity
+ * @param {string} [args.prompt] - Custom narrative context for scoping adjustments (simplification goals, pacing targets)
  * @param {string} [args.tasksJsonPath] - Path to the tasks.json file (resolved by tool)
- * @param {boolean} [args.research=false] - Whether to use research capabilities for scoping
+ * @param {boolean} [args.research=false] - Whether to use research capabilities for genre/lore-aware scoping
  * @param {string} args.projectRoot - Project root path
- * @param {string} [args.tag] - Tag for the task context (optional)
+ * @param {string} [args.tag] - Tag context (outline, draft, revision) for the task (optional)
  * @param {Object} log - Logger object
  * @param {Object} context - Additional context (session)
  * @returns {Promise<Object>} - Result object { success: boolean, data?: any, error?: { code: string, message: string } }
@@ -53,7 +53,7 @@ export async function scopeDownDirect(args, log, context = {}) {
 				success: false,
 				error: {
 					code: 'MISSING_ARGUMENT',
-					message: 'tasksJsonPath is required'
+					message: 'Tasks file path is required to scope down chapters'
 				}
 			};
 		}
@@ -66,16 +66,16 @@ export async function scopeDownDirect(args, log, context = {}) {
 				success: false,
 				error: {
 					code: 'MISSING_PARAMETER',
-					message: 'The id parameter is required for scoping down tasks'
+					message: 'Chapter ID(s) are required for scoping down narrative complexity (e.g., "5" or "5,6,7")'
 				}
 			};
 		}
 
-		// Parse task IDs - convert to numbers as expected by scopeDownTask
+		// Parse chapter IDs - convert to numbers as expected by scopeDownTask
 		const taskIds = id.split(',').map((taskId) => parseInt(taskId.trim(), 10));
 
 		log.info(
-			`Scoping down tasks: ${taskIds.join(', ')}, strength: ${strength}, research: ${research}`
+			`Scoping down chapters (simplifying narrative complexity): ${taskIds.join(', ')}, strength: ${strength}, research: ${research}`
 		);
 
 		// Call the scopeDownTask function
@@ -103,8 +103,8 @@ export async function scopeDownDirect(args, log, context = {}) {
 			success: true,
 			data: {
 				updatedTasks: result.updatedTasks,
-				tasksUpdated: result.updatedTasks.length,
-				message: `Successfully scoped down ${result.updatedTasks.length} task(s)`,
+				chaptersUpdated: result.updatedTasks.length,
+				message: `Successfully scoped down ${result.updatedTasks.length} chapter(s) (simplified narrative complexity)`,
 				telemetryData: result.telemetryData
 			}
 		};

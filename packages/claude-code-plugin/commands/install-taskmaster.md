@@ -1,16 +1,16 @@
-Check if Task Master is installed and install it if needed.
+Check if Novel Master is installed and install it if needed.
 
-This command helps you get Task Master set up globally on your system.
+This command helps you get Novel Master set up globally on your system.
 
 ## Detection and Installation Process
 
 1. **Check Current Installation**
    ```bash
-   # Check if task-master command exists
-   which task-master || echo "Task Master not found"
+   # Check if novel-master command exists
+   which novel-master || echo "Novel Master not found"
    
    # Check npm global packages
-   npm list -g task-master-ai
+   npm list -g novel-master-ai
    ```
 
 2. **System Requirements Check**
@@ -24,32 +24,32 @@ This command helps you get Task Master set up globally on your system.
    # Check Node version (need 16+)
    ```
 
-3. **Install Task Master Globally**
+3. **Install Novel Master Globally**
    If not installed, run:
    ```bash
-   npm install -g task-master-ai
+   npm install -g novel-master-ai
    ```
 
 4. **Verify Installation**
    ```bash
    # Check version
-   task-master --version
+   novel-master --version
    
    # Verify command is available
-   which task-master
+   which novel-master
    ```
 
 5. **Initial Setup**
    ```bash
    # Initialize in current directory
-   task-master init
+   novel-master init
    ```
 
 6. **Configure AI Provider**
    Ensure you have at least one AI provider API key set:
    ```bash
    # Check current configuration
-   task-master models --status
+   novel-master models --status
    
    # If no API keys found, guide setup
    echo "You'll need at least one API key:"
@@ -62,11 +62,11 @@ This command helps you get Task Master set up globally on your system.
 
 7. **Quick Test**
    ```bash
-   # Create a test PRD
-   echo "Build a simple hello world API" > test-prd.txt
+   # Create a test NRD
+   echo "# My Novel\n\n## Act 1\n- Chapter 1: Opening scene" > test-nrd.txt
    
    # Try parsing it
-   task-master parse-prd test-prd.txt -n 3
+   novel-master parse-prd test-nrd.txt -n 3
    ```
 
 ## Troubleshooting
@@ -76,7 +76,7 @@ If installation fails:
 **Permission Errors:**
 ```bash
 # Try with sudo (macOS/Linux)
-sudo npm install -g task-master-ai
+sudo npm install -g novel-master-ai
 
 # Or fix npm permissions
 npm config set prefix ~/.npm-global
@@ -86,7 +86,7 @@ export PATH=~/.npm-global/bin:$PATH
 **Network Issues:**
 ```bash
 # Use different registry
-npm install -g task-master-ai --registry https://registry.npmjs.org/
+npm install -g novel-master-ai --registry https://registry.npmjs.org/
 ```
 
 **Node Version Issues:**
@@ -101,17 +101,17 @@ nvm use 18
 
 Once installed, you should see:
 ```
-✅ Task Master v0.16.2 (or higher) installed
-✅ Command 'task-master' available globally
+✅ Novel Master v0.16.2 (or higher) installed
+✅ Command 'novel-master' available globally
 ✅ AI provider configured
 ✅ Ready to use slash commands!
 
-Try: /project:task-master:init your-prd.md
+Try: /project:novel-master:init your-nrd.md
 ```
 
 ## Next Steps
 
 After installation:
 1. Run `/project:utils:check-health` to verify setup
-2. Configure AI providers with `/project:task-master:models`
-3. Start using Task Master commands!
+2. Configure AI providers with `/project:novel-master:models`
+3. Start using Novel Master commands!

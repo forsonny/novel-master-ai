@@ -2,12 +2,12 @@ Run interactive setup to configure AI models.
 
 ## Interactive Model Configuration
 
-Guides you through setting up AI providers for Task Master.
+Guides you through setting up AI providers for Novel Master.
 
 ## Execution
 
 ```bash
-task-master models --setup
+novel-master models --setup
 ```
 
 ## Setup Process
@@ -40,7 +40,7 @@ Based on your needs:
 Keys can be stored in:
 1. Environment variables (recommended)
 2. `.env` file in project
-3. Global `.taskmaster/config`
+3. Global `.novelmaster/config`
 
 ## Post-Setup
 

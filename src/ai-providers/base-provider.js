@@ -55,7 +55,7 @@ export class BaseAIProvider {
 
 	/**
 	 * Creates a custom fetch function with proxy support.
-	 * Only enables proxy when TASKMASTER_ENABLE_PROXY environment variable is set to 'true'
+	 * Only enables proxy when NOVELMASTER_ENABLE_PROXY environment variable is set to 'true'
 	 * or enableProxy is set to true in config.json.
 	 * Automatically reads http_proxy/https_proxy environment variables when enabled.
 	 * @returns {Function} Custom fetch function with proxy support, or undefined if proxy is disabled

@@ -1,5 +1,6 @@
 /**
- * Direct function wrapper for analyzeTaskComplexity
+ * analyze-task-complexity.js
+ * Direct function implementation for analyzing narrative complexity (plot density, pacing, POV load)
  */
 
 import analyzeTaskComplexity from '../../../../scripts/modules/task-manager/analyze-task-complexity.js';
@@ -12,17 +13,17 @@ import fs from 'fs';
 import { createLogWrapper } from '../../tools/utils.js'; // Import the new utility
 
 /**
- * Analyze task complexity and generate recommendations
+ * Analyze narrative complexity (plot density, pacing, POV load) and generate expansion recommendations
  * @param {Object} args - Function arguments
  * @param {string} args.tasksJsonPath - Explicit path to the tasks.json file.
- * @param {string} args.outputPath - Explicit absolute path to save the report.
+ * @param {string} args.outputPath - Explicit absolute path to save the complexity/pacing report.
  * @param {string|number} [args.threshold] - Minimum complexity score to recommend expansion (1-10)
- * @param {boolean} [args.research] - Use Perplexity AI for research-backed complexity analysis
- * @param {string} [args.ids] - Comma-separated list of task IDs to analyze
- * @param {number} [args.from] - Starting task ID in a range to analyze
- * @param {number} [args.to] - Ending task ID in a range to analyze
+ * @param {boolean} [args.research] - Use research role for genre/lore-aware complexity analysis
+ * @param {string} [args.ids] - Comma-separated list of chapter IDs to analyze
+ * @param {number} [args.from] - Starting chapter ID in a range to analyze
+ * @param {number} [args.to] - Ending chapter ID in a range to analyze
  * @param {string} [args.projectRoot] - Project root path.
- * @param {string} [args.tag] - Tag for the task (optional)
+ * @param {string} [args.tag] - Tag context (outline, draft, revision) for the task (optional)
  * @param {Object} log - Logger object
  * @param {Object} [context={}] - Context object containing session data
  * @param {Object} [context.session] - MCP session object
@@ -54,7 +55,7 @@ export async function analyzeTaskComplexityDirect(args, log, context = {}) {
 				success: false,
 				error: {
 					code: 'MISSING_ARGUMENT',
-					message: 'tasksJsonPath is required'
+					message: 'Tasks file path is required to analyze narrative complexity'
 				}
 			};
 		}
@@ -62,26 +63,26 @@ export async function analyzeTaskComplexityDirect(args, log, context = {}) {
 			log.error('analyzeTaskComplexityDirect called without outputPath');
 			return {
 				success: false,
-				error: { code: 'MISSING_ARGUMENT', message: 'outputPath is required' }
+				error: { code: 'MISSING_ARGUMENT', message: 'Output path is required to save the complexity/pacing report' }
 			};
 		}
 
 		const tasksPath = tasksJsonPath;
 		const resolvedOutputPath = outputPath;
 
-		log.info(`Analyzing task complexity from: ${tasksPath}`);
-		log.info(`Output report will be saved to: ${resolvedOutputPath}`);
+		log.info(`Analyzing narrative complexity (plot density, pacing, POV load) from: ${tasksPath}`);
+		log.info(`Complexity/pacing report will be saved to: ${resolvedOutputPath}`);
 
 		if (ids) {
-			log.info(`Analyzing specific task IDs: ${ids}`);
+			log.info(`Analyzing specific chapter IDs: ${ids}`);
 		} else if (from || to) {
 			const fromStr = from !== undefined ? from : 'first';
 			const toStr = to !== undefined ? to : 'last';
-			log.info(`Analyzing tasks in range: ${fromStr} to ${toStr}`);
+			log.info(`Analyzing chapters in range: ${fromStr} to ${toStr}`);
 		}
 
 		if (research) {
-			log.info('Using research role for complexity analysis');
+			log.info('Using research role for genre/lore-aware complexity analysis');
 		}
 
 		// Prepare options for the core function - REMOVED mcpLog and session here
@@ -192,13 +193,13 @@ export async function analyzeTaskComplexityDirect(args, log, context = {}) {
 			return {
 				success: true,
 				data: {
-					message: `Task complexity analysis complete. Report saved to ${outputPath}`,
+					message: `Narrative complexity analysis complete. Pacing/plot complexity report saved to ${outputPath}`,
 					reportPath: outputPath,
 					reportSummary: {
-						taskCount: analysisArray.length,
-						highComplexityTasks,
-						mediumComplexityTasks,
-						lowComplexityTasks
+						chapterCount: analysisArray.length,
+						highComplexityChapters: highComplexityTasks,
+						mediumComplexityChapters: mediumComplexityTasks,
+						lowComplexityChapters: lowComplexityTasks
 					},
 					fullReport: coreResult.report,
 					telemetryData: coreResult.telemetryData,

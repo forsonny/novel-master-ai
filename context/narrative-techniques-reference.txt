@@ -1,0 +1,270 @@
+# Narrative Techniques Reference for Novel Writing
+
+This guide provides a comprehensive reference for narrative techniques, story structures, and writing craft that Novel Master uses to generate and refine story elements.
+
+## Story Structures
+
+### Three-Act Structure
+**Classic structure used in most commercial fiction**
+
+**Act I (Setup): 25% of story**
+- Hook: Opening scene that grabs attention
+- Inciting Incident: Event that disrupts status quo
+- Plot Point 1: Decision that propels into Act II
+
+**Act II (Confrontation): 50% of story**
+- Rising Action: Obstacles and complications
+- Midpoint: Major turning point or revelation
+- Crisis: Darkest moment, all seems lost
+- Plot Point 2: Decision that leads to climax
+
+**Act III (Resolution): 25% of story**
+- Climax: Final confrontation
+- Falling Action: Consequences and aftermath
+- Resolution: New equilibrium established
+
+### Hero's Journey (Monomyth)
+**Common in fantasy and adventure**
+
+1. **Ordinary World:** Hero's normal life
+2. **Call to Adventure:** Challenge presented
+3. **Refusal of Call:** Hero hesitates
+4. **Meeting Mentor:** Guide appears
+5. **Crossing Threshold:** Enters special world
+6. **Tests, Allies, Enemies:** Challenges and helpers
+7. **Approach to Inmost Cave:** Preparation for ordeal
+8. **Ordeal:** Greatest challenge
+9. **Reward:** Gains something valuable
+10. **Road Back:** Return journey begins
+11. **Resurrection:** Final test
+12. **Return with Elixir:** Transformed, brings wisdom
+
+### Save the Cat Beat Sheet
+**Popular screenwriting structure adapted for novels**
+
+1. **Opening Image (1%):** Visual that represents the whole
+2. **Theme Stated (5%):** What story is about
+3. **Setup (1-10%):** World and character introduction
+4. **Catalyst (10%):** Inciting incident
+5. **Debate (10-20%):** Should hero proceed?
+6. **Break into Two (20%):** Act II begins
+7. **B Story (22%):** Secondary plotline
+8. **Fun and Games (20-50%):** Promise of premise
+9. **Midpoint (50%):** False victory or defeat
+10. **Bad Guys Close In (50-75%):** Opposition strengthens
+11. **All Is Lost (75%):** Darkest moment
+12. **Dark Night of the Soul (75-80%):** Hero reflects
+13. **Break into Three (80%):** Act III begins
+14. **Finale (80-99%):** Climax and resolution
+15. **Final Image (99-100%):** Contrast with opening
+
+### Seven-Point Story Structure
+**Character-focused structure**
+
+1. **Hook:** Character in opposite state
+2. **Plot Turn 1:** Inciting incident
+3. **Pinch Point 1:** Apply pressure
+4. **Midpoint:** Character moves from reaction to action
+5. **Pinch Point 2:** Apply more pressure
+6. **Plot Turn 2:** Power to resolve
+7. **Resolution:** Character in new state
+
+## POV Techniques
+
+### First Person
+**Advantages:**
+- Intimate connection with narrator
+- Strong voice and personality
+- Immediate emotional impact
+- Unreliable narrator possibilities
+
+**Challenges:**
+- Limited to narrator's knowledge
+- Can feel claustrophobic
+- Harder to show other characters' thoughts
+
+**Best For:**
+- Character-driven stories
+- Mysteries (detective POV)
+- Coming-of-age stories
+- Stories with unreliable narrators
+
+### Third Person Limited
+**Advantages:**
+- Close to character but with flexibility
+- Can switch POV between scenes
+- Maintains some distance
+- Most common in commercial fiction
+
+**Challenges:**
+- Must establish POV clearly
+- Switching POVs can confuse
+- Less intimate than first person
+
+**Best For:**
+- Most commercial fiction
+- Multiple POV stories
+- Stories needing flexibility
+
+### Third Person Omniscient
+**Advantages:**
+- Can show any character's thoughts
+- Can provide authorial commentary
+- Epic scope
+- Historical or literary fiction feel
+
+**Challenges:**
+- Can feel distant
+- Harder to maintain tension
+- Requires strong authorial voice
+
+**Best For:**
+- Epic fantasy
+- Literary fiction
+- Historical fiction
+- Stories with large casts
+
+### Multiple POV
+**Best Practices:**
+- Limit to 3-5 POV characters
+- Use distinct voices for each
+- Switch at chapter breaks
+- Each POV should advance plot
+- Balance screen time
+
+## Pacing Techniques
+
+### Scene and Sequel Structure
+**Scene (Action):**
+- Goal: What character wants
+- Conflict: Obstacle in the way
+- Disaster: Failure or complication
+
+**Sequel (Reaction):**
+- Reaction: Emotional response
+- Dilemma: What to do next?
+- Decision: New goal chosen
+
+### Chapter Endings
+**Techniques:**
+- Cliffhanger: Suspenseful moment
+- Revelation: Important information
+- Emotional beat: Character moment
+- Plot twist: Unexpected turn
+- Question: Unanswered question
+
+### Pacing Variation
+- **Fast Pacing:** Short sentences, action, dialogue, present tense
+- **Slow Pacing:** Long sentences, description, reflection, past tense
+- **Rhythm:** Alternate fast and slow sections
+
+### Tension and Release
+- Build tension through conflict
+- Release through resolution or humor
+- Vary intensity throughout story
+- Peak at climax
+
+## Character Development
+
+### Character Arc Types
+1. **Positive Arc:** Character grows, overcomes flaw
+2. **Negative Arc:** Character degrades, succumbs to flaw
+3. **Flat Arc:** Character changes world, not themselves
+4. **No Arc:** Character remains same (rare, usually secondary)
+
+### Character Dimensions
+- **Surface:** What others see
+- **Depth:** Internal thoughts and feelings
+- **Backstory:** Past experiences
+- **Motivation:** What drives them
+- **Goal:** What they want
+- **Conflict:** What stands in their way
+
+### Dialogue Techniques
+- **Voice:** Distinct speech patterns
+- **Subtext:** What's not being said
+- **Purpose:** Advance plot or reveal character
+- **Conflict:** Even friendly dialogue has tension
+- **Pacing:** Vary dialogue with action
+
+## World-Building Techniques
+
+### Show, Don't Tell
+- Reveal world through character actions
+- Use sensory details
+- Let readers discover naturally
+- Avoid info dumps
+
+### Consistency Rules
+- Establish rules early
+- Document important rules
+- Check for contradictions
+- Maintain internal logic
+
+### Layered Revelation
+- Start with surface details
+- Reveal deeper layers gradually
+- Save major reveals for key moments
+- Build mystery and intrigue
+
+## Emotional Beats
+
+### Emotional Arc
+1. **Setup:** Establish emotional baseline
+2. **Rising Emotion:** Build intensity
+3. **Peak:** Emotional climax
+4. **Release:** Emotional resolution
+5. **New Baseline:** Changed emotional state
+
+### Emotional Techniques
+- **Sensory Details:** Physical sensations
+- **Internal Monologue:** Character thoughts
+- **Body Language:** Physical reactions
+- **Metaphor/Simile:** Emotional comparisons
+- **Pacing:** Match emotion to pacing
+
+## Revision Techniques
+
+### Macro Revision
+- **Structure:** Act structure, pacing
+- **Character:** Arcs, consistency, voice
+- **Plot:** Logic, tension, resolution
+- **Theme:** Clarity, development
+
+### Micro Revision
+- **Prose:** Sentence structure, word choice
+- **Dialogue:** Voice, subtext, purpose
+- **Description:** Sensory details, specificity
+- **Pacing:** Sentence length, scene length
+
+### Continuity Checks
+- **Character:** Appearance, voice, motivation
+- **Timeline:** Chronology, time passage
+- **World:** Rules, consistency
+- **Plot:** Logic, cause and effect
+
+## Using Techniques in Novel Master
+
+When working with Novel Master:
+
+1. **NRD Structure:** Use three-act structure or hero's journey in your NRD
+2. **POV Specification:** Clearly define POV in NRD
+3. **Pacing Notes:** Include pacing preferences in revision priorities
+4. **Character Arcs:** Define arcs in character roster
+5. **Emotional Beats:** Note key emotional moments in chapter beats
+
+Novel Master's AI prompts incorporate these techniques when:
+- Expanding chapters into scenes
+- Generating narrative metadata
+- Analyzing complexity
+- Updating tasks with prose
+- Validating scene quality
+
+## Additional Resources
+
+- **Story Structure:** Save the Cat, Story Engineering, The Hero's Journey
+- **Character:** The Anatomy of Story, Creating Character Arcs
+- **POV:** The Art of Fiction, Writing Deep Point of View
+- **Pacing:** Techniques of the Selling Writer, Scene & Structure
+- **Revision:** Self-Editing for Fiction Writers, The First Five Pages
+

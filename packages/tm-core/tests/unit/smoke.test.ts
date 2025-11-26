@@ -26,7 +26,7 @@ import type {
 describe('tm-core smoke tests', () => {
 	describe('package metadata', () => {
 		it('should export correct package name and version', () => {
-			expect(name).toBe('@task-master/tm-core');
+			expect(name).toBe('@novel-master/tm-core');
 			expect(version).toBe('1.0.0');
 		});
 	});

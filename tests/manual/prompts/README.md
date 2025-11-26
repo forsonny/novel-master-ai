@@ -1,6 +1,6 @@
-# Task Master Prompt Template Testing
+# Novel Master Prompt Template Testing
 
-This directory contains comprehensive testing tools for Task Master's centralized prompt template system.
+This directory contains comprehensive testing tools for Novel Master's centralized prompt template system.
 
 ## Interactive Menu System (Recommended)
 

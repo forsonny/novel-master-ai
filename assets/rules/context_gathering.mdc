@@ -1,0 +1,363 @@
+---
+description: Guide for gathering and using context effectively in novel writing workflows
+globs: **/*
+alwaysApply: true
+---
+
+# Novel Master Context Gathering Guide
+
+This guide outlines strategies for gathering and using context effectively when working with Novel Master for novel writing.
+
+## Types of Context
+
+### 1. Manuscript Context
+
+**What it includes**:
+- Existing chapter files (`.novelmaster/manuscript/**/*.md`)
+- Drafted scenes and prose
+- Character notes and development
+- Worldbuilding documentation
+- Research notes
+
+**When to use**:
+- Updating existing chapters
+- Expanding scenes
+- Maintaining continuity
+- Character development
+
+**How to access**:
+```bash
+# Enable manuscript context in commands
+novel-master update-task --id=1 --prompt="..." 
+# (automatically uses manuscript context if available)
+
+# Or explicitly via MCP tools with hasManuscriptContext: true
+```
+
+### 2. NRD Context
+
+**What it includes**:
+- Novel Requirements Document (`.novelmaster/docs/nrd.txt`)
+- Character sheets
+- World rules
+- Plot structure
+- Thematic elements
+
+**When to use**:
+- Parsing initial structure
+- Validating against requirements
+- Maintaining story consistency
+- Character development
+
+**How to access**:
+```bash
+# NRD is automatically included when parsing
+novel-master parse-prd nrd.txt
+
+# Reference NRD in updates
+novel-master update-task --id=1 --prompt="Based on NRD requirements..."
+```
+
+### 3. Research Context
+
+**What it includes**:
+- Research notes (`.novelmaster/docs/research/**`)
+- Genre conventions
+- Worldbuilding details
+- Historical references
+- Writing technique notes
+
+**When to use**:
+- Worldbuilding queries
+- Genre-specific writing
+- Historical accuracy
+- Technical details
+
+**How to access**:
+```bash
+# Use research mode
+novel-master expand --id=1 --research
+
+# Research specific topic
+novel-master research --prompt="Medieval castle architecture"
+```
+
+### 4. Task Context
+
+**What it includes**:
+- Existing tasks and subtasks
+- Task dependencies
+- Task metadata (POV, tension, timeline)
+- Completion status
+- Word count progress
+
+**When to use**:
+- Expanding tasks
+- Updating related tasks
+- Dependency management
+- Progress tracking
+
+**How to access**:
+```bash
+# List tasks for context
+novel-master list
+
+# Show specific task
+novel-master show <id>
+
+# Analyze complexity for context
+novel-master analyze-complexity
+```
+
+## Context Gathering Strategies
+
+### Strategy 1: Incremental Context
+
+**Approach**: Gather context as needed, incrementally.
+
+**When to use**:
+- Early in project
+- When context is large
+- When working on isolated chapters
+
+**Example**:
+```bash
+# Start with minimal context
+novel-master expand --id=1
+
+# Add context as needed
+novel-master update-task --id=1 --prompt="Based on Chapter 2 developments..."
+```
+
+### Strategy 2: Comprehensive Context
+
+**Approach**: Gather all relevant context upfront.
+
+**When to use**:
+- Complex narratives
+- Multi-POV novels
+- Interconnected plot threads
+- Revision passes
+
+**Example**:
+```bash
+# Gather comprehensive context
+novel-master analyze-complexity --research
+
+# Use context in updates
+novel-master update-task --id=1 --prompt="..." 
+# (uses all available context)
+```
+
+### Strategy 3: Tag-Based Context
+
+**Approach**: Organize context by tags (POV, timeline, revision phase).
+
+**When to use**:
+- Multi-POV novels
+- Complex timelines
+- Revision workflows
+
+**Example**:
+```bash
+# Work with POV-specific context
+novel-master use-tag pov-protagonist
+novel-master list  # Shows only protagonist's chapters
+
+# Switch to different context
+novel-master use-tag pov-antagonist
+novel-master list  # Shows only antagonist's chapters
+```
+
+## Context Patterns for Fiction Writing
+
+### Pattern 1: Character Development
+
+**Context needed**:
+- Character sheets from NRD
+- Previous scenes with character
+- Character arc progression
+- POV consistency
+
+**Gathering approach**:
+```bash
+# 1. Review character sheet
+cat .novelmaster/docs/nrd.txt | grep -A 20 "Character: Protagonist"
+
+# 2. Review previous character scenes
+novel-master list | grep "protagonist"
+
+# 3. Update with character context
+novel-master update-task --id=5 --prompt="Develop protagonist's internal conflict based on previous scenes..."
+```
+
+### Pattern 2: Worldbuilding Consistency
+
+**Context needed**:
+- World rules from NRD
+- Research notes
+- Previous worldbuilding references
+- Established lore
+
+**Gathering approach**:
+```bash
+# 1. Review world rules
+cat .novelmaster/docs/nrd.txt | grep -A 30 "World Rules"
+
+# 2. Check research notes
+ls .novelmaster/docs/research/
+
+# 3. Use research for consistency
+novel-master expand --id=3 --research
+```
+
+### Pattern 3: Plot Thread Management
+
+**Context needed**:
+- All related chapters
+- Subplot progression
+- Dependency relationships
+- Timeline alignment
+
+**Gathering approach**:
+```bash
+# 1. Analyze complexity for plot overview
+novel-master analyze-complexity
+
+# 2. Review related tasks
+novel-master list | grep -i "subplot"
+
+# 3. Update with plot context
+novel-master update-task --id=7 --prompt="Advance romance subplot based on Chapters 3 and 5..."
+```
+
+### Pattern 4: Continuity Checking
+
+**Context needed**:
+- All previous chapters
+- Character descriptions
+- Timeline references
+- World details
+
+**Gathering approach**:
+```bash
+# 1. Generate manuscript for full context
+novel-master generate --compile
+
+# 2. Review manuscript summary
+cat .novelmaster/manuscript/draft/manuscript-summary.json
+
+# 3. Check continuity
+novel-master analyze-complexity --research
+```
+
+## Using Context in Prompts
+
+### Effective Context Integration
+
+**Good prompt with context**:
+```
+Update Chapter 5 based on:
+- Character development in Chapters 2 and 4
+- Worldbuilding established in Chapter 1
+- Plot thread from Chapter 3
+- Research notes on medieval architecture
+
+The scene should maintain consistency with established character voice and world rules.
+```
+
+**Poor prompt without context**:
+```
+Update chapter 5
+```
+
+### Context-Aware Updates
+
+```bash
+# Update with manuscript context
+novel-master update-task --id=5 \
+  --prompt="Based on protagonist's arc in Chapters 2-4, develop the confrontation scene..."
+
+# Expand with research context
+novel-master expand --id=5 --research \
+  --prompt="Break down into scenes that advance the character arc established in previous chapters"
+```
+
+## Context File Organization
+
+### Recommended Structure
+
+```
+.novelmaster/
+├── docs/
+│   ├── nrd.txt              # Main NRD
+│   ├── research/            # Research notes
+│   │   ├── worldbuilding.md
+│   │   ├── genre-conventions.md
+│   │   └── character-notes.md
+│   └── notes/               # Author notes
+├── manuscript/
+│   └── draft/
+│       └── chapters/        # Drafted chapters
+└── tasks/
+    └── tasks.json          # Task structure
+```
+
+### Best Practices
+
+1. **Organize by type**: Keep research, notes, and drafts separate
+2. **Use descriptive names**: Make files easy to find
+3. **Update regularly**: Keep context files current
+4. **Reference in tasks**: Link tasks to relevant context files
+5. **Version control**: Track context changes in Git
+
+## Context Limitations
+
+### Token Limits
+
+- **Be selective**: Include only relevant context
+- **Summarize**: Use summaries for large context
+- **Break down**: Split large operations into smaller ones
+- **Prioritize**: Include most important context first
+
+### Performance Considerations
+
+- **Cache context**: Reuse gathered context when possible
+- **Lazy loading**: Load context only when needed
+- **Incremental updates**: Update context incrementally
+- **Clean up**: Remove outdated context
+
+## Best Practices
+
+1. **Start with NRD**: Always reference the NRD for core context
+2. **Gather incrementally**: Don't overload with unnecessary context
+3. **Use tags**: Organize context by narrative elements (POV, timeline)
+4. **Leverage research**: Use research mode for worldbuilding context
+5. **Maintain consistency**: Ensure context aligns across chapters
+6. **Document context**: Keep notes on important context decisions
+7. **Review regularly**: Periodically review and update context
+
+## Integration with Novel Master
+
+### Automatic Context Gathering
+
+Novel Master automatically gathers context when:
+- `hasManuscriptContext: true` is set
+- Manuscript files exist in `.novelmaster/manuscript/`
+- Research notes exist in `.novelmaster/docs/research/`
+
+### Manual Context Provision
+
+You can provide context manually via:
+- Prompt text in update commands
+- Research tool queries
+- File references in commands
+- Tag-based organization
+
+### Context in MCP Tools
+
+MCP tools automatically use context when available:
+- `parse_prd`: Uses NRD context
+- `expand_task`: Uses task and manuscript context
+- `update_task`: Uses full project context
+- `research`: Uses research notes and manuscript context

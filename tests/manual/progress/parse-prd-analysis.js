@@ -291,7 +291,7 @@ async function main() {
 	const args = process.argv.slice(2);
 	const testType = args[0] || 'accuracy';
 
-	console.log(chalk.bold.cyan('🚀 Task Master Detailed Progress Tests\n'));
+	console.log(chalk.bold.cyan('🚀 Novel Master Detailed Progress Tests\n'));
 	console.log(chalk.blue(`Test type: ${testType}\n`));
 
 	try {

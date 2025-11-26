@@ -1,5 +1,6 @@
 /**
- * Direct function wrapper for cross-tag task moves
+ * move-task-cross-tag.js
+ * Direct function implementation for moving chapters/scenes between tag contexts (e.g., outline → draft, draft → revision)
  */
 
 import { moveTasksBetweenTags } from '../../../../scripts/modules/task-manager/move-task.js';
@@ -11,13 +12,13 @@ import {
 } from '../../../../scripts/modules/utils.js';
 
 /**
- * Move tasks between tags
+ * Move chapters/scenes between tag contexts (e.g., outline → draft, draft → revision)
  * @param {Object} args - Function arguments
  * @param {string} args.tasksJsonPath - Explicit path to the tasks.json file
- * @param {string} args.sourceIds - Comma-separated IDs of tasks to move
- * @param {string} args.sourceTag - Source tag name
- * @param {string} args.targetTag - Target tag name
- * @param {boolean} args.withDependencies - Move dependent tasks along with main task
+ * @param {string} args.sourceIds - Comma-separated IDs of chapters to move (e.g., "5" or "5,6,7")
+ * @param {string} args.sourceTag - Source tag context (e.g., "outline", "draft")
+ * @param {string} args.targetTag - Target tag context (e.g., "draft", "rev-1")
+ * @param {boolean} args.withDependencies - Move prerequisite chapters along with main chapter
  * @param {boolean} args.ignoreDependencies - Break cross-tag dependencies during move
  * @param {string} args.file - Alternative path to the tasks.json file
  * @param {string} args.projectRoot - Project root directory
@@ -35,7 +36,7 @@ export async function moveTaskCrossTagDirect(args, log, context = {}) {
 		return {
 			success: false,
 			error: {
-				message: 'Source IDs are required',
+				message: 'Source chapter IDs are required (e.g., "5" or "5,6,7")',
 				code: 'MISSING_SOURCE_IDS'
 			}
 		};
@@ -45,7 +46,7 @@ export async function moveTaskCrossTagDirect(args, log, context = {}) {
 		return {
 			success: false,
 			error: {
-				message: 'Source tag is required for cross-tag moves',
+				message: 'Source tag context is required for cross-tag moves (e.g., "outline", "draft")',
 				code: 'MISSING_SOURCE_TAG'
 			}
 		};
@@ -55,7 +56,7 @@ export async function moveTaskCrossTagDirect(args, log, context = {}) {
 		return {
 			success: false,
 			error: {
-				message: 'Target tag is required for cross-tag moves',
+				message: 'Target tag context is required for cross-tag moves (e.g., "draft", "rev-1")',
 				code: 'MISSING_TARGET_TAG'
 			}
 		};
@@ -70,8 +71,8 @@ export async function moveTaskCrossTagDirect(args, log, context = {}) {
 				code: 'SAME_SOURCE_TARGET_TAG',
 				suggestions: [
 					'Use different tags for cross-tag moves',
-					'Use within-tag move: task-master move --from=<id> --to=<id> --tag=<tag>',
-					'Check available tags: task-master tags'
+					'Use within-tag move: novel-master move --from=<id> --to=<id> --tag=<tag>',
+					'Check available tags: novel-master tags'
 				]
 			}
 		};
@@ -121,7 +122,7 @@ export async function moveTaskCrossTagDirect(args, log, context = {}) {
 				success: true,
 				data: {
 					...result,
-					message: `Successfully moved ${sourceIds.length} task(s) from "${args.sourceTag}" to "${args.targetTag}"`,
+					message: `Successfully moved ${sourceIds.length} chapter(s) from "${args.sourceTag}" to "${args.targetTag}"`,
 					moveOptions,
 					sourceTag: args.sourceTag,
 					targetTag: args.targetTag
@@ -132,7 +133,7 @@ export async function moveTaskCrossTagDirect(args, log, context = {}) {
 			disableSilentMode();
 		}
 	} catch (error) {
-		log.error(`Failed to move tasks between tags: ${error.message}`);
+		log.error(`Failed to move chapters between tag contexts: ${error.message}`);
 		log.error(`Error code: ${error.code}, Error name: ${error.name}`);
 
 		// Enhanced error handling with structured error objects
@@ -145,13 +146,13 @@ export async function moveTaskCrossTagDirect(args, log, context = {}) {
 			suggestions = [
 				'Use --with-dependencies to move dependent tasks together',
 				'Use --ignore-dependencies to break cross-tag dependencies',
-				'Run task-master validate-dependencies to check for issues',
+				'Run novel-master validate-dependencies to check for issues',
 				'Move dependencies first, then move the main task'
 			];
 		} else if (error.code === 'CANNOT_MOVE_SUBTASK') {
 			errorCode = 'SUBTASK_MOVE_RESTRICTION';
 			suggestions = [
-				'Promote subtask to full task first: task-master remove-subtask --id=<subtaskId> --convert',
+				'Promote subtask to full task first: novel-master remove-subtask --id=<subtaskId> --convert',
 				'Move the parent task with all subtasks using --with-dependencies'
 			];
 		} else if (
@@ -161,9 +162,9 @@ export async function moveTaskCrossTagDirect(args, log, context = {}) {
 		) {
 			errorCode = 'TAG_OR_TASK_NOT_FOUND';
 			suggestions = [
-				'Check available tags: task-master tags',
-				'Verify task IDs exist: task-master list',
-				'Check task details: task-master show <id>'
+				'Check available tags: novel-master tags',
+				'Verify task IDs exist: novel-master list',
+				'Check task details: novel-master show <id>'
 			];
 		} else if (error.message.includes('cross-tag dependency conflicts')) {
 			// Fallback for legacy error messages
@@ -171,23 +172,23 @@ export async function moveTaskCrossTagDirect(args, log, context = {}) {
 			suggestions = [
 				'Use --with-dependencies to move dependent tasks together',
 				'Use --ignore-dependencies to break cross-tag dependencies',
-				'Run task-master validate-dependencies to check for issues',
+				'Run novel-master validate-dependencies to check for issues',
 				'Move dependencies first, then move the main task'
 			];
 		} else if (error.message.includes('Cannot move subtask')) {
 			// Fallback for legacy error messages
 			errorCode = 'SUBTASK_MOVE_RESTRICTION';
 			suggestions = [
-				'Promote subtask to full task first: task-master remove-subtask --id=<subtaskId> --convert',
+				'Promote subtask to full task first: novel-master remove-subtask --id=<subtaskId> --convert',
 				'Move the parent task with all subtasks using --with-dependencies'
 			];
 		} else if (error.message.includes('not found')) {
 			// Fallback for legacy error messages
 			errorCode = 'TAG_OR_TASK_NOT_FOUND';
 			suggestions = [
-				'Check available tags: task-master tags',
-				'Verify task IDs exist: task-master list',
-				'Check task details: task-master show <id>'
+				'Check available tags: novel-master tags',
+				'Verify task IDs exist: novel-master list',
+				'Check task details: novel-master show <id>'
 			];
 		} else if (
 			error.code === 'TASK_ALREADY_EXISTS' ||

@@ -21,10 +21,10 @@ export class ConfigLoader {
 	private globalConfigPath: string;
 
 	constructor(projectRoot: string) {
-		this.localConfigPath = path.join(projectRoot, '.taskmaster', 'config.json');
+		this.localConfigPath = path.join(projectRoot, '.novelmaster', 'config.json');
 		this.globalConfigPath = path.join(
 			process.env.HOME || '',
-			'.taskmaster',
+			'.novelmaster',
 			'config.json'
 		);
 	}

@@ -103,7 +103,7 @@ When updating extension metadata, ensure these fields match between `package.jso
 {
   "version": "1.0.1",                    // ⚠️ MUST MATCH
   "publisher": "Hamster",        // ⚠️ MUST MATCH  
-  "displayName": "taskr: Task Master Kanban", // ⚠️ MUST MATCH
+  "displayName": "taskr: Novel Master Kanban", // ⚠️ MUST MATCH
   "description": "A visual Kanban board...",  // ⚠️ MUST MATCH
 }
 ```
@@ -193,7 +193,7 @@ If needed, you can manually trigger a release:
 The extension uses a separate tagging strategy from the main package:
 
 - **Extension tags**: `taskr-kanban@1.0.1`
-- **Main package tags**: `task-master-ai@2.1.0`
+- **Main package tags**: `novel-master-ai@2.1.0`
 
 This allows independent versioning and prevents conflicts in the monorepo.
 

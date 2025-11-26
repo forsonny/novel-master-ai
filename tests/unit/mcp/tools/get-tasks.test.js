@@ -13,7 +13,7 @@ import {
 
 // Mock EVERYTHING
 const mockListTasksDirect = jest.fn();
-jest.mock('../../../../mcp-server/src/core/task-master-core.js', () => ({
+jest.mock('../../../../mcp-server/src/core/novel-master-core.js', () => ({
 	listTasksDirect: mockListTasksDirect
 }));
 
@@ -71,7 +71,7 @@ const registerListTasksTool = (server) => {
 	const toolConfig = {
 		name: 'get_tasks',
 		description:
-			'Get all tasks from Task Master, optionally filtering by status and including subtasks.',
+			'Get all tasks from Novel Master, optionally filtering by status and including subtasks.',
 		parameters: mockZod,
 
 		execute: (args, context) => {
@@ -182,7 +182,7 @@ describe('MCP Tool: get-tasks', () => {
 		expect(mockServer.addTool).toHaveBeenCalledWith(
 			expect.objectContaining({
 				name: 'get_tasks',
-				description: expect.stringContaining('Get all tasks from Task Master'),
+				description: expect.stringContaining('Get all tasks from Novel Master'),
 				parameters: expect.any(Object),
 				execute: expect.any(Function)
 			})

@@ -1,10 +1,10 @@
 /**
- * @fileoverview Base error class for Task Master operations
+ * @fileoverview Base error class for Novel Master operations
  * Provides comprehensive error handling with metadata, context, and serialization support
  */
 
 /**
- * Error codes used throughout the Task Master system
+ * Error codes used throughout the Novel Master system
  */
 export const ERROR_CODES = {
 	// File system errors
@@ -97,7 +97,7 @@ export interface SerializableError {
 }
 
 /**
- * Base error class for all Task Master operations
+ * Base error class for all Novel Master operations
  *
  * Provides comprehensive error handling with:
  * - Error codes for programmatic handling

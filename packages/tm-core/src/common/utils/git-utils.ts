@@ -1,5 +1,5 @@
 /**
- * @fileoverview Git utilities for Task Master
+ * @fileoverview Git utilities for Novel Master
  * Git integration utilities using raw git commands and gh CLI
  */
 

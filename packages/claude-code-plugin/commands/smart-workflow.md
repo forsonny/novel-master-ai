@@ -14,23 +14,23 @@ Based on context, I'll determine the best workflow:
 
 ### Context Analysis
 - Previous command executed
-- Current task states
+- Current chapter states
 - Unfinished work from last session
 - Your typical patterns
 
 ### Smart Execution
 
 If last command was:
-- `status` → Likely starting work → Run daily standup
-- `complete` → Task finished → Find next task
-- `list pending` → Planning → Suggest sprint planning
+- `status` → Likely starting work → Run daily writing session
+- `complete` → Chapter finished → Find next chapter
+- `list pending` → Planning → Suggest story arc planning
 - `expand` → Breaking down work → Show complexity analysis
 - `init` → New project → Show onboarding workflow
 
 If no recent commands:
-- Morning? → Daily standup workflow
-- Many pending tasks? → Sprint planning
-- Tasks blocked? → Dependency resolution
+- Morning? → Daily writing workflow
+- Many pending chapters? → Story arc planning
+- Chapters blocked? → Dependency resolution
 - Friday? → Weekly review
 
 ### Workflow Composition
@@ -39,7 +39,7 @@ I'll chain appropriate commands:
 1. Analyze current state
 2. Execute primary workflow
 3. Suggest follow-up actions
-4. Prepare environment for coding
+4. Prepare environment for writing
 
 ### Learning Mode
 
@@ -51,5 +51,5 @@ This command learns from your patterns:
 
 Example flows detected:
 - Morning: standup → next → start
-- After lunch: status → continue task
+- After lunch: status → continue chapter
 - End of day: complete → commit → status

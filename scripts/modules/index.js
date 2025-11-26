@@ -1,6 +1,6 @@
 /**
  * index.js
- * Main export point for all Task Master CLI modules
+ * Main export point for all Novel Master CLI modules
  */
 
 // Export all modules

@@ -19,7 +19,7 @@ describe('Complex Cross-Tag Scenarios', () => {
 		'..',
 		'..',
 		'dist',
-		'task-master.js'
+		'novel-master.js'
 	);
 
 	beforeEach(() => {
@@ -27,9 +27,9 @@ describe('Complex Cross-Tag Scenarios', () => {
 		testDir = fs.mkdtempSync(path.join(os.tmpdir(), 'tm-test-'));
 		process.chdir(testDir);
 		// Keep integration timings deterministic
-		process.env.TASKMASTER_SKIP_AUTO_UPDATE = '1';
+		process.env.NOVELMASTER_SKIP_AUTO_UPDATE = '1';
 
-		// Initialize task-master
+		// Initialize novel-master
 		execSync(`node ${binPath} init --yes`, {
 			stdio: 'pipe'
 		});
@@ -123,7 +123,7 @@ describe('Complex Cross-Tag Scenarios', () => {
 		};
 
 		// Write tasks to file
-		tasksPath = path.join(testDir, '.taskmaster', 'tasks', 'tasks.json');
+		tasksPath = path.join(testDir, '.novelmaster', 'tasks', 'tasks.json');
 		fs.writeFileSync(tasksPath, JSON.stringify(complexTasks, null, 2));
 	});
 
@@ -140,7 +140,7 @@ describe('Complex Cross-Tag Scenarios', () => {
 		if (testDir && fs.existsSync(testDir)) {
 			fs.rmSync(testDir, { recursive: true, force: true });
 		}
-		delete process.env.TASKMASTER_SKIP_AUTO_UPDATE;
+		delete process.env.NOVELMASTER_SKIP_AUTO_UPDATE;
 	});
 
 	describe('Circular Dependency Detection', () => {

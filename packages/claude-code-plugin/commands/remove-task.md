@@ -1,68 +1,68 @@
-Remove a task permanently from the project.
+Remove a chapter permanently from the project.
 
-Arguments: $ARGUMENTS (task ID)
+Arguments: $ARGUMENTS (chapter ID)
 
-Delete a task and handle all its relationships properly.
+Delete a chapter and handle all its relationships properly.
 
-## Task Removal
+## Chapter Removal
 
-Permanently removes a task while maintaining project integrity.
+Permanently removes a chapter while maintaining project integrity.
 
 ## Argument Parsing
 
-- "remove task 5"
+- "remove chapter 5"
 - "delete 5"
-- "5" → remove task 5
+- "5" → remove chapter 5
 - Can include "-y" for auto-confirm
 
 ## Execution
 
 ```bash
-task-master remove-task --id=<id> [-y]
+novel-master remove-task --id=<id> [-y]
 ```
 
 ## Pre-Removal Analysis
 
-1. **Task Details**
+1. **Chapter Details**
    - Current status
    - Work completed
    - Time invested
    - Associated data
 
 2. **Relationship Check**
-   - Tasks that depend on this
-   - Dependencies this task has
-   - Subtasks that will be removed
+   - Chapters that depend on this
+   - Dependencies this chapter has
+   - Scenes that will be removed
    - Blocking implications
 
 3. **Impact Assessment**
    ```
-   Task Removal Impact
+   Chapter Removal Impact
    ━━━━━━━━━━━━━━━━━━
-   Task: #5 "Implement authentication" (in-progress)
+   Chapter: #5 "The Confrontation" (in-progress)
    Status: 60% complete (~8 hours work)
    
    Will affect:
-   - 3 tasks depend on this (will be blocked)
-   - Has 4 subtasks (will be deleted)
-   - Part of critical path
+   - 3 chapters depend on this (will be blocked)
+   - Has 4 scenes (will be deleted)
+   - Part of critical story path
    
    ⚠️  This action cannot be undone
    ```
 
 ## Smart Warnings
 
-- Warn if task is in-progress
-- Show dependent tasks that will be blocked
-- Highlight if part of critical path
+- Warn if chapter is in-progress
+- Show dependent chapters that will be blocked
+- Highlight if part of critical story path
 - Note any completed work being lost
 
 ## Removal Process
 
 1. Show comprehensive impact
 2. Require confirmation (unless -y)
-3. Update dependent task references
-4. Remove task and subtasks
+3. Update dependent chapter references
+4. Remove chapter and scenes
 5. Clean up orphaned dependencies
 6. Log removal with timestamp
 
@@ -71,12 +71,12 @@ task-master remove-task --id=<id> [-y]
 Suggest before deletion:
 - Mark as cancelled instead
 - Convert to documentation
-- Archive task data
-- Transfer work to another task
+- Archive chapter data
+- Transfer work to another chapter
 
 ## Post-Removal
 
-- List affected tasks
+- List affected chapters
 - Show broken dependencies
 - Update project statistics
 - Suggest dependency fixes
@@ -85,17 +85,17 @@ Suggest before deletion:
 ## Example Flows
 
 ```
-/taskmaster:remove-task 5
-→ Task #5 is in-progress with 8 hours logged
-→ 3 other tasks depend on this
+/novelmaster:remove-task 5
+→ Chapter #5 is in-progress with 8 hours logged
+→ 3 other chapters depend on this
 → Suggestion: Mark as cancelled instead?
 Remove anyway? (y/n)
 
-/taskmaster:remove-task 5 -y
-→ Removed: Task #5 and 4 subtasks
-→ Updated: 3 task dependencies
-→ Warning: Tasks #7, #8, #9 now have missing dependency
-→ Run /taskmaster:fix-dependencies to resolve
+/novelmaster:remove-task 5 -y
+→ Removed: Chapter #5 and 4 scenes
+→ Updated: 3 chapter dependencies
+→ Warning: Chapters #7, #8, #9 now have missing dependency
+→ Run /novelmaster:fix-dependencies to resolve
 ```
 
 ## Safety Features

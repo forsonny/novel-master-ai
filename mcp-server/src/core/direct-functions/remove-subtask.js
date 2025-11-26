@@ -1,5 +1,6 @@
 /**
- * Direct function wrapper for removeSubtask
+ * remove-subtask.js
+ * Direct function implementation for removing a beat/scene from its parent chapter
  */
 
 import { removeSubtask } from '../../../../scripts/modules/task-manager.js';
@@ -9,14 +10,14 @@ import {
 } from '../../../../scripts/modules/utils.js';
 
 /**
- * Remove a subtask from its parent task
+ * Remove a beat/scene from its parent chapter
  * @param {Object} args - Function arguments
  * @param {string} args.tasksJsonPath - Explicit path to the tasks.json file.
- * @param {string} args.id - Subtask ID in format "parentId.subtaskId" (required)
- * @param {boolean} [args.convert] - Whether to convert the subtask to a standalone task
- * @param {boolean} [args.skipGenerate] - Skip regenerating task files
+ * @param {string} args.id - Beat/scene ID in format "chapterId.beatId" (e.g., "5.2") (required)
+ * @param {boolean} [args.convert] - Whether to convert the beat to a standalone chapter
+ * @param {boolean} [args.skipGenerate] - Skip regenerating manuscript files
  * @param {string} args.projectRoot - Project root path (for MCP/env fallback)
- * @param {string} args.tag - Tag for the task (optional)
+ * @param {string} args.tag - Tag context (outline, draft, revision) for the task (optional)
  * @param {Object} log - Logger object
  * @returns {Promise<{success: boolean, data?: Object, error?: {code: string, message: string}}>}
  */
@@ -37,7 +38,7 @@ export async function removeSubtaskDirect(args, log) {
 				success: false,
 				error: {
 					code: 'MISSING_ARGUMENT',
-					message: 'tasksJsonPath is required'
+					message: 'Tasks file path is required to remove a beat/scene'
 				}
 			};
 		}
@@ -49,19 +50,19 @@ export async function removeSubtaskDirect(args, log) {
 				error: {
 					code: 'INPUT_VALIDATION_ERROR',
 					message:
-						'Subtask ID is required and must be in format "parentId.subtaskId"'
+						'Beat/scene ID is required and must be in format "chapterId.beatId" (e.g., "5.2")'
 				}
 			};
 		}
 
-		// Validate subtask ID format
+		// Validate beat/scene ID format
 		if (!id.includes('.')) {
 			disableSilentMode(); // Disable before returning
 			return {
 				success: false,
 				error: {
 					code: 'INPUT_VALIDATION_ERROR',
-					message: `Invalid subtask ID format: ${id}. Expected format: "parentId.subtaskId"`
+					message: `Invalid beat/scene ID format: ${id}. Expected format: "chapterId.beatId" (e.g., "5.2")`
 				}
 			};
 		}
@@ -76,7 +77,7 @@ export async function removeSubtaskDirect(args, log) {
 		const generateFiles = !skipGenerate;
 
 		log.info(
-			`Removing subtask ${id} (convertToTask: ${convertToTask}, generateFiles: ${generateFiles})`
+			`Removing beat/scene ${id} (convertToChapter: ${convertToTask}, generateFiles: ${generateFiles})`
 		);
 
 		// Use the provided tasksPath
@@ -95,11 +96,11 @@ export async function removeSubtaskDirect(args, log) {
 		disableSilentMode();
 
 		if (convertToTask && result) {
-			// Return info about the converted task
+			// Return info about the converted chapter
 			return {
 				success: true,
 				data: {
-					message: `Subtask ${id} successfully converted to task #${result.id}`,
+					message: `Beat/scene ${id} successfully converted to chapter #${result.id}`,
 					task: result
 				}
 			};
@@ -108,7 +109,7 @@ export async function removeSubtaskDirect(args, log) {
 			return {
 				success: true,
 				data: {
-					message: `Subtask ${id} successfully removed`
+					message: `Beat/scene ${id} successfully removed`
 				}
 			};
 		}

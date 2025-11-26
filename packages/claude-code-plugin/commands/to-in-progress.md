@@ -1,36 +1,36 @@
-Start working on a task by setting its status to in-progress.
+Start working on a chapter by setting its status to in-progress.
 
-Arguments: $ARGUMENTS (task ID)
+Arguments: $ARGUMENTS (chapter ID)
 
-## Starting Work on Task
+## Starting Work on Chapter
 
 This command does more than just change status - it prepares your environment for productive work.
 
 ## Pre-Start Checks
 
 1. Verify dependencies are met
-2. Check if another task is already in-progress
-3. Ensure task details are complete
-4. Validate test strategy exists
+2. Check if another chapter is already in-progress
+3. Ensure chapter details are complete
+4. Validate continuity/pacing strategy exists
 
 ## Execution
 
 ```bash
-task-master set-status --id=$ARGUMENTS --status=in-progress
+novel-master set-status --id=$ARGUMENTS --status=in-progress
 ```
 
 ## Environment Setup
 
 After setting to in-progress:
 1. Create/checkout appropriate git branch
-2. Open relevant documentation
-3. Set up test watchers if applicable
-4. Display task details and acceptance criteria
-5. Show similar completed tasks for reference
+2. Open relevant manuscript files
+3. Set up continuity checkers if applicable
+4. Display chapter details and narrative criteria
+5. Show similar completed chapters for reference
 
 ## Smart Suggestions
 
 - Estimated completion time based on complexity
-- Related files from similar tasks
+- Related manuscript files from similar chapters
 - Potential blockers to watch for
 - Recommended first steps

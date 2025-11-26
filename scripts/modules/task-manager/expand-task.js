@@ -24,13 +24,13 @@ import { tryExpandViaRemote } from '@tm/bridge';
 import { createBridgeLogger } from '../bridge-utils.js';
 
 /**
- * Expand a task into subtasks using the unified AI service (generateObjectService).
- * Appends new subtasks by default. Replaces existing subtasks if force=true.
- * Integrates complexity report to determine subtask count and prompt if available,
+ * Expand a narrative task into scene beats using the unified AI service (generateObjectService).
+ * Appends new beats by default. Replaces existing beats if force=true.
+ * Integrates the complexity report to determine beat count and prompt if available,
  * unless numSubtasks is explicitly provided.
  * @param {string} tasksPath - Path to the tasks.json file
  * @param {number} taskId - Task ID to expand
- * @param {number | null | undefined} [numSubtasks] - Optional: Explicit target number of subtasks. If null/undefined, check complexity report or config default.
+ * @param {number | null | undefined} [numSubtasks] - Optional: Explicit target number of beats. If null/undefined, check complexity report or config default.
  * @param {boolean} [useResearch=false] - Whether to use the research AI role.
  * @param {string} [additionalContext=''] - Optional additional context.
  * @param {Object} context - Context object containing session and mcpLog.
@@ -38,8 +38,8 @@ import { createBridgeLogger } from '../bridge-utils.js';
  * @param {Object} [context.mcpLog] - MCP logger object.
  * @param {string} [context.projectRoot] - Project root path
  * @param {string} [context.tag] - Tag for the task
- * @param {boolean} [force=false] - If true, replace existing subtasks; otherwise, append.
- * @returns {Promise<Object>} The updated parent task object with new subtasks.
+ * @param {boolean} [force=false] - If true, replace existing beats; otherwise, append.
+ * @returns {Promise<Object>} The updated parent task object with new beats.
  * @throws {Error} If task not found, AI service fails, or parsing fails.
  */
 async function expandTask(
@@ -107,10 +107,10 @@ async function expandTask(
 		);
 		// --- End Task Loading/Filtering ---
 
-		// --- Handle Force Flag: Clear existing subtasks if force=true ---
+		// --- Handle Force Flag: Clear existing beats if force=true ---
 		if (force && Array.isArray(task.subtasks) && task.subtasks.length > 0) {
 			logger.info(
-				`Force flag set. Clearing existing ${task.subtasks.length} subtasks for task ${taskId}.`
+				`Force flag set. Clearing existing ${task.subtasks.length} beats for task ${taskId}.`
 			);
 			task.subtasks = []; // Clear existing subtasks
 		}
@@ -183,32 +183,32 @@ async function expandTask(
 			);
 		}
 
-		// Determine final subtask count
+		// Determine final beat count
 		const explicitNumSubtasks = parseInt(numSubtasks, 10);
 		if (!Number.isNaN(explicitNumSubtasks) && explicitNumSubtasks >= 0) {
 			finalSubtaskCount = explicitNumSubtasks;
 			logger.info(
-				`Using explicitly provided subtask count: ${finalSubtaskCount}`
+				`Using explicitly provided beat count: ${finalSubtaskCount}`
 			);
 		} else if (taskAnalysis?.recommendedSubtasks) {
 			finalSubtaskCount = parseInt(taskAnalysis.recommendedSubtasks, 10);
 			logger.info(
-				`Using subtask count from complexity report: ${finalSubtaskCount}`
+				`Using beat count from complexity report: ${finalSubtaskCount}`
 			);
 		} else {
 			finalSubtaskCount = getDefaultSubtasks(session);
-			logger.info(`Using default number of subtasks: ${finalSubtaskCount}`);
+			logger.info(`Using default number of beats: ${finalSubtaskCount}`);
 		}
 		if (Number.isNaN(finalSubtaskCount) || finalSubtaskCount < 0) {
 			logger.warn(
-				`Invalid subtask count determined (${finalSubtaskCount}), defaulting to 3.`
+				`Invalid beat count determined (${finalSubtaskCount}), defaulting to 3.`
 			);
 			finalSubtaskCount = 3;
 		}
 
 		// Determine prompt content AND system prompt
-		// Calculate the next subtask ID to match current behavior:
-		// - Start from the number of existing subtasks + 1
+		// Calculate the next beat ID to match current behavior:
+		// - Start from the number of existing beats + 1
 		// - This creates sequential IDs: 1, 2, 3, 4...
 		// - Display format shows as parentTaskId.subtaskId (e.g., "1.1", "1.2", "2.1")
 		const nextSubtaskId = (task.subtasks?.length || 0) + 1;
@@ -305,7 +305,7 @@ async function expandTask(
 		let loadingIndicator = null;
 		if (outputFormat === 'text') {
 			loadingIndicator = startLoadingIndicator(
-				`Generating ${finalSubtaskCount || 'appropriate number of'} subtasks...\n`
+				`Generating ${finalSubtaskCount || 'appropriate number of'} beats...\n`
 			);
 		}
 
@@ -329,10 +329,10 @@ async function expandTask(
 			// With generateObject, we expect structured data – verify it before use
 			const mainResult = aiServiceResponse?.mainResult;
 			if (!mainResult || !Array.isArray(mainResult.subtasks)) {
-				throw new Error('AI response did not include a valid subtasks array.');
+				throw new Error('AI response did not include a valid beats array.');
 			}
 			generatedSubtasks = mainResult.subtasks;
-			logger.info(`Received ${generatedSubtasks.length} subtasks from AI.`);
+			logger.info(`Received ${generatedSubtasks.length} beats from AI.`);
 		} catch (error) {
 			if (loadingIndicator) stopLoadingIndicator(loadingIndicator);
 			logger.error(

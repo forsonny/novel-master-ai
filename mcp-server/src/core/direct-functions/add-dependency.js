@@ -1,6 +1,6 @@
 /**
  * add-dependency.js
- * Direct function implementation for adding a dependency to a task
+ * Direct function implementation for adding a narrative dependency (prerequisite chapter/scene)
  */
 
 import { addDependency } from '../../../../scripts/modules/dependency-manager.js';
@@ -10,13 +10,13 @@ import {
 } from '../../../../scripts/modules/utils.js';
 
 /**
- * Direct function wrapper for addDependency with error handling.
+ * Direct function wrapper for adding a narrative dependency (prerequisite chapter/scene) with error handling.
  *
  * @param {Object} args - Command arguments
  * @param {string} args.tasksJsonPath - Explicit path to the tasks.json file.
- * @param {string|number} args.id - Task ID to add dependency to
- * @param {string|number} args.dependsOn - Task ID that will become a dependency
- * @param {string} args.tag - Tag for the task (optional)
+ * @param {string|number} args.id - Chapter/scene ID that will depend on another (e.g., "12" or "12.3")
+ * @param {string|number} args.dependsOn - Chapter/scene ID that must be completed first (the prerequisite)
+ * @param {string} args.tag - Tag context (outline, draft, revision) for the task (optional)
  * @param {string} args.projectRoot - Project root path (for MCP/env fallback)
  * @param {Object} log - Logger object
  * @returns {Promise<Object>} - Result object with success status and data/error information
@@ -34,7 +34,7 @@ export async function addDependencyDirect(args, log) {
 				success: false,
 				error: {
 					code: 'MISSING_ARGUMENT',
-					message: 'tasksJsonPath is required'
+					message: 'Tasks file path is required to add a narrative dependency'
 				}
 			};
 		}
@@ -45,7 +45,7 @@ export async function addDependencyDirect(args, log) {
 				success: false,
 				error: {
 					code: 'INPUT_VALIDATION_ERROR',
-					message: 'Task ID (id) is required'
+					message: 'Chapter/scene ID (id) is required (e.g., "12" or "12.3")'
 				}
 			};
 		}
@@ -55,7 +55,7 @@ export async function addDependencyDirect(args, log) {
 				success: false,
 				error: {
 					code: 'INPUT_VALIDATION_ERROR',
-					message: 'Dependency ID (dependsOn) is required'
+					message: 'Prerequisite chapter/scene ID (dependsOn) is required (e.g., "5" or "5.2")'
 				}
 			};
 		}
@@ -72,7 +72,7 @@ export async function addDependencyDirect(args, log) {
 				: parseInt(dependsOn, 10);
 
 		log.info(
-			`Adding dependency: task ${taskId} will depend on ${dependencyId}`
+			`Adding narrative dependency: chapter/scene ${taskId} will depend on ${dependencyId}`
 		);
 
 		// Enable silent mode to prevent console logs from interfering with JSON response
@@ -90,7 +90,7 @@ export async function addDependencyDirect(args, log) {
 		return {
 			success: true,
 			data: {
-				message: `Successfully added dependency: Task ${taskId} now depends on ${dependencyId}`,
+				message: `Successfully added narrative dependency: Chapter/scene ${taskId} now depends on ${dependencyId}`,
 				taskId: taskId,
 				dependencyId: dependencyId
 			}

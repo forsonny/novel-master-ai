@@ -37,6 +37,12 @@ import { registerResearchTool } from './research.js';
 import { registerRulesTool } from './rules.js';
 import { registerScopeUpTool } from './scope-up.js';
 import { registerScopeDownTool } from './scope-down.js';
+import { registerReadManuscriptSummaryTool } from './read-manuscript-summary.js';
+import { registerValidateNRDTool } from './validate-nrd.js';
+import { registerValidateSceneQualityTool } from './validate-scene-quality.js';
+import { registerValidateNRDComplianceTool } from './validate-nrd-compliance.js';
+import { registerCompareTagsTool } from './compare-tags.js';
+import { registerEstimateWorkflowCostTool } from './estimate-workflow-cost.js';
 
 // Import TypeScript tools from apps/mcp
 import {
@@ -93,6 +99,12 @@ export const toolRegistry = {
 	rename_tag: registerRenameTagTool,
 	copy_tag: registerCopyTagTool,
 	research: registerResearchTool,
+	read_manuscript_summary: registerReadManuscriptSummaryTool,
+	validate_nrd: registerValidateNRDTool,
+	validate_scene_quality: registerValidateSceneQualityTool,
+	validate_nrd_compliance: registerValidateNRDComplianceTool,
+	compare_tags: registerCompareTagsTool,
+	estimate_workflow_cost: registerEstimateWorkflowCostTool,
 	autopilot_start: registerAutopilotStartTool,
 	autopilot_resume: registerAutopilotResumeTool,
 	autopilot_next: registerAutopilotNextTool,

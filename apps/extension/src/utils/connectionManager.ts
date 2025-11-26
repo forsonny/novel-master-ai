@@ -325,7 +325,7 @@ export class ConnectionManager {
 			if (this.reconnectAttempts >= this.maxReconnectAttempts) {
 				this.isReconnecting = false;
 				vscode.window.showErrorMessage(
-					`Failed to reconnect to Task Master after ${this.maxReconnectAttempts} attempts. Please check your configuration and try manually reconnecting.`
+					`Failed to reconnect to Novel Master after ${this.maxReconnectAttempts} attempts. Please check your configuration and try manually reconnecting.`
 				);
 			} else {
 				// Try again

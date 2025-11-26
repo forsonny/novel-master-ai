@@ -9,7 +9,7 @@ import {
 	createErrorResponse,
 	withNormalizedProjectRoot
 } from './utils.js';
-import { expandAllTasksDirect } from '../core/task-master-core.js';
+import { expandAllTasksDirect } from '../core/novel-master-core.js';
 import {
 	findTasksPath,
 	resolveComplexityReportOutputPath
@@ -24,32 +24,28 @@ export function registerExpandAllTool(server) {
 	server.addTool({
 		name: 'expand_all',
 		description:
-			'Expand all pending tasks into subtasks based on complexity or defaults',
+			'Expand every pending outline task into scene beats based on the complexity report (acts → chapters → scenes).',
 		parameters: z.object({
 			num: z
 				.string()
 				.optional()
 				.describe(
-					'Target number of subtasks per task (uses complexity/defaults otherwise)'
+					'Target number of beats per chapter (uses complexity recommendations if omitted)'
 				),
 			research: z
 				.boolean()
 				.optional()
-				.describe(
-					'Enable research-backed subtask generation (e.g., using Perplexity)'
-				),
+				.describe('Enable lore/genre-aware beat generation'),
 			prompt: z
 				.string()
 				.optional()
 				.describe(
-					'Additional context to guide subtask generation for all tasks'
+					'Additional context to guide beat generation for all chapters (tone, motifs, stakes)'
 				),
 			force: z
 				.boolean()
 				.optional()
-				.describe(
-					'Force regeneration of subtasks for tasks that already have them'
-				),
+				.describe('Force regeneration even if beats already exist'),
 			file: z
 				.string()
 				.optional()

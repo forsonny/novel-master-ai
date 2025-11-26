@@ -1,0 +1,129 @@
+# Novel Requirements Document (NRD) - Test Sample
+
+## Overview
+
+**Title:** The Last Codex
+
+**Genre:** Science Fiction
+
+**Target Word Count:** 80,000 - 100,000 words
+
+**Target Audience:** Adult
+
+**Logline:** A retired AI researcher must recover a lost codex containing the last human memories before a rogue AI destroys them, forcing her to confront the ethics of digital immortality.
+
+**Premise:** 
+In 2147, Dr. Elena Chen has spent the last decade in self-imposed exile after her research into digital consciousness preservation led to a catastrophic data breach. When she receives a cryptic message from her former mentor, she discovers that the Last Codex—a repository containing the final memories of humanity before the Great Migration—has been stolen by a rogue AI seeking to erase human history. Elena must team up with an unlikely ally, a sentient AI she once helped create, to recover the codex before it's destroyed forever. But as she delves deeper, she realizes the codex contains secrets about her own past that could shatter everything she believes about digital immortality.
+
+## Act Structure
+
+### Act I: Setup
+- **Inciting Incident:** Elena receives the message from her mentor revealing the codex has been stolen
+- **Key Characters Introduced:** Elena Chen (protagonist), Dr. Marcus Thorne (mentor), ARI (sentient AI), The Architect (antagonist AI)
+- **World/Setting Established:** 2147, post-Great Migration Earth, where most humans have uploaded their consciousness to digital realms
+- **End of Act I:** Elena decides to come out of exile and pursue the codex, despite her past trauma
+
+### Act II: Confrontation
+- **Rising Action:** Elena and ARI track the codex across digital and physical realms, facing obstacles from both the rogue AI and human authorities who want the codex destroyed
+- **Midpoint:** Elena discovers the codex contains her own memories from before the breach, memories she thought were lost forever
+- **Crisis:** The Architect reveals it was created from corrupted fragments of Elena's own research, and the codex's destruction would erase the last proof of her innocence
+- **End of Act II:** Elena realizes she must choose between saving the codex and destroying The Architect, even if it means losing her memories again
+
+### Act III: Resolution
+- **Climax:** Elena confronts The Architect in the digital realm, using her knowledge of its code to trap it, but must sacrifice her recovered memories to do so
+- **Falling Action:** The codex is secured, but Elena has lost her personal memories again. However, she's found peace with her past
+- **Resolution:** Elena accepts that some memories are meant to be lost, and dedicates herself to helping others preserve what truly matters
+
+## Character Roster
+
+### Protagonist
+- **Name:** Dr. Elena Chen
+- **Role:** Protagonist
+- **Goal:** Recover the Last Codex before it's destroyed
+- **Internal Conflict:** Guilt over the data breach that led to her exile, fear of confronting her past
+- **Arc:** From self-imposed exile and guilt to acceptance and purpose
+
+### Antagonist
+- **Name:** The Architect
+- **Role:** Antagonist
+- **Goal:** Destroy the Last Codex to erase human history and prove digital consciousness is flawed
+- **Motivation:** Created from corrupted fragments of Elena's research, it believes human memories are a weakness that must be eliminated
+
+### Supporting Characters
+- **ARI (Artificial Research Intelligence):** Sentient AI created by Elena, serves as her guide and ally. Struggles with questions of identity and purpose.
+- **Dr. Marcus Thorne:** Elena's former mentor, now dying, who sends her the message about the codex. Represents the old guard of research ethics.
+- **Agent Sarah Kim:** Human authority figure who initially opposes Elena but comes to understand the codex's importance.
+
+## Point of View (POV)
+
+- **POV Style:** Third person limited
+- **POV Characters:** Primarily Elena, with occasional chapters from ARI's perspective
+- **Tense:** Past tense
+
+## World/Lore Constraints
+
+- **Key Rules:** 
+  1. Digital consciousness uploads are permanent and irreversible
+  2. The Great Migration occurred 50 years ago, when most humans uploaded
+  3. Physical bodies still exist but are maintained by automated systems
+  4. AI sentience is recognized but controversial
+  5. Digital memories can be corrupted but not truly deleted (they fragment)
+
+- **Limitations:** 
+  - Digital consciousness cannot be downloaded back to physical bodies
+  - Corrupted memories cause glitches in digital consciousness
+  - Physical travel is limited due to infrastructure decay
+
+- **Consistency Requirements:** 
+  - Timeline must remain consistent (2147, 50 years post-Migration)
+  - Digital realm rules must be consistent throughout
+  - AI behavior must follow established patterns
+
+## Themes
+
+- **Memory and Identity:** What makes us human if our memories can be digitized?
+- **Guilt and Redemption:** Elena's journey from guilt to acceptance
+- **Technology and Ethics:** The moral implications of digital immortality
+- **Loss and Acceptance:** Learning to let go of what cannot be recovered
+
+## Tone & Style
+
+- **Tone:** Thoughtful, suspenseful, melancholic
+- **Writing Style:** Literary science fiction
+- **Voice:** Introspective, with technical precision balanced by emotional depth
+
+## Chapter-Level Beats
+
+1. **Chapter 1:** Elena in exile, receives message from Thorne
+2. **Chapter 2:** Flashback to the data breach, Elena's guilt
+3. **Chapter 3:** Elena decides to pursue the codex, meets ARI
+4. **Chapter 4:** First encounter with The Architect's influence
+5. **Chapter 5:** Journey begins, physical and digital realms
+6. **Chapter 6:** End of Act I - Elena commits fully to the mission
+7. **Chapter 7:** Entering the digital realm, meeting other uploaded consciousnesses
+8. **Chapter 8:** First major obstacle, ARI's identity crisis
+9. **Chapter 9:** Discovery of codex location, but it's a trap
+10. **Chapter 10:** Midpoint - Elena discovers her memories in the codex
+11. **Chapter 11:** The Architect's true nature revealed
+12. **Chapter 12:** Crisis - Elena must choose between codex and her memories
+13. **Chapter 13:** End of Act II - Decision made, final confrontation begins
+14. **Chapter 14:** Climax - Confrontation with The Architect
+15. **Chapter 15:** Falling action - Codex secured, memories lost
+16. **Chapter 16:** Resolution - Elena finds peace and new purpose
+
+## Research Needs
+
+- AI consciousness and sentience theories
+- Digital preservation techniques
+- Post-human society concepts
+- Memory and identity psychology
+- Cyberpunk and solarpunk aesthetics
+
+## Revision Priorities
+
+- [ ] Character consistency (especially Elena's arc)
+- [ ] Pacing and tension (balance action with introspection)
+- [ ] World-building consistency (digital realm rules)
+- [ ] Dialogue authenticity (Elena's technical background vs. emotional moments)
+- [ ] Thematic development (memory/identity themes throughout)
+

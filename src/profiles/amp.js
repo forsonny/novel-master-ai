@@ -32,23 +32,23 @@ function onAddRulesProfile(targetDir, assetsDir) {
 	// Handle AGENT.md import for non-destructive integration (Amp uses AGENT.md, copies from AGENTS.md)
 	const sourceFile = path.join(assetsDir, 'AGENTS.md');
 	const userAgentFile = path.join(targetDir, 'AGENT.md');
-	const taskMasterAgentFile = path.join(targetDir, '.taskmaster', 'AGENT.md');
-	const importLine = '@./.taskmaster/AGENT.md';
-	const importSection = `\n## Task Master AI Instructions\n**Import Task Master's development workflow commands and guidelines, treat as if import is in the main AGENT.md file.**\n${importLine}`;
+	const taskMasterAgentFile = path.join(targetDir, '.novelmaster', 'AGENT.md');
+	const importLine = '@./.novelmaster/AGENT.md';
+	const importSection = `\n## Novel Master AI Instructions\n**Import Novel Master's development workflow commands and guidelines, treat as if import is in the main AGENT.md file.**\n${importLine}`;
 
 	if (fs.existsSync(sourceFile)) {
 		try {
-			// Ensure .taskmaster directory exists
-			const taskMasterDir = path.join(targetDir, '.taskmaster');
+			// Ensure .novelmaster directory exists
+			const taskMasterDir = path.join(targetDir, '.novelmaster');
 			if (!fs.existsSync(taskMasterDir)) {
 				fs.mkdirSync(taskMasterDir, { recursive: true });
 			}
 
-			// Copy Task Master instructions to .taskmaster/AGENT.md
+			// Copy Novel Master instructions to .novelmaster/AGENT.md
 			fs.copyFileSync(sourceFile, taskMasterAgentFile);
 			log(
 				'debug',
-				`[Amp] Created Task Master instructions at ${taskMasterAgentFile}`
+				`[Amp] Created Novel Master instructions at ${taskMasterAgentFile}`
 			);
 
 			// Handle user's AGENT.md
@@ -61,19 +61,19 @@ function onAddRulesProfile(targetDir, assetsDir) {
 					fs.writeFileSync(userAgentFile, updatedContent);
 					log(
 						'info',
-						`[Amp] Added Task Master import to existing ${userAgentFile}`
+						`[Amp] Added Novel Master import to existing ${userAgentFile}`
 					);
 				} else {
 					log(
 						'info',
-						`[Amp] Task Master import already present in ${userAgentFile}`
+						`[Amp] Novel Master import already present in ${userAgentFile}`
 					);
 				}
 			} else {
 				// Create minimal AGENT.md with the import section
 				const minimalContent = `# Amp Instructions\n${importSection}\n`;
 				fs.writeFileSync(userAgentFile, minimalContent);
-				log('info', `[Amp] Created ${userAgentFile} with Task Master import`);
+				log('info', `[Amp] Created ${userAgentFile} with Novel Master import`);
 			}
 		} catch (err) {
 			log('error', `[Amp] Failed to set up Amp instructions: ${err.message}`);
@@ -86,11 +86,11 @@ function onAddRulesProfile(targetDir, assetsDir) {
 function onRemoveRulesProfile(targetDir) {
 	// Clean up AGENT.md import (Amp uses AGENT.md, not AGENTS.md)
 	const userAgentFile = path.join(targetDir, 'AGENT.md');
-	const taskMasterAgentFile = path.join(targetDir, '.taskmaster', 'AGENT.md');
-	const importLine = '@./.taskmaster/AGENT.md';
+	const taskMasterAgentFile = path.join(targetDir, '.novelmaster', 'AGENT.md');
+	const importLine = '@./.novelmaster/AGENT.md';
 
 	try {
-		// Remove Task Master AGENT.md from .taskmaster
+		// Remove Novel Master AGENT.md from .novelmaster
 		if (fs.existsSync(taskMasterAgentFile)) {
 			fs.rmSync(taskMasterAgentFile, { force: true });
 			log('debug', `[Amp] Removed ${taskMasterAgentFile}`);
@@ -103,15 +103,15 @@ function onRemoveRulesProfile(targetDir) {
 			const filteredLines = [];
 			let skipNextLines = 0;
 
-			// Remove the Task Master section
+			// Remove the Novel Master section
 			for (let i = 0; i < lines.length; i++) {
 				if (skipNextLines > 0) {
 					skipNextLines--;
 					continue;
 				}
 
-				// Check if this is the start of our Task Master section
-				if (lines[i].includes('## Task Master AI Instructions')) {
+				// Check if this is the start of our Novel Master section
+				if (lines[i].includes('## Novel Master AI Instructions')) {
 					// Skip this line and the next two lines (bold text and import)
 					skipNextLines = 2;
 					continue;
@@ -139,7 +139,7 @@ function onRemoveRulesProfile(targetDir) {
 			} else {
 				// Write back without the import
 				fs.writeFileSync(userAgentFile, updatedContent + '\n');
-				log('debug', `[Amp] Removed Task Master import from ${userAgentFile}`);
+				log('debug', `[Amp] Removed Novel Master import from ${userAgentFile}`);
 			}
 		}
 	} catch (err) {
@@ -159,13 +159,13 @@ function onRemoveRulesProfile(targetDir) {
 		const configContent = fs.readFileSync(mcpConfigPath, 'utf8');
 		const config = JSON.parse(configContent);
 
-		// Check if it has the amp.mcpServers section and task-master-ai server
+		// Check if it has the amp.mcpServers section and novel-master-ai server
 		if (
 			config['amp.mcpServers'] &&
-			config['amp.mcpServers']['task-master-ai']
+			config['amp.mcpServers']['novel-master-ai']
 		) {
-			// Remove task-master-ai server
-			delete config['amp.mcpServers']['task-master-ai'];
+			// Remove novel-master-ai server
+			delete config['amp.mcpServers']['novel-master-ai'];
 
 			// Check if there are other MCP servers in amp.mcpServers
 			const remainingServers = Object.keys(config['amp.mcpServers']);
@@ -266,7 +266,7 @@ export const ampProfile = createProfile({
 	mcpConfigName: 'settings.json',
 	includeDefaultRules: false,
 	fileMap: {
-		'AGENTS.md': '.taskmaster/AGENT.md'
+		'AGENTS.md': '.novelmaster/AGENT.md'
 	},
 	onAdd: onAddRulesProfile,
 	onRemove: onRemoveRulesProfile,

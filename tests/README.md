@@ -1,6 +1,6 @@
-# Task Master Test Suite
+# Novel Master Test Suite
 
-This directory contains tests for the Task Master CLI. The tests are organized into different categories to ensure comprehensive test coverage.
+This directory contains tests for the Novel Master CLI. The tests are organized into different categories to ensure comprehensive test coverage.
 
 ## Test Structure
 
@@ -46,6 +46,29 @@ End-to-end tests focus on testing complete workflows from a user's perspective. 
 ## Test Fixtures
 
 Test fixtures provide sample data for tests. Fixtures should be small, focused, and representative of real-world data.
+
+### Narrative Fixtures
+
+Novel Master includes narrative-specific test fixtures for testing novel writing workflows:
+
+- **`sample-nrd.txt`** - Sample Novel Requirements Document (NRD) for a science fiction novel
+- **`sample-narrative-tasks.js`** - Narrative task data with story arcs, chapters, and scenes including narrative metadata (POV, tension level, emotional beats)
+- **`sample-narrative-claude-response.js`** - Mock AI responses for narrative task generation
+
+These fixtures are used in:
+- End-to-end workflow tests (`integration/novel-workflow-e2e.test.js`)
+- Narrative complexity analysis tests (`unit/narrative-complexity-analysis.test.js`)
+- Manuscript generation tests (`unit/manuscript-generation-narrative.test.js`)
+
+### Legacy Fixtures
+
+The following fixtures are maintained for backward compatibility but are being phased out in favor of narrative fixtures:
+
+- **`sample-prd.txt`** - Legacy technical PRD (URL shortener example)
+- **`sample-tasks.js`** - Legacy technical task data
+- **`sample-claude-response.js`** - Legacy technical AI responses
+
+New tests should use narrative fixtures when testing novel-specific functionality.
 
 ## Mocking
 

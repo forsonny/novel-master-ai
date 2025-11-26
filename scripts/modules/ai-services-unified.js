@@ -203,7 +203,7 @@ function _readAvailableTags(projectRoot) {
 		const fs = require('fs');
 		const tasksPath = path.join(
 			projectRoot,
-			'.taskmaster',
+			'.novelmaster',
 			'tasks',
 			'tasks.json'
 		);

@@ -18,7 +18,7 @@ jest.mock('readline', () => ({
 // Mock figlet for banner display
 jest.mock('figlet', () => ({
 	default: {
-		textSync: jest.fn(() => 'Task Master')
+		textSync: jest.fn(() => 'Novel Master')
 	}
 }));
 
@@ -38,7 +38,7 @@ describe('Windsurf Rules File Handling', () => {
 		jest.clearAllMocks();
 
 		// Create a temporary directory for testing
-		tempDir = fs.mkdtempSync(path.join(os.tmpdir(), 'task-master-test-'));
+		tempDir = fs.mkdtempSync(path.join(os.tmpdir(), 'novel-master-test-'));
 
 		// Spy on fs methods
 		jest.spyOn(fs, 'writeFileSync').mockImplementation(() => {});
@@ -79,7 +79,7 @@ describe('Windsurf Rules File Handling', () => {
 					const existingContent = fs.readFileSync(targetPath, 'utf8');
 					const updatedContent =
 						existingContent.trim() +
-						'\n\n# Added by Claude Task Master - Development Workflow Rules\n\n' +
+						'\n\n# Added by Claude Novel Master - Development Workflow Rules\n\n' +
 						'New content';
 					fs.writeFileSync(targetPath, updatedContent);
 					return;
@@ -121,7 +121,7 @@ describe('Windsurf Rules File Handling', () => {
 		);
 		expect(fs.writeFileSync).toHaveBeenCalledWith(
 			targetPath,
-			expect.stringContaining('Added by Claude Task Master')
+			expect.stringContaining('Added by Claude Novel Master')
 		);
 	});
 
@@ -157,7 +157,7 @@ describe('MCP Configuration Handling', () => {
 		jest.clearAllMocks();
 
 		// Create a temporary directory for testing
-		tempDir = fs.mkdtempSync(path.join(os.tmpdir(), 'task-master-test-'));
+		tempDir = fs.mkdtempSync(path.join(os.tmpdir(), 'novel-master-test-'));
 
 		// Spy on fs methods
 		jest.spyOn(fs, 'writeFileSync').mockImplementation(() => {});
@@ -207,9 +207,9 @@ describe('MCP Configuration Handling', () => {
 
 		// New MCP config to be added - references the installed package
 		const newMCPServer = {
-			'task-master-ai': {
+			'novel-master-ai': {
 				command: 'npx',
-				args: ['task-master-ai', 'mcp-server']
+				args: ['novel-master-ai', 'mcp-server']
 			}
 		};
 
@@ -224,10 +224,10 @@ describe('MCP Configuration Handling', () => {
 					mcpConfig.mcpServers = {};
 				}
 
-				// Add the taskmaster-ai server if it doesn't exist
-				if (!mcpConfig.mcpServers['task-master-ai']) {
-					mcpConfig.mcpServers['task-master-ai'] =
-						newMCPServer['task-master-ai'];
+				// Add the novelmaster-ai server if it doesn't exist
+				if (!mcpConfig.mcpServers['novel-master-ai']) {
+					mcpConfig.mcpServers['novel-master-ai'] =
+						newMCPServer['novel-master-ai'];
 				}
 
 				// Write the updated configuration
@@ -260,7 +260,7 @@ describe('MCP Configuration Handling', () => {
 		// Assert
 		expect(fs.writeFileSync).toHaveBeenCalledWith(
 			mcpJsonPath,
-			expect.stringContaining('task-master-ai')
+			expect.stringContaining('novel-master-ai')
 		);
 
 		// Should create a proper structure with mcpServers key
@@ -301,7 +301,7 @@ describe('MCP Configuration Handling', () => {
 		// Should add our new server
 		expect(fs.writeFileSync).toHaveBeenCalledWith(
 			mcpJsonPath,
-			expect.stringContaining('task-master-ai')
+			expect.stringContaining('novel-master-ai')
 		);
 	});
 
@@ -332,7 +332,7 @@ describe('MCP Configuration Handling', () => {
 		// Should create a new valid JSON file with our server
 		expect(fs.writeFileSync).toHaveBeenCalledWith(
 			mcpJsonPath,
-			expect.stringContaining('task-master-ai')
+			expect.stringContaining('novel-master-ai')
 		);
 	});
 
@@ -348,7 +348,7 @@ describe('MCP Configuration Handling', () => {
 			return false;
 		});
 
-		// Return JSON that already has task-master-ai
+		// Return JSON that already has novel-master-ai
 		fs.readFileSync.mockImplementation((filePath) => {
 			if (filePath.toString().includes('mcp.json')) {
 				return JSON.stringify({
@@ -357,7 +357,7 @@ describe('MCP Configuration Handling', () => {
 							command: 'node',
 							args: ['server.js']
 						},
-						'task-master-ai': {
+						'novel-master-ai': {
 							command: 'custom',
 							args: ['custom-args']
 						}
@@ -374,10 +374,10 @@ describe('MCP Configuration Handling', () => {
 		mockSetupMCPConfiguration(tempDir, 'test-project');
 
 		// Assert
-		// Verify the written data contains the original taskmaster configuration
+		// Verify the written data contains the original novelmaster configuration
 		const dataWritten = JSON.parse(writeFileSyncSpy.mock.calls[0][1]);
-		expect(dataWritten.mcpServers['task-master-ai'].command).toBe('custom');
-		expect(dataWritten.mcpServers['task-master-ai'].args).toContain(
+		expect(dataWritten.mcpServers['novel-master-ai'].command).toBe('custom');
+		expect(dataWritten.mcpServers['novel-master-ai'].args).toContain(
 			'custom-args'
 		);
 	});

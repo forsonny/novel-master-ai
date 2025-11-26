@@ -29,7 +29,7 @@ describe('ConfigManager', () => {
 
 		// Clear environment variables
 		Object.keys(process.env).forEach((key) => {
-			if (key.startsWith('TASKMASTER_')) {
+			if (key.startsWith('NOVELMASTER_')) {
 				delete process.env[key];
 			}
 		});
@@ -95,7 +95,7 @@ describe('ConfigManager', () => {
 					loadConfig: vi.fn().mockReturnValue({}),
 					getRuntimeState: vi.fn().mockReturnValue({}),
 					hasEnvVar: vi.fn().mockReturnValue(false),
-					getAllTaskmasterEnvVars: vi.fn().mockReturnValue({}),
+					getAllNovel MasterEnvVars: vi.fn().mockReturnValue({}),
 					addMapping: vi.fn(),
 					getMappings: vi.fn().mockReturnValue([])
 				}) as any

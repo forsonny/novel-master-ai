@@ -1,6 +1,6 @@
 /**
  * list-tags.js
- * Direct function implementation for listing all tags
+ * Direct function implementation for listing all tag contexts (outline, draft, revision, etc.)
  */
 
 import { tags } from '../../../../scripts/modules/task-manager/tag-management.js';
@@ -11,7 +11,7 @@ import {
 import { createLogWrapper } from '../../tools/utils.js';
 
 /**
- * Direct function wrapper for listing all tags with error handling.
+ * Direct function wrapper for listing all tag contexts (outline, draft, revision, etc.) with error handling.
  *
  * @param {Object} args - Command arguments
  * @param {boolean} [args.showMetadata=false] - Whether to include metadata in the output
@@ -41,12 +41,12 @@ export async function listTagsDirect(args, log, context = {}) {
 				success: false,
 				error: {
 					code: 'MISSING_ARGUMENT',
-					message: 'tasksJsonPath is required'
+					message: 'Tasks file path is required to list tag contexts'
 				}
 			};
 		}
 
-		log.info('Listing all tags');
+		log.info('Listing all tag contexts (outline, draft, revision, etc.)');
 
 		// Prepare options
 		const options = {
@@ -95,10 +95,10 @@ export async function listTagsDirect(args, log, context = {}) {
 			return {
 				name: tag.name,
 				isCurrent: tag.isCurrent,
-				taskCount: tasks.length,
-				completedTasks: tag.completedTasks,
+				chapterCount: tasks.length,
+				completedChapters: tag.completedTasks,
 				statusBreakdown,
-				subtaskCounts,
+				beatCounts: subtaskCounts,
 				created: tag.created,
 				description: tag.description
 			};

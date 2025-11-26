@@ -10,7 +10,7 @@ Instead of Docker complexity, use git worktrees to create isolated working direc
 ✅ **Simple** - No Docker, no containers, just git
 ✅ **Fast** - Instant setup, shared git history
 ✅ **Flexible** - Each worktree can be on a different branch
-✅ **Task Master Works** - Full access to `.taskmaster/` in each worktree
+✅ **Novel Master Works** - Full access to `.novelmaster/` in each worktree
 
 ## Quick Start
 
@@ -24,13 +24,13 @@ Instead of Docker complexity, use git worktrees to create isolated working direc
 ./scripts/create-worktree.sh feature/my-feature
 ```
 
-This creates a worktree in `../claude-task-master-worktrees/<branch-name>/`
+This creates a worktree in `../claude-novel-master-worktrees/<branch-name>/`
 
 ### 2. Open in Your Editor
 
 ```bash
 # Navigate to the worktree
-cd ../claude-task-master-worktrees/auto-main/  # (or whatever branch)
+cd ../claude-novel-master-worktrees/auto-main/  # (or whatever branch)
 
 # Open with your preferred AI editor
 cursor .        # Cursor
@@ -50,7 +50,7 @@ cursor .
 
 **Worktree directory**:
 ```bash
-cd ../claude-task-master-worktrees/auto-main/
+cd ../claude-novel-master-worktrees/auto-main/
 # Different files, different branch, same git repo
 claude
 ```
@@ -61,16 +61,16 @@ claude
 
 ```bash
 # Create worktree
-./scripts/create-worktree.sh auto/taskmaster-work
+./scripts/create-worktree.sh auto/novelmaster-work
 
 # Navigate there
-cd ../claude-task-master-worktrees/auto-taskmaster-work/
+cd ../claude-novel-master-worktrees/auto-novelmaster-work/
 
 # Start Claude
 claude
 
 # In Claude session
-> Use task-master to get the next task and complete it
+> Use novel-master to get the next task and complete it
 ```
 
 **Meanwhile in your main directory:**
@@ -89,15 +89,15 @@ cursor .
 ./scripts/create-worktree.sh windsurf/feature-c
 
 # Terminal 1
-cd ../claude-task-master-worktrees/cursor-feature-a/
+cd ../claude-novel-master-worktrees/cursor-feature-a/
 cursor .
 
 # Terminal 2
-cd ../claude-task-master-worktrees/claude-feature-b/
+cd ../claude-novel-master-worktrees/claude-feature-b/
 claude
 
 # Terminal 3
-cd ../claude-task-master-worktrees/windsurf-feature-c/
+cd ../claude-novel-master-worktrees/windsurf-feature-c/
 windsurf .
 ```
 
@@ -108,7 +108,7 @@ windsurf .
 cursor .
 
 # Worktree: Have Claude write tests
-cd ../claude-task-master-worktrees/auto-main/
+cd ../claude-novel-master-worktrees/auto-main/
 claude -p "Write tests for the recent changes in the main branch"
 ```
 
@@ -117,21 +117,21 @@ claude -p "Write tests for the recent changes in the main branch"
 ### Directory Structure
 
 ```
-/Volumes/Workspace/workspace/contrib/task-master/
-├── claude-task-master/              # Main directory (this one)
+/Volumes/Workspace/workspace/contrib/novel-master/
+├── claude-novel-master/              # Main directory (this one)
 │   ├── .git/                        # Shared git repo
-│   ├── .taskmaster/                 # Synced via git
+│   ├── .novelmaster/                 # Synced via git
 │   └── your code...
 │
-└── claude-task-master-worktrees/    # Worktrees directory
+└── claude-novel-master-worktrees/    # Worktrees directory
     ├── auto-main/                   # Worktree 1
     │   ├── .git -> (points to main .git)
-    │   ├── .taskmaster/             # Same tasks, synced
+    │   ├── .novelmaster/             # Same tasks, synced
     │   └── your code... (on branch auto/main)
     │
     └── feature-x/                   # Worktree 2
         ├── .git -> (points to main .git)
-        ├── .taskmaster/
+        ├── .novelmaster/
         └── your code... (on branch feature/x)
 ```
 
@@ -143,15 +143,15 @@ All worktrees share the same `.git`:
 - Git history is shared
 - Only the working files differ
 
-## Task Master in Worktrees
+## Novel Master in Worktrees
 
-Task Master works perfectly in worktrees:
+Novel Master works perfectly in worktrees:
 
 ```bash
 # In any worktree
-task-master list        # Same tasks
-task-master next        # Same task queue
-task-master show 1.2    # Same task data
+novel-master list        # Same tasks
+novel-master next        # Same task queue
+novel-master show 1.2    # Same task data
 
 # Changes are shared (if committed/pushed)
 ```
@@ -162,13 +162,13 @@ Use **tags** to separate task contexts:
 
 ```bash
 # Main directory - use default tag
-task-master list
+novel-master list
 
 # Worktree 1 - use separate tag
-cd ../claude-task-master-worktrees/auto-main/
-task-master add-tag --name=claude-auto
-task-master use-tag --name=claude-auto
-task-master list  # Shows claude-auto tasks only
+cd ../claude-novel-master-worktrees/auto-main/
+novel-master add-tag --name=claude-auto
+novel-master use-tag --name=claude-auto
+novel-master list  # Shows claude-auto tasks only
 ```
 
 ## Managing Worktrees
@@ -186,10 +186,10 @@ git worktree list
 
 ```bash
 # Remove specific worktree
-git worktree remove ../claude-task-master-worktrees/auto-main/
+git worktree remove ../claude-novel-master-worktrees/auto-main/
 
 # Or if there are uncommitted changes, force it
-git worktree remove --force ../claude-task-master-worktrees/auto-main/
+git worktree remove --force ../claude-novel-master-worktrees/auto-main/
 ```
 
 ### Sync Changes Between Worktrees
@@ -209,18 +209,18 @@ git pull
 
 ## Common Workflows
 
-### 1. Autonomous Claude with Task Master
+### 1. Autonomous Claude with Novel Master
 
 **Setup:**
 ```bash
 ./scripts/create-worktree.sh auto/claude-work
-cd ../claude-task-master-worktrees/auto-claude-work/
+cd ../claude-novel-master-worktrees/auto-claude-work/
 ```
 
 **Run:**
 ```bash
 # Copy the autonomous script
-cp ../claude-task-master/run-autonomous-tasks.sh .
+cp ../claude-novel-master/run-autonomous-tasks.sh .
 
 # Run Claude autonomously
 ./run-autonomous-tasks.sh
@@ -229,7 +229,7 @@ cp ../claude-task-master/run-autonomous-tasks.sh .
 **Monitor from main directory:**
 ```bash
 # In another terminal, in main directory
-watch -n 5 "task-master list"
+watch -n 5 "novel-master list"
 ```
 
 ### 2. Code Review Workflow
@@ -244,7 +244,7 @@ git commit -m "feat: new feature"
 
 **Worktree:**
 ```bash
-cd ../claude-task-master-worktrees/auto-main/
+cd ../claude-novel-master-worktrees/auto-main/
 git pull
 
 # Have Claude review
@@ -256,7 +256,7 @@ claude -p "Review the latest commit and suggest improvements"
 **Worktree 1 (Backend):**
 ```bash
 ./scripts/create-worktree.sh backend/api
-cd ../claude-task-master-worktrees/backend-api/
+cd ../claude-novel-master-worktrees/backend-api/
 cursor .
 # Work on API
 ```
@@ -264,7 +264,7 @@ cursor .
 **Worktree 2 (Frontend):**
 ```bash
 ./scripts/create-worktree.sh frontend/ui
-cd ../claude-task-master-worktrees/frontend-ui/
+cd ../claude-novel-master-worktrees/frontend-ui/
 windsurf .
 # Work on UI
 ```
@@ -303,7 +303,7 @@ Each worktree can have different `node_modules`:
 npm install
 
 # Worktree (different dependencies)
-cd ../claude-task-master-worktrees/auto-main/
+cd ../claude-novel-master-worktrees/auto-main/
 npm install
 # Installs independently
 ```
@@ -316,7 +316,7 @@ Each worktree can have its own `.env`:
 echo "API_URL=http://localhost:3000" > .env
 
 # Worktree
-cd ../claude-task-master-worktrees/auto-main/
+cd ../claude-novel-master-worktrees/auto-main/
 echo "API_URL=http://localhost:4000" > .env
 # Different config!
 ```
@@ -330,11 +330,11 @@ echo "API_URL=http://localhost:4000" > .env
 ./scripts/list-worktrees.sh
 
 # Remove each one
-git worktree remove ../claude-task-master-worktrees/auto-main/
-git worktree remove ../claude-task-master-worktrees/feature-x/
+git worktree remove ../claude-novel-master-worktrees/auto-main/
+git worktree remove ../claude-novel-master-worktrees/feature-x/
 
 # Or remove all at once (careful!)
-rm -rf ../claude-task-master-worktrees/
+rm -rf ../claude-novel-master-worktrees/
 git worktree prune  # Clean up git's worktree metadata
 ```
 
@@ -352,7 +352,7 @@ git push origin --delete auto/claude-work
 
 ```bash
 # Remove the existing worktree first
-git worktree remove ../claude-task-master-worktrees/auto-main/
+git worktree remove ../claude-novel-master-worktrees/auto-main/
 ```
 
 ### "Branch already checked out"
@@ -380,7 +380,7 @@ git pull
 
 Each worktree needs its own `node_modules`:
 ```bash
-cd ../claude-task-master-worktrees/auto-main/
+cd ../claude-novel-master-worktrees/auto-main/
 npm install
 ```
 
@@ -408,7 +408,7 @@ npm install
 ./scripts/create-worktree.sh auto/claude-work
 
 # 2. Open in AI editor
-cd ../claude-task-master-worktrees/auto-claude-work/
+cd ../claude-novel-master-worktrees/auto-claude-work/
 cursor .   # or claude, windsurf, code, etc.
 
 # 3. Work in parallel

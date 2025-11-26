@@ -1,5 +1,6 @@
 /**
- * Direct function wrapper for validateDependenciesCommand
+ * validate-dependencies.js
+ * Direct function implementation for validating narrative dependencies (prerequisite relationships)
  */
 
 import { validateDependenciesCommand } from '../../../../scripts/modules/dependency-manager.js';
@@ -10,11 +11,12 @@ import {
 import fs from 'fs';
 
 /**
- * Validate dependencies in tasks.json
+ * Validate narrative dependencies (prerequisite relationships) in tasks.json
+ * Checks for circular references, missing prerequisites, and invalid dependency chains.
  * @param {Object} args - Function arguments
  * @param {string} args.tasksJsonPath - Explicit path to the tasks.json file.
  * @param {string} args.projectRoot - Project root path (for MCP/env fallback)
- * @param {string} args.tag - Tag for the task (optional)
+ * @param {string} args.tag - Tag context (outline, draft, revision) for the task (optional)
  * @param {Object} log - Logger object
  * @returns {Promise<{success: boolean, data?: Object, error?: {code: string, message: string}}>}
  */
@@ -28,13 +30,13 @@ export async function validateDependenciesDirect(args, log) {
 			success: false,
 			error: {
 				code: 'MISSING_ARGUMENT',
-				message: 'tasksJsonPath is required'
+				message: 'Tasks file path is required to validate narrative dependencies'
 			}
 		};
 	}
 
 	try {
-		log.info(`Validating dependencies in tasks: ${tasksJsonPath}`);
+		log.info(`Validating narrative dependencies in chapters: ${tasksJsonPath}`);
 
 		// Use the provided tasksJsonPath
 		const tasksPath = tasksJsonPath;
@@ -63,7 +65,7 @@ export async function validateDependenciesDirect(args, log) {
 		return {
 			success: true,
 			data: {
-				message: 'Dependencies validated successfully',
+				message: 'Narrative dependencies validated successfully (no circular references or missing prerequisites found)',
 				tasksPath
 			}
 		};

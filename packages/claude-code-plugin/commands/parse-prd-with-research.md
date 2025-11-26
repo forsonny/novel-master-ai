@@ -1,48 +1,48 @@
-Parse PRD with enhanced research mode for better task generation.
+Parse NRD with enhanced research mode for better chapter generation.
 
-Arguments: $ARGUMENTS (PRD file path)
+Arguments: $ARGUMENTS (NRD file path)
 
 ## Research-Enhanced Parsing
 
-Uses the research AI provider (typically Perplexity) for more comprehensive task generation with current best practices.
+Uses the research AI provider (typically Perplexity) for more comprehensive chapter generation with current best practices and narrative research.
 
 ## Execution
 
 ```bash
-task-master parse-prd --input=$ARGUMENTS --research
+novel-master parse-prd --input=$ARGUMENTS --research
 ```
 
 ## Research Benefits
 
 1. **Current Best Practices**
-   - Latest framework patterns
-   - Security considerations
-   - Performance optimizations
-   - Accessibility requirements
+   - Latest narrative techniques
+   - Genre conventions
+   - Pacing strategies
+   - Character development patterns
 
-2. **Technical Deep Dive**
-   - Implementation approaches
-   - Library recommendations
-   - Architecture patterns
-   - Testing strategies
+2. **Narrative Deep Dive**
+   - Story structure approaches
+   - Genre-specific recommendations
+   - Worldbuilding patterns
+   - Continuity strategies
 
 3. **Comprehensive Coverage**
-   - Edge cases consideration
-   - Error handling tasks
-   - Monitoring setup
-   - Deployment tasks
+   - Character arc consideration
+   - Plot thread management
+   - Setting consistency
+   - Timeline validation
 
 ## Enhanced Output
 
 Research mode typically:
-- Generates more detailed tasks
-- Includes industry standards
-- Adds compliance considerations
-- Suggests modern tooling
+- Generates more detailed chapters
+- Includes genre standards
+- Adds narrative considerations
+- Suggests modern writing techniques
 
 ## When to Use
 
-- New technology domains
-- Complex requirements
-- Regulatory compliance needed
-- Best practices crucial
+- New genre exploration
+- Complex narrative requirements
+- Historical accuracy needed
+- Genre conventions crucial

@@ -1,49 +1,49 @@
-Break down a complex task into subtasks.
+Break down a complex chapter into scenes.
 
-Arguments: $ARGUMENTS (task ID)
+Arguments: $ARGUMENTS (chapter ID)
 
-## Intelligent Task Expansion
+## Intelligent Chapter Expansion
 
-Analyzes a task and creates detailed subtasks for better manageability.
+Analyzes a chapter and creates detailed scenes for better manageability.
 
 ## Execution
 
 ```bash
-task-master expand --id=$ARGUMENTS
+novel-master expand --id=$ARGUMENTS
 ```
 
 ## Expansion Process
 
-1. **Task Analysis**
-   - Review task complexity
-   - Identify components
-   - Detect technical challenges
+1. **Chapter Analysis**
+   - Review chapter complexity
+   - Identify narrative components
+   - Detect pacing challenges
    - Estimate time requirements
 
-2. **Subtask Generation**
-   - Create 3-7 subtasks typically
-   - Each subtask 1-4 hours
-   - Logical implementation order
-   - Clear acceptance criteria
+2. **Scene Generation**
+   - Create 3-7 scenes typically
+   - Each scene 1-4 hours
+   - Logical narrative order
+   - Clear narrative criteria
 
 3. **Smart Breakdown**
-   - Setup/configuration tasks
-   - Core implementation
-   - Testing components
+   - Setup/establishment scenes
+   - Core narrative scenes
+   - Continuity check components
    - Integration steps
-   - Documentation updates
+   - Revision notes
 
 ## Enhanced Features
 
-Based on task type:
-- **Feature**: Setup → Implement → Test → Integrate
-- **Bug Fix**: Reproduce → Diagnose → Fix → Verify
-- **Refactor**: Analyze → Plan → Refactor → Validate
+Based on chapter type:
+- **Action Chapter**: Setup → Conflict → Resolution → Transition
+- **Character Development**: Introduction → Development → Revelation → Growth
+- **Worldbuilding**: Discovery → Exploration → Integration → Understanding
 
 ## Post-Expansion
 
 After expansion:
-1. Show subtask hierarchy
+1. Show scene hierarchy
 2. Update time estimates
-3. Suggest implementation order
+3. Suggest narrative order
 4. Highlight critical path

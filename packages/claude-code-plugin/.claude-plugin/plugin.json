@@ -1,12 +1,12 @@
 {
-	"name": "taskmaster",
+	"name": "novelmaster",
 	"description": "A task management system for ambitious AI-driven development that doesn't overwhelm and confuse Cursor.",
 	"author": {
 		"name": "Hamster",
-		"url": "https://github.com/eyaltoledano/claude-task-master"
+		"url": "https://github.com/eyaltoledano/claude-novel-master"
 	},
-	"homepage": "https://github.com/eyaltoledano/claude-task-master#readme",
-	"repository": "https://github.com/eyaltoledano/claude-task-master",
+	"homepage": "https://github.com/eyaltoledano/claude-novel-master#readme",
+	"repository": "https://github.com/eyaltoledano/claude-novel-master",
 	"license": "MIT WITH Commons-Clause",
 	"keywords": [
 		"task-management",

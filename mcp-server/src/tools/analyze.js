@@ -11,7 +11,7 @@ import {
 	createErrorResponse,
 	withNormalizedProjectRoot
 } from './utils.js';
-import { analyzeTaskComplexityDirect } from '../core/task-master-core.js'; // Assuming core functions are exported via task-master-core.js
+import { analyzeTaskComplexityDirect } from '../core/novel-master-core.js'; // Assuming core functions are exported via novel-master-core.js
 import { findTasksPath } from '../core/utils/path-utils.js';
 import { resolveTag } from '../../../scripts/modules/utils.js';
 import { COMPLEXITY_REPORT_FILE } from '../../../src/constants/paths.js';
@@ -25,7 +25,7 @@ export function registerAnalyzeProjectComplexityTool(server) {
 	server.addTool({
 		name: 'analyze_project_complexity',
 		description:
-			'Analyze task complexity and generate expansion recommendations.',
+			'Analyze narrative complexity (pacing, POV load, dependency tangles) and recommend where scenes/arcs need more detail.',
 		parameters: z.object({
 			threshold: z.coerce // Use coerce for number conversion from string if needed
 				.number()
@@ -34,17 +34,19 @@ export function registerAnalyzeProjectComplexityTool(server) {
 				.max(10)
 				.optional()
 				.default(5) // Default threshold
-				.describe('Complexity score threshold (1-10) to recommend expansion.'),
+				.describe(
+					'Complexity score threshold (1-10) before recommending deeper outlining/drafting.'
+				),
 			research: z
 				.boolean()
 				.optional()
 				.default(false)
-				.describe('Use Perplexity AI for research-backed analysis.'),
+				.describe('Use the research model for lore/genre-aware analysis.'),
 			output: z
 				.string()
 				.optional()
 				.describe(
-					`Output file path relative to project root (default: ${COMPLEXITY_REPORT_FILE}).`
+					`Output file path (relative to project root) for the pacing/complexity report (default: ${COMPLEXITY_REPORT_FILE}).`
 				),
 			file: z
 				.string()
@@ -56,7 +58,7 @@ export function registerAnalyzeProjectComplexityTool(server) {
 				.string()
 				.optional()
 				.describe(
-					'Comma-separated list of task IDs to analyze specifically (e.g., "1,3,5").'
+					'Comma-separated list of chapter/scene IDs to analyze (e.g., "3,7,9.2").'
 				),
 			from: z.coerce
 				.number()

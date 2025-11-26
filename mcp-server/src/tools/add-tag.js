@@ -9,7 +9,7 @@ import {
 	handleApiResult,
 	withNormalizedProjectRoot
 } from './utils.js';
-import { addTagDirect } from '../core/task-master-core.js';
+import { addTagDirect } from '../core/novel-master-core.js';
 import { findTasksPath } from '../core/utils/path-utils.js';
 
 /**
@@ -19,7 +19,7 @@ import { findTasksPath } from '../core/utils/path-utils.js';
 export function registerAddTagTool(server) {
 	server.addTool({
 		name: 'add_tag',
-		description: 'Create a new tag for organizing tasks in different contexts',
+		description: 'Create a new tag for organizing tasks in different contexts. For novel workflows, use tags like "outline" (story planning), "draft" (first-pass writing), "rev-1" (revision passes), "character-<name>" (POV-specific work), "timeline-<period>" (timeline segments), or "beta-feedback" (reader feedback integration). Example: Create a revision tag with "add_tag" using name="rev-1" and copyFromTag="draft" to start revising your first draft.',
 		parameters: z.object({
 			name: z.string().describe('Name of the new tag to create'),
 			copyFromCurrent: z

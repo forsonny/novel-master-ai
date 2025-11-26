@@ -1,7 +1,7 @@
 {
 	"$schema": "https://mintlify.com/docs.json",
 	"theme": "mint",
-	"name": "Task Master",
+	"name": "Novel Master",
 	"colors": {
 		"primary": "#3366CC",
 		"light": "#6699FF",
@@ -11,7 +11,7 @@
 	"navigation": {
 		"tabs": [
 			{
-				"tab": "Task Master Documentation",
+				"tab": "Novel Master Documentation",
 				"groups": [
 					{
 						"group": "Welcome",
@@ -67,7 +67,7 @@
 			"anchors": [
 				{
 					"anchor": "Github",
-					"href": "https://github.com/eyaltoledano/claude-task-master",
+					"href": "https://github.com/eyaltoledano/claude-novel-master",
 					"icon": "github"
 				},
 				{
@@ -79,13 +79,13 @@
 		}
 	},
 	"logo": {
-		"light": "/logo/task-master-logo.png",
-		"dark": "/logo/task-master-logo.png"
+		"light": "/logo/novel-master-logo.png",
+		"dark": "/logo/novel-master-logo.png"
 	},
 	"footer": {
 		"socials": {
-			"x": "https://x.com/TaskmasterAI",
-			"github": "https://github.com/eyaltoledano/claude-task-master"
+			"x": "https://x.com/Novel MasterAI",
+			"github": "https://github.com/eyaltoledano/claude-novel-master"
 		}
 	}
 }

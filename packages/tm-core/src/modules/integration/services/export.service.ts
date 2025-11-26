@@ -374,7 +374,7 @@ export class ExportService {
 
 			// Prepare request body
 			const requestBody = {
-				source: 'task-master-cli',
+				source: 'novel-master-cli',
 				options: {
 					dryRun: false,
 					stopOnError: false

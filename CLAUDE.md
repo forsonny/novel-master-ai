@@ -1,9 +1,9 @@
 # Claude Code Instructions
 
-## Task Master AI Instructions
+## Novel Master AI Instructions
 
-**Import Task Master's development workflow commands and guidelines, treat as if import is in the main CLAUDE.md file.**
-@./.taskmaster/CLAUDE.md
+**Import Novel Master's development workflow commands and guidelines, treat as if import is in the main CLAUDE.md file.**
+@./.novelmaster/CLAUDE.md
 
 ## Test Guidelines
 
@@ -143,7 +143,7 @@ Apply standard software engineering principles:
 ## Documentation Guidelines
 
 - **Documentation location**: Write docs in `apps/docs/` (Mintlify site source), not `docs/`
-- **Documentation URL**: Reference docs at <https://docs.task-master.dev>, not local file paths
+- **Documentation URL**: Reference docs at <https://docs.novel-master.dev>, not local file paths
 
 ## Changeset Guidelines
 

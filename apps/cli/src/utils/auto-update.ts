@@ -1,5 +1,5 @@
 /**
- * @fileoverview Auto-update utilities for task-master-ai CLI
+ * @fileoverview Auto-update utilities for novel-master-ai CLI
  */
 
 import { spawn } from 'child_process';
@@ -68,10 +68,10 @@ async function fetchChangelogHighlights(version: string): Promise<string[]> {
 	return new Promise((resolve) => {
 		const options = {
 			hostname: 'raw.githubusercontent.com',
-			path: '/eyaltoledano/claude-task-master/main/CHANGELOG.md',
+			path: '/eyaltoledano/claude-novel-master/main/CHANGELOG.md',
 			method: 'GET',
 			headers: {
-				'User-Agent': `task-master-ai/${version}`
+				'User-Agent': `novel-master-ai/${version}`
 			}
 		};
 
@@ -172,7 +172,7 @@ export function parseChangelogHighlights(
 }
 
 /**
- * Check for newer version of task-master-ai
+ * Check for newer version of novel-master-ai
  */
 export async function checkForUpdate(
 	currentVersionOverride?: string
@@ -182,11 +182,11 @@ export async function checkForUpdate(
 	return new Promise((resolve) => {
 		const options = {
 			hostname: 'registry.npmjs.org',
-			path: '/task-master-ai',
+			path: '/novel-master-ai',
 			method: 'GET',
 			headers: {
 				Accept: 'application/vnd.npm.install-v1+json',
-				'User-Agent': `task-master-ai/${currentVersion}`
+				'User-Agent': `novel-master-ai/${currentVersion}`
 			}
 		};
 
@@ -283,19 +283,19 @@ export function displayUpgradeNotification(
 }
 
 /**
- * Automatically update task-master-ai to the latest version
+ * Automatically update novel-master-ai to the latest version
  */
 export async function performAutoUpdate(
 	latestVersion: string
 ): Promise<boolean> {
 	if (
-		process.env.TASKMASTER_SKIP_AUTO_UPDATE === '1' ||
+		process.env.NOVELMASTER_SKIP_AUTO_UPDATE === '1' ||
 		process.env.CI ||
 		process.env.NODE_ENV === 'test'
 	) {
 		const reason =
-			process.env.TASKMASTER_SKIP_AUTO_UPDATE === '1'
-				? 'TASKMASTER_SKIP_AUTO_UPDATE=1'
+			process.env.NOVELMASTER_SKIP_AUTO_UPDATE === '1'
+				? 'NOVELMASTER_SKIP_AUTO_UPDATE=1'
 				: process.env.CI
 					? 'CI environment'
 					: 'NODE_ENV=test';
@@ -304,7 +304,7 @@ export async function performAutoUpdate(
 	}
 	const spinner = ora({
 		text: chalk.blue(
-			`Updating task-master-ai to version ${chalk.green(latestVersion)}`
+			`Updating novel-master-ai to version ${chalk.green(latestVersion)}`
 		),
 		spinner: 'dots',
 		color: 'blue'
@@ -316,7 +316,7 @@ export async function performAutoUpdate(
 			[
 				'install',
 				'-g',
-				`task-master-ai@${latestVersion}`,
+				`novel-master-ai@${latestVersion}`,
 				'--no-fund',
 				'--no-audit',
 				'--loglevel=warn'
@@ -331,7 +331,7 @@ export async function performAutoUpdate(
 		updateProcess.stdout.on('data', () => {
 			// Update spinner text with progress
 			spinner.text = chalk.blue(
-				`Installing task-master-ai@${latestVersion}...`
+				`Installing novel-master-ai@${latestVersion}...`
 			);
 		});
 
@@ -351,7 +351,7 @@ export async function performAutoUpdate(
 				spinner.fail(chalk.red('Auto-update failed'));
 				console.log(
 					chalk.cyan(
-						`Please run manually: npm install -g task-master-ai@${latestVersion}`
+						`Please run manually: npm install -g novel-master-ai@${latestVersion}`
 					)
 				);
 				if (errorOutput) {
@@ -366,7 +366,7 @@ export async function performAutoUpdate(
 			console.log(chalk.red('Error:'), error.message);
 			console.log(
 				chalk.cyan(
-					`Please run manually: npm install -g task-master-ai@${latestVersion}`
+					`Please run manually: npm install -g novel-master-ai@${latestVersion}`
 				)
 			);
 			resolve(false);
@@ -383,8 +383,8 @@ export function restartWithNewVersion(argv: string[]): void {
 
 	console.log(chalk.dim('Restarting with updated version...\n'));
 
-	// Spawn the updated task-master command
-	const child = spawn('task-master', args, {
+	// Spawn the updated novel-master command
+	const child = spawn('novel-master', args, {
 		stdio: 'inherit', // Inherit stdin/stdout/stderr so it looks seamless
 		detached: false,
 		shell: process.platform === 'win32' // Windows compatibility

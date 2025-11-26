@@ -1,6 +1,6 @@
 /**
  * delete-tag.js
- * Direct function implementation for deleting a tag
+ * Direct function implementation for deleting a tag context (removes all chapters/scenes in that tag)
  */
 
 import { deleteTag } from '../../../../scripts/modules/task-manager/tag-management.js';
@@ -11,10 +11,10 @@ import {
 import { createLogWrapper } from '../../tools/utils.js';
 
 /**
- * Direct function wrapper for deleting a tag with error handling.
+ * Direct function wrapper for deleting a tag context (removes all chapters/scenes in that tag) with error handling.
  *
  * @param {Object} args - Command arguments
- * @param {string} args.name - Name of the tag to delete
+ * @param {string} args.name - Name of the tag context to delete (e.g., "draft", "rev-1")
  * @param {boolean} [args.yes=false] - Skip confirmation prompts
  * @param {string} [args.tasksJsonPath] - Path to the tasks.json file (resolved by tool)
  * @param {string} [args.projectRoot] - Project root path
@@ -42,7 +42,7 @@ export async function deleteTagDirect(args, log, context = {}) {
 				success: false,
 				error: {
 					code: 'MISSING_ARGUMENT',
-					message: 'tasksJsonPath is required'
+					message: 'Tasks file path is required to delete a tag context'
 				}
 			};
 		}
@@ -55,12 +55,12 @@ export async function deleteTagDirect(args, log, context = {}) {
 				success: false,
 				error: {
 					code: 'MISSING_PARAMETER',
-					message: 'Tag name is required and must be a string'
+					message: 'Tag context name is required and must be a string (e.g., "draft", "rev-1")'
 				}
 			};
 		}
 
-		log.info(`Deleting tag: ${name}`);
+		log.info(`Deleting tag context: ${name} (this will remove all chapters/scenes in this tag)`);
 
 		// Prepare options
 		const options = {
@@ -88,10 +88,10 @@ export async function deleteTagDirect(args, log, context = {}) {
 			data: {
 				tagName: result.tagName,
 				deleted: result.deleted,
-				tasksDeleted: result.tasksDeleted,
+				chaptersDeleted: result.tasksDeleted,
 				wasCurrentTag: result.wasCurrentTag,
 				switchedToMaster: result.switchedToMaster,
-				message: `Successfully deleted tag "${result.tagName}"`
+				message: `Successfully deleted tag context "${result.tagName}" (removed ${result.tasksDeleted} chapter(s))`
 			}
 		};
 	} catch (error) {

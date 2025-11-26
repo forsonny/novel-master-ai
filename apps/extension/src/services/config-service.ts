@@ -1,6 +1,6 @@
 /**
  * Config Service
- * Manages Task Master config.json file operations
+ * Manages Novel Master config.json file operations
  */
 
 import * as path from 'path';
@@ -32,7 +32,7 @@ export class ConfigService {
 	constructor(private logger: ExtensionLogger) {}
 
 	/**
-	 * Read Task Master config.json from the workspace
+	 * Read Novel Master config.json from the workspace
 	 */
 	async readConfig(): Promise<TaskMasterConfigJson | null> {
 		// Check cache first
@@ -50,7 +50,7 @@ export class ConfigService {
 				return null;
 			}
 
-			const configPath = path.join(workspaceRoot, '.taskmaster', 'config.json');
+			const configPath = path.join(workspaceRoot, '.novelmaster', 'config.json');
 
 			try {
 				const configContent = await fs.readFile(configPath, 'utf-8');
@@ -60,7 +60,7 @@ export class ConfigService {
 				this.configCache = config;
 				this.lastReadTime = Date.now();
 
-				this.logger.debug('Successfully read Task Master config', {
+				this.logger.debug('Successfully read Novel Master config', {
 					hasModels: !!config.models,
 					debug: config.debug
 				});
@@ -68,14 +68,14 @@ export class ConfigService {
 				return config;
 			} catch (error) {
 				if ((error as any).code === 'ENOENT') {
-					this.logger.debug('Task Master config.json not found');
+					this.logger.debug('Novel Master config.json not found');
 				} else {
-					this.logger.error('Failed to read Task Master config', error);
+					this.logger.error('Failed to read Novel Master config', error);
 				}
 				return null;
 			}
 		} catch (error) {
-			this.logger.error('Error accessing Task Master config', error);
+			this.logger.error('Error accessing Novel Master config', error);
 			return null;
 		}
 	}

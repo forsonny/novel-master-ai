@@ -1,6 +1,6 @@
 /**
  * contextGatherer.js
- * Comprehensive context gathering utility for Task Master AI operations
+ * Comprehensive context gathering utility for Novel Master AI operations
  * Supports task context, file context, project tree, and custom context
  */
 
@@ -25,7 +25,7 @@ export class ContextGatherer {
 		this.projectRoot = projectRoot;
 		this.tasksPath = path.join(
 			projectRoot,
-			'.taskmaster',
+			'.novelmaster',
 			'tasks',
 			'tasks.json'
 		);

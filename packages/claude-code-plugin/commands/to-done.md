@@ -1,44 +1,44 @@
-Mark a task as completed.
+Mark a chapter as completed.
 
-Arguments: $ARGUMENTS (task ID)
+Arguments: $ARGUMENTS (chapter ID)
 
-## Completing a Task
+## Completing a Chapter
 
-This command validates task completion and updates project state intelligently.
+This command validates chapter completion and updates project state intelligently.
 
 ## Pre-Completion Checks
 
-1. Verify test strategy was followed
-2. Check if all subtasks are complete
-3. Validate acceptance criteria met
-4. Ensure code is committed
+1. Verify continuity/pacing strategy was followed
+2. Check if all scenes are complete
+3. Validate narrative requirements met
+4. Ensure prose is committed
 
 ## Execution
 
 ```bash
-task-master set-status --id=$ARGUMENTS --status=done
+novel-master set-status --id=$ARGUMENTS --status=done
 ```
 
 ## Post-Completion Actions
 
-1. **Update Dependencies**
-   - Identify newly unblocked tasks
-   - Update sprint progress
-   - Recalculate project timeline
+1. **Update Story Dependencies**
+   - Identify newly unblocked chapters
+   - Update story arc progress
+   - Recalculate manuscript timeline
 
 2. **Documentation**
    - Generate completion summary
-   - Update CLAUDE.md with learnings
-   - Log implementation approach
+   - Update CLAUDE.md with narrative learnings
+   - Log drafting approach
 
 3. **Next Steps**
-   - Show newly available tasks
-   - Suggest logical next task
-   - Update velocity metrics
+   - Show newly available chapters
+   - Suggest logical next chapter
+   - Update writing velocity metrics
 
 ## Celebration & Learning
 
 - Show impact of completion
 - Display unblocked work
 - Recognize achievement
-- Capture lessons learned
+- Capture narrative lessons learned

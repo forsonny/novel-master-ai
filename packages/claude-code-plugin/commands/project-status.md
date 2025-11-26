@@ -6,52 +6,52 @@ Arguments: $ARGUMENTS
 
 ### 1. **Executive Summary**
 Quick dashboard view:
-- 🏃 Active work (in-progress tasks)
+- 🏃 Active work (in-progress chapters)
 - 📊 Progress metrics (% complete, velocity)
 - 🚧 Blockers and risks
 - ⏱️ Time analysis (estimated vs actual)
-- 🎯 Sprint/milestone progress
+- 🎯 Story arc/milestone progress
 
 ### 2. **Contextual Analysis**
 
 Based on $ARGUMENTS, focus on:
-- "sprint" → Current sprint progress and burndown
+- "story-arc" → Current story arc progress and burndown
 - "blocked" → Dependency chains and resolution paths
-- "team" → Task distribution and workload
+- "team" → Chapter distribution and workload
 - "timeline" → Schedule adherence and projections
 - "risk" → High complexity or overdue items
 
 ### 3. **Smart Insights**
 
 **Workflow Health:**
-- Idle tasks (in-progress > 24h without updates)
-- Bottlenecks (multiple tasks waiting on same dependency)
+- Idle chapters (in-progress > 24h without updates)
+- Bottlenecks (multiple chapters waiting on same dependency)
 - Quick wins (low complexity, high impact)
 
 **Predictive Analytics:**
 - Completion projections based on velocity
 - Risk of missing deadlines
-- Recommended task order for optimal flow
+- Recommended chapter order for optimal flow
 
 ### 4. **Visual Intelligence**
 
 Dynamic visualization based on data:
 ```
-Sprint Progress: ████████░░ 80% (16/20 tasks)
+Story Arc Progress: ████████░░ 80% (16/20 chapters)
 Velocity Trend: ↗️ +15% this week
-Blocked Tasks:  🔴 3 critical path items
+Blocked Chapters:  🔴 3 critical path items
 
 Priority Distribution:
-High:   ████████ 8 tasks (2 blocked)
-Medium: ████░░░░ 4 tasks
-Low:    ██░░░░░░ 2 tasks
+High:   ████████ 8 chapters (2 blocked)
+Medium: ████░░░░ 4 chapters
+Low:    ██░░░░░░ 2 chapters
 ```
 
 ### 5. **Actionable Recommendations**
 
 Based on analysis:
 1. **Immediate actions** (unblock critical path)
-2. **Today's focus** (optimal task sequence)
+2. **Today's focus** (optimal chapter sequence)
 3. **Process improvements** (recurring patterns)
 4. **Resource needs** (skills, time, dependencies)
 

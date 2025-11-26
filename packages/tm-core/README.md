@@ -1,10 +1,10 @@
-# @task-master/tm-core
+# @novel-master/tm-core
 
-Core library for Task Master AI - providing task management and orchestration capabilities with TypeScript support.
+Core library for Novel Master AI - providing task management and orchestration capabilities with TypeScript support.
 
 ## Overview
 
-`tm-core` is the foundational library that powers Task Master AI's task management system. It provides a comprehensive set of tools for creating, managing, and orchestrating tasks with AI integration.
+`tm-core` is the foundational library that powers Novel Master AI's task management system. It provides a comprehensive set of tools for creating, managing, and orchestrating tasks with AI integration.
 
 ## Features
 
@@ -20,7 +20,7 @@ Core library for Task Master AI - providing task management and orchestration ca
 ## Installation
 
 ```bash
-npm install @task-master/tm-core
+npm install @novel-master/tm-core
 ```
 
 ## Usage
@@ -28,7 +28,7 @@ npm install @task-master/tm-core
 ### Basic Usage
 
 ```typescript
-import { generateTaskId, PlaceholderTask } from '@task-master/tm-core';
+import { generateTaskId, PlaceholderTask } from '@novel-master/tm-core';
 
 // Generate a unique task ID
 const taskId = generateTaskId();
@@ -48,22 +48,22 @@ You can import specific modules to reduce bundle size:
 
 ```typescript
 // Import types only
-import type { TaskId, TaskStatus } from '@task-master/tm-core/types';
+import type { TaskId, TaskStatus } from '@novel-master/tm-core/types';
 
 // Import utilities
-import { generateTaskId, formatDate } from '@task-master/tm-core/utils';
+import { generateTaskId, formatDate } from '@novel-master/tm-core/utils';
 
 // Import providers (AI providers coming soon)
-// import { AIProvider } from '@task-master/tm-core/providers';
+// import { AIProvider } from '@novel-master/tm-core/providers';
 
 // Import storage
-import { PlaceholderStorage } from '@task-master/tm-core/storage';
+import { PlaceholderStorage } from '@novel-master/tm-core/storage';
 
 // Import parsers
-import { PlaceholderParser } from '@task-master/tm-core/parser';
+import { PlaceholderParser } from '@novel-master/tm-core/parser';
 
 // Import errors
-import { TmCoreError, TaskNotFoundError } from '@task-master/tm-core/errors';
+import { TmCoreError, TaskNotFoundError } from '@novel-master/tm-core/errors';
 ```
 
 ## Architecture
@@ -127,10 +127,10 @@ This package supports both ESM and CommonJS formats automatically:
 
 ```javascript
 // ESM
-import { generateTaskId } from '@task-master/tm-core';
+import { generateTaskId } from '@novel-master/tm-core';
 
 // CommonJS
-const { generateTaskId } = require('@task-master/tm-core');
+const { generateTaskId } = require('@novel-master/tm-core');
 ```
 
 ## Roadmap
@@ -215,7 +215,7 @@ This is the initial package structure. The following features are planned for im
 
 ## Contributing
 
-This package is part of the Task Master AI project. Please refer to the main project's contributing guidelines.
+This package is part of the Novel Master AI project. Please refer to the main project's contributing guidelines.
 
 ## License
 
@@ -223,4 +223,4 @@ MIT - See the main project's LICENSE file for details.
 
 ## Support
 
-For questions and support, please refer to the main Task Master AI documentation.
+For questions and support, please refer to the main Novel Master AI documentation.

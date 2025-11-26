@@ -1,6 +1,6 @@
-# Contributing to Task Master
+# Contributing to Novel Master
 
-Thank you for your interest in contributing to Task Master! We're excited to work with you and appreciate your help in making this project better. 🚀
+Thank you for your interest in contributing to Novel Master! We're excited to work with you and appreciate your help in making this project better. 🚀
 
 ## 🤝 Our Collaborative Approach
 
@@ -25,8 +25,8 @@ We're a **PR-friendly team** that values collaboration:
 ### 1. Fork and Clone
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/claude-task-master.git
-cd claude-task-master
+git clone https://github.com/YOUR_USERNAME/claude-novel-master.git
+cd claude-novel-master
 npm install
 ```
 
@@ -277,7 +277,7 @@ Any additional context or notes for reviewers.
 ## 🏗️ Project Structure
 
 ```
-claude-task-master/
+claude-novel-master/
 ├── bin/                    # CLI executables
 ├── mcp-server/            # MCP server implementation
 ├── scripts/               # Core task management logic
@@ -302,7 +302,7 @@ claude-task-master/
 
 Include:
 
-- Task Master version
+- Novel Master version
 - Node.js version
 - Operating system
 - Steps to reproduce
@@ -320,9 +320,9 @@ Include:
 
 ## 💬 Getting Help
 
-- **Discord**: [Join our community](https://discord.gg/taskmasterai)
-- **Issues**: [GitHub Issues](https://github.com/eyaltoledano/claude-task-master/issues)
-- **Discussions**: [GitHub Discussions](https://github.com/eyaltoledano/claude-task-master/discussions)
+- **Discord**: [Join our community](https://discord.gg/novelmasterai)
+- **Issues**: [GitHub Issues](https://github.com/eyaltoledano/claude-novel-master/issues)
+- **Discussions**: [GitHub Discussions](https://github.com/eyaltoledano/claude-novel-master/discussions)
 
 ## 📄 License
 
@@ -330,6 +330,6 @@ By contributing, you agree that your contributions will be licensed under the sa
 
 ---
 
-**Thank you for contributing to Task Master!** 🎉
+**Thank you for contributing to Novel Master!** 🎉
 
 Your contributions help make AI-driven development more accessible and efficient for everyone.

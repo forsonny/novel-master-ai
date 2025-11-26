@@ -119,7 +119,7 @@ alwaysApply: true
 ---
 
 This references [dev_workflow.mdc](mdc:.cursor/rules/dev_workflow.mdc) and 
-[taskmaster.mdc](mdc:.cursor/rules/taskmaster.mdc).`;
+[novelmaster.mdc](mdc:.cursor/rules/novelmaster.mdc).`;
 
 		// Mock file read to return our test content
 		mockReadFileSync.mockReturnValue(testContent);
@@ -138,9 +138,9 @@ This references [dev_workflow.mdc](mdc:.cursor/rules/dev_workflow.mdc) and
 		const writeCall = mockWriteFileSync.mock.calls[0];
 		const transformedContent = writeCall[1];
 
-		// Verify transformations - no taskmaster subdirectory for Trae
-		expect(transformedContent).toContain('(.trae/rules/dev_workflow.md)'); // File path transformation - no taskmaster subdirectory for Trae
-		expect(transformedContent).toContain('(.trae/rules/taskmaster.md)'); // File path transformation - no taskmaster subdirectory for Trae
+		// Verify transformations - no novelmaster subdirectory for Trae
+		expect(transformedContent).toContain('(.trae/rules/dev_workflow.md)'); // File path transformation - no novelmaster subdirectory for Trae
+		expect(transformedContent).toContain('(.trae/rules/novelmaster.md)'); // File path transformation - no novelmaster subdirectory for Trae
 		expect(transformedContent).not.toContain('(mdc:.cursor/rules/');
 	});
 

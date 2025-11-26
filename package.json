@@ -1,15 +1,19 @@
 {
-	"name": "task-master-ai",
+	"name": "novel-master-ai",
 	"version": "0.33.0",
-	"description": "A task management system for ambitious AI-driven development that doesn't overwhelm and confuse Cursor.",
+	"description": "An AI-powered novel development system that plans, drafts, and revises manuscripts collaboratively with your editor.",
 	"main": "index.js",
 	"type": "module",
 	"bin": {
-		"task-master": "dist/task-master.js",
-		"task-master-mcp": "dist/mcp-server.js",
-		"task-master-ai": "dist/mcp-server.js"
+		"novel-master": "dist/novel-master.js",
+		"novel-master-mcp": "dist/mcp-server.js",
+		"novel-master-ai": "dist/mcp-server.js"
 	},
-	"workspaces": ["apps/*", "packages/*", "."],
+	"workspaces": [
+		"apps/*",
+		"packages/*",
+		"."
+	],
 	"scripts": {
 		"build": "npm run build:build-config && cross-env NODE_ENV=production tsdown",
 		"dev": "tsdown --watch",
@@ -17,16 +21,16 @@
 		"turbo:build": "turbo build",
 		"turbo:typecheck": "turbo typecheck",
 		"build:build-config": "npm run build -w @tm/build-config",
-		"test": "cross-env NODE_ENV=test node --experimental-vm-modules node_modules/.bin/jest",
-		"test:unit": "node --experimental-vm-modules node_modules/.bin/jest --testPathPattern=unit",
-		"test:integration": "node --experimental-vm-modules node_modules/.bin/jest --testPathPattern=integration",
-		"test:fails": "node --experimental-vm-modules node_modules/.bin/jest --onlyFailures",
-		"test:watch": "node --experimental-vm-modules node_modules/.bin/jest --watch",
-		"test:coverage": "node --experimental-vm-modules node_modules/.bin/jest --coverage",
-		"test:ci": "node --experimental-vm-modules node_modules/.bin/jest --coverage --ci",
+		"test": "cross-env NODE_ENV=test node --experimental-vm-modules node_modules/jest/bin/jest.js",
+		"test:unit": "node --experimental-vm-modules node_modules/jest/bin/jest.js --testPathPattern=unit",
+		"test:integration": "node --experimental-vm-modules node_modules/jest/bin/jest.js --testPathPattern=integration",
+		"test:fails": "node --experimental-vm-modules node_modules/jest/bin/jest.js --onlyFailures",
+		"test:watch": "node --experimental-vm-modules node_modules/jest/bin/jest.js --watch",
+		"test:coverage": "node --experimental-vm-modules node_modules/jest/bin/jest.js --coverage",
+		"test:ci": "node --experimental-vm-modules node_modules/jest/bin/jest.js --coverage --ci",
 		"test:e2e": "./tests/e2e/run_e2e.sh",
 		"test:e2e-report": "./tests/e2e/run_e2e.sh --analyze-log",
-		"postpack": "chmod +x dist/task-master.js dist/mcp-server.js",
+		"postpack": "chmod +x dist/novel-master.js dist/mcp-server.js",
 		"changeset": "changeset",
 		"changeset:validate": "node .github/scripts/validate-changesets.mjs",
 		"release": "changeset publish",
@@ -39,18 +43,19 @@
 		"deps:fix": "manypkg fix"
 	},
 	"keywords": [
-		"claude",
-		"task",
-		"management",
+		"novel",
+		"writing",
+		"manuscript",
+		"story",
+		"fiction",
 		"ai",
-		"development",
 		"cursor",
 		"anthropic",
 		"llm",
 		"mcp",
 		"context"
 	],
-	"author": "Eyal Toledano",
+	"author": "AnimeX Developer <jpoplive741@gmail.com>",
 	"license": "MIT WITH Commons-Clause",
 	"dependencies": {
 		"@ai-sdk/amazon-bedrock": "^3.0.23",
@@ -120,15 +125,15 @@
 	"packageManager": "npm@10.9.2",
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/eyaltoledano/claude-task-master.git"
+		"url": "git+https://github.com/forsonny/novel-master-ai.git"
 	},
-	"homepage": "https://github.com/eyaltoledano/claude-task-master#readme",
+	"homepage": "https://github.com/forsonny/novel-master-ai#readme",
 	"bugs": {
-		"url": "https://github.com/eyaltoledano/claude-task-master/issues"
+		"url": "https://github.com/forsonny/novel-master-ai/issues"
 	},
 	"files": [
 		"dist/**",
-		"README-task-master.md",
+		"README-novel-master.md",
 		"README.md",
 		"LICENSE",
 		"CHANGELOG.md"
@@ -148,7 +153,7 @@
 		"@types/jest": "^29.5.14",
 		"@types/marked-terminal": "^6.1.1",
 		"concurrently": "^9.2.1",
-		"cross-env": "^10.0.0",
+		"cross-env": "^10.1.0",
 		"execa": "^8.0.1",
 		"jest": "^29.7.0",
 		"jest-environment-node": "^29.7.0",

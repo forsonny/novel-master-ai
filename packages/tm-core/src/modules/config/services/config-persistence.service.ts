@@ -34,8 +34,8 @@ export class ConfigPersistence {
 	private readonly logger = getLogger('ConfigPersistence');
 
 	constructor(projectRoot: string) {
-		this.localConfigPath = path.join(projectRoot, '.taskmaster', 'config.json');
-		this.backupDir = path.join(projectRoot, '.taskmaster', 'backups');
+		this.localConfigPath = path.join(projectRoot, '.novelmaster', 'config.json');
+		this.backupDir = path.join(projectRoot, '.novelmaster', 'backups');
 	}
 
 	/**

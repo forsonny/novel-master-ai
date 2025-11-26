@@ -1,36 +1,36 @@
-Show detailed task information with rich context and insights.
+Show detailed chapter information with rich context and insights.
 
 Arguments: $ARGUMENTS
 
-## Enhanced Task Display
+## Enhanced Chapter Display
 
 Parse arguments to determine what to show and how.
 
-### 1. **Smart Task Selection**
+### 1. **Smart Chapter Selection**
 
 Based on $ARGUMENTS:
-- Number → Show specific task with full context
-- "current" → Show active in-progress task(s)
-- "next" → Show recommended next task
-- "blocked" → Show all blocked tasks with reasons
-- "critical" → Show critical path tasks
+- Number → Show specific chapter with full context
+- "current" → Show active in-progress chapter(s)
+- "next" → Show recommended next chapter
+- "blocked" → Show all blocked chapters with reasons
+- "critical" → Show critical story path chapters
 - Multiple IDs → Comparative view
 
 ### 2. **Contextual Information**
 
-For each task, intelligently include:
+For each chapter, intelligently include:
 
 **Core Details**
-- Full task information (id, title, description, details)
+- Full chapter information (id, title, description, details)
 - Current status with history
-- Test strategy and acceptance criteria
+- Continuity/pacing strategy and narrative criteria
 - Priority and complexity analysis
 
 **Relationships**
 - Dependencies (what it needs)
 - Dependents (what needs it)
-- Parent/subtask hierarchy
-- Related tasks (similar work)
+- Parent/scene hierarchy
+- Related chapters (similar work)
 
 **Time Intelligence**
 - Created/updated timestamps
@@ -41,7 +41,7 @@ For each task, intelligently include:
 ### 3. **Visual Enhancements**
 
 ```
-📋 Task #45: Implement User Authentication
+📋 Chapter #45: The Revelation
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 Status: 🟡 in-progress (2 hours)
 Priority: 🔴 High | Complexity: 73/100
@@ -54,16 +54,16 @@ Progress: ████████░░ 80% complete
 Recent Activity:
 - 2h ago: Status changed to in-progress
 - 4h ago: Dependency #42 completed
-- Yesterday: Task expanded with 3 subtasks
+- Yesterday: Chapter expanded with 3 scenes
 ```
 
 ### 4. **Intelligent Insights**
 
-Based on task analysis:
+Based on chapter analysis:
 - **Risk Assessment**: Complexity vs time remaining
 - **Bottleneck Analysis**: Is this blocking critical work?
 - **Recommendation**: Suggested approach or concerns
-- **Similar Tasks**: How others completed similar work
+- **Similar Chapters**: How others completed similar work
 
 ### 5. **Action Suggestions**
 
@@ -71,11 +71,11 @@ Context-aware next steps:
 - If blocked → Show how to unblock
 - If complex → Suggest expansion
 - If in-progress → Show completion checklist
-- If done → Show dependent tasks ready to start
+- If done → Show dependent chapters ready to start
 
-### 6. **Multi-Task View**
+### 6. **Multi-Chapter View**
 
-When showing multiple tasks:
+When showing multiple chapters:
 - Common dependencies
 - Optimal completion order
 - Parallel work opportunities

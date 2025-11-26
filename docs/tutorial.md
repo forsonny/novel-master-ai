@@ -1,19 +1,19 @@
-# Task Master Tutorial
+# Novel Master Tutorial
 
-This tutorial will guide you through setting up and using Task Master for AI-driven development.
+This tutorial guides you through using Novel Master to write a complete novel from concept to finished manuscript.
 
 ## Initial Setup
 
-There are two ways to set up Task Master: using MCP (recommended) or via npm installation.
+There are two ways to set up Novel Master: using MCP (recommended) or via npm installation.
 
 ### Option 1: Using MCP (Recommended)
 
-MCP (Model Control Protocol) provides the easiest way to get started with Task Master directly in your editor.
+MCP (Model Context Protocol) provides the easiest way to get started with Novel Master directly in your editor.
 
 1. **Install the package**
 
 ```bash
-npm i -g task-master-ai
+npm i -g novel-master-ai
 ```
 
 2. **Add the MCP config to your IDE/MCP Client** (Cursor is recommended, but it works with other clients):
@@ -21,9 +21,9 @@ npm i -g task-master-ai
 ```json
 {
   "mcpServers": {
-    "taskmaster-ai": {
+    "novel-master-ai": {
       "command": "npx",
-      "args": ["-y", "task-master-ai"],
+      "args": ["-y", "novel-master-ai"],
       "env": {
         "ANTHROPIC_API_KEY": "YOUR_ANTHROPIC_API_KEY_HERE",
         "PERPLEXITY_API_KEY": "YOUR_PERPLEXITY_API_KEY_HERE",
@@ -39,19 +39,19 @@ npm i -g task-master-ai
 }
 ```
 
-**IMPORTANT:** An API key is _required_ for each AI provider you plan on using. Run the `task-master models` command to see your selected models and the status of your API keys across .env and mcp.json
+**IMPORTANT:** An API key is _required_ for each AI provider you plan on using. Run the `novel-master models` command to see your selected models and the status of your API keys across .env and mcp.json
 
-**To use AI commands in CLI** you MUST have API keys in the .env file
-**To use AI commands in MCP** you MUST have API keys in the .mcp.json file (or MCP config equivalent)
+**To use AI commands in CLI** you MUST have API keys in the .env file  
+**To use AI commands in MCP** you MUST have API keys in the .cursor/mcp.json file (or MCP config equivalent)
 
 We recommend having keys in both places and adding mcp.json to your gitignore so your API keys aren't checked into git.
 
 3. **Enable the MCP** in your editor settings
 
-4. **Prompt the AI** to initialize Task Master:
+4. **Prompt the AI** to initialize Novel Master:
 
 ```
-Can you please initialize taskmaster-ai into my project?
+Can you please initialize novel-master-ai into my project?
 ```
 
 The AI will:
@@ -60,14 +60,14 @@ The AI will:
 - Set up initial configuration files
 - Guide you through the rest of the process
 
-5. Place your PRD document in the `.taskmaster/docs/` directory (e.g., `.taskmaster/docs/prd.txt`)
+5. Place your NRD (Novel Requirements Document) in the `.novelmaster/docs/` directory (e.g., `.novelmaster/docs/nrd.txt`)
 
-6. **Use natural language commands** to interact with Task Master:
+6. **Use natural language commands** to interact with Novel Master:
 
 ```
-Can you parse my PRD at .taskmaster/docs/prd.txt?
-What's the next task I should work on?
-Can you help me implement task 3?
+Can you parse my NRD at .novelmaster/docs/nrd.txt?
+What's the next chapter I should work on?
+Can you help me expand chapter 3 into scenes?
 ```
 
 ### Option 2: Manual Installation
@@ -76,54 +76,57 @@ If you prefer to use the command line interface directly:
 
 ```bash
 # Install globally
-npm install -g task-master-ai
+npm install -g novel-master-ai
 
 # OR install locally within your project
-npm install task-master-ai
+npm install novel-master-ai
 ```
 
 Initialize a new project:
 
 ```bash
 # If installed globally
-task-master init
+novel-master init
 
 # If installed locally
-npx task-master init
+npx novel-master init
 ```
 
 This will prompt you for project details and set up a new project with the necessary files and structure.
 
 ## Common Commands
 
-After setting up Task Master, you can use these commands (either via AI prompts or CLI):
+After setting up Novel Master, you can use these commands (either via AI prompts or CLI):
 
 ```bash
-# Parse a PRD and generate tasks
-task-master parse-prd your-prd.txt
+# Parse an NRD and generate story arcs/chapters
+novel-master parse-prd your-nrd.txt --tag outline
 
-# List all tasks
-task-master list
+# List all chapters/scenes
+novel-master list --tag outline
 
-# Show the next task to work on
-task-master next
+# Show the next chapter to work on
+novel-master next --tag draft
 
-# Generate task files
-task-master generate
+# Expand a chapter into scenes/beats
+novel-master expand --id=3 --num=5 --tag outline --research
+
+# Generate manuscript files
+novel-master generate --tag draft
 ```
 
 ## Setting up Cursor AI Integration
 
-Task Master is designed to work seamlessly with [Cursor AI](https://www.cursor.so/), providing a structured workflow for AI-driven development.
+Novel Master is designed to work seamlessly with [Cursor AI](https://www.cursor.so/), providing a structured workflow for AI-driven novel writing.
 
 ### Using Cursor with MCP (Recommended)
 
-If you've already set up Task Master with MCP in Cursor, the integration is automatic. You can simply use natural language to interact with Task Master:
+If you've already set up Novel Master with MCP in Cursor, the integration is automatic. You can simply use natural language to interact with Novel Master:
 
 ```
-What tasks are available to work on next?
-Can you analyze the complexity of our tasks?
-I'd like to implement task 4. What does it involve?
+What chapters are available to work on next?
+Can you analyze the pacing of our story?
+I'd like to expand chapter 4 into scenes. What does it involve?
 ```
 
 ### Manual Cursor Setup
@@ -131,8 +134,8 @@ I'd like to implement task 4. What does it involve?
 If you're not using MCP, you can still set up Cursor integration:
 
 1. After initializing your project, open it in Cursor
-2. The `.cursor/rules/dev_workflow.mdc` file is automatically loaded by Cursor, providing the AI with knowledge about the task management system
-3. Place your PRD document in the `.taskmaster/docs/` directory (e.g., `.taskmaster/docs/prd.txt`)
+2. The `.cursor/rules/dev_workflow.mdc` file is automatically loaded by Cursor, providing the AI with knowledge about the novel development system
+3. Place your NRD document in the `.novelmaster/docs/` directory (e.g., `.novelmaster/docs/nrd.txt`)
 4. Open Cursor's AI chat and switch to Agent mode
 
 ### Alternative MCP Setup in Cursor
@@ -143,299 +146,275 @@ You can also set up the MCP server in Cursor settings:
 2. Navigate to the MCP section
 3. Click on "Add New MCP Server"
 4. Configure with the following details:
-   - Name: "Task Master"
+   - Name: "Novel Master"
    - Type: "Command"
-   - Command: "npx -y task-master-ai"
+   - Command: "npx -y novel-master-ai"
 5. Save the settings
 
-Once configured, you can interact with Task Master's task management commands directly through Cursor's interface, providing a more integrated experience.
+Once configured, you can interact with Novel Master's novel management commands directly through Cursor's interface, providing a more integrated experience.
 
-## Initial Task Generation
+## Initial Story Planning
 
-In Cursor's AI chat, instruct the agent to generate tasks from your PRD:
+In Cursor's AI chat, instruct the agent to generate story arcs from your NRD:
 
 ```
-Please use the task-master parse-prd command to generate tasks from my PRD. The PRD is located at .taskmaster/docs/prd.txt.
+Please use the novel-master parse-prd command to generate story arcs from my NRD. The NRD is located at .novelmaster/docs/nrd.txt.
 ```
 
 The agent will execute:
 
 ```bash
-task-master parse-prd .taskmaster/docs/prd.txt
+novel-master parse-prd .novelmaster/docs/nrd.txt --tag outline
 ```
 
 This will:
 
-- Parse your PRD document
-- Generate a structured `tasks.json` file with tasks, dependencies, priorities, and test strategies
+- Parse your NRD document
+- Generate a structured `tasks.json` file with story arcs, chapters, dependencies, priorities, and narrative guidance
 - The agent will understand this process due to the Cursor rules
 
-### Generate Individual Task Files
+### Generate Manuscript Chapter Files
 
-Next, ask the agent to generate individual task files:
+Next, ask the agent to generate manuscript chapter files:
 
 ```
-Please generate individual task files from tasks.json
+Please generate manuscript chapter files from tasks.json
 ```
 
 The agent will execute:
 
 ```bash
-task-master generate
+novel-master generate --tag draft
 ```
 
-This creates individual task files in the `tasks/` directory (e.g., `task_001.txt`, `task_002.txt`), making it easier to reference specific tasks.
+This creates chapter markdown files in `.novelmaster/manuscript/chapters/` (e.g., `chapter-001.md`, `chapter-002.md`), making it easier to draft and revise specific chapters.
 
-## AI-Driven Development Workflow
+## AI-Driven Novel Writing Workflow
 
 The Cursor agent is pre-configured (via the rules file) to follow this workflow:
 
-### 1. Task Discovery and Selection
+### 1. Story Discovery and Selection
 
-Ask the agent to list available tasks:
-
-```
-What tasks are available to work on next?
-```
+Ask the agent to list available chapters:
 
 ```
-Can you show me tasks 1, 3, and 5 to understand their current status?
+What chapters are available to work on next?
+```
+
+```
+Can you show me chapters 1, 3, and 5 to understand their current status?
 ```
 
 The agent will:
 
-- Run `task-master list` to see all tasks
-- Run `task-master next` to determine the next task to work on
-- Run `task-master show 1,3,5` to display multiple tasks with interactive options
-- Analyze dependencies to determine which tasks are ready to be worked on
-- Prioritize tasks based on priority level and ID order
-- Suggest the next task(s) to implement
+- Run `novel-master list` to see all chapters
+- Run `novel-master next` to determine the next chapter to work on
+- Run `novel-master show 1,3,5` to display multiple chapters with interactive options
+- Analyze dependencies to determine which chapters are ready to be worked on
+- Prioritize chapters based on priority level and ID order
+- Suggest the next chapter(s) to draft
 
-### 2. Task Implementation
+### 2. Chapter Expansion
 
-When implementing a task, the agent will:
+When expanding a chapter into scenes, the agent will:
 
-- Reference the task's details section for implementation specifics
-- Consider dependencies on previous tasks
-- Follow the project's coding standards
-- Create appropriate tests based on the task's testStrategy
+- Reference the chapter's details section for narrative specifics
+- Consider dependencies on previous chapters
+- Follow the story's pacing and structure
+- Create appropriate scene beats based on the chapter's narrative goals
 
 You can ask:
 
 ```
-Let's implement task 3. What does it involve?
+Let's expand chapter 3 into scenes. What does it involve?
 ```
 
-### 2.1. Viewing Multiple Tasks
+### 2.1. Viewing Multiple Chapters
 
 For efficient context gathering and batch operations:
 
 ```
-Show me tasks 5, 7, and 9 so I can plan my implementation approach.
+Show me chapters 5, 7, and 9 so I can plan my narrative approach.
 ```
 
 The agent will:
 
-- Run `task-master show 5,7,9` to display a compact summary table
-- Show task status, priority, and progress indicators
+- Run `novel-master show 5,7,9` to display a compact summary table
+- Show chapter status, priority, and progress indicators
 - Provide an interactive action menu with batch operations
-- Allow you to perform group actions like marking multiple tasks as in-progress
+- Allow you to perform group actions like marking multiple chapters as in-progress
 
-### 3. Task Verification
+### 3. Narrative Verification
 
-Before marking a task as complete, verify it according to:
+Before marking a chapter as complete, verify it according to:
 
-- The task's specified testStrategy
-- Any automated tests in the codebase
-- Manual verification if required
+- The chapter's specified continuity checks
+- Pacing and tension goals
+- Character arc progression
+- Worldbuilding consistency
 
-### 4. Task Completion
+### 4. Chapter Completion
 
-When a task is completed, tell the agent:
+When a chapter is completed, tell the agent:
 
 ```
-Task 3 is now complete. Please update its status.
+Chapter 3 is now complete. Please update its status.
 ```
 
 The agent will execute:
 
 ```bash
-task-master set-status --id=3 --status=done
+novel-master set-status --id=3 --status=done
 ```
 
-### 5. Handling Implementation Drift
+### 5. Handling Story Changes
 
-If during implementation, you discover that:
+If during writing, you discover that:
 
 - The current approach differs significantly from what was planned
-- Future tasks need to be modified due to current implementation choices
-- New dependencies or requirements have emerged
+- Future chapters need to be modified due to current story choices
+- New plot threads or character arcs have emerged
 
 Tell the agent:
 
 ```
-We've decided to use MongoDB instead of PostgreSQL. Can you update all future tasks (from ID 4) to reflect this change?
+We've decided to change the POV structure. Can you update all future chapters (from ID 4) to reflect this change?
 ```
 
 The agent will execute:
 
 ```bash
-task-master update --from=4 --prompt="Now we are using MongoDB instead of PostgreSQL."
-
-# OR, if research is needed to find best practices for MongoDB:
-task-master update --from=4 --prompt="Update to use MongoDB, researching best practices" --research
+novel-master update --from=4 --prompt="Now we are using alternating first-person POV instead of third-person limited."
 ```
 
-This will rewrite or re-scope subsequent tasks in tasks.json while preserving completed work.
+This will rewrite or re-scope subsequent chapters in tasks.json while preserving completed work.
 
-### 6. Reorganizing Tasks
+### 6. Reorganizing Story Structure
 
-If you need to reorganize your task structure:
+If you need to reorganize your story structure:
 
 ```
-I think subtask 5.2 would fit better as part of task 7 instead. Can you move it there?
+I think scene 5.2 would fit better as part of chapter 7 instead. Can you move it there?
 ```
 
 The agent will execute:
 
 ```bash
-task-master move --from=5.2 --to=7.3
+novel-master move --from=5.2 --to=7.3
 ```
 
-You can reorganize tasks in various ways:
+You can reorganize chapters and scenes in various ways:
 
-- Moving a standalone task to become a subtask: `--from=5 --to=7`
-- Moving a subtask to become a standalone task: `--from=5.2 --to=7`
-- Moving a subtask to a different parent: `--from=5.2 --to=7.3`
-- Reordering subtasks within the same parent: `--from=5.2 --to=5.4`
-- Moving a task to a new ID position: `--from=5 --to=25` (even if task 25 doesn't exist yet)
-- Moving multiple tasks at once: `--from=10,11,12 --to=16,17,18` (must have same number of IDs, Taskmaster will look through each position)
+- Moving a standalone chapter to become a scene: `--from=5 --to=7`
+- Moving a scene to become a standalone chapter: `--from=5.2 --to=7`
+- Moving a scene to a different parent: `--from=5.2 --to=7.3`
+- Reordering scenes within the same chapter: `--from=5.2 --to=5.4`
+- Moving a chapter to a new ID position: `--from=5 --to=25` (even if chapter 25 doesn't exist yet)
+- Moving multiple chapters at once: `--from=10,11,12 --to=16,17,18` (must have same number of IDs, Novel Master will look through each position)
 
-When moving tasks to new IDs:
+When moving chapters to new IDs:
 
-- The system automatically creates placeholder tasks for non-existent destination IDs
+- The system automatically creates placeholder chapters for non-existent destination IDs
 - This prevents accidental data loss during reorganization
-- Any tasks that depend on moved tasks will have their dependencies updated
-- When moving a parent task, all its subtasks are automatically moved with it and renumbered
+- Any chapters that depend on moved chapters will have their dependencies updated
+- When moving a parent chapter, all its scenes are automatically moved with it and renumbered
 
-This is particularly useful as your project understanding evolves and you need to refine your task structure.
+This is particularly useful as your story understanding evolves and you need to refine your narrative structure.
 
-### 7. Resolving Merge Conflicts with Tasks
+### 7. Breaking Down Complex Chapters
 
-When working with a team, you might encounter merge conflicts in your tasks.json file if multiple team members create tasks on different branches. The move command makes resolving these conflicts straightforward:
-
-```
-I just merged the main branch and there's a conflict with tasks.json. My teammates created tasks 10-15 while I created tasks 10-12 on my branch. Can you help me resolve this?
-```
-
-The agent will help you:
-
-1. Keep your teammates' tasks (10-15)
-2. Move your tasks to new positions to avoid conflicts:
-
-```bash
-# Move your tasks to new positions (e.g., 16-18)
-task-master move --from=10 --to=16
-task-master move --from=11 --to=17
-task-master move --from=12 --to=18
-```
-
-This approach preserves everyone's work while maintaining a clean task structure, making it much easier to handle task conflicts than trying to manually merge JSON files.
-
-### 8. Breaking Down Complex Tasks
-
-For complex tasks that need more granularity:
+For complex chapters that need more granularity:
 
 ```
-Task 5 seems complex. Can you break it down into subtasks?
+Chapter 5 seems complex. Can you break it down into scenes?
 ```
 
 The agent will execute:
 
 ```bash
-task-master expand --id=5 --num=3
+novel-master expand --id=5 --num=6 --tag outline
 ```
 
 You can provide additional context:
 
 ```
-Please break down task 5 with a focus on security considerations.
+Please break down chapter 5 with a focus on character development and emotional beats.
 ```
 
 The agent will execute:
 
 ```bash
-task-master expand --id=5 --prompt="Focus on security aspects"
+novel-master expand --id=5 --prompt="Focus on character development and emotional beats"
 ```
 
-You can also expand all pending tasks:
+You can also expand all pending chapters:
 
 ```
-Please break down all pending tasks into subtasks.
-```
-
-The agent will execute:
-
-```bash
-task-master expand --all
-```
-
-For research-backed subtask generation using the configured research model:
-
-```
-Please break down task 5 using research-backed generation.
+Please break down all pending chapters into scenes.
 ```
 
 The agent will execute:
 
 ```bash
-task-master expand --id=5 --research
+novel-master expand --all --tag outline
+```
+
+For research-backed scene generation using the configured research model:
+
+```
+Please break down chapter 5 using research-backed generation for worldbuilding details.
+```
+
+The agent will execute:
+
+```bash
+novel-master expand --id=5 --research
 ```
 
 ## Example Cursor AI Interactions
 
-### Starting a new project
+### Starting a new novel
 
 ```
-I've just initialized a new project with Claude Task Master. I have a PRD at .taskmaster/docs/prd.txt.
-Can you help me parse it and set up the initial tasks?
+I've just initialized a new project with Novel Master. I have an NRD at .novelmaster/docs/nrd.txt.
+Can you help me parse it and set up the initial story arcs?
 ```
 
-### Working on tasks
+### Working on chapters
 
 ```
-What's the next task I should work on? Please consider dependencies and priorities.
+What's the next chapter I should work on? Please consider dependencies and priorities.
 ```
 
-### Implementing a specific task
+### Expanding a specific chapter
 
 ```
-I'd like to implement task 4. Can you help me understand what needs to be done and how to approach it?
+I'd like to expand chapter 4 into scenes. Can you help me understand what needs to be done and how to approach it?
 ```
 
-### Managing subtasks
+### Managing scenes
 
 ```
-I need to regenerate the subtasks for task 3 with a different approach. Can you help me clear and regenerate them?
+I need to regenerate the scenes for chapter 3 with a different approach. Can you help me clear and regenerate them?
 ```
 
-### Handling changes
+### Handling story changes
 
 ```
-We've decided to use MongoDB instead of PostgreSQL. Can you update all future tasks to reflect this change?
+We've decided to change the ending. Can you update all future chapters to reflect this change?
 ```
 
 ### Completing work
 
 ```
-I've finished implementing the authentication system described in task 2. All tests are passing.
+I've finished drafting chapter 2. All scenes are complete and the pacing feels right.
 Please mark it as complete and tell me what I should work on next.
 ```
 
-### Analyzing complexity
+### Analyzing narrative complexity
 
 ```
-Can you analyze the complexity of our tasks to help me understand which ones need to be broken down further?
+Can you analyze the pacing and complexity of our chapters to help me understand which ones need to be broken down further?
 ```
 
 ### Viewing complexity report
@@ -444,147 +423,197 @@ Can you analyze the complexity of our tasks to help me understand which ones nee
 Can you show me the complexity report in a more readable format?
 ```
 
-### Research-Driven Development
+### Research-Driven Writing
 
-Task Master includes a powerful research tool that provides fresh, up-to-date information beyond the AI's knowledge cutoff. This is particularly valuable for:
+Novel Master includes a powerful research tool that provides fresh, up-to-date information beyond the AI's knowledge cutoff. This is particularly valuable for:
 
-#### Getting Current Best Practices
+- **Worldbuilding research** – Historical accuracy, cultural details, scientific concepts
+- **Genre conventions** – Understanding tropes, reader expectations, market trends
+- **Writing techniques** – Narrative structure, pacing, character development
 
-```
-Before implementing task 5 (authentication), research the latest JWT security recommendations.
-```
-
-The agent will execute:
-
-```bash
-task-master research "Latest JWT security recommendations 2024" --id=5
-```
-
-#### Research with Project Context
+#### Getting Fresh Information
 
 ```
-Research React Query v5 migration strategies for our current API implementation.
+Research the latest best practices for writing science fiction worldbuilding.
 ```
 
-The agent will execute:
+(Agent runs: `novel-master research "Latest best practices for writing science fiction worldbuilding"`)
 
-```bash
-task-master research "React Query v5 migration strategies" --files=src/api.js,src/hooks.js
+#### Research with Story Context
+
 ```
+I'm working on chapter 15 which involves a heist scene. Can you research current best practices for writing heist sequences?
+```
+
+(Agent runs: `novel-master research "Best practices for writing heist sequences" --id=15 --files=.novelmaster/manuscript/chapters/chapter-015.md`)
+
+#### Research Before Writing
+
+```
+Before I draft chapter 8 (which involves medieval combat), can you research the latest historical accuracy requirements for sword fighting scenes?
+```
+
+(Agent runs: `novel-master research "Historical accuracy for medieval sword fighting scenes" --id=8`)
 
 #### Research and Update Pattern
 
-A powerful workflow is to research first, then update tasks with findings:
-
 ```
-Research the latest Node.js performance optimization techniques and update task 12 with the findings.
+Research the latest recommendations for writing multi-POV novels and update our POV structure chapter with the findings.
 ```
 
-The agent will:
+(Agent runs:
 
-1. Run research: `task-master research "Node.js performance optimization 2024" --id=12`
-2. Update the task: `task-master update-subtask --id=12.2 --prompt="Updated with latest performance findings: [research results]"`
+1. `novel-master research "Best practices for writing multi-POV novels" --id=12`
+2. `novel-master update-subtask --id=12.3 --prompt="Updated with latest POV findings: [research results]"`)
 
-#### When to Use Research
-
-- **Before implementing any new technology**
-- **When encountering security-related tasks**
-- **For performance optimization tasks**
-- **When debugging complex issues**
-- **Before making architectural decisions**
-- **When updating dependencies**
-
-The research tool automatically includes relevant project context and provides fresh information that can significantly improve implementation quality.
-
-## Git Integration and Tag Management
-
-Task Master supports tagged task lists for multi-context development, which is particularly useful when working with git branches or different project phases.
-
-### Working with Tags
-
-Tags provide isolated task contexts, allowing you to maintain separate task lists for different features, branches, or experiments:
+### Research for Continuity
 
 ```
-I'm starting work on a new feature branch. Can you create a new tag for this work?
+I'm having issues with timeline consistency in chapter 20. Can you research common timeline problems in novels and solutions?
 ```
 
-The agent will execute:
+(Agent runs: `novel-master research "Common timeline consistency problems in novels and solutions" --id=20 --files=.novelmaster/manuscript/chapters/chapter-020.md`)
 
-```bash
-# Create a tag based on your current git branch
-task-master add-tag --from-branch
-```
-
-Or you can create a tag with a specific name:
+### Research Genre Comparisons
 
 ```
-Create a new tag called 'user-auth' for authentication-related tasks.
+We need to choose between first-person and third-person POV for our thriller. Can you research the current recommendations for our genre?
 ```
 
-The agent will execute:
+(Agent runs: `novel-master research "First-person vs third-person POV in thriller novels 2024" --tree`)
 
-```bash
-task-master add-tag user-auth --description="User authentication feature tasks"
-```
+## Tag Management for Novel Workflows
 
-### Switching Between Contexts
-
-When working on different features or branches:
+### Creating Tags for Draft Phases
 
 ```
-Switch to the 'user-auth' tag context so I can work on authentication tasks.
+I'm starting work on the first draft. Can you create a matching task tag?
 ```
 
-The agent will execute:
+(Agent runs: `novel-master add-tag draft --description="First draft writing phase"`)
 
-```bash
-task-master use-tag user-auth
-```
-
-### Copying Tasks Between Tags
-
-When you need to duplicate work across contexts:
+### Creating Named Tags
 
 ```
-Copy all tasks from the current tag to a new 'testing' tag for QA work.
+Create a new tag called 'rev-1' for our first revision pass.
 ```
 
-The agent will execute:
+(Agent runs: `novel-master add-tag rev-1 --description="First revision pass"`)
 
-```bash
-task-master add-tag testing --copy-from-current --description="QA and testing tasks"
+### Switching Tag Contexts
+
+```
+Switch to the 'draft' tag so I can work on first-draft chapters.
 ```
 
-### Tag Management
+(Agent runs: `novel-master use-tag draft`)
 
-View and manage your tag contexts:
+### Copying Chapters Between Tags
+
+```
+I need to copy the current outline to a new 'draft' tag for writing.
+```
+
+(Agent runs: `novel-master add-tag draft --copy-from-current --description="First draft writing"`)
+
+### Managing Multiple Contexts
 
 ```
 Show me all available tags and their current status.
 ```
 
-The agent will execute:
+(Agent runs: `novel-master tags --show-metadata`)
 
-```bash
-task-master tags --show-metadata
+### Tag Cleanup
+
+```
+I've finished the 'outline' phase and moved to draft. Can you clean up the outline tag?
 ```
 
-### Benefits of Tagged Task Lists
+(Agent runs: `novel-master delete-tag outline`)
 
-- **Branch Isolation**: Each git branch can have its own task context
-- **Merge Conflict Prevention**: Tasks in different tags don't interfere with each other
-- **Parallel Development**: Multiple team members can work on separate contexts
-- **Context Switching**: Easily switch between different project phases or features
-- **Experimentation**: Create experimental task lists without affecting main work
+### Working with Tag-Specific Chapters
 
-### Git Workflow Integration
+```
+List all chapters in the 'draft' tag context.
+```
 
-A typical git workflow with Task Master tags:
+(Agent runs: `novel-master use-tag draft` then `novel-master list`)
 
-1. **Create feature branch**: `git checkout -b feature/user-auth`
-2. **Create matching tag**: Ask agent to run `task-master add-tag --from-branch`
-3. **Work in isolated context**: All task operations work within the new tag
-4. **Switch contexts as needed**: Use `task-master use-tag <name>` to switch between different work streams
-5. **Merge and cleanup**: After merging the branch, optionally delete the tag with `task-master delete-tag <name>`
+### Phase-Based Writing Workflow
 
-This workflow ensures your task management stays organized and conflicts are minimized when working with teams or multiple features simultaneously.
+```
+I'm switching to work on the 'rev-1' revision phase. Can you set up the chapter context for this?
+```
+
+(Agent runs:
+
+1. `novel-master use-tag rev-1`
+2. `novel-master list` to show chapters in the new context)
+
+### Parallel Revision Development
+
+```
+I need to work on both character development and pacing simultaneously. How should I organize the chapters?
+```
+
+(Agent suggests and runs:
+
+1. `novel-master add-tag rev-1-character --description="Character development revision"`
+2. `novel-master add-tag rev-1-pacing --description="Pacing revision"`
+3. `novel-master use-tag rev-1-character` to start with character work)
+
+## Manuscript Generation
+
+Once you have chapters and scenes defined, generate manuscript files:
+
+```bash
+novel-master generate --tag draft
+```
+
+This creates:
+
+- Chapter markdown files in `.novelmaster/manuscript/chapters/` (e.g., `chapter-001.md`)
+- Scene sections within each chapter file
+- A manuscript summary in `.novelmaster/manuscript/manuscript-summary.json` (includes word counts, targets, and completion percentages)
+- A compiled manuscript in `.novelmaster/manuscript/compiled/manuscript-draft.md`
+
+You can then edit the chapter files directly, and Novel Master will preserve your draft text between the `<!-- novel-master:draft:start -->` and `<!-- novel-master:draft:end -->` markers.
+
+### File Sync After Updates
+
+**Important:** After updating tasks via `update_task`, `update_subtask`, or any other task modification command, run `generate` again to sync manuscript files with the latest changes:
+
+```bash
+# After updating a task
+novel-master update-task --id=3 --prompt="Change POV to first person"
+novel-master generate --tag draft  # Regenerate to sync manuscript files
+```
+
+This ensures that:
+- Chapter metadata reflects the latest task details
+- Word counts are recalculated from current draft content
+- The manuscript summary shows up-to-date progress
+- Compiled manuscript includes all latest changes
+
+## Best Practices for AI-Driven Novel Writing
+
+1. **Start with a detailed NRD**: The more detailed your NRD, the better the generated story arcs will be.
+
+2. **Review generated chapters**: After parsing the NRD, review the chapters to ensure they make sense and have appropriate dependencies.
+
+3. **Analyze narrative complexity**: Use the complexity analysis feature to identify which chapters should be broken down further.
+
+4. **Follow the dependency chain**: Always respect chapter dependencies - the Cursor agent will help with this.
+
+5. **Update as you go**: If your story diverges from the plan, use the update command to keep future chapters aligned with your current approach.
+
+6. **Break down complex chapters**: Use the expand command to break down complex chapters into manageable scenes.
+
+7. **Regenerate manuscript files**: After any updates to tasks.json, regenerate the manuscript files to keep them in sync.
+
+8. **Communicate context to the agent**: When asking the Cursor agent to help with a chapter, provide context about what you're trying to achieve.
+
+9. **Use tags for different phases**: Leverage tags to separate outline, draft, and revision phases.
+
+10. **Research for accuracy**: Use the research tool for worldbuilding, historical accuracy, and genre conventions.

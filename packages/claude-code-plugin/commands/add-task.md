@@ -1,52 +1,52 @@
-Add new tasks with intelligent parsing and context awareness.
+Add new chapters with intelligent parsing and context awareness.
 
 Arguments: $ARGUMENTS
 
-## Smart Task Addition
+## Smart Chapter Addition
 
-Parse natural language to create well-structured tasks.
+Parse natural language to create well-structured chapters.
 
 ### 1. **Input Understanding**
 
 I'll intelligently parse your request:
-- Natural language → Structured task
-- Detect priority from keywords (urgent, ASAP, important)
+- Natural language → Structured chapter
+- Detect priority from keywords (urgent, critical, important)
 - Infer dependencies from context
 - Suggest complexity based on description
-- Determine task type (feature, bug, refactor, test, docs)
+- Determine chapter type (action, character development, worldbuilding, transition)
 
 ### 2. **Smart Parsing Examples**
 
-**"Add urgent task to fix login bug"**
-→ Title: Fix login bug
+**"Add urgent chapter for the climactic confrontation"**
+→ Title: The Climactic Confrontation
 → Priority: high
-→ Type: bug
-→ Suggested complexity: medium
+→ Type: action
+→ Suggested complexity: high
 
-**"Create task for API documentation after task 23 is done"**
-→ Title: API documentation
+**"Create chapter for character backstory after chapter 23 is done"**
+→ Title: Character Backstory
 → Dependencies: [23]
-→ Type: documentation
+→ Type: character development
 → Priority: medium
 
-**"Need to refactor auth module - depends on 12 and 15, high complexity"**
-→ Title: Refactor auth module
+**"Need to develop worldbuilding chapter - depends on 12 and 15, high complexity"**
+→ Title: Worldbuilding Chapter
 → Dependencies: [12, 15]
 → Complexity: high
-→ Type: refactor
+→ Type: worldbuilding
 
 ### 3. **Context Enhancement**
 
 Based on current project state:
-- Suggest related existing tasks
+- Suggest related existing chapters
 - Warn about potential conflicts
 - Recommend dependencies
-- Propose subtasks if complex
+- Propose scenes if complex
 
 ### 4. **Interactive Refinement**
 
 ```yaml
-Task Preview:
+Chapter Preview:
 ─────────────
 Title: [Extracted title]
 Priority: [Inferred priority]
@@ -54,9 +54,9 @@ Dependencies: [Detected dependencies]
 Complexity: [Estimated complexity]
 
 Suggestions:
-- Similar task #34 exists, consider as dependency?
-- This seems complex, break into subtasks?
-- Tasks #45-47 work on same module
+- Similar chapter #34 exists, consider as dependency?
+- This seems complex, break into scenes?
+- Chapters #45-47 work on same story arc
 ```
 
 ### 5. **Validation & Creation**
@@ -65,14 +65,14 @@ Before creating:
 - Validate dependencies exist
 - Check for duplicates
 - Ensure logical ordering
-- Verify task completeness
+- Verify chapter completeness
 
 ### 6. **Smart Defaults**
 
 Intelligent defaults based on:
-- Task type patterns
-- Team conventions
+- Chapter type patterns
+- Story conventions
 - Historical data
-- Current sprint/phase
+- Current story arc/phase
 
-Result: High-quality tasks from minimal input.
+Result: High-quality chapters from minimal input.

@@ -2,11 +2,11 @@
 
 # Claude Code Integration Guide
 
-This guide covers how to use Task Master with Claude Code AI SDK integration for enhanced AI-powered development workflows.
+This guide covers how to use Novel Master with Claude Code AI SDK integration for enhanced AI-powered novel writing workflows.
 
 ## Overview
 
-Claude Code integration allows Task Master to leverage the Claude Code CLI for AI operations without requiring direct API keys. The integration uses OAuth tokens managed by the Claude Code CLI itself.
+Claude Code integration allows Novel Master to leverage the Claude Code CLI for AI operations without requiring direct API keys. The integration uses OAuth tokens managed by the Claude Code CLI itself.
 
 ## Authentication Setup
 
@@ -30,11 +30,11 @@ The Claude Code provider uses token authentication managed by the Claude Code CL
    This command will:
    - Guide you through OAuth authentication
    - Store the token securely for CLI usage
-   - Enable Task Master to use Claude Code without manual API key configuration
+   - Enable Novel Master to use Claude Code without manual API key configuration
 
 ### Authentication Priority
 
-Task Master will attempt authentication in this order:
+Novel Master will attempt authentication in this order:
 
 1. **Environment Variable** (optional): `CLAUDE_CODE_OAUTH_TOKEN`
    - Useful for CI/CD environments or when you want to override the default token
@@ -50,10 +50,10 @@ Task Master will attempt authentication in this order:
 
 ### Basic Configuration
 
-Add Claude Code to your Task Master configuration:
+Add Claude Code to your Novel Master configuration:
 
 ```javascript
-// In your .taskmaster/config.json or via task-master models command
+// In your .novelmaster/config.json or via novel-master models command
 {
   "models": {
     "main": "claude-code:sonnet",      // Use Claude Code with Sonnet
@@ -84,23 +84,23 @@ This is only needed in specific scenarios like:
 
 ## Usage Examples
 
-### Basic Task Operations
+### Basic Chapter Operations
 
 ```bash
-# Use Claude Code for task operations
-task-master add-task --prompt="Implement user authentication system" --research
-task-master expand --id=1 --research
-task-master update-task --id=1.1 --prompt="Add JWT token validation"
+# Use Claude Code for chapter operations
+novel-master add-task --prompt="Chapter 5: The Revelation - Protagonist discovers the truth" --research
+novel-master expand --id=1 --research
+novel-master update-task --id=1.1 --prompt="Add emotional depth to the confrontation scene"
 ```
 
 ### Model Configuration Commands
 
 ```bash
 # Set Claude Code as main model
-task-master models --set-main claude-code:sonnet
+novel-master models --set-main claude-code:sonnet
 
 # Use interactive setup
-task-master models --setup
+novel-master models --setup
 # Then select "claude-code" from the provider list
 ```
 
@@ -110,7 +110,7 @@ task-master models --setup
 
 #### 1. "Claude Code CLI not available" Error
 
-**Problem**: Task Master cannot connect to Claude Code CLI.
+**Problem**: Novel Master cannot connect to Claude Code CLI.
 
 **Solutions**:
 
@@ -135,7 +135,7 @@ task-master models --setup
 **Solutions**:
 
 - Use supported models: `sonnet` or `opus`
-- Check model availability: `task-master models --list`
+- Check model availability: `novel-master models --list`
 - Verify your Claude Code CLI has access to the requested model
 
 ### Debug Steps
@@ -154,15 +154,15 @@ task-master models --setup
    # Should confirm token is valid
    ```
 
-3. **Test Task Master integration**:
+3. **Test Novel Master integration**:
 
    ```bash
-   task-master models --test claude-code:sonnet
+   novel-master models --test claude-code:sonnet
    # Should successfully connect and test the model
    ```
 
 4. **Check logs**:
-   - Task Master logs will show detailed error messages
+   - Novel Master logs will show detailed error messages
    - Use `--verbose` flag for more detailed output
 
 ### Environment-Specific Configuration
@@ -184,11 +184,11 @@ For automated environments:
 
 1. Set up a service account token or use environment variables
 2. Ensure Claude Code CLI is available in the pipeline environment
-3. Configure authentication before running Task Master commands
+3. Configure authentication before running Novel Master commands
 
 ## Integration with AI SDK
 
-Task Master's Claude Code integration uses the official `ai-sdk-provider-claude-code` package, providing:
+Novel Master's Claude Code integration uses the official `ai-sdk-provider-claude-code` package, providing:
 
 - **Streaming Support**: Real-time token streaming for interactive experiences
 - **Full AI SDK Compatibility**: Works with generateText, streamText, and other AI SDK functions
@@ -207,7 +207,7 @@ const client = provider.getClient();
 const result = await generateText({
   model: client('sonnet'),
   messages: [
-    { role: 'user', content: 'Hello Claude!' }
+    { role: 'user', content: 'Draft the opening scene for Chapter 1' }
   ]
 });
 
@@ -227,5 +227,5 @@ If you encounter issues:
 
 1. Check the Claude Code CLI documentation
 2. Verify your authentication setup with `claude setup-token --verify`
-3. Review Task Master logs for detailed error messages
-4. Open an issue with both Task Master and Claude Code version information
+3. Review Novel Master logs for detailed error messages
+4. Open an issue with both Novel Master and Claude Code version information

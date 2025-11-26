@@ -1,6 +1,6 @@
 /**
  * complexity-report.js
- * Direct function implementation for displaying complexity analysis report
+ * Direct function implementation for displaying narrative complexity/pacing analysis report
  */
 
 import {
@@ -10,10 +10,10 @@ import {
 } from '../../../../scripts/modules/utils.js';
 
 /**
- * Direct function wrapper for displaying the complexity report with error handling and caching.
+ * Direct function wrapper for displaying the narrative complexity/pacing report with error handling and caching.
  *
  * @param {Object} args - Command arguments containing reportPath.
- * @param {string} args.reportPath - Explicit path to the complexity report file.
+ * @param {string} args.reportPath - Explicit path to the complexity/pacing report file (plot density, POV load, tension curves).
  * @param {Object} log - Logger object
  * @returns {Promise<Object>} - Result object with success status and data/error information
  */
@@ -28,12 +28,12 @@ export async function complexityReportDirect(args, log) {
 			log.error('complexityReportDirect called without reportPath');
 			return {
 				success: false,
-				error: { code: 'MISSING_ARGUMENT', message: 'reportPath is required' }
+				error: { code: 'MISSING_ARGUMENT', message: 'Report path is required to display narrative complexity/pacing analysis' }
 			};
 		}
 
 		// Use the provided report path
-		log.info(`Looking for complexity report at: ${reportPath}`);
+		log.info(`Looking for narrative complexity/pacing report at: ${reportPath}`);
 
 		// Generate cache key based on report path
 		const cacheKey = `complexityReport:${reportPath}`;
@@ -50,12 +50,12 @@ export async function complexityReportDirect(args, log) {
 				disableSilentMode();
 
 				if (!report) {
-					log.warn(`No complexity report found at ${reportPath}`);
+					log.warn(`No complexity/pacing report found at ${reportPath}`);
 					return {
 						success: false,
 						error: {
 							code: 'FILE_NOT_FOUND_ERROR',
-							message: `No complexity report found at ${reportPath}. Run 'analyze-complexity' first.`
+							message: `No narrative complexity/pacing report found at ${reportPath}. Run 'analyze-complexity' first to generate the report.`
 						}
 					};
 				}

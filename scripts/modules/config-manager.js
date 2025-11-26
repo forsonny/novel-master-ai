@@ -6,7 +6,7 @@ import { z } from 'zod';
 import { AI_COMMAND_NAMES } from '../../src/constants/commands.js';
 import {
 	LEGACY_CONFIG_FILE,
-	TASKMASTER_DIR
+	NOVELMASTER_DIR,
 } from '../../src/constants/paths.js';
 import {
 	ALL_PROVIDERS,
@@ -51,12 +51,14 @@ const DEFAULTS = {
 		defaultNumTasks: 10,
 		defaultSubtasks: 5,
 		defaultPriority: 'medium',
-		projectName: 'Task Master',
+		projectName: 'Novel Master',
+		targetWordCount: null, // Global novel word count target (optional)
 		ollamaBaseURL: 'http://localhost:11434/api',
 		bedrockBaseURL: 'https://bedrock.us-east-1.amazonaws.com',
 		responseLanguage: 'English',
 		enableCodebaseAnalysis: true,
-		enableProxy: false
+		enableProxy: false,
+		autoRegenerateManuscript: false // Auto-regenerate manuscript files on task updates
 	},
 	claudeCode: {},
 	codexCli: {},
@@ -107,7 +109,7 @@ function _loadAndValidateConfig(explicitRoot = null) {
 
 	// During initialization (no project markers), skip config file search entirely
 	const hasProjectMarkers =
-		fs.existsSync(path.join(rootToUse, TASKMASTER_DIR)) ||
+		fs.existsSync(path.join(rootToUse, NOVELMASTER_DIR)) ||
 		fs.existsSync(path.join(rootToUse, LEGACY_CONFIG_FILE));
 
 	if (hasProjectMarkers) {
@@ -149,7 +151,7 @@ function _loadAndValidateConfig(explicitRoot = null) {
 			if (isLegacy) {
 				console.warn(
 					chalk.yellow(
-						`⚠️  DEPRECATION WARNING: Found configuration in legacy location '${configPath}'. Please migrate to .taskmaster/config.json. Run 'task-master migrate' to automatically migrate your project.`
+						`⚠️  DEPRECATION WARNING: Found configuration in legacy location '${configPath}'. Please migrate to .novelmaster/config.json. Run 'novel-master migrate' to automatically migrate your project.`
 					)
 				);
 			}
@@ -206,20 +208,20 @@ function _loadAndValidateConfig(explicitRoot = null) {
 			// Only warn if an explicit root was *expected*.
 			console.warn(
 				chalk.yellow(
-					`Warning: Configuration file not found at provided project root (${explicitRoot}). Using default configuration. Run 'task-master models --setup' to configure.`
+					`Warning: Configuration file not found at provided project root (${explicitRoot}). Using default configuration. Run 'novel-master models --setup' to configure.`
 				)
 			);
 		} else {
 			// Don't warn about missing config during initialization
-			// Only warn if this looks like an existing project (has .taskmaster dir or legacy config marker)
-			const hasTaskmasterDir = fs.existsSync(
-				path.join(rootToUse, TASKMASTER_DIR)
+			// Only warn if this looks like an existing project (has .novelmaster dir or legacy config marker)
+			const hasNovelMasterDir = fs.existsSync(
+				path.join(rootToUse, NOVELMASTER_DIR)
 			);
 			const hasLegacyMarker = fs.existsSync(
 				path.join(rootToUse, LEGACY_CONFIG_FILE)
 			);
 
-			if (hasTaskmasterDir || hasLegacyMarker) {
+			if (hasNovelMasterDir || hasLegacyMarker) {
 				console.warn(
 					chalk.yellow(
 						`Warning: Configuration file not found at derived root (${rootToUse}). Using defaults.`
@@ -535,7 +537,9 @@ function getResearchProvider(explicitRoot = null) {
 function isCodebaseAnalysisEnabled(session = null, projectRoot = null) {
 	// Priority 1: Environment variable
 	const envFlag = resolveEnvVariable(
-		'TASKMASTER_ENABLE_CODEBASE_ANALYSIS',
+		'NOVELMASTER_ENABLE_CODEBASE_ANALYSIS',
+		// Legacy env var for backward compatibility
+		'NOVELMASTER_ENABLE_CODEBASE_ANALYSIS',
 		session,
 		projectRoot
 	);
@@ -544,8 +548,8 @@ function isCodebaseAnalysisEnabled(session = null, projectRoot = null) {
 	}
 
 	// Priority 2: MCP session environment
-	if (session?.env?.TASKMASTER_ENABLE_CODEBASE_ANALYSIS) {
-		const mcpFlag = session.env.TASKMASTER_ENABLE_CODEBASE_ANALYSIS;
+	if (session?.env?.NOVELMASTER_ENABLE_CODEBASE_ANALYSIS) {
+		const mcpFlag = session.env.NOVELMASTER_ENABLE_CODEBASE_ANALYSIS;
 		return mcpFlag.toLowerCase() === 'true' || mcpFlag === '1';
 	}
 
@@ -659,6 +663,16 @@ function getProjectName(explicitRoot = null) {
 	return getGlobalConfig(explicitRoot).projectName;
 }
 
+function getTargetWordCount(explicitRoot = null) {
+	// Directly return value from config (can be null)
+	return getGlobalConfig(explicitRoot).targetWordCount;
+}
+
+function getAutoRegenerateManuscript(explicitRoot = null) {
+	// Directly return value from config, ensure boolean
+	return getGlobalConfig(explicitRoot).autoRegenerateManuscript === true;
+}
+
 function getOllamaBaseURL(explicitRoot = null) {
 	// Directly return value from config
 	return getGlobalConfig(explicitRoot).ollamaBaseURL;
@@ -712,7 +726,8 @@ function getProxyEnabled(explicitRoot = null) {
 function isProxyEnabled(session = null, projectRoot = null) {
 	// Priority 1: Environment variable
 	const envFlag = resolveEnvVariable(
-		'TASKMASTER_ENABLE_PROXY',
+		'NOVELMASTER_ENABLE_PROXY',
+		// Legacy env var for backward compatibility
 		session,
 		projectRoot
 	);
@@ -721,8 +736,8 @@ function isProxyEnabled(session = null, projectRoot = null) {
 	}
 
 	// Priority 2: MCP session environment (explicit check for parity with other flags)
-	if (session?.env?.TASKMASTER_ENABLE_PROXY) {
-		const mcpFlag = session.env.TASKMASTER_ENABLE_PROXY;
+	if (session?.env?.NOVELMASTER_ENABLE_PROXY) {
+		const mcpFlag = session.env.NOVELMASTER_ENABLE_PROXY;
 		return mcpFlag.toLowerCase() === 'true' || mcpFlag === '1';
 	}
 
@@ -892,7 +907,7 @@ function isApiKeySet(providerName, session = null, projectRoot = null) {
 
 /**
  * Checks the API key status within .cursor/mcp.json for a given provider.
- * Reads the mcp.json file, finds the taskmaster-ai server config, and checks the relevant env var.
+ * Reads the mcp.json file, finds the novelmaster-ai server config, and checks the relevant env var.
  * @param {string} providerName The name of the provider.
  * @param {string|null} projectRoot - Optional explicit path to the project root.
  * @returns {boolean} True if the key exists and is not a placeholder, false otherwise.
@@ -917,8 +932,8 @@ function getMcpApiKeyStatus(providerName, projectRoot = null) {
 		const mcpConfig = JSON.parse(mcpConfigRaw);
 
 		const mcpEnv =
-			mcpConfig?.mcpServers?.['task-master-ai']?.env ||
-			mcpConfig?.mcpServers?.['taskmaster-ai']?.env;
+			mcpConfig?.mcpServers?.['novel-master-ai']?.env ||
+			mcpConfig?.mcpServers?.['novelmaster-ai']?.env;
 		if (!mcpEnv) {
 			return false;
 		}
@@ -1071,14 +1086,14 @@ function writeConfig(config, explicitRoot = null) {
 	}
 	// ---> End determine root path logic <---
 
-	// Use new config location: .taskmaster/config.json
-	const taskmasterDir = path.join(rootPath, '.taskmaster');
-	const configPath = path.join(taskmasterDir, 'config.json');
+	// Use new config location: .novelmaster/config.json
+	const novelmasterDir = path.join(rootPath, '.novelmaster');
+	const configPath = path.join(novelmasterDir, 'config.json');
 
 	try {
-		// Ensure .taskmaster directory exists
-		if (!fs.existsSync(taskmasterDir)) {
-			fs.mkdirSync(taskmasterDir, { recursive: true });
+		// Ensure .novelmaster directory exists
+		if (!fs.existsSync(novelmasterDir)) {
+			fs.mkdirSync(novelmasterDir, { recursive: true });
 		}
 
 		fs.writeFileSync(configPath, JSON.stringify(config, null, 2));
@@ -1209,6 +1224,8 @@ export {
 	getDefaultSubtasks,
 	getDefaultPriority,
 	getProjectName,
+	getTargetWordCount,
+	getAutoRegenerateManuscript,
 	getOllamaBaseURL,
 	getAzureBaseURL,
 	getBedrockBaseURL,

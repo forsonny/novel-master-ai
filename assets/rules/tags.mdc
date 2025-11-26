@@ -1,0 +1,263 @@
+---
+description: Tag conventions and strategies for novel writing workflows
+globs: **/*
+alwaysApply: true
+---
+
+# Novel Master Tag Conventions
+
+This guide outlines standard tag conventions for organizing novel writing work across different phases, revisions, and narrative contexts.
+
+## Standard Tag Categories
+
+### Phase-Based Tags
+
+**`outline`**: Initial story arc planning and chapter structure
+- Use during: NRD parsing, initial chapter planning
+- Contains: High-level story arcs, chapter outlines, plot structure
+- Example: `novel-master parse-prd nrd.txt --tag=outline`
+
+**`draft`**: First-pass chapter/scene writing
+- Use during: Initial prose writing, first complete draft
+- Contains: Raw prose, scene development, basic narrative structure
+- Example: `novel-master use-tag draft`
+
+**`rev-1`**, **`rev-2`**, **`rev-N`**: Revision pass contexts
+- Use during: Structural edits, line edits, copy edits
+- Contains: Revised chapters, tightened prose, improved pacing
+- Example: `novel-master use-tag rev-1`
+
+**`beta-feedback`**: Tasks tracking reader feedback and changes
+- Use during: Beta reader review phase
+- Contains: Feedback integration, reader-suggested changes
+- Example: `novel-master use-tag beta-feedback`
+
+### Character-Based Tags
+
+**`character-<name>`**: POV-specific task isolation for multi-POV novels
+- Use during: Multi-POV novel development
+- Contains: Chapters/scenes from specific character's perspective
+- Examples:
+  - `character-protagonist`
+  - `character-antagonist`
+  - `character-sidekick`
+
+**Usage**:
+```bash
+# Work on protagonist's chapters
+novel-master use-tag character-protagonist
+novel-master list
+
+# Switch to antagonist's chapters
+novel-master use-tag character-antagonist
+novel-master list
+```
+
+### Timeline-Based Tags
+
+**`timeline-<period>`**: Tasks organized by story timeline segments
+- Use during: Complex timelines, flashbacks, parallel storylines
+- Contains: Chapters/scenes from specific time periods
+- Examples:
+  - `timeline-act-1`
+  - `timeline-act-2`
+  - `timeline-act-3`
+  - `timeline-flashback`
+  - `timeline-present`
+
+**Usage**:
+```bash
+# Work on Act 1 chapters
+novel-master use-tag timeline-act-1
+novel-master expand --id=1
+```
+
+### Genre/Theme Tags
+
+**`theme-<name>`**: Organize work by thematic elements
+- Use during: Thematic development, subplot management
+- Examples:
+  - `theme-romance`
+  - `theme-mystery`
+  - `theme-family`
+
+### Revision-Specific Tags
+
+**`structural-edit`**: Major structural revisions
+- Use during: Reorganizing chapters, adding/removing scenes
+- Contains: Structural changes, chapter reorganization
+
+**`line-edit`**: Line-by-line prose refinement
+- Use during: Sentence-level editing, style refinement
+- Contains: Polished prose, refined dialogue
+
+**`copy-edit`**: Grammar, spelling, consistency
+- Use during: Final editing pass
+- Contains: Corrected prose, consistency fixes
+
+## Tag Naming Conventions
+
+### Best Practices
+
+1. **Use lowercase**: All tags should be lowercase
+2. **Use hyphens**: Separate words with hyphens (e.g., `beta-feedback`, not `beta_feedback`)
+3. **Be descriptive**: Tag names should clearly indicate their purpose
+4. **Keep it short**: Avoid overly long tag names
+5. **Be consistent**: Use the same naming pattern throughout
+
+### Examples
+
+✅ **Good tag names**:
+- `draft`
+- `rev-1`
+- `character-protagonist`
+- `timeline-act-1`
+- `beta-feedback`
+
+❌ **Bad tag names**:
+- `Draft` (should be lowercase)
+- `rev_1` (should use hyphens)
+- `protagonist-pov-chapters` (too long)
+- `my-work` (not descriptive)
+
+## Tag Workflow Patterns
+
+### Pattern 1: Linear Draft → Revision
+
+```bash
+# 1. Create outline
+novel-master parse-prd nrd.txt --tag=outline
+
+# 2. Switch to draft
+novel-master use-tag draft
+novel-master expand --id=1
+
+# 3. After draft complete, create revision tag
+novel-master add-tag rev-1 --copy-from=draft
+novel-master use-tag rev-1
+# ... make revisions ...
+
+# 4. Create second revision
+novel-master add-tag rev-2 --copy-from=rev-1
+novel-master use-tag rev-2
+# ... more revisions ...
+```
+
+### Pattern 2: Multi-POV Novel
+
+```bash
+# 1. Parse NRD into outline
+novel-master parse-prd nrd.txt --tag=outline
+
+# 2. Work on protagonist chapters
+novel-master add-tag character-protagonist --copy-from=outline
+novel-master use-tag character-protagonist
+novel-master expand --id=1  # Protagonist's chapters
+
+# 3. Work on antagonist chapters
+novel-master add-tag character-antagonist --copy-from=outline
+novel-master use-tag character-antagonist
+novel-master expand --id=5  # Antagonist's chapters
+
+# 4. Merge into draft
+novel-master add-tag draft
+novel-master move-task --from-tag=character-protagonist --to-tag=draft
+novel-master move-task --from-tag=character-antagonist --to-tag=draft
+```
+
+### Pattern 3: Beta Feedback Integration
+
+```bash
+# 1. Create beta feedback tag
+novel-master add-tag beta-feedback --copy-from=rev-2
+
+# 2. Work on feedback
+novel-master use-tag beta-feedback
+novel-master update-task --id=3 --prompt="Address beta reader concern about pacing in Chapter 3"
+
+# 3. Merge back to revision
+novel-master move-task --from-tag=beta-feedback --to-tag=rev-2
+```
+
+## Tag Management Commands
+
+### Creating Tags
+
+```bash
+# Create empty tag
+novel-master add-tag my-tag
+
+# Create tag with description
+novel-master add-tag draft --description="First complete draft"
+
+# Create tag by copying from another
+novel-master add-tag rev-1 --copy-from=draft
+
+# Create tag from git branch
+novel-master add-tag --from-branch
+```
+
+### Using Tags
+
+```bash
+# Switch to a tag
+novel-master use-tag draft
+
+# List tasks in current tag
+novel-master list
+
+# Show current tag
+novel-master current-tag
+```
+
+### Moving Tasks Between Tags
+
+```bash
+# Move single task
+novel-master move-task --id=1 --from-tag=draft --to-tag=rev-1
+
+# Move all tasks
+novel-master move-task --from-tag=draft --to-tag=rev-1 --all
+```
+
+## Integration with Git Branches
+
+Tags can mirror Git branches for version control:
+
+- **Tag `draft`** → Branch `draft-v1`
+- **Tag `rev-1`** → Branch `rev-1`
+- **Tag `beta-feedback`** → Branch `beta-feedback`
+
+This keeps task management and version control aligned.
+
+## Best Practices
+
+1. **Start with outline**: Always begin with an `outline` tag
+2. **Use phase tags**: Organize work by writing phase (draft, rev-1, etc.)
+3. **Isolate experiments**: Use separate tags for experimental work
+4. **Keep master clean**: Use `master` tag for final, polished work
+5. **Document tag purpose**: Use descriptions to clarify tag intent
+6. **Don't over-tag**: Too many tags can become confusing
+7. **Clean up unused tags**: Remove tags that are no longer needed
+
+## Common Tag Patterns
+
+### Simple Novel (Single POV)
+```
+outline → draft → rev-1 → rev-2 → beta-feedback
+```
+
+### Multi-POV Novel
+```
+outline → character-protagonist → character-antagonist → draft → rev-1
+```
+
+### Complex Timeline
+```
+outline → timeline-act-1 → timeline-act-2 → timeline-act-3 → draft
+```
+
+### Experimental Work
+```
+outline → draft → experiment-alternate-ending → draft (if kept)
+```

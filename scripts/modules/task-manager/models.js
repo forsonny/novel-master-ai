@@ -27,7 +27,7 @@ import { CUSTOM_PROVIDERS } from '@tm/core';
 
 // Constants
 const CONFIG_MISSING_ERROR =
-	'The configuration file is missing. Run "task-master init" to create it.';
+	'The configuration file is missing. Run "novel-master init" to create it.';
 
 /**
  * Fetches the list of models from OpenRouter API.
@@ -472,7 +472,7 @@ async function setModel(role, modelId, options = {}) {
 						if (modelId.endsWith(':free')) {
 							warningMessage = `Warning: OpenRouter free model '${modelId}' selected. Free models have significant limitations including lower context windows, reduced rate limits, and may not support advanced features like tool_use. Consider using the paid version '${modelId.replace(':free', '')}' for full functionality.`;
 						} else {
-							warningMessage = `Warning: Custom OpenRouter model '${modelId}' set. This model is not officially validated by Taskmaster and may not function as expected.`;
+							warningMessage = `Warning: Custom OpenRouter model '${modelId}' set. This model is not officially validated by Novel Master and may not function as expected.`;
 						}
 
 						report('warn', warningMessage);
@@ -514,7 +514,7 @@ async function setModel(role, modelId, options = {}) {
 						);
 					} else if (ollamaModels.some((m) => m.model === modelId)) {
 						determinedProvider = CUSTOM_PROVIDERS.OLLAMA;
-						warningMessage = `Warning: Custom Ollama model '${modelId}' set. Ensure your Ollama server is running and has pulled this model. Taskmaster cannot guarantee compatibility.`;
+						warningMessage = `Warning: Custom Ollama model '${modelId}' set. Ensure your Ollama server is running and has pulled this model. Novel Master cannot guarantee compatibility.`;
 						report('warn', warningMessage);
 						// Store the computed baseURL so it gets saved in config
 						computedBaseURL = ollamaBaseURL;
@@ -614,7 +614,7 @@ async function setModel(role, modelId, options = {}) {
 
 					const lmStudioBaseURL =
 						baseURL || existingBaseURL || 'http://localhost:1234/v1';
-					warningMessage = `Warning: Custom LM Studio model '${modelId}' set with base URL '${lmStudioBaseURL}'. Please ensure LM Studio server is running and has loaded this model. Taskmaster cannot guarantee compatibility.`;
+					warningMessage = `Warning: Custom LM Studio model '${modelId}' set with base URL '${lmStudioBaseURL}'. Please ensure LM Studio server is running and has loaded this model. Novel Master cannot guarantee compatibility.`;
 					report('warn', warningMessage);
 					// Store the computed baseURL so it gets saved in config
 					computedBaseURL = lmStudioBaseURL;
@@ -644,7 +644,7 @@ async function setModel(role, modelId, options = {}) {
 							`Base URL is required for OpenAI-compatible providers. Please provide a baseURL.`
 						);
 					}
-					warningMessage = `Warning: Custom OpenAI-compatible model '${modelId}' set with base URL '${resolvedBaseURL}'. Taskmaster cannot guarantee compatibility. Ensure your API endpoint follows the OpenAI API specification.`;
+					warningMessage = `Warning: Custom OpenAI-compatible model '${modelId}' set with base URL '${resolvedBaseURL}'. Novel Master cannot guarantee compatibility. Ensure your API endpoint follows the OpenAI API specification.`;
 					report('warn', warningMessage);
 					// Store the computed baseURL so it gets saved in config
 					computedBaseURL = resolvedBaseURL;
@@ -668,7 +668,7 @@ async function setModel(role, modelId, options = {}) {
 					success: false,
 					error: {
 						code: 'MODEL_NOT_FOUND_NO_HINT',
-						message: `Model ID "${modelId}" not found in Taskmaster's supported models. If this is a custom model, please specify the provider using --openrouter, --ollama, --bedrock, --azure, --vertex, --lmstudio, --openai-compatible, --gemini-cli, or --codex-cli.`
+						message: `Model ID "${modelId}" not found in Novel Master's supported models. If this is a custom model, please specify the provider using --openrouter, --ollama, --bedrock, --azure, --vertex, --lmstudio, --openai-compatible, --gemini-cli, or --codex-cli.`
 					}
 				};
 			}

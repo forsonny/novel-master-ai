@@ -1,17 +1,17 @@
 ---
 title: "Cursor AI Integration"
-description: "Learn how to set up and use Task Master with Cursor AI"
+description: "Learn how to set up and use Novel Master with Cursor AI"
 ---
 
 ## Setting up Cursor AI Integration
 
 <Check>
-  Task Master is designed to work seamlessly with [Cursor AI](https://www.cursor.so/), providing a structured workflow for AI-driven development.
+  Novel Master is designed to work seamlessly with [Cursor AI](https://www.cursor.so/), providing a structured workflow for AI-driven development.
 </Check>
 
 <AccordionGroup>
   <Accordion title="Using Cursor with MCP (Recommended)" icon="sparkles">
-    If you've already set up Task Master with MCP in Cursor, the integration is automatic. You can simply use natural language to interact with Task Master:
+    If you've already set up Novel Master with MCP in Cursor, the integration is automatic. You can simply use natural language to interact with Novel Master:
 
     ```
     What tasks are available to work on next?
@@ -46,15 +46,15 @@ description: "Learn how to set up and use Task Master with Cursor AI"
         
       </Step>
       <Step title="Configure with the following details:">
-        - Name: "Task Master"
+        - Name: "Novel Master"
         - Type: "Command"
-        - Command: "npx -y task-master-ai"
+        - Command: "npx -y novel-master-ai"
       </Step>
       <Step title="Save Settings">
         
       </Step>
     </Steps>
-    Once configured, you can interact with Task Master's task management commands directly through Cursor's interface, providing a more integrated experience.
+    Once configured, you can interact with Novel Master's task management commands directly through Cursor's interface, providing a more integrated experience.
   </Accordion>
 </AccordionGroup>
 
@@ -63,13 +63,13 @@ description: "Learn how to set up and use Task Master with Cursor AI"
 In Cursor's AI chat, instruct the agent to generate tasks from your PRD:
 
 ```
-Please use the task-master parse-prd command to generate tasks from my PRD. The PRD is located at scripts/prd.txt.
+Please use the novel-master parse-prd command to generate tasks from my PRD. The PRD is located at scripts/prd.txt.
 ```
 
 The agent will execute:
 
 ```bash
-task-master parse-prd scripts/prd.txt
+novel-master parse-prd scripts/prd.txt
 ```
 
 This will:
@@ -89,7 +89,7 @@ Please generate individual task files from tasks.json
 The agent will execute:
 
 ```bash
-task-master generate
+novel-master generate
 ```
 
 This creates individual task files in the `tasks/` directory (e.g., `task_001.txt`, `task_002.txt`), making it easier to reference specific tasks.

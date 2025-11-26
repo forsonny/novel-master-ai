@@ -9,7 +9,7 @@ import {
 	createErrorResponse,
 	withNormalizedProjectRoot
 } from './utils.js';
-import { addSubtaskDirect } from '../core/task-master-core.js';
+import { addSubtaskDirect } from '../core/novel-master-core.js';
 import { findTasksPath } from '../core/utils/path-utils.js';
 import { resolveTag } from '../../../scripts/modules/utils.js';
 
@@ -20,33 +20,36 @@ import { resolveTag } from '../../../scripts/modules/utils.js';
 export function registerAddSubtaskTool(server) {
 	server.addTool({
 		name: 'add_subtask',
-		description: 'Add a subtask to an existing task',
+		description:
+			'Add a beat/subscene beneath an existing chapter/scene task or convert an existing task into a beat.',
 		parameters: z.object({
-			id: z.string().describe('Parent task ID (required)'),
+			id: z.string().describe('Parent chapter/scene ID (required)'),
 			taskId: z
 				.string()
 				.optional()
-				.describe('Existing task ID to convert to subtask'),
+				.describe('Existing task ID to convert into a beat'),
 			title: z
 				.string()
 				.optional()
-				.describe('Title for the new subtask (when creating a new subtask)'),
+				.describe('Title for the new beat (e.g., "Beat 3 – Rooftop Chase")'),
 			description: z
 				.string()
 				.optional()
-				.describe('Description for the new subtask'),
+				.describe('Description for the new beat (summary of action/emotion)'),
 			details: z
 				.string()
 				.optional()
-				.describe('Implementation details for the new subtask'),
+				.describe('Sensory cues, POV notes, or research hooks for the beat'),
 			status: z
 				.string()
 				.optional()
-				.describe("Status for the new subtask (default: 'pending')"),
+				.describe("Status for the new beat (default: 'pending')"),
 			dependencies: z
 				.string()
 				.optional()
-				.describe('Comma-separated list of dependency IDs for the new subtask'),
+				.describe(
+					'Comma-separated list of prerequisite beats/arcs for the new beat'
+				),
 			file: z
 				.string()
 				.optional()
@@ -56,7 +59,7 @@ export function registerAddSubtaskTool(server) {
 			skipGenerate: z
 				.boolean()
 				.optional()
-				.describe('Skip regenerating task files'),
+				.describe('Skip regenerating chapter Markdown files'),
 			projectRoot: z
 				.string()
 				.describe('The directory of the project. Must be an absolute path.'),

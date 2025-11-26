@@ -1,37 +1,37 @@
-Cancel a task permanently.
+Cancel a chapter permanently.
 
-Arguments: $ARGUMENTS (task ID)
+Arguments: $ARGUMENTS (chapter ID)
 
-## Cancelling a Task
+## Cancelling a Chapter
 
-This status indicates a task is no longer needed and won't be completed.
+This status indicates a chapter is no longer needed and won't be completed.
 
 ## Valid Reasons for Cancellation
 
-- Requirements changed
-- Feature deprecated
-- Duplicate of another task
+- Story requirements changed
+- Chapter deprecated
+- Duplicate of another chapter
 - Strategic pivot
-- Technical approach invalidated
+- Narrative approach invalidated
 
 ## Pre-Cancellation Checks
 
 1. Confirm no critical dependencies
-2. Check for partial implementation
+2. Check for partial drafting
 3. Verify cancellation rationale
 4. Document lessons learned
 
 ## Execution
 
 ```bash
-task-master set-status --id=$ARGUMENTS --status=cancelled
+novel-master set-status --id=$ARGUMENTS --status=cancelled
 ```
 
 ## Cancellation Impact
 
 When cancelling:
 1. **Dependency Updates**
-   - Notify dependent tasks
+   - Notify dependent chapters
    - Update project scope
    - Recalculate timelines
 

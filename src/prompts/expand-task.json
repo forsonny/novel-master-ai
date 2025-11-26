@@ -1,23 +1,23 @@
 {
 	"id": "expand-task",
 	"version": "1.0.0",
-	"description": "Break down a task into detailed subtasks",
+	"description": "Break down a narrative task (arc/chapter) into detailed scenes or revision passes",
 	"metadata": {
 		"author": "system",
 		"created": "2024-01-01T00:00:00Z",
-		"updated": "2024-01-01T00:00:00Z",
-		"tags": ["expansion", "subtasks", "breakdown"]
+		"updated": "2025-01-15T00:00:00Z",
+		"tags": ["scene-breakdown", "narrative", "expansion"]
 	},
 	"parameters": {
 		"subtaskCount": {
 			"type": "number",
 			"required": true,
-			"description": "Number of subtasks to generate"
+			"description": "Number of scenes/beats to generate"
 		},
 		"task": {
 			"type": "object",
 			"required": true,
-			"description": "The task to expand"
+			"description": "The parent narrative task (act/arc/chapter) to expand"
 		},
 		"nextSubtaskId": {
 			"type": "number",
@@ -27,36 +27,42 @@
 		"useResearch": {
 			"type": "boolean",
 			"default": false,
-			"description": "Use research mode"
+			"description": "Use research mode for genre/world insights"
 		},
 		"expansionPrompt": {
 			"type": "string",
 			"required": false,
-			"description": "Expansion prompt from complexity report"
+			"description": "Prompt from pacing/complexity report"
 		},
 		"additionalContext": {
 			"type": "string",
 			"required": false,
 			"default": "",
-			"description": "Additional context for task expansion"
+			"description": "Additional narrative context"
 		},
 		"complexityReasoningContext": {
 			"type": "string",
 			"required": false,
 			"default": "",
-			"description": "Complexity analysis reasoning context"
+			"description": "Reasoning snippet from latest analysis"
 		},
 		"gatheredContext": {
 			"type": "string",
 			"required": false,
 			"default": "",
-			"description": "Gathered project context"
+			"description": "Collected project context (prior scenes, lore, etc.)"
+		},
+		"hasManuscriptContext": {
+			"type": "boolean",
+			"required": false,
+			"default": false,
+			"description": "Whether manuscript files are accessible"
 		},
 		"hasCodebaseAnalysis": {
 			"type": "boolean",
 			"required": false,
 			"default": false,
-			"description": "Whether codebase analysis is available"
+			"description": "Deprecated: Use hasManuscriptContext instead. Whether manuscript files are accessible"
 		},
 		"projectRoot": {
 			"type": "string",
@@ -68,18 +74,17 @@
 	"prompts": {
 		"complexity-report": {
 			"condition": "expansionPrompt",
-			"system": "You are an AI assistant helping with task breakdown. Generate {{#if (gt subtaskCount 0)}}exactly {{subtaskCount}}{{else}}an appropriate number of{{/if}} subtasks based on the provided prompt and context.\n\nIMPORTANT: Your response MUST be a JSON object with a \"subtasks\" property containing an array of subtask objects. Each subtask must include ALL of the following fields:\n- id: MUST be sequential integers starting EXACTLY from {{nextSubtaskId}}. First subtask id={{nextSubtaskId}}, second id={{nextSubtaskId}}+1, etc. DO NOT use any other numbering pattern!\n- title: A clear, actionable title (5-200 characters)\n- description: A detailed description (minimum 10 characters)\n- dependencies: An array of task IDs this subtask depends on (can be empty [])\n- details: Implementation details (minimum 20 characters)\n- status: Must be \"pending\" for new subtasks\n- testStrategy: Testing approach (can be null)\n\nYou may optionally include a \"metadata\" object. Do not include any other top-level properties.",
-
-			"user": "Break down the following task:\n\nParent Task:\nID: {{task.id}}\nTitle: {{task.title}}\nDescription: {{task.description}}\nCurrent details: {{#if task.details}}{{task.details}}{{else}}None{{/if}}\n\n{{expansionPrompt}}{{#if additionalContext}}\n\n{{additionalContext}}{{/if}}{{#if complexityReasoningContext}}\n\n{{complexityReasoningContext}}{{/if}}{{#if gatheredContext}}\n\n# Project Context\n\n{{gatheredContext}}{{/if}}\n\nGenerate {{#if (gt subtaskCount 0)}}exactly {{subtaskCount}}{{else}}an appropriate number of{{/if}} subtasks. CRITICAL: Use sequential IDs starting from {{nextSubtaskId}} (first={{nextSubtaskId}}, second={{nextSubtaskId}}+1, etc.)."
+			"system": "You are an AI narrative editor expanding high-level narrative tasks into concrete scenes or revision checkpoints. Generate {{#if (gt subtaskCount 0)}}exactly {{subtaskCount}}{{else}}an appropriate number of{{/if}} subtasks using the pacing guidance below. IMPORTANT: respond with a JSON object containing \"subtasks\" (array) and optional \"metadata\" only. Each subtask must include: id (sequential integers starting at {{nextSubtaskId}}), title (scene/beat label), description (what happens + emotional intent), dependencies (array), details (POV, setting, stakes, sensory cues, research hooks), status (\"pending\"), and testStrategy (continuity/pacing check).",
+			"user": "Break down the following task using the provided pacing prompt.\n\nParent Task\nID: {{task.id}}\nTitle: {{task.title}}\nDescription: {{task.description}}\nCurrent details: {{#if task.details}}{{task.details}}{{else}}None{{/if}}\n\nComplexity guidance:\n{{expansionPrompt}}{{#if additionalContext}}\n\nAdditional context:\n{{additionalContext}}{{/if}}{{#if complexityReasoningContext}}\n\nAnalysis notes:\n{{complexityReasoningContext}}{{/if}}{{#if gatheredContext}}\n\n# Project Context\n{{gatheredContext}}{{/if}}\n\nGenerate {{#if (gt subtaskCount 0)}}exactly {{subtaskCount}}{{else}}an appropriate number of{{/if}} subtasks. IDs must be sequential starting at {{nextSubtaskId}}."
 		},
 		"research": {
 			"condition": "useResearch === true && !expansionPrompt",
-			"system": "You are an AI assistant with research capabilities analyzing and breaking down software development tasks.\n\nIMPORTANT: Your response MUST be a JSON object with a \"subtasks\" property containing an array of subtask objects. Each subtask must include ALL of the following fields:\n- id: MUST be sequential integers starting EXACTLY from {{nextSubtaskId}}. First subtask id={{nextSubtaskId}}, second id={{nextSubtaskId}}+1, etc. DO NOT use any other numbering pattern!\n- title: A clear, actionable title (5-200 characters)\n- description: A detailed description (minimum 10 characters)\n- dependencies: An array of task IDs this subtask depends on (can be empty [])\n- details: Implementation details (minimum 20 characters)\n- status: Must be \"pending\" for new subtasks\n- testStrategy: Testing approach (can be null)\n\nYou may optionally include a \"metadata\" object. Do not include any other top-level properties.",
-			"user": "{{#if hasCodebaseAnalysis}}## IMPORTANT: Codebase Analysis Required\n\nYou have access to powerful codebase analysis tools. Before generating subtasks:\n\n1. Use the Glob tool to explore relevant files for this task (e.g., \"**/*.js\", \"src/**/*.ts\")\n2. Use the Grep tool to search for existing implementations related to this task\n3. Use the Read tool to examine files that would be affected by this task\n4. Understand the current implementation state and patterns used\n\nBased on your analysis:\n- Identify existing code that relates to this task\n- Understand patterns and conventions to follow\n- Generate subtasks that integrate smoothly with existing code\n- Ensure subtasks are specific and actionable based on the actual codebase\n\nProject Root: {{projectRoot}}\n\n{{/if}}Analyze the following task and break it down into {{#if (gt subtaskCount 0)}}exactly {{subtaskCount}}{{else}}an appropriate number of{{/if}} specific subtasks. Each subtask should be actionable and well-defined.\n\nParent Task:\nID: {{task.id}}\nTitle: {{task.title}}\nDescription: {{task.description}}\nCurrent details: {{#if task.details}}{{task.details}}{{else}}None{{/if}}{{#if additionalContext}}\nConsider this context: {{additionalContext}}{{/if}}{{#if complexityReasoningContext}}\nComplexity Analysis Reasoning: {{complexityReasoningContext}}{{/if}}{{#if gatheredContext}}\n\n# Project Context\n\n{{gatheredContext}}{{/if}}\n\nCRITICAL: You MUST use sequential IDs starting from {{nextSubtaskId}}. The first subtask MUST have id={{nextSubtaskId}}, the second MUST have id={{nextSubtaskId}}+1, and so on. Do NOT use parent task ID in subtask numbering!"
+			"system": "You are an AI assistant with research capabilities focused on narrative craft. Before expansion, fold in any relevant lore, genre expectations, or thematic insights surfaced during research. Output must match the JSON schema described above (subtasks array with id/title/description/dependencies/details/status/testStrategy).",
+			"user": "{{#if (or hasManuscriptContext hasCodebaseAnalysis)}}## OPTIONAL: Manuscript Context Available\n- Explore `.novelmaster/manuscript/**/*.md` for drafted scenes.\n- Inspect `.novelmaster/docs/research` for lore notes.\n- Respect previously written canon.\n\nProject Root: {{projectRoot}}\n{{/if}}\nAnalyze the task below and break it into {{#if (gt subtaskCount 0)}}exactly {{subtaskCount}}{{else}}an appropriate number of{{/if}} scenes or revision actions. Provide POV, emotional beat, tension curve, and sensory anchors for every subtask.\n\nParent Task\nID: {{task.id}}\nTitle: {{task.title}}\nDescription: {{task.description}}\nCurrent details: {{#if task.details}}{{task.details}}{{else}}None{{/if}}{{#if additionalContext}}\nAdditional context: {{additionalContext}}{{/if}}{{#if complexityReasoningContext}}\nAnalysis notes: {{complexityReasoningContext}}{{/if}}{{#if gatheredContext}}\n\n# Project Context\n{{gatheredContext}}{{/if}}\n\nCRITICAL: Subtask IDs must be sequential starting at {{nextSubtaskId}} (no dotted notation)."
 		},
 		"default": {
-			"system": "You are an AI assistant helping with task breakdown for software development. Break down high-level tasks into specific, actionable subtasks that can be implemented sequentially.\n\nIMPORTANT: Your response MUST be a JSON object with a \"subtasks\" property containing an array of subtask objects. Each subtask must include ALL of the following fields:\n- id: MUST be sequential integers starting EXACTLY from {{nextSubtaskId}}. First subtask id={{nextSubtaskId}}, second id={{nextSubtaskId}}+1, etc. DO NOT use any other numbering pattern!\n- title: A clear, actionable title (5-200 characters)\n- description: A detailed description (minimum 10 characters)\n- dependencies: An array of task IDs this subtask depends on (can be empty [])\n- details: Implementation details (minimum 20 characters)\n- status: Must be \"pending\" for new subtasks\n- testStrategy: Testing approach (can be null)\n\nYou may optionally include a \"metadata\" object. Do not include any other top-level properties.",
-			"user": "{{#if hasCodebaseAnalysis}}## IMPORTANT: Codebase Analysis Required\n\nYou have access to powerful codebase analysis tools. Before generating subtasks:\n\n1. Use the Glob tool to explore relevant files for this task (e.g., \"**/*.js\", \"src/**/*.ts\")\n2. Use the Grep tool to search for existing implementations related to this task\n3. Use the Read tool to examine files that would be affected by this task\n4. Understand the current implementation state and patterns used\n\nBased on your analysis:\n- Identify existing code that relates to this task\n- Understand patterns and conventions to follow\n- Generate subtasks that integrate smoothly with existing code\n- Ensure subtasks are specific and actionable based on the actual codebase\n\nProject Root: {{projectRoot}}\n\n{{/if}}Break down this task into {{#if (gt subtaskCount 0)}}exactly {{subtaskCount}}{{else}}an appropriate number of{{/if}} specific subtasks:\n\nTask ID: {{task.id}}\nTitle: {{task.title}}\nDescription: {{task.description}}\nCurrent details: {{#if task.details}}{{task.details}}{{else}}None{{/if}}{{#if additionalContext}}\nAdditional context: {{additionalContext}}{{/if}}{{#if complexityReasoningContext}}\nComplexity Analysis Reasoning: {{complexityReasoningContext}}{{/if}}{{#if gatheredContext}}\n\n# Project Context\n\n{{gatheredContext}}{{/if}}\n\nCRITICAL: You MUST use sequential IDs starting from {{nextSubtaskId}}. The first subtask MUST have id={{nextSubtaskId}}, the second MUST have id={{nextSubtaskId}}+1, and so on. Do NOT use parent task ID in subtask numbering!"
+			"system": "You are an AI narrative editor breaking down narrative tasks into actionable scenes. Always return JSON with \"subtasks\" (array) and optional \"metadata\". Each subtask requires: id (sequential integer from {{nextSubtaskId}}), title, description (what the scene accomplishes), dependencies, details (POV, location, conflict, stakes, sensory cues, revision notes), status (\"pending\"), and testStrategy (continuity/pacing validation).",
+			"user": "{{#if (or hasManuscriptContext hasCodebaseAnalysis)}}## OPTIONAL: Manuscript Context Available\nUse the Glob/Grep/Read tools to inspect `.novelmaster/**` files for previously drafted scenes. Align new subtasks with existing canon.\n\nProject Root: {{projectRoot}}\n{{/if}}\nBreak down this task into {{#if (gt subtaskCount 0)}}exactly {{subtaskCount}}{{else}}an appropriate number of{{/if}} narrative subtasks:\n\nTask ID: {{task.id}}\nTitle: {{task.title}}\nDescription: {{task.description}}\nCurrent details: {{#if task.details}}{{task.details}}{{else}}None{{/if}}{{#if additionalContext}}\nAdditional context: {{additionalContext}}{{/if}}{{#if complexityReasoningContext}}\nAnalysis notes: {{complexityReasoningContext}}{{/if}}{{#if gatheredContext}}\n\n# Project Context\n{{gatheredContext}}{{/if}}\n\nEnsure IDs are sequential starting at {{nextSubtaskId}}."
 		}
 	}
 }

@@ -1,5 +1,6 @@
 /**
- * Direct function wrapper for moveTask
+ * move-task.js
+ * Direct function implementation for moving chapters/scenes/beats to new positions
  */
 
 import { moveTask } from '../../../../scripts/modules/task-manager.js';
@@ -10,15 +11,15 @@ import {
 } from '../../../../scripts/modules/utils.js';
 
 /**
- * Move a task or subtask to a new position
+ * Move a chapter/scene/beat to a new position in the narrative structure
  * @param {Object} args - Function arguments
  * @param {string} args.tasksJsonPath - Explicit path to the tasks.json file
- * @param {string} args.sourceId - ID of the task/subtask to move (e.g., '5' or '5.2' or '5,6,7')
- * @param {string} args.destinationId - ID of the destination (e.g., '7' or '7.3' or '7,8,9')
+ * @param {string} args.sourceId - ID of the chapter/beat to move (e.g., '5' or '5.2' or '5,6,7' for multiple)
+ * @param {string} args.destinationId - ID of the destination (e.g., '7' or '7.3' or '7,8,9' for multiple)
  * @param {string} args.file - Alternative path to the tasks.json file
  * @param {string} args.projectRoot - Project root directory
- * @param {string} args.tag - Tag for the task (optional)
- * @param {boolean} args.generateFiles - Whether to regenerate task files after moving (default: true)
+ * @param {string} args.tag - Tag context (outline, draft, revision) for the task (optional)
+ * @param {boolean} args.generateFiles - Whether to regenerate manuscript files after moving (default: true)
  * @param {Object} log - Logger object
  * @returns {Promise<{success: boolean, data?: Object, error?: Object}>}
  */
@@ -31,7 +32,7 @@ export async function moveTaskDirect(args, log, context = {}) {
 		return {
 			success: false,
 			error: {
-				message: 'Source ID is required',
+				message: 'Source chapter/beat ID is required (e.g., "5" or "5.2")',
 				code: 'MISSING_SOURCE_ID'
 			}
 		};
@@ -41,7 +42,7 @@ export async function moveTaskDirect(args, log, context = {}) {
 		return {
 			success: false,
 			error: {
-				message: 'Destination ID is required',
+				message: 'Destination chapter/beat ID is required (e.g., "7" or "7.3")',
 				code: 'MISSING_DESTINATION_ID'
 			}
 		};
@@ -87,14 +88,14 @@ export async function moveTaskDirect(args, log, context = {}) {
 			success: true,
 			data: {
 				...result,
-				message: `Successfully moved task/subtask ${args.sourceId} to ${args.destinationId}`
+				message: `Successfully moved chapter/beat ${args.sourceId} to ${args.destinationId}`
 			}
 		};
 	} catch (error) {
 		// Restore console output in case of error
 		disableSilentMode();
 
-		log.error(`Failed to move task: ${error.message}`);
+		log.error(`Failed to move chapter/beat: ${error.message}`);
 
 		return {
 			success: false,

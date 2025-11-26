@@ -68,7 +68,7 @@ export class StartCommand extends Command {
 				process.exit(1);
 			}
 
-			// Initialize Task Master Core
+			// Initialize Novel Master Core
 			const tmCore = await createTmCore({
 				projectPath: mergedOptions.projectRoot!
 			});
@@ -89,7 +89,7 @@ export class StartCommand extends Command {
 			if (!task.subtasks || task.subtasks.length === 0) {
 				formatter.error('Task has no subtasks. Expand task first.', {
 					taskId,
-					suggestion: `Run: task-master expand --id=${taskId}`
+					suggestion: `Run: novel-master expand --id=${taskId}`
 				});
 				process.exit(1);
 			}

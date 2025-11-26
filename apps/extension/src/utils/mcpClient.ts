@@ -64,13 +64,13 @@ export class MCPClientManager {
 			logger.log('🔍 DEBUGGING: Transport config cwd:', this.config.cwd);
 			logger.log('🔍 DEBUGGING: Process cwd before spawn:', process.cwd());
 
-			// Test if the target directory and .taskmaster exist
+			// Test if the target directory and .novelmaster exist
 			const fs = require('fs');
 			const path = require('path');
 			try {
 				const targetDir = this.config.cwd;
-				const taskmasterDir = path.join(targetDir, '.taskmaster');
-				const tasksFile = path.join(taskmasterDir, 'tasks', 'tasks.json');
+				const novelmasterDir = path.join(targetDir, '.novelmaster');
+				const tasksFile = path.join(novelmasterDir, 'tasks', 'tasks.json');
 
 				logger.log(
 					'🔍 DEBUGGING: Checking target directory:',
@@ -79,10 +79,10 @@ export class MCPClientManager {
 					fs.existsSync(targetDir)
 				);
 				logger.log(
-					'🔍 DEBUGGING: Checking .taskmaster dir:',
-					taskmasterDir,
+					'🔍 DEBUGGING: Checking .novelmaster dir:',
+					novelmasterDir,
 					'exists:',
-					fs.existsSync(taskmasterDir)
+					fs.existsSync(novelmasterDir)
 				);
 				logger.log(
 					'🔍 DEBUGGING: Checking tasks.json:',
@@ -125,7 +125,7 @@ export class MCPClientManager {
 				});
 				this.status = { isRunning: false, error: error.message };
 				vscode.window.showErrorMessage(
-					`TaskMaster MCP transport error: ${error.message}`
+					`Novel Master MCP transport error: ${error.message}`
 				);
 			};
 
@@ -144,7 +144,7 @@ export class MCPClientManager {
 			// Create the client
 			this.client = new Client(
 				{
-					name: 'task-master-vscode-extension',
+					name: 'novel-master-vscode-extension',
 					version: '1.0.0'
 				},
 				{
@@ -213,17 +213,17 @@ export class MCPClientManager {
 
 			logger.log('MCP client connected successfully');
 
-			// Log Task Master version information after successful connection
+			// Log Novel Master version information after successful connection
 			try {
 				const versionResult = await this.callTool('get_tasks', {});
 				if (versionResult?.content?.[0]?.text) {
 					const response = JSON.parse(versionResult.content[0].text);
 					if (response?.version) {
 						logger.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
-						logger.log('✅ Task Master MCP Server Connected');
+						logger.log('✅ Novel Master MCP Server Connected');
 						logger.log(`   Version: ${response.version.version || 'unknown'}`);
 						logger.log(
-							`   Package: ${response.version.name || 'task-master-ai'}`
+							`   Package: ${response.version.name || 'novel-master-ai'}`
 						);
 						if (response.tag) {
 							logger.log(
@@ -234,7 +234,7 @@ export class MCPClientManager {
 					}
 				}
 			} catch (versionError) {
-				logger.log('Note: Could not retrieve Task Master version information');
+				logger.log('Note: Could not retrieve Novel Master version information');
 			}
 		} catch (error) {
 			logger.error('Failed to connect to MCP server:', error);
@@ -347,10 +347,10 @@ export class MCPClientManager {
 					const response = JSON.parse(versionResult.content[0].text);
 					if (response?.version) {
 						logger.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
-						logger.log('📦 Task Master MCP Server Connected');
+						logger.log('📦 Novel Master MCP Server Connected');
 						logger.log(`   Version: ${response.version.version || 'unknown'}`);
 						logger.log(
-							`   Package: ${response.version.name || 'task-master-ai'}`
+							`   Package: ${response.version.name || 'novel-master-ai'}`
 						);
 						if (response.tag) {
 							logger.log(
@@ -362,7 +362,7 @@ export class MCPClientManager {
 				}
 			} catch (versionError) {
 				// Don't fail the connection test if we can't get version info
-				logger.log('Could not retrieve Task Master version information');
+				logger.log('Could not retrieve Novel Master version information');
 			}
 
 			return true;
@@ -396,7 +396,7 @@ export function createMCPConfigFromSettings(): MCPConfig {
 		'🔍 DEBUGGING: createMCPConfigFromSettings called at',
 		new Date().toISOString()
 	);
-	const config = vscode.workspace.getConfiguration('taskmaster');
+	const config = vscode.workspace.getConfiguration('novelmaster');
 
 	let command = config.get<string>('mcp.command', 'node');
 	let args = config.get<string[]>('mcp.args', []);
@@ -405,7 +405,7 @@ export function createMCPConfigFromSettings(): MCPConfig {
 	if (command === 'node' && args.length === 0) {
 		try {
 			// Try to resolve the bundled MCP server
-			const taskMasterPath = require.resolve('task-master-ai');
+			const taskMasterPath = require.resolve('novel-master-ai');
 			const mcpServerPath = path.resolve(
 				path.dirname(taskMasterPath),
 				'./dist/mcp-server.js'
@@ -420,10 +420,10 @@ export function createMCPConfigFromSettings(): MCPConfig {
 			args = [mcpServerPath];
 			logger.log(`📦 Using bundled MCP server at: ${mcpServerPath}`);
 		} catch (error) {
-			logger.error('❌ Could not find bundled task-master-ai server:', error);
+			logger.error('❌ Could not find bundled novel-master-ai server:', error);
 			// Fallback to npx
 			command = 'npx';
-			args = ['-y', 'task-master-ai'];
+			args = ['-y', 'novel-master-ai'];
 		}
 	}
 

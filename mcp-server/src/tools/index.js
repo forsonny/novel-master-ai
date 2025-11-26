@@ -1,6 +1,6 @@
 /**
  * tools/index.js
- * Export all Task Master CLI tools for MCP server
+ * Export all Novel Master CLI tools for MCP server
  */
 
 import logger from '../logger.js';
@@ -14,30 +14,30 @@ import {
 } from './tool-registry.js';
 
 /**
- * Helper function to safely read and normalize the TASK_MASTER_TOOLS environment variable
+ * Helper function to safely read and normalize the NOVEL_MASTER_TOOLS environment variable
  * @returns {string} The tools configuration string, defaults to 'all'
  */
 export function getToolsConfiguration() {
-	const rawValue = process.env.TASK_MASTER_TOOLS;
+	const rawValue = process.env.NOVEL_MASTER_TOOLS;
 
 	if (!rawValue || rawValue.trim() === '') {
-		logger.debug('No TASK_MASTER_TOOLS env var found, defaulting to "all"');
+		logger.debug('No NOVEL_MASTER_TOOLS env var found, defaulting to "all"');
 		return 'all';
 	}
 
 	const normalizedValue = rawValue.trim();
-	logger.debug(`TASK_MASTER_TOOLS env var: "${normalizedValue}"`);
+	logger.debug(`NOVEL_MASTER_TOOLS env var: "${normalizedValue}"`);
 	return normalizedValue;
 }
 
 /**
- * Register Task Master tools with the MCP server
- * Supports selective tool loading via TASK_MASTER_TOOLS environment variable
+ * Register Novel Master tools with the MCP server
+ * Supports selective tool loading via NOVEL_MASTER_TOOLS environment variable
  * @param {Object} server - FastMCP server instance
  * @param {string} toolMode - The tool mode configuration (defaults to 'all')
  * @returns {Object} Object containing registered tools, failed tools, and normalized mode
  */
-export function registerTaskMasterTools(server, toolMode = 'all') {
+export function registerNovelMasterTools(server, toolMode = 'all') {
 	const registeredTools = [];
 	const failedTools = [];
 
@@ -185,7 +185,7 @@ export function registerTaskMasterTools(server, toolMode = 'all') {
 		};
 	} catch (error) {
 		logger.error(
-			`Error parsing TASK_MASTER_TOOLS environment variable: ${error.message}`
+			`Error parsing NOVEL_MASTER_TOOLS environment variable: ${error.message}`
 		);
 		logger.info('Falling back to loading all tools');
 
@@ -236,5 +236,5 @@ export {
 };
 
 export default {
-	registerTaskMasterTools
+	registerNovelMasterTools
 };

@@ -24,12 +24,12 @@ describe('RuntimeStateManager', () => {
 		stateManager = new RuntimeStateManager(testProjectRoot);
 		vi.clearAllMocks();
 		// Clear environment variables
-		delete process.env.TASKMASTER_TAG;
+		delete process.env.NOVELMASTER_TAG;
 	});
 
 	afterEach(() => {
 		vi.restoreAllMocks();
-		delete process.env.TASKMASTER_TAG;
+		delete process.env.NOVELMASTER_TAG;
 	});
 
 	describe('loadState', () => {
@@ -45,7 +45,7 @@ describe('RuntimeStateManager', () => {
 			const state = await stateManager.loadState();
 
 			expect(fs.readFile).toHaveBeenCalledWith(
-				'/test/project/.taskmaster/state.json',
+				'/test/project/.novelmaster/state.json',
 				'utf-8'
 			);
 			expect(state.currentTag).toBe('feature-branch');
@@ -56,7 +56,7 @@ describe('RuntimeStateManager', () => {
 			const mockState = { activeTag: 'file-tag' };
 			vi.mocked(fs.readFile).mockResolvedValue(JSON.stringify(mockState));
 
-			process.env.TASKMASTER_TAG = 'env-tag';
+			process.env.NOVELMASTER_TAG = 'env-tag';
 
 			const state = await stateManager.loadState();
 
@@ -78,7 +78,7 @@ describe('RuntimeStateManager', () => {
 			error.code = 'ENOENT';
 			vi.mocked(fs.readFile).mockRejectedValue(error);
 
-			process.env.TASKMASTER_TAG = 'env-tag';
+			process.env.NOVELMASTER_TAG = 'env-tag';
 
 			const state = await stateManager.loadState();
 
@@ -117,13 +117,13 @@ describe('RuntimeStateManager', () => {
 			await stateManager.setCurrentTag('test-tag');
 
 			// Verify mkdir was called
-			expect(fs.mkdir).toHaveBeenCalledWith('/test/project/.taskmaster', {
+			expect(fs.mkdir).toHaveBeenCalledWith('/test/project/.novelmaster', {
 				recursive: true
 			});
 
 			// Verify writeFile was called with correct data
 			expect(fs.writeFile).toHaveBeenCalledWith(
-				'/test/project/.taskmaster/state.json',
+				'/test/project/.novelmaster/state.json',
 				expect.stringContaining('"activeTag":"test-tag"'),
 				'utf-8'
 			);
@@ -242,7 +242,7 @@ describe('RuntimeStateManager', () => {
 			await stateManager.clearState();
 
 			expect(fs.unlink).toHaveBeenCalledWith(
-				'/test/project/.taskmaster/state.json'
+				'/test/project/.novelmaster/state.json'
 			);
 			expect(stateManager.getCurrentTag()).toBe(
 				DEFAULT_CONFIG_VALUES.TAGS.DEFAULT_TAG

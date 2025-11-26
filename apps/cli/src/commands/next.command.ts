@@ -198,7 +198,7 @@ export class NextCommand extends Command {
 				)
 			);
 			console.log(
-				`\n${chalk.dim('Tip: Try')} ${chalk.cyan('task-master list --status pending')} ${chalk.dim('to see all pending tasks')}`
+				`\n${chalk.dim('Tip: Try')} ${chalk.cyan('novel-master list --status pending')} ${chalk.dim('to see all pending tasks')}`
 			);
 			return;
 		}

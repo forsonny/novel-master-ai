@@ -4,7 +4,7 @@ import path from 'path';
 import os from 'os';
 
 // Reduce noise in test output
-process.env.TASKMASTER_LOG_LEVEL = 'error';
+process.env.NOVELMASTER_LOG_LEVEL = 'error';
 
 // === Mock everything early ===
 jest.mock('child_process', () => ({ execSync: jest.fn() }));

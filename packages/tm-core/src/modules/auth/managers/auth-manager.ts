@@ -1,5 +1,5 @@
 /**
- * Authentication manager for Task Master CLI
+ * Authentication manager for Novel Master CLI
  */
 
 import fs from 'fs';
@@ -41,7 +41,7 @@ export class AuthManager {
 	private readonly logger = getLogger('AuthManager');
 	private readonly LEGACY_AUTH_FILE = path.join(
 		os.homedir(),
-		'.taskmaster',
+		'.novelmaster',
 		'auth.json'
 	);
 
@@ -100,7 +100,7 @@ export class AuthManager {
 
 			// Otherwise, user needs to re-authenticate
 			this.logger.warn('Legacy auth.json found but no valid Supabase session.');
-			this.logger.warn('Please run: task-master auth login');
+			this.logger.warn('Please run: novel-master auth login');
 		} catch (error) {
 			this.logger.debug('Error during legacy auth migration:', error);
 		}

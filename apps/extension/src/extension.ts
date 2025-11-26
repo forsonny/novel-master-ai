@@ -16,7 +16,7 @@ import {
 	MCPClientManager,
 	createMCPConfigFromSettings
 } from './utils/mcpClient';
-import { TaskMasterApi } from './utils/task-master-api';
+import { TaskMasterApi } from './utils/novel-master-api';
 import { SidebarWebviewManager } from './services/sidebar-webview-manager';
 
 let logger: ExtensionLogger;
@@ -56,7 +56,7 @@ export async function activate(context: vscode.ExtensionContext) {
 
 		// Polling service with strategy pattern (makes sense for different polling behaviors)
 		const strategy = createPollingStrategy(
-			vscode.workspace.getConfiguration('taskmaster')
+			vscode.workspace.getConfiguration('novelmaster')
 		);
 		pollingService = new PollingService(repository, strategy, logger);
 
@@ -175,7 +175,7 @@ function handleConnectionError(error: any) {
 				if (action === 'Open Settings') {
 					vscode.commands.executeCommand(
 						'workbench.action.openSettings',
-						'@ext:Hamster.task-master-hamster taskmaster'
+						'@ext:Hamster.novel-master-hamster novelmaster'
 					);
 				}
 			});
@@ -206,7 +206,7 @@ function registerCommands(context: vscode.ExtensionContext) {
 		vscode.commands.registerCommand('tm.openSettings', () => {
 			vscode.commands.executeCommand(
 				'workbench.action.openSettings',
-				'@ext:Hamster.task-master-hamster taskmaster'
+				'@ext:Hamster.novel-master-hamster novelmaster'
 			);
 		})
 	);
@@ -215,7 +215,7 @@ function registerCommands(context: vscode.ExtensionContext) {
 
 	context.subscriptions.push(
 		vscode.window.registerWebviewViewProvider(
-			'taskmaster.welcome',
+			'novelmaster.welcome',
 			sidebarManager
 		)
 	);

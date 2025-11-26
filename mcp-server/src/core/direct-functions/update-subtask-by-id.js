@@ -1,6 +1,6 @@
 /**
  * update-subtask-by-id.js
- * Direct function implementation for appending information to a specific subtask
+ * Direct function implementation for appending narrative notes to a specific beat/scene
  */
 
 import { updateSubtaskById } from '../../../../scripts/modules/task-manager.js';
@@ -12,15 +12,15 @@ import {
 import { createLogWrapper } from '../../tools/utils.js';
 
 /**
- * Direct function wrapper for updateSubtaskById with error handling.
+ * Direct function wrapper for appending narrative notes to a beat/scene with error handling.
  *
  * @param {Object} args - Command arguments containing id, prompt, useResearch, tasksJsonPath, and projectRoot.
  * @param {string} args.tasksJsonPath - Explicit path to the tasks.json file.
- * @param {string} args.id - Subtask ID in format "parent.sub".
- * @param {string} args.prompt - Information to append to the subtask.
- * @param {boolean} [args.research] - Whether to use research role.
+ * @param {string} args.id - Beat/scene ID in format "chapterId.beatId" (e.g., "5.2").
+ * @param {string} args.prompt - Narrative notes to append (research findings, revision notes, sensory inspiration, editorial feedback).
+ * @param {boolean} [args.research] - Whether to use research role for lore/genre-aware context before appending.
  * @param {string} [args.projectRoot] - Project root path.
- * @param {string} [args.tag] - Tag for the task (optional)
+ * @param {string} [args.tag] - Tag context (outline, draft, revision) for the beat (optional)
  * @param {Object} log - Logger object.
  * @param {Object} context - Context object containing session data.
  * @returns {Promise<Object>} - Result object with success status and data/error information.
@@ -34,12 +34,12 @@ export async function updateSubtaskByIdDirect(args, log, context = {}) {
 
 	try {
 		logWrapper.info(
-			`Updating subtask by ID via direct function. ID: ${id}, ProjectRoot: ${projectRoot}`
+			`Updating beat/scene by ID via direct function. ID: ${id}, ProjectRoot: ${projectRoot}`
 		);
 
 		// Check if tasksJsonPath was provided
 		if (!tasksJsonPath) {
-			const errorMessage = 'tasksJsonPath is required but was not provided.';
+			const errorMessage = 'Tasks file path is required to update a beat/scene.';
 			logWrapper.error(errorMessage);
 			return {
 				success: false,
@@ -50,7 +50,7 @@ export async function updateSubtaskByIdDirect(args, log, context = {}) {
 		// Basic validation for ID format (e.g., '5.2')
 		if (!id || typeof id !== 'string' || !id.includes('.')) {
 			const errorMessage =
-				'Invalid subtask ID format. Must be in format "parentId.subtaskId" (e.g., "5.2").';
+				'Invalid beat/scene ID format. Must be in format "chapterId.beatId" (e.g., "5.2").';
 			logWrapper.error(errorMessage);
 			return {
 				success: false,
@@ -60,7 +60,7 @@ export async function updateSubtaskByIdDirect(args, log, context = {}) {
 
 		if (!prompt) {
 			const errorMessage =
-				'No prompt specified. Please provide the information to append.';
+				'No narrative notes provided. Please provide notes to append (research findings, revision notes, sensory inspiration, etc.).';
 			logWrapper.error(errorMessage);
 			return {
 				success: false,
@@ -94,7 +94,7 @@ export async function updateSubtaskByIdDirect(args, log, context = {}) {
 		const useResearch = research === true;
 
 		log.info(
-			`Updating subtask with ID ${subtaskIdStr} with prompt "${prompt}" and research: ${useResearch}`
+			`Appending narrative notes to beat/scene ${subtaskIdStr} with research: ${useResearch}`
 		);
 
 		const wasSilent = isSilentMode();

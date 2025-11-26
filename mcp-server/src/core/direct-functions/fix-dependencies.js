@@ -1,5 +1,6 @@
 /**
- * Direct function wrapper for fixDependenciesCommand
+ * fix-dependencies.js
+ * Direct function implementation for automatically fixing invalid narrative dependencies
  */
 
 import { fixDependenciesCommand } from '../../../../scripts/modules/dependency-manager.js';
@@ -10,11 +11,12 @@ import {
 import fs from 'fs';
 
 /**
- * Fix invalid dependencies in tasks.json automatically
+ * Fix invalid narrative dependencies in tasks.json automatically
+ * Removes circular references and links to non-existent chapters/scenes.
  * @param {Object} args - Function arguments
  * @param {string} args.tasksJsonPath - Explicit path to the tasks.json file.
  * @param {string} args.projectRoot - Project root directory
- * @param {string} args.tag - Tag for the project
+ * @param {string} args.tag - Tag context (outline, draft, revision) for the project
  * @param {Object} log - Logger object
  * @returns {Promise<{success: boolean, data?: Object, error?: {code: string, message: string}}>}
  */
@@ -22,7 +24,7 @@ export async function fixDependenciesDirect(args, log) {
 	// Destructure expected args
 	const { tasksJsonPath, projectRoot, tag } = args;
 	try {
-		log.info(`Fixing invalid dependencies in tasks: ${tasksJsonPath}`);
+		log.info(`Fixing invalid narrative dependencies in chapters: ${tasksJsonPath}`);
 
 		// Check if tasksJsonPath was provided
 		if (!tasksJsonPath) {
@@ -31,7 +33,7 @@ export async function fixDependenciesDirect(args, log) {
 				success: false,
 				error: {
 					code: 'MISSING_ARGUMENT',
-					message: 'tasksJsonPath is required'
+					message: 'Tasks file path is required to fix narrative dependencies'
 				}
 			};
 		}
@@ -63,7 +65,7 @@ export async function fixDependenciesDirect(args, log) {
 		return {
 			success: true,
 			data: {
-				message: 'Dependencies fixed successfully',
+				message: 'Narrative dependencies fixed successfully (circular references and invalid links removed)',
 				tasksPath,
 				tag: tag || 'master'
 			}

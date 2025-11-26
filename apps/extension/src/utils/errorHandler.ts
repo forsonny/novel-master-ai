@@ -21,7 +21,7 @@ export enum ErrorCategory {
 	VALIDATION = 'validation',
 	NETWORK = 'network',
 	INTERNAL = 'internal',
-	TASK_MASTER_API = 'TASK_MASTER_API',
+	NOVEL_MASTER_API = 'NOVEL_MASTER_API',
 	DATA_VALIDATION = 'DATA_VALIDATION',
 	DATA_PARSING = 'DATA_PARSING',
 	TASK_DATA_CORRUPTION = 'TASK_DATA_CORRUPTION',
@@ -104,9 +104,9 @@ export interface ErrorLogEntry {
 }
 
 /**
- * Base class for all Task Master errors
+ * Base class for all Novel Master errors
  */
-export abstract class TaskMasterError extends Error {
+export abstract class NovelMasterError extends Error {
 	public readonly code: string;
 	public readonly category: ErrorCategory;
 	public readonly severity: ErrorSeverity;
@@ -166,7 +166,7 @@ export abstract class TaskMasterError extends Error {
 /**
  * MCP Connection related errors
  */
-export class MCPConnectionError extends TaskMasterError {
+export class MCPConnectionError extends NovelMasterError {
 	constructor(
 		message: string,
 		code = 'MCP_CONNECTION_FAILED',
@@ -183,7 +183,7 @@ export class MCPConnectionError extends TaskMasterError {
 			ErrorCategory.MCP_CONNECTION,
 			ErrorSeverity.HIGH,
 			context,
-			'Check your Task Master configuration and ensure the MCP server is accessible.',
+			'Check your Novel Master configuration and ensure the MCP server is accessible.',
 			recovery
 		);
 	}
@@ -192,7 +192,7 @@ export class MCPConnectionError extends TaskMasterError {
 /**
  * Configuration related errors
  */
-export class ConfigurationError extends TaskMasterError {
+export class ConfigurationError extends NovelMasterError {
 	constructor(
 		message: string,
 		code = 'CONFIGURATION_INVALID',
@@ -204,7 +204,7 @@ export class ConfigurationError extends TaskMasterError {
 			ErrorCategory.CONFIGURATION,
 			ErrorSeverity.MEDIUM,
 			context,
-			'Check your Task Master configuration in VS Code settings.'
+			'Check your Novel Master configuration in VS Code settings.'
 		);
 	}
 }
@@ -212,7 +212,7 @@ export class ConfigurationError extends TaskMasterError {
 /**
  * Task loading related errors
  */
-export class TaskLoadingError extends TaskMasterError {
+export class TaskLoadingError extends NovelMasterError {
 	constructor(
 		message: string,
 		code = 'TASK_LOADING_FAILED',
@@ -238,7 +238,7 @@ export class TaskLoadingError extends TaskMasterError {
 /**
  * UI rendering related errors
  */
-export class UIRenderingError extends TaskMasterError {
+export class UIRenderingError extends NovelMasterError {
 	constructor(
 		message: string,
 		code = 'UI_RENDERING_FAILED',
@@ -258,7 +258,7 @@ export class UIRenderingError extends TaskMasterError {
 /**
  * Network related errors
  */
-export class NetworkError extends TaskMasterError {
+export class NetworkError extends NovelMasterError {
 	constructor(
 		message: string,
 		code = 'NETWORK_ERROR',
@@ -305,7 +305,7 @@ export class ErrorHandler {
 	 * Handle an error with comprehensive logging and recovery
 	 */
 	async handleError(
-		error: Error | TaskMasterError,
+		error: Error | NovelMasterError,
 		context?: Record<string, any>
 	): Promise<void> {
 		const errorDetails = this.createErrorDetails(error, context);
@@ -337,7 +337,7 @@ export class ErrorHandler {
 	 * Handle critical errors that should stop execution
 	 */
 	async handleCriticalError(
-		error: Error | TaskMasterError,
+		error: Error | NovelMasterError,
 		context?: Record<string, any>
 	): Promise<void> {
 		const errorDetails = this.createErrorDetails(error, context);
@@ -347,7 +347,7 @@ export class ErrorHandler {
 
 		// Show critical error dialog
 		const action = await vscode.window.showErrorMessage(
-			`Critical Error in Task Master: ${errorDetails.message}`,
+			`Critical Error in Novel Master: ${errorDetails.message}`,
 			'View Details',
 			'Report Issue',
 			'Restart Extension'
@@ -425,10 +425,10 @@ export class ErrorHandler {
 	 * Create error details from error instance
 	 */
 	private createErrorDetails(
-		error: Error | TaskMasterError,
+		error: Error | NovelMasterError,
 		context?: Record<string, any>
 	): ErrorDetails {
-		if (error instanceof TaskMasterError) {
+		if (error instanceof NovelMasterError) {
 			const details = error.toErrorDetails();
 			if (context) {
 				details.context = { ...details.context, ...context };
@@ -623,7 +623,7 @@ ${errorDetails.context ? JSON.stringify(errorDetails.context, null, 2) : 'None'}
 
     `);
 
-		const issueUrl = `https://github.com/eyaltoledano/claude-task-master/issues/new?title=${issueTitle}&body=${issueBody}`;
+		const issueUrl = `https://github.com/eyaltoledano/claude-novel-master/issues/new?title=${issueTitle}&body=${issueBody}`;
 		await vscode.env.openExternal(vscode.Uri.parse(issueUrl));
 	}
 
@@ -647,7 +647,7 @@ ${errorDetails.context ? JSON.stringify(errorDetails.context, null, 2) : 'None'}
 		// Handle unhandled promise rejections
 		process.on('unhandledRejection', (reason, promise) => {
 			// Create a concrete error class for internal errors
-			class InternalError extends TaskMasterError {
+			class InternalError extends NovelMasterError {
 				constructor(
 					message: string,
 					code: string,
@@ -670,7 +670,7 @@ ${errorDetails.context ? JSON.stringify(errorDetails.context, null, 2) : 'None'}
 		// Handle uncaught exceptions
 		process.on('uncaughtException', (error) => {
 			// Create a concrete error class for internal errors
-			class InternalError extends TaskMasterError {
+			class InternalError extends NovelMasterError {
 				constructor(
 					message: string,
 					code: string,
@@ -732,8 +732,8 @@ export const ERROR_CATEGORIZATION_RULES: Record<string, ErrorCategory> = {
 
 	// MCP patterns
 	MCP: ErrorCategory.MCP_CONNECTION,
-	'Task Master': ErrorCategory.TASK_MASTER_API,
-	polling: ErrorCategory.TASK_MASTER_API,
+	'Novel Master': ErrorCategory.NOVEL_MASTER_API,
+	polling: ErrorCategory.NOVEL_MASTER_API,
 
 	// VS Code patterns
 	vscode: ErrorCategory.VSCODE_API,
@@ -761,7 +761,7 @@ export const ERROR_CATEGORIZATION_RULES: Record<string, ErrorCategory> = {
 export const CATEGORY_SEVERITY_MAPPING: Record<ErrorCategory, ErrorSeverity> = {
 	[ErrorCategory.NETWORK]: ErrorSeverity.MEDIUM,
 	[ErrorCategory.MCP_CONNECTION]: ErrorSeverity.HIGH,
-	[ErrorCategory.TASK_MASTER_API]: ErrorSeverity.HIGH,
+	[ErrorCategory.NOVEL_MASTER_API]: ErrorSeverity.HIGH,
 	[ErrorCategory.DATA_VALIDATION]: ErrorSeverity.MEDIUM,
 	[ErrorCategory.DATA_PARSING]: ErrorSeverity.HIGH,
 	[ErrorCategory.TASK_DATA_CORRUPTION]: ErrorSeverity.CRITICAL,

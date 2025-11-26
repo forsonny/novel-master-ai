@@ -1,6 +1,6 @@
 /**
  * models.js
- * Direct function for managing AI model configurations via MCP
+ * Direct function for managing AI model configurations for Novel Master (main model for drafting, research model for worldbuilding)
  */
 
 import {

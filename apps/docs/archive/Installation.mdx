@@ -1,12 +1,12 @@
 ---
 title: "Installation(2)"
-description: "This guide walks you through setting up Task Master in your development environment."
+description: "This guide walks you through setting up Novel Master in your development environment."
 ---
 
 ## Initial Setup
 
 <Tip>
-  MCP (Model Control Protocol) provides the easiest way to get started with Task Master directly in your editor.
+  MCP (Model Control Protocol) provides the easiest way to get started with Novel Master directly in your editor.
 </Tip>
 
 <AccordionGroup>
@@ -17,9 +17,9 @@ description: "This guide walks you through setting up Task Master in your develo
         ```json
         {
         	"mcpServers": {
-        		"taskmaster-ai": {
+        		"novelmaster-ai": {
         			"command": "npx",
-        			"args": ["-y", "task-master-ai"],
+        			"args": ["-y", "novel-master-ai"],
         			"env": {
         				"ANTHROPIC_API_KEY": "YOUR_ANTHROPIC_API_KEY_HERE",
         				"PERPLEXITY_API_KEY": "YOUR_PERPLEXITY_API_KEY_HERE",
@@ -38,8 +38,8 @@ description: "This guide walks you through setting up Task Master in your develo
       <Step title="Enable the MCP in your editor settings">
         
       </Step>
-      <Step title="Prompt the AI to initialize Task Master">
-        > "Can you please initialize taskmaster-ai into my project?"
+      <Step title="Prompt the AI to initialize Novel Master">
+        > "Can you please initialize novelmaster-ai into my project?"
 
         **The AI will:**
 
@@ -47,7 +47,7 @@ description: "This guide walks you through setting up Task Master in your develo
         2. Set up initial configuration files
         3. Guide you through the rest of the process
         4. Place your PRD document in the `scripts/` directory (e.g., `scripts/prd.txt`)
-        5. **Use natural language commands** to interact with Task Master:
+        5. **Use natural language commands** to interact with Novel Master:
 
            > "Can you parse my PRD at scripts/prd.txt?"
            >
@@ -65,12 +65,12 @@ description: "This guide walks you through setting up Task Master in your develo
         <CodeGroup>
 
         ```bash Global
-        npm install -g task-master-ai
+        npm install -g novel-master-ai
         ```
 
         
         ```bash Local
-        npm install task-master-ai
+        npm install novel-master-ai
         ```
 
         </CodeGroup>
@@ -79,12 +79,12 @@ description: "This guide walks you through setting up Task Master in your develo
         <CodeGroup>
 
         ```bash Global
-        task-master init
+        novel-master init
         ```
 
         
         ```bash Local
-        npx task-master-init
+        npx novel-master-init
         ```
 
         </CodeGroup>
@@ -97,18 +97,18 @@ description: "This guide walks you through setting up Task Master in your develo
 ## Common Commands
 
 <Tip>
-  After setting up Task Master, you can use these commands (either via AI prompts or CLI)
+  After setting up Novel Master, you can use these commands (either via AI prompts or CLI)
 </Tip>
 
 ```bash
 # Parse a PRD and generate tasks
-task-master parse-prd your-prd.txt
+novel-master parse-prd your-prd.txt
 
 # List all tasks
-task-master list
+novel-master list
 
 # Show the next task to work on
-task-master next
+novel-master next
 
 # Generate task files
-task-master generate 
+novel-master generate 

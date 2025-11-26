@@ -27,7 +27,7 @@ vi.mock('fs-extra', () => ({
 
 describe('Autopilot Shared Utilities', () => {
 	const projectRoot = '/test/project';
-	const statePath = `${projectRoot}/.taskmaster/workflow-state.json`;
+	const statePath = `${projectRoot}/.novelmaster/workflow-state.json`;
 
 	beforeEach(() => {
 		vi.clearAllMocks();

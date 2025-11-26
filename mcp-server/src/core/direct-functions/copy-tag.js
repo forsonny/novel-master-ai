@@ -1,6 +1,6 @@
 /**
  * copy-tag.js
- * Direct function implementation for copying a tag
+ * Direct function implementation for copying a tag context (duplicates all chapters/scenes to a new tag)
  */
 
 import { copyTag } from '../../../../scripts/modules/task-manager/tag-management.js';
@@ -11,12 +11,12 @@ import {
 import { createLogWrapper } from '../../tools/utils.js';
 
 /**
- * Direct function wrapper for copying a tag with error handling.
+ * Direct function wrapper for copying a tag context (duplicates all chapters/scenes to a new tag) with error handling.
  *
  * @param {Object} args - Command arguments
- * @param {string} args.sourceName - Name of the source tag to copy from
- * @param {string} args.targetName - Name of the new tag to create
- * @param {string} [args.description] - Optional description for the new tag
+ * @param {string} args.sourceName - Name of the source tag context to copy from (e.g., "draft")
+ * @param {string} args.targetName - Name of the new tag context to create (e.g., "draft-backup")
+ * @param {string} [args.description] - Optional description for the new tag context
  * @param {string} [args.tasksJsonPath] - Path to the tasks.json file (resolved by tool)
  * @param {string} [args.projectRoot] - Project root path
  * @param {Object} log - Logger object
@@ -44,7 +44,7 @@ export async function copyTagDirect(args, log, context = {}) {
 				success: false,
 				error: {
 					code: 'MISSING_ARGUMENT',
-					message: 'tasksJsonPath is required'
+					message: 'Tasks file path is required to copy a tag context'
 				}
 			};
 		}
@@ -57,7 +57,7 @@ export async function copyTagDirect(args, log, context = {}) {
 				success: false,
 				error: {
 					code: 'MISSING_PARAMETER',
-					message: 'Source tag name is required and must be a string'
+					message: 'Source tag context name is required and must be a string (e.g., "draft")'
 				}
 			};
 		}
@@ -69,12 +69,12 @@ export async function copyTagDirect(args, log, context = {}) {
 				success: false,
 				error: {
 					code: 'MISSING_PARAMETER',
-					message: 'Target tag name is required and must be a string'
+					message: 'Target tag context name is required and must be a string (e.g., "draft-backup")'
 				}
 			};
 		}
 
-		log.info(`Copying tag from "${sourceName}" to "${targetName}"`);
+		log.info(`Copying tag context from "${sourceName}" to "${targetName}" (duplicating all chapters/scenes)`);
 
 		// Prepare options
 		const options = {
@@ -104,9 +104,9 @@ export async function copyTagDirect(args, log, context = {}) {
 				sourceName: result.sourceName,
 				targetName: result.targetName,
 				copied: result.copied,
-				tasksCopied: result.tasksCopied,
+				chaptersCopied: result.tasksCopied,
 				description: result.description,
-				message: `Successfully copied tag from "${result.sourceName}" to "${result.targetName}"`
+				message: `Successfully copied tag context from "${result.sourceName}" to "${result.targetName}" (copied ${result.tasksCopied} chapter(s))`
 			}
 		};
 	} catch (error) {

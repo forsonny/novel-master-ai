@@ -61,7 +61,7 @@ describe('ConfigLoader', () => {
 			const result = await configLoader.loadLocalConfig();
 
 			expect(fs.readFile).toHaveBeenCalledWith(
-				'/test/project/.taskmaster/config.json',
+				'/test/project/.novelmaster/config.json',
 				'utf-8'
 			);
 			expect(result).toEqual(mockConfig);
@@ -107,7 +107,7 @@ describe('ConfigLoader', () => {
 			const result = await configLoader.hasLocalConfig();
 
 			expect(fs.access).toHaveBeenCalledWith(
-				'/test/project/.taskmaster/config.json'
+				'/test/project/.novelmaster/config.json'
 			);
 			expect(result).toBe(true);
 		});
@@ -128,7 +128,7 @@ describe('ConfigLoader', () => {
 			const result = await configLoader.hasGlobalConfig();
 
 			expect(fs.access).toHaveBeenCalledWith(
-				expect.stringContaining('.taskmaster/config.json')
+				expect.stringContaining('.novelmaster/config.json')
 			);
 			expect(result).toBe(true);
 		});

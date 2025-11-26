@@ -1,111 +1,111 @@
 ---
-title: PRD Creation and Parsing
-sidebarTitle: "PRD Creation and Parsing"
+title: NRD Creation and Parsing
+sidebarTitle: "NRD Creation and Parsing"
 ---
 
-# Writing a PRD
+# Writing an NRD
 
-A PRD (Product Requirements Document) is the starting point of every task flow in Task Master. It defines what you're building and why. A clear PRD dramatically improves the quality of your tasks, your model outputs, and your final product — so it’s worth taking the time to get it right.
+An NRD (Novel Requirements Document) is the starting point of every narrative workflow in Novel Master. It defines your story's premise, structure, characters, and world. A clear NRD dramatically improves the quality of your story arcs, chapters, and scenes — so it's worth taking the time to get it right.
 
 <Tip>
-You don’t need to define your whole app up front. You can write a focused PRD just for the next feature or module you’re working on.
+You don't need to define your whole novel up front. You can write a focused NRD just for the next act, arc, or chapter you're working on.
 </Tip>
 
 <Tip>
-You can start with an empty project or you can start with a feature PRD on an existing project.
+You can start with an empty project or you can start with an NRD for a specific story arc on an existing project.
 </Tip>
 
 <Tip>
-You can add and parse multiple PRDs per project using the --append flag
+You can add and parse multiple NRDs per project using the --append flag
 </Tip>
 
-## What Makes a Good PRD?
+## What Makes a Good NRD?
 
-- Clear objective — what’s the outcome or feature?
-- Context — what’s already in place or assumed?
-- Constraints — what limits or requirements need to be respected?
-- Reasoning — why are you building it this way?
+- Clear premise — what's the core story concept or logline?
+- Character arcs — who are the main characters and how do they change?
+- World/lore constraints — what are the rules of your story's world?
+- Act structure — how does the story progress (three-act, hero's journey, etc.)?
 
-The more context you give the model, the better the breakdown and results.
+The more context you give the model, the better the breakdown into story arcs, chapters, and scenes.
 
 ---
 
-## Writing a PRD for Task Master
+## Writing an NRD for Novel Master
 
 <Note>
-Two example PRD templates are available in `.taskmaster/templates/`:
-- `example_prd.md` - Simple template for straightforward projects (`.md` recommended for better editor support)
-- `example_prd_rpg.md` - Advanced RPG (Repository Planning Graph) template for complex projects with dependencies
+Two example NRD templates are available in `.novelmaster/templates/`:
+- `example_nrd.md` - Simple template for straightforward stories (`.md` recommended for better editor support)
+- `example_nrd_epic.md` - Advanced template for complex multi-arc stories with intricate dependencies
 
 **Why `.md`?** While both `.txt` and `.md` work, Markdown files provide syntax highlighting, proper rendering in VS Code/GitHub, and better collaboration through formatted documentation.
 </Note>
 
 
-You can co-write your PRD with an LLM model using the following workflow:
+You can co-write your NRD with an LLM model using the following workflow:
 
-1. **Chat about requirements** — explain what you want to build.
-2. **Show an example PRD** — share the example PRD so the model understands the expected format. The example uses formatting that work well with Task Master's code. Following the example will yield better results.
-3. **Iterate and refine** — work with the model to shape the draft into a clear and well-structured PRD.
+1. **Chat about your story** — explain the premise, characters, and structure you want.
+2. **Show an example NRD** — share the example NRD so the model understands the expected format. The example uses formatting that works well with Novel Master's narrative workflows. Following the example will yield better results.
+3. **Iterate and refine** — work with the model to shape the draft into a clear and well-structured NRD.
 
 This approach works great in Cursor, or anywhere you use a chat-based LLM.
 
 ### Choosing Between Templates
 
-**Use `example_prd.md` when:**
-- Building straightforward features
-- Working on smaller projects
-- Dependencies are simple and obvious
+**Use `example_nrd.md` when:**
+- Writing straightforward stories
+- Working on smaller projects or single-arc narratives
+- Story structure is simple and linear
 
-**Use `example_prd_rpg.md` when:**
-- Building complex systems with multiple modules
-- Need explicit dependency management
-- Want structured guidance on architecture decisions
-- Planning a large codebase from scratch
+**Use `example_nrd_epic.md` when:**
+- Writing complex multi-arc stories
+- Need explicit dependency management between storylines
+- Want structured guidance on narrative architecture
+- Planning a large novel with multiple POVs from scratch
 
-The RPG template teaches you to think about:
-1. **Functional decomposition** (WHAT the system does)
-2. **Structural decomposition** (HOW it's organized in code)
-3. **Explicit dependencies** (WHAT depends on WHAT)
-4. **Topological ordering** (build foundation first, then layers)
+The epic template teaches you to think about:
+1. **Narrative decomposition** (WHAT story arcs exist)
+2. **Structural organization** (HOW acts and chapters are organized)
+3. **Explicit dependencies** (WHAT story beats depend on WHAT)
+4. **Chronological ordering** (establish foundation first, then build tension)
 
 <Tip>
-For complex projects, using the RPG template with a code-context-aware ai agent produces the best results because the AI can understand your existing codebase structure. [Learn more about the RPG method →](/capabilities/rpg-method)
+For complex stories, using the epic template with a narrative-context-aware AI agent produces the best results because the AI can understand your existing story structure and character arcs.
 </Tip>
 
 ---
 
-## Where to Save Your PRD
+## Where to Save Your NRD
 
-Place your PRD file in the `.taskmaster/docs` folder in your project.
+Place your NRD file in the `.novelmaster/docs` folder in your project.
 
-- You can have **multiple PRDs** per project.
-- Name your PRDs clearly so they're easy to reference later.
-  - Examples: `dashboard_redesign.md`, `user_onboarding.md`
+- You can have **multiple NRDs** per project (e.g., one for main story, one for subplot).
+- Name your NRDs clearly so they're easy to reference later.
+  - Examples: `main_story_nrd.md`, `character_arc_mina.md`, `worldbuilding_lore.md`
   - Tip: Use `.md` extension for better editor support and syntax highlighting
 
 ---
 
-# Parse your PRD into Tasks
+# Parse your NRD into Tasks
 
-This is where the Task Master magic begins.
+This is where the Novel Master magic begins.
 
-In Cursor's AI chat, instruct the agent to generate tasks from your PRD:
+In Cursor's AI chat, instruct the agent to generate story arcs and chapters from your NRD:
 
 ```
-Please use the task-master parse-prd command to generate tasks from my PRD. The PRD is located at .taskmaster/docs/<prd-name>.md.
+Please use the novel-master parse-prd command to generate tasks from my NRD. The NRD is located at .novelmaster/docs/<nrd-name>.md.
 ```
 
 The agent will execute the following command which you can alternatively paste into the CLI:
 
 ```bash
-task-master parse-prd .taskmaster/docs/<prd-name>.md
+novel-master parse-prd .novelmaster/docs/<nrd-name>.md
 ```
 
 This will:
 
-- Parse your PRD document
-- Generate a structured `tasks.json` file with tasks, dependencies, priorities, and test strategies
+- Parse your NRD document
+- Generate a structured `tasks.json` file with story arcs, chapters, dependencies, priorities, and narrative guidance
 
-Now that you have written and parsed a PRD, you are ready to start setting up your tasks.
+Now that you have written and parsed an NRD, you are ready to start expanding chapters into scenes and drafting your manuscript.
 
 

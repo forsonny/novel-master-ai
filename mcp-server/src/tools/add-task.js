@@ -9,7 +9,7 @@ import {
 	handleApiResult,
 	withNormalizedProjectRoot
 } from './utils.js';
-import { addTaskDirect } from '../core/task-master-core.js';
+import { addTaskDirect } from '../core/novel-master-core.js';
 import { findTasksPath } from '../core/utils/path-utils.js';
 import { resolveTag } from '../../../scripts/modules/utils.js';
 
@@ -20,26 +20,29 @@ import { resolveTag } from '../../../scripts/modules/utils.js';
 export function registerAddTaskTool(server) {
 	server.addTool({
 		name: 'add_task',
-		description: 'Add a new task using AI',
+		description:
+			'Add a new story task (act/chapter/scene) via AI or manual inputs.',
 		parameters: z.object({
 			prompt: z
 				.string()
 				.optional()
 				.describe(
-					'Description of the task to add (required if not using manual fields)'
+					'NRD-style description of the narrative beat to add (required if not using manual fields)'
 				),
 			title: z
 				.string()
 				.optional()
-				.describe('Task title (for manual task creation)'),
+				.describe('Manual task title (e.g., "Act I Twist – Train Heist")'),
 			description: z
 				.string()
 				.optional()
-				.describe('Task description (for manual task creation)'),
+				.describe('Manual description/summary of the scene or arc'),
 			details: z
 				.string()
 				.optional()
-				.describe('Implementation details (for manual task creation)'),
+				.describe(
+					'Manual details (emotional beats, sensory palette, research hooks)'
+				),
 			testStrategy: z
 				.string()
 				.optional()
@@ -47,11 +50,13 @@ export function registerAddTaskTool(server) {
 			dependencies: z
 				.string()
 				.optional()
-				.describe('Comma-separated list of task IDs this task depends on'),
+				.describe(
+					'Comma-separated list of prerequisite arcs/scenes (task IDs)'
+				),
 			priority: z
 				.string()
 				.optional()
-				.describe('Task priority (high, medium, low)'),
+				.describe('Priority (e.g., high = plot-critical, low = optional vignette)'),
 			file: z
 				.string()
 				.optional()
@@ -63,7 +68,9 @@ export function registerAddTaskTool(server) {
 			research: z
 				.boolean()
 				.optional()
-				.describe('Whether to use research capabilities for task creation')
+				.describe(
+					'Use lore/genre research while generating the new outline step'
+				)
 		}),
 		execute: withNormalizedProjectRoot(async (args, { log, session }) => {
 			try {

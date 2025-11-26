@@ -1,5 +1,5 @@
 /**
- * Configuration classes and schemas for PRD parsing
+ * Configuration classes and schemas for NRD parsing
  */
 
 import { z } from 'zod';
@@ -12,6 +12,19 @@ import { hasCodebaseAnalysis } from '../../config-manager.js';
 // SCHEMAS
 // ============================================================================
 
+const NarrativeMetadataSchema = z
+	.object({
+		pov: z.string().optional(),
+		timeline: z.string().optional(),
+		emotionalBeat: z.string().optional(),
+		tensionLevel: z.string().optional(),
+		wordCountTarget: z.string().optional(),
+		sensoryNotes: z.string().optional(),
+		researchHook: z.string().optional(),
+		continuityCheck: z.string().optional()
+	})
+	.optional();
+
 // Define the Zod schema for a SINGLE task object
 export const prdSingleTaskSchema = z.object({
 	id: z.number(),
@@ -21,7 +34,8 @@ export const prdSingleTaskSchema = z.object({
 	testStrategy: z.string(),
 	priority: z.enum(TASK_PRIORITY_OPTIONS),
 	dependencies: z.array(z.number()),
-	status: z.string()
+	status: z.string(),
+	metadata: NarrativeMetadataSchema
 });
 
 // Define the Zod schema for the ENTIRE expected AI response object
@@ -47,7 +61,7 @@ export const prdResponseSchema = z.object({
 // ============================================================================
 
 /**
- * Configuration object for PRD parsing
+ * Configuration object for NRD parsing
  */
 export class PrdParseConfig {
 	constructor(prdPath, tasksPath, numTasks, options = {}) {

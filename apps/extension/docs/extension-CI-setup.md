@@ -1,6 +1,6 @@
 # VS Code Extension CI/CD Setup
 
-This document explains the CI/CD setup for the Task Master VS Code extension using automated changesets.
+This document explains the CI/CD setup for the Novel Master VS Code extension using automated changesets.
 
 ## 🔄 Workflows Overview
 
@@ -110,7 +110,7 @@ The automation ensures these fields stay in sync between `package.json` and `pac
 {
   "version": "1.0.2",                    // ✅ AUTO-SYNCED
   "publisher": "Hamster",        // ⚠️ MUST MATCH MANUALLY
-  "displayName": "taskr: Task Master Kanban", // ⚠️ MUST MATCH MANUALLY
+  "displayName": "taskr: Novel Master Kanban", // ⚠️ MUST MATCH MANUALLY
   "description": "...",                  // ⚠️ MUST MATCH MANUALLY
   "engines": { "vscode": "^1.93.0" },   // ⚠️ MUST MATCH MANUALLY
   "categories": [...],                   // ⚠️ MUST MATCH MANUALLY

@@ -1,60 +1,65 @@
-Generate individual task files from tasks.json.
+Generate individual chapter files from tasks.json.
 
-## Task File Generation
+## Manuscript File Generation
 
-Creates separate markdown files for each task, perfect for AI agents or documentation.
+Creates separate markdown files for each chapter, perfect for AI agents or documentation.
 
 ## Execution
 
 ```bash
-task-master generate
+novel-master generate
 ```
 
 ## What It Creates
 
-For each task, generates a file like `task_001.txt`:
+For each chapter, generates a file like `chapter-001.md`:
 
 ```
-Task ID: 1
-Title: Implement user authentication
-Status: pending
-Priority: high
-Dependencies: []
-Created: 2024-01-15
-Complexity: 7
+# Chapter 1: The Beginning
+
+**Chapter ID:** 1  
+**Status:** pending  
+**Priority:** high  
+**Dependencies:** []  
+**Created:** 2024-01-15  
+**Complexity:** 7
 
 ## Description
-Create a secure user authentication system with login, logout, and session management.
+Introduce the protagonist in their ordinary world, establish the setting, and hint at the coming conflict.
 
 ## Details
-- Use JWT tokens for session management
-- Implement secure password hashing
-- Add remember me functionality
-- Include password reset flow
+- POV: First person, Protagonist
+- Setting: Small coastal town, present day
+- Emotional beat: Contentment turning to unease
+- Research hooks: Coastal town architecture, fishing industry
 
-## Test Strategy
-- Unit tests for auth functions
-- Integration tests for login flow
-- Security testing for vulnerabilities
-- Performance tests for concurrent logins
+## Continuity/Pacing Strategy
+- Establish protagonist's voice and worldview
+- Set up the inciting incident
+- Pacing: Slow build, atmospheric
+- Character consistency: Maintain protagonist's established personality
 
-## Subtasks
-1.1 Setup authentication framework (pending)
-1.2 Create login endpoints (pending)
-1.3 Implement session management (pending)
-1.4 Add password reset (pending)
+## Scenes
+1.1 Opening: Protagonist's morning routine (pending)
+1.2 Discovery: Finding the mysterious object (pending)
+1.3 Reaction: Protagonist's initial response (pending)
+1.4 Hook: First hint of larger conflict (pending)
 ```
 
 ## File Organization
 
 Creates structure:
 ```
-.taskmaster/
-└── tasks/
-    ├── task_001.txt
-    ├── task_002.txt
-    ├── task_003.txt
-    └── ...
+.novelmaster/
+└── manuscript/
+    ├── chapters/
+    │   ├── chapter-001.md
+    │   ├── chapter-002.md
+    │   ├── chapter-003.md
+    │   └── ...
+    ├── compiled/
+    │   └── manuscript-draft.md
+    └── manuscript-summary.json
 ```
 
 ## Smart Features
@@ -66,24 +71,24 @@ Creates structure:
    - Markdown compatible
 
 2. **Contextual Information**
-   - Full task details
-   - Related task references
+   - Full chapter details
+   - Related chapter references
    - Progress indicators
-   - Implementation notes
+   - Drafting notes
 
 3. **Incremental Updates**
-   - Only regenerate changed tasks
+   - Only regenerate changed chapters
    - Preserve custom additions
    - Track generation timestamp
    - Version control friendly
 
 ## Use Cases
 
-- **AI Context**: Provide task context to AI assistants
-- **Documentation**: Standalone task documentation
-- **Archival**: Task history preservation
-- **Sharing**: Send specific tasks to team members
-- **Review**: Easier task review process
+- **AI Context**: Provide chapter context to AI assistants
+- **Documentation**: Standalone chapter documentation
+- **Archival**: Chapter history preservation
+- **Sharing**: Send specific chapters to beta readers
+- **Review**: Easier chapter review process
 
 ## Generation Options
 
@@ -91,15 +96,15 @@ Based on arguments:
 - Filter by status
 - Include/exclude completed
 - Custom templates
-- Different formats
+- Different formats (md, txt)
 
 ## Post-Generation
 
 ```
-Task File Generation Complete
+Manuscript File Generation Complete
 ━━━━━━━━━━━━━━━━━━━━━━━━━━
-Generated: 45 task files
-Location: .taskmaster/tasks/
+Generated: 45 chapter files
+Location: .novelmaster/manuscript/chapters/
 Total size: 156 KB
 
 New files: 5
@@ -109,13 +114,13 @@ Unchanged: 28
 Ready for:
 - AI agent consumption
 - Version control
-- Team distribution
+- Beta reader distribution
 ```
 
 ## Integration Benefits
 
-- Git-trackable task history
-- Easy task sharing
+- Git-trackable chapter history
+- Easy chapter sharing
 - AI tool compatibility
-- Offline task access
+- Offline chapter access
 - Backup redundancy

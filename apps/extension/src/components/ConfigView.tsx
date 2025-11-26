@@ -99,7 +99,7 @@ export const ConfigView: React.FC<ConfigViewProps> = ({
 					</Button>
 					<div className="flex items-center gap-2">
 						<Settings className="w-5 h-5" />
-						<h1 className="text-lg font-semibold">Task Master Configuration</h1>
+						<h1 className="text-lg font-semibold">Novel Master Configuration</h1>
 					</div>
 				</div>
 				<Button
@@ -128,7 +128,7 @@ export const ConfigView: React.FC<ConfigViewProps> = ({
 								<CardHeader>
 									<CardTitle>AI Models</CardTitle>
 									<CardDescription>
-										Models configured for different Task Master operations
+										Models configured for different Novel Master operations
 									</CardDescription>
 								</CardHeader>
 								<CardContent className="space-y-4">
@@ -271,7 +271,7 @@ export const ConfigView: React.FC<ConfigViewProps> = ({
 									<p className="text-sm text-vscode-foreground/60">
 										To modify these settings, go to{' '}
 										<code className="bg-vscode-input/30 px-1 py-0.5 rounded">
-											.taskmaster/config.json
+											.novelmaster/config.json
 										</code>{' '}
 										and modify them, or use the MCP.
 									</p>
@@ -280,7 +280,7 @@ export const ConfigView: React.FC<ConfigViewProps> = ({
 						</div>
 					) : (
 						<div className="text-center py-8 text-vscode-foreground/50">
-							No configuration found. Please run `task-master init` in your
+							No configuration found. Please run `novel-master init` in your
 							project.
 						</div>
 					)}

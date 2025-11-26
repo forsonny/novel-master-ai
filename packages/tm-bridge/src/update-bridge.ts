@@ -118,7 +118,7 @@ export async function tryUpdateViaRemote(
 						chalk.white('The task has been updated on the remote server.') +
 						'\n' +
 						chalk.white(
-							`Run ${chalk.yellow(`task-master show ${taskId}`)} to view the updated task.`
+							`Run ${chalk.yellow(`novel-master show ${taskId}`)} to view the updated task.`
 						),
 					{
 						padding: 1,

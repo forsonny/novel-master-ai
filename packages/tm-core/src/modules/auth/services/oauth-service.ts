@@ -7,7 +7,7 @@ import http from 'http';
 import os from 'os';
 import { URL } from 'url';
 import { Session } from '@supabase/supabase-js';
-import { TASKMASTER_VERSION } from '../../../common/constants/index.js';
+import { NOVELMASTER_VERSION } from '../../../common/constants/index.js';
 import { getLogger } from '../../../common/logger/index.js';
 import { SupabaseAuthClient } from '../../integration/clients/supabase-client.js';
 import { getAuthConfig } from '../config.js';
@@ -175,7 +175,7 @@ export class OAuthService {
 				const cliData: CliData = {
 					callback: callbackUrl,
 					state: state,
-					name: 'Task Master CLI',
+					name: 'Novel Master CLI',
 					version: this.getCliVersion(),
 					device: os.hostname(),
 					user: os.userInfo().username,
@@ -420,7 +420,7 @@ export class OAuthService {
 	 * Get CLI version from centralized constants
 	 */
 	private getCliVersion(): string {
-		return TASKMASTER_VERSION;
+		return NOVELMASTER_VERSION;
 	}
 
 	/**

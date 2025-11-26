@@ -1,6 +1,6 @@
 /**
  * commands.js
- * Command-line interface for the Task Master CLI
+ * Command-line interface for the Novel Master CLI
  */
 
 import { Command } from 'commander';
@@ -76,11 +76,12 @@ import { CUSTOM_PROVIDERS } from '@tm/core';
 
 import {
 	COMPLEXITY_REPORT_FILE,
-	TASKMASTER_TASKS_FILE,
-	TASKMASTER_DOCS_DIR
+	NOVELMASTER_TASKS_FILE,
+	NOVELMASTER_DOCS_DIR,
+	NOVELMASTER_MANUSCRIPT_DIR
 } from '../../src/constants/paths.js';
 
-import { initTaskMaster } from '../../src/task-master.js';
+import { initNovelMaster } from '../../src/task-master.js';
 
 import {
 	displayBanner,
@@ -121,7 +122,7 @@ import {
 	RULES_ACTIONS,
 	RULES_SETUP_ACTION
 } from '../../src/constants/rules-actions.js';
-import { getTaskMasterVersion } from '../../src/utils/getVersion.js';
+import { getNovelMasterVersion } from '../../src/utils/getVersion.js';
 import { syncTasksToReadme } from './sync-readme.js';
 import { RULE_PROFILES } from '../../src/constants/profiles.js';
 import {
@@ -149,7 +150,7 @@ function registerCommands(programInstance) {
 		console.error(chalk.red(`Error: Unknown option '${unknownOption}'`));
 		console.error(
 			chalk.yellow(
-				`Run 'task-master ${commandName} --help' to see available options`
+				`Run 'novel-master ${commandName} --help' to see available options`
 			)
 		);
 		process.exit(1);
@@ -158,11 +159,11 @@ function registerCommands(programInstance) {
 	// parse-prd command
 	programInstance
 		.command('parse-prd')
-		.description('Parse a PRD file and generate tasks')
-		.argument('[file]', 'Path to the PRD file')
+		.description('Parse a Novel Requirements Document (NRD) and generate story tasks')
+		.argument('[file]', 'Path to the NRD file')
 		.option(
 			'-i, --input <file>',
-			'Path to the PRD file (alternative to positional argument)'
+			'Path to the NRD file (alternative to positional argument)'
 		)
 		.option('-o, --output <file>', 'Output file path')
 		.option(
@@ -181,7 +182,7 @@ function registerCommands(programInstance) {
 		)
 		.option('--tag <tag>', 'Specify tag context for task operations')
 		.action(async (file, options) => {
-			// Initialize TaskMaster
+			// Initialize NovelMaster
 			let taskMaster;
 			try {
 				const initOptions = {
@@ -192,11 +193,11 @@ function registerCommands(programInstance) {
 				if (options.output) {
 					initOptions.tasksPath = options.output;
 				}
-				taskMaster = initTaskMaster(initOptions);
+				taskMaster = initNovelMaster(initOptions);
 			} catch (error) {
 				console.log(
 					boxen(
-						`${chalk.white.bold('Parse PRD Help')}\n\n${chalk.cyan('Usage:')}\n  task-master parse-prd <prd-file.txt> [options]\n\n${chalk.cyan('Options:')}\n  -i, --input <file>       Path to the PRD file (alternative to positional argument)\n  -o, --output <file>      Output file path (default: .taskmaster/tasks/tasks.json)\n  -n, --num-tasks <number> Number of tasks to generate (default: 10)\n  -f, --force              Skip confirmation when overwriting existing tasks\n  --append                 Append new tasks to existing tasks.json instead of overwriting\n  -r, --research           Use Perplexity AI for research-backed task generation\n\n${chalk.cyan('Example:')}\n  task-master parse-prd requirements.txt --num-tasks 15\n  task-master parse-prd --input=requirements.txt\n  task-master parse-prd --force\n  task-master parse-prd requirements_v2.txt --append\n  task-master parse-prd requirements.txt --research\n\n${chalk.yellow('Note: This command will:')}\n  1. Look for a PRD file at ${TASKMASTER_DOCS_DIR}/PRD.md by default\n  2. Use the file specified by --input or positional argument if provided\n  3. Generate tasks from the PRD and either:\n     - Overwrite any existing tasks.json file (default)\n     - Append to existing tasks.json if --append is used`,
+						`${chalk.white.bold('Parse NRD Help')}\n\n${chalk.cyan('Usage:')}\n  novel-master parse-prd <nrd-file.txt> [options]\n\n${chalk.cyan('Options:')}\n  -i, --input <file>       Path to the NRD file (alternative to positional argument)\n  -o, --output <file>      Output file path (default: .novelmaster/tasks/tasks.json)\n  -n, --num-tasks <number> Number of story arcs/chapters to generate (default: 10)\n  -f, --force              Skip confirmation when overwriting existing tasks\n  --append                 Append new tasks to existing tasks.json instead of overwriting\n  -r, --research           Use Perplexity AI for research-backed narrative planning\n\n${chalk.cyan('Example:')}\n  novel-master parse-prd nrd.txt --num-tasks 8\n  novel-master parse-prd --input=docs/nrd.txt\n  novel-master parse-prd --force\n  novel-master parse-prd outline_v2.txt --append\n  novel-master parse-prd nrd.txt --research\n\n${chalk.yellow('Note: This command will:')}\n  1. Look for an NRD file at ${NOVELMASTER_DOCS_DIR}/nrd.txt by default\n  2. Use the file specified by --input or positional argument if provided\n  3. Generate narrative tasks from the NRD and either:\n     - Overwrite any existing tasks.json file (default)\n     - Append to existing tasks.json if --append is used`,
 						{ padding: 1, borderColor: 'blue', borderStyle: 'round' }
 					)
 				);
@@ -259,8 +260,8 @@ function registerCommands(programInstance) {
 			try {
 				if (!(await confirmOverwriteIfNeeded())) return;
 
-				console.log(chalk.blue(`Parsing PRD file: ${taskMaster.getPrdPath()}`));
-				console.log(chalk.blue(`Generating ${numTasks} tasks...`));
+				console.log(chalk.blue(`Parsing NRD file: ${taskMaster.getPrdPath()}`));
+				console.log(chalk.blue(`Generating ${numTasks} narrative tasks...`));
 				if (append) {
 					console.log(chalk.blue('Appending to existing tasks...'));
 				}
@@ -275,7 +276,7 @@ function registerCommands(programInstance) {
 				// Handle case where getTasksPath() returns null
 				const outputPath =
 					taskMaster.getTasksPath() ||
-					path.join(taskMaster.getProjectRoot(), TASKMASTER_TASKS_FILE);
+					path.join(taskMaster.getProjectRoot(), NOVELMASTER_TASKS_FILE);
 				await parsePRD(taskMaster.getPrdPath(), outputPath, numTasks, {
 					append: useAppend,
 					force: useForce,
@@ -284,7 +285,7 @@ function registerCommands(programInstance) {
 					tag: tag
 				});
 			} catch (error) {
-				console.error(chalk.red(`Error parsing PRD: ${error.message}`));
+				console.error(chalk.red(`Error parsing NRD: ${error.message}`));
 				process.exit(1);
 			}
 		});
@@ -293,30 +294,30 @@ function registerCommands(programInstance) {
 	programInstance
 		.command('update')
 		.description(
-			'Update multiple tasks with ID >= "from" based on new information or implementation changes'
+			'Update upcoming outline items (ID >= --from) when story direction changes (tone, POV, stakes).'
 		)
 		.option(
 			'-f, --file <file>',
 			'Path to the tasks file',
-			TASKMASTER_TASKS_FILE
+			NOVELMASTER_TASKS_FILE
 		)
 		.option(
 			'--from <id>',
-			'Task ID to start updating from (tasks with ID >= this value will be updated)',
+			'First chapter/scene ID to update (all IDs ≥ this value will be refreshed)',
 			'1'
 		)
 		.option(
 			'-p, --prompt <text>',
-			'Prompt explaining the changes or new context (required)'
+			'Prompt explaining the new story context (required)'
 		)
 		.option(
 			'-r, --research',
-			'Use Perplexity AI for research-backed task updates'
+			'Use the research model for lore/tone-aware updates'
 		)
 		.option('--tag <tag>', 'Specify tag context for task operations')
 		.action(async (options) => {
 			// Initialize TaskMaster
-			const taskMaster = initTaskMaster({
+			const taskMaster = initNovelMaster({
 				tasksPath: options.file || true,
 				tag: options.tag
 			});
@@ -343,7 +344,7 @@ function registerCommands(programInstance) {
 				);
 				console.log(chalk.yellow('\nTo update multiple tasks:'));
 				console.log(
-					`  task-master update --from=${fromId} --prompt="Your prompt here"`
+					`  novel-master update --from=${fromId} --prompt="Your prompt here"`
 				);
 				console.log(
 					chalk.yellow(
@@ -351,7 +352,7 @@ function registerCommands(programInstance) {
 					)
 				);
 				console.log(
-					`  task-master update-task --id=<id> --prompt="Your prompt here"`
+					`  novel-master update-task --id=<id> --prompt="Your prompt here"`
 				);
 				process.exit(1);
 			}
@@ -367,14 +368,14 @@ function registerCommands(programInstance) {
 
 			console.log(
 				chalk.blue(
-					`Updating tasks from ID >= ${fromId} with prompt: "${prompt}"`
+					`Updating narrative tasks from ID >= ${fromId} with prompt: "${prompt}"`
 				)
 			);
 			console.log(chalk.blue(`Tasks file: ${tasksPath}`));
 
 			if (useResearch) {
 				console.log(
-					chalk.blue('Using Perplexity AI for research-backed task updates')
+					chalk.blue('Using research-backed updates (genre/lore aware)')
 				);
 			}
 
@@ -392,21 +393,21 @@ function registerCommands(programInstance) {
 	programInstance
 		.command('update-task')
 		.description(
-			'Update a single specific task by ID with new information (use --id parameter)'
+			'Update a single chapter/scene task by ID when the outline for that beat changes.'
 		)
 		.option(
 			'-f, --file <file>',
 			'Path to the tasks file',
-			TASKMASTER_TASKS_FILE
+			NOVELMASTER_TASKS_FILE
 		)
 		.option('-i, --id <id>', 'Task ID to update (required)')
 		.option(
 			'-p, --prompt <text>',
-			'Prompt explaining the changes or new context (required)'
+			'Prompt explaining the new story direction for this beat (required)'
 		)
 		.option(
 			'-r, --research',
-			'Use Perplexity AI for research-backed task updates'
+			'Enable lore/genre research before updating this beat'
 		)
 		.option(
 			'--append',
@@ -416,7 +417,7 @@ function registerCommands(programInstance) {
 		.action(async (options) => {
 			try {
 				// Initialize TaskMaster
-				const taskMaster = initTaskMaster({
+				const taskMaster = initNovelMaster({
 					tasksPath: options.file || true,
 					tag: options.tag
 				});
@@ -433,7 +434,7 @@ function registerCommands(programInstance) {
 					console.error(chalk.red('Error: --id parameter is required'));
 					console.log(
 						chalk.yellow(
-							'Usage example: task-master update-task --id=23 --prompt="Update with new information"'
+							'Usage example: novel-master update-task --id=23 --prompt="Update with new information"'
 						)
 					);
 					process.exit(1);
@@ -456,7 +457,7 @@ function registerCommands(programInstance) {
 					);
 					console.log(
 						chalk.yellow(
-							'Usage example: task-master update-task --id=23 --prompt="Update with new information"'
+							'Usage example: novel-master update-task --id=23 --prompt="Update with new information"'
 						)
 					);
 					process.exit(1);
@@ -472,7 +473,7 @@ function registerCommands(programInstance) {
 					);
 					console.log(
 						chalk.yellow(
-							'Usage example: task-master update-task --id=23 --prompt="Update with new information"'
+							'Usage example: novel-master update-task --id=23 --prompt="Update with new information"'
 						)
 					);
 					process.exit(1);
@@ -486,10 +487,10 @@ function registerCommands(programInstance) {
 					console.error(
 						chalk.red(`Error: Tasks file not found at path: ${tasksPath}`)
 					);
-					if (tasksPath === TASKMASTER_TASKS_FILE) {
+					if (tasksPath === NOVELMASTER_TASKS_FILE) {
 						console.log(
 							chalk.yellow(
-								'Hint: Run task-master init or task-master parse-prd to create tasks.json first'
+								'Hint: Run novel-master init or novel-master parse-prd to create tasks.json first'
 							)
 						);
 					} else {
@@ -502,9 +503,9 @@ function registerCommands(programInstance) {
 					process.exit(1);
 				}
 
-				console.log(
-					chalk.blue(`Updating task ${taskId} with prompt: "${prompt}"`)
-				);
+			console.log(
+				chalk.blue(`Updating narrative task ${taskId} with prompt: "${prompt}"`)
+			);
 				console.log(chalk.blue(`Tasks file: ${tasksPath}`));
 
 				if (useResearch) {
@@ -553,7 +554,7 @@ function registerCommands(programInstance) {
 				) {
 					console.log(chalk.yellow('\nTo fix this issue:'));
 					console.log(
-						'  1. Run task-master list to see all available task IDs'
+						'  1. Run novel-master list to see all available task IDs'
 					);
 					console.log('  2. Use a valid task ID with the --id parameter');
 				} else if (error.message.includes('API key')) {
@@ -577,27 +578,27 @@ function registerCommands(programInstance) {
 	programInstance
 		.command('update-subtask')
 		.description(
-			'Update a subtask by appending additional timestamped information'
+			'Append timestamped notes to a beat/subscene without overwriting existing details.'
 		)
 		.option(
 			'-f, --file <file>',
 			'Path to the tasks file',
-			TASKMASTER_TASKS_FILE
+			NOVELMASTER_TASKS_FILE
 		)
 		.option(
 			'-i, --id <id>',
-			'Subtask ID to update in format "parentId.subtaskId" (required)'
+			'Beat ID to update in format "chapterId.beatId" (required)'
 		)
 		.option(
 			'-p, --prompt <text>',
 			'Prompt explaining what information to add (required)'
 		)
-		.option('-r, --research', 'Use Perplexity AI for research-backed updates')
+		.option('-r, --research', 'Enable lore/genre research before appending notes')
 		.option('--tag <tag>', 'Specify tag context for task operations')
 		.action(async (options) => {
 			try {
 				// Initialize TaskMaster
-				const taskMaster = initTaskMaster({
+				const taskMaster = initNovelMaster({
 					tasksPath: options.file || true,
 					tag: options.tag
 				});
@@ -614,7 +615,7 @@ function registerCommands(programInstance) {
 					console.error(chalk.red('Error: --id parameter is required'));
 					console.log(
 						chalk.yellow(
-							'Usage example: task-master update-subtask --id=5.2 --prompt="Add more details about the API endpoint"'
+							'Usage example: novel-master update-subtask --id=5.2 --prompt="Add more details about the API endpoint"'
 						)
 					);
 					process.exit(1);
@@ -630,7 +631,7 @@ function registerCommands(programInstance) {
 					);
 					console.log(
 						chalk.yellow(
-							'Usage example: task-master update-subtask --id=5.2 --prompt="Add more details about the API endpoint"'
+							'Usage example: novel-master update-subtask --id=5.2 --prompt="Add more details about the API endpoint"'
 						)
 					);
 					process.exit(1);
@@ -644,7 +645,7 @@ function registerCommands(programInstance) {
 					);
 					console.log(
 						chalk.yellow(
-							'Usage example: task-master update-subtask --id=5.2 --prompt="Add more details about the API endpoint"'
+							'Usage example: novel-master update-subtask --id=5.2 --prompt="Add more details about the API endpoint"'
 						)
 					);
 					process.exit(1);
@@ -658,10 +659,10 @@ function registerCommands(programInstance) {
 					console.error(
 						chalk.red(`Error: Tasks file not found at path: ${tasksPath}`)
 					);
-					if (tasksPath === TASKMASTER_TASKS_FILE) {
+					if (tasksPath === NOVELMASTER_TASKS_FILE) {
 						console.log(
 							chalk.yellow(
-								'Hint: Run task-master init or task-master parse-prd to create tasks.json first'
+								'Hint: Run novel-master init or novel-master parse-prd to create tasks.json first'
 							)
 						);
 					} else {
@@ -724,7 +725,7 @@ function registerCommands(programInstance) {
 				) {
 					console.log(chalk.yellow('\nTo fix this issue:'));
 					console.log(
-						'  1. Run task-master list --with-subtasks to see all available subtask IDs'
+						'  1. Run novel-master list --with-subtasks to see all available subtask IDs'
 					);
 					console.log(
 						'  2. Use a valid subtask ID with the --id parameter in format "parentId.subtaskId"'
@@ -753,7 +754,7 @@ function registerCommands(programInstance) {
 		.option(
 			'-f, --file <file>',
 			'Path to the tasks file',
-			TASKMASTER_TASKS_FILE
+			NOVELMASTER_TASKS_FILE
 		)
 		.option(
 			'-i, --id <ids>',
@@ -773,7 +774,7 @@ function registerCommands(programInstance) {
 		.action(async (options) => {
 			try {
 				// Initialize TaskMaster
-				const taskMaster = initTaskMaster({
+				const taskMaster = initNovelMaster({
 					tasksPath: options.file || true,
 					tag: options.tag
 				});
@@ -788,7 +789,7 @@ function registerCommands(programInstance) {
 					console.error(chalk.red('Error: --id parameter is required'));
 					console.log(
 						chalk.yellow(
-							'Usage example: task-master scope-up --id=1,2,3 --strength=regular'
+							'Usage example: novel-master scope-up --id=1,2,3 --strength=regular'
 						)
 					);
 					process.exit(1);
@@ -860,7 +861,7 @@ function registerCommands(programInstance) {
 				if (error.message.includes('not found')) {
 					console.log(chalk.yellow('\nTo fix this issue:'));
 					console.log(
-						'  1. Run task-master list to see all available task IDs'
+						'  1. Run novel-master list to see all available task IDs'
 					);
 					console.log('  2. Use valid task IDs with the --id parameter');
 				}
@@ -880,7 +881,7 @@ function registerCommands(programInstance) {
 		.option(
 			'-f, --file <file>',
 			'Path to the tasks file',
-			TASKMASTER_TASKS_FILE
+			NOVELMASTER_TASKS_FILE
 		)
 		.option(
 			'-i, --id <ids>',
@@ -900,7 +901,7 @@ function registerCommands(programInstance) {
 		.action(async (options) => {
 			try {
 				// Initialize TaskMaster
-				const taskMaster = initTaskMaster({
+				const taskMaster = initNovelMaster({
 					tasksPath: options.file || true,
 					tag: options.tag
 				});
@@ -915,7 +916,7 @@ function registerCommands(programInstance) {
 					console.error(chalk.red('Error: --id parameter is required'));
 					console.log(
 						chalk.yellow(
-							'Usage example: task-master scope-down --id=1,2,3 --strength=regular'
+							'Usage example: novel-master scope-down --id=1,2,3 --strength=regular'
 						)
 					);
 					process.exit(1);
@@ -987,7 +988,7 @@ function registerCommands(programInstance) {
 				if (error.message.includes('not found')) {
 					console.log(chalk.yellow('\nTo fix this issue:'));
 					console.log(
-						'  1. Run task-master list to see all available task IDs'
+						'  1. Run novel-master list to see all available task IDs'
 					);
 					console.log('  2. Use valid task IDs with the --id parameter');
 				}
@@ -1003,37 +1004,86 @@ function registerCommands(programInstance) {
 	// generate command
 	programInstance
 		.command('generate')
-		.description('Generate task files from tasks.json')
+		.description(
+			'Generate chapter/scene markdown files and compiled manuscripts from tasks.json'
+		)
 		.option(
 			'-f, --file <file>',
 			'Path to the tasks file',
-			TASKMASTER_TASKS_FILE
+			NOVELMASTER_TASKS_FILE
 		)
 		.option(
 			'-o, --output <dir>',
-			'Output directory',
-			path.dirname(TASKMASTER_TASKS_FILE)
+			'Directory for manuscript artifacts (defaults to .novelmaster/manuscript inside the project)'
 		)
 		.option('--tag <tag>', 'Specify tag context for task operations')
+		.option('--no-compile', 'Skip building the combined manuscript export')
+		.option(
+			'--format <format>',
+			'Export format for compiled manuscript: "md" (markdown) or "txt" (plain text). Default: "md"',
+			'md'
+		)
 		.action(async (options) => {
 			// Initialize TaskMaster
-			const taskMaster = initTaskMaster({
+			const taskMaster = initNovelMaster({
 				tasksPath: options.file || true,
 				tag: options.tag
 			});
 
-			const outputDir = options.output;
+			const projectRoot = taskMaster.getProjectRoot();
 			const tag = taskMaster.getCurrentTag();
+			const defaultOutputDir = path.join(projectRoot, NOVELMASTER_MANUSCRIPT_DIR);
+			const outputDir = options.output
+				? path.isAbsolute(options.output)
+					? options.output
+					: path.join(projectRoot, options.output)
+				: defaultOutputDir;
 
 			console.log(
-				chalk.blue(`Generating task files from: ${taskMaster.getTasksPath()}`)
+				chalk.blue(
+					`Generating manuscript assets from: ${taskMaster.getTasksPath()}`
+				)
 			);
-			console.log(chalk.blue(`Output directory: ${outputDir}`));
+			console.log(
+				chalk.blue(
+					`Output directory: ${path.relative(projectRoot, outputDir) || '.'}`
+				)
+			);
 
-			await generateTaskFiles(taskMaster.getTasksPath(), outputDir, {
-				projectRoot: taskMaster.getProjectRoot(),
-				tag
+			const result = await generateTaskFiles(taskMaster.getTasksPath(), outputDir, {
+				projectRoot,
+				tag,
+				compile: options.compile !== false,
+				format: options.format || 'md'
 			});
+
+			if (result.summaryPath) {
+				console.log(
+					chalk.green(
+						`✓ Manuscript summary updated: ${path.relative(
+							projectRoot,
+							result.summaryPath
+						)}`
+					)
+				);
+			}
+
+			if (result.compiledPath) {
+				console.log(
+					chalk.green(
+						`✓ Compiled manuscript created: ${path.relative(
+							projectRoot,
+							result.compiledPath
+						)}`
+					)
+				);
+			} else if (options.compile === false) {
+				console.log(
+					chalk.yellow(
+						'Skipped compiled manuscript export (enable by omitting --no-compile).'
+					)
+				);
+			}
 		});
 
 	// ========================================
@@ -1046,27 +1096,32 @@ function registerCommands(programInstance) {
 	// expand command
 	programInstance
 		.command('expand')
-		.description('Expand a task into subtasks using AI')
-		.option('-i, --id <id>', 'ID of the task to expand')
+		.description(
+			'Expand a chapter/scene task into beats using AI (acts → chapters → scenes)'
+		)
+		.option('-i, --id <id>', 'ID of the chapter/scene to expand')
 		.option(
 			'-a, --all',
-			'Expand all pending tasks based on complexity analysis'
+			'Expand all pending outline tasks flagged by the complexity analysis'
 		)
 		.option(
 			'-n, --num <number>',
-			'Number of subtasks to generate (uses complexity analysis by default if available)'
+			'Number of beats/scenes to generate (uses complexity analysis by default if available)'
 		)
 		.option(
 			'-r, --research',
-			'Enable research-backed generation (e.g., using Perplexity)',
+			'Enable research-backed generation (pull in lore, genre tropes, sensory cues)',
 			false
 		)
-		.option('-p, --prompt <text>', 'Additional context for subtask generation')
+		.option(
+			'-p, --prompt <text>',
+			'Additional context for beat generation (tone goals, POV notes, stakes, etc.)'
+		)
 		.option('-f, --force', 'Force expansion even if subtasks exist', false) // Ensure force option exists
 		.option(
 			'--file <file>',
 			'Path to the tasks file (relative to project root)',
-			TASKMASTER_TASKS_FILE // Allow file override
+			NOVELMASTER_TASKS_FILE // Allow file override
 		) // Allow file override
 		.option(
 			'-cr, --complexity-report <file>',
@@ -1085,7 +1140,7 @@ function registerCommands(programInstance) {
 				initOptions.complexityReportPath = options.complexityReport;
 			}
 
-			const taskMaster = initTaskMaster(initOptions);
+			const taskMaster = initNovelMaster(initOptions);
 
 			const tag = taskMaster.getCurrentTag();
 
@@ -1094,7 +1149,9 @@ function registerCommands(programInstance) {
 
 			if (options.all) {
 				// --- Handle expand --all ---
-				console.log(chalk.blue('Expanding all pending tasks...'));
+				console.log(
+					chalk.blue('Expanding all pending outline tasks into scene beats...')
+				);
 				// Updated call to the refactored expandAllTasks
 				try {
 					const result = await expandAllTasks(
@@ -1125,7 +1182,11 @@ function registerCommands(programInstance) {
 					process.exit(1);
 				}
 
-				console.log(chalk.blue(`Expanding task ${options.id}...`));
+				console.log(
+					chalk.blue(
+						`Expanding narrative task ${options.id} into detailed beats...`
+					)
+				);
 				try {
 					// Call the refactored expandTask function
 					await expandTask(
@@ -1160,30 +1221,35 @@ function registerCommands(programInstance) {
 	programInstance
 		.command('analyze-complexity')
 		.description(
-			`Analyze tasks and generate expansion recommendations${chalk.reset('')}`
+			`Analyze narrative complexity (pacing load, POV juggling, dependency tangles) and recommend where to expand scenes or arcs${chalk.reset(
+				''
+			)}`
 		)
-		.option('-o, --output <file>', 'Output file path for the report')
+		.option(
+			'-o, --output <file>',
+			'Output file path for the narrative complexity report'
+		)
 		.option(
 			'-m, --model <model>',
 			'LLM model to use for analysis (defaults to configured model)'
 		)
 		.option(
 			'-t, --threshold <number>',
-			'Minimum complexity score to recommend expansion (1-10)',
+			'Minimum complexity score (1-10) before suggesting deeper outlining/drafting',
 			'5'
 		)
 		.option(
 			'-f, --file <file>',
 			'Path to the tasks file',
-			TASKMASTER_TASKS_FILE
+			NOVELMASTER_TASKS_FILE
 		)
 		.option(
 			'-r, --research',
-			'Use configured research model for research-backed complexity analysis'
+			'Use the research model for lore/pacing-informed analysis'
 		)
 		.option(
 			'-i, --id <ids>',
-			'Comma-separated list of specific task IDs to analyze (e.g., "1,3,5")'
+			'Comma-separated list of chapter/scene IDs to analyze (e.g., "3,7,9.2")'
 		)
 		.option('--from <id>', 'Starting task ID in a range to analyze')
 		.option('--to <id>', 'Ending task ID in a range to analyze')
@@ -1199,7 +1265,7 @@ function registerCommands(programInstance) {
 				initOptions.complexityReportPath = options.output;
 			}
 
-			const taskMaster = initTaskMaster(initOptions);
+			const taskMaster = initNovelMaster(initOptions);
 
 			const modelOverride = options.model;
 			const thresholdScore = parseFloat(options.threshold);
@@ -1216,25 +1282,29 @@ function registerCommands(programInstance) {
 
 			console.log(
 				chalk.blue(
-					`Analyzing task complexity from: ${taskMaster.getTasksPath()}`
+					`Analyzing narrative complexity from: ${taskMaster.getTasksPath()}`
 				)
 			);
-			console.log(chalk.blue(`Output report will be saved to: ${outputPath}`));
+			console.log(
+				chalk.blue(`Pacing report will be saved to: ${outputPath}`)
+			);
 
 			if (options.id) {
-				console.log(chalk.blue(`Analyzing specific task IDs: ${options.id}`));
+				console.log(
+					chalk.blue(`Focusing on specific chapter/scene IDs: ${options.id}`)
+				);
 			} else if (options.from || options.to) {
 				const fromStr = options.from ? options.from : 'first';
 				const toStr = options.to ? options.to : 'last';
 				console.log(
-					chalk.blue(`Analyzing tasks in range: ${fromStr} to ${toStr}`)
+					chalk.blue(`Analyzing IDs in range: ${fromStr} to ${toStr}`)
 				);
 			}
 
 			if (useResearch) {
 				console.log(
 					chalk.blue(
-						'Using Perplexity AI for research-backed complexity analysis'
+						'Using the research model for lore/genre-aware complexity analysis'
 					)
 				);
 			}
@@ -1254,8 +1324,13 @@ function registerCommands(programInstance) {
 	// research command
 	programInstance
 		.command('research')
-		.description('Perform AI-powered research queries with project context')
-		.argument('[prompt]', 'Research prompt to investigate')
+		.description(
+			'Perform AI-powered narrative research (worldbuilding, continuity, genre studies) with manuscript context'
+		)
+		.argument(
+			'[prompt]',
+			'Research prompt to investigate (e.g., "Hard sci-fi life support failures" or "Victorian ballroom sensory details")'
+		)
 		.option('--file <file>', 'Path to the tasks file')
 		.option(
 			'-i, --id <ids>',
@@ -1263,19 +1338,19 @@ function registerCommands(programInstance) {
 		)
 		.option(
 			'-f, --files <paths>',
-			'Comma-separated file paths to include as context'
+			'Comma-separated manuscript/lore file paths to include as context'
 		)
 		.option(
 			'-c, --context <text>',
-			'Additional custom context to include in the research prompt'
+			'Additional context (character arcs, tone goals, editorial notes) to include in the prompt'
 		)
 		.option(
 			'-t, --tree',
-			'Include project file tree structure in the research context'
+			'Include project file tree structure in the research context (useful for large lore bibles)'
 		)
 		.option(
 			'-s, --save <file>',
-			'Save research results to the specified task/subtask(s)'
+			'Save research results to the specified chapter/scene task(s)'
 		)
 		.option(
 			'-d, --detail <level>',
@@ -1288,7 +1363,7 @@ function registerCommands(programInstance) {
 		)
 		.option(
 			'--save-file',
-			'Save research results to .taskmaster/docs/research/ directory'
+			'Save research results to `.novelmaster/docs/research/` for long-term lore reference'
 		)
 		.option('--tag <tag>', 'Specify tag context for task operations')
 		.action(async (prompt, options) => {
@@ -1298,7 +1373,7 @@ function registerCommands(programInstance) {
 				tag: options.tag
 			};
 
-			const taskMaster = initTaskMaster(initOptions);
+			const taskMaster = initNovelMaster(initOptions);
 
 			// Parameter validation
 			if (!prompt || typeof prompt !== 'string' || prompt.trim().length === 0) {
@@ -1616,24 +1691,24 @@ ${result.result}
 	// clear-subtasks command
 	programInstance
 		.command('clear-subtasks')
-		.description('Clear subtasks from specified tasks')
+		.description('Clear all beats from the specified parent chapters/scenes')
 		.option(
 			'-f, --file <file>',
 			'Path to the tasks file',
-			TASKMASTER_TASKS_FILE
+			NOVELMASTER_TASKS_FILE
 		)
 		.option(
 			'-i, --id <ids>',
-			'Task IDs (comma-separated) to clear subtasks from'
+			'Parent chapter/scene IDs (comma-separated) to clear beats from'
 		)
-		.option('--all', 'Clear subtasks from all tasks')
+		.option('--all', 'Clear beats from every parent task in the current tag')
 		.option('--tag <tag>', 'Specify tag context for task operations')
 		.action(async (options) => {
 			const taskIds = options.id;
 			const all = options.all;
 
 			// Initialize TaskMaster
-			const taskMaster = initTaskMaster({
+			const taskMaster = initNovelMaster({
 				tasksPath: options.file || true,
 				tag: options.tag
 			});
@@ -1679,37 +1754,42 @@ ${result.result}
 	// add-task command
 	programInstance
 		.command('add-task')
-		.description('Add a new task using AI, optionally providing manual details')
+		.description(
+			'Add a new story task (act/chapter/scene) via AI or manual inputs'
+		)
 		.option(
 			'-f, --file <file>',
 			'Path to the tasks file',
-			TASKMASTER_TASKS_FILE
+			NOVELMASTER_TASKS_FILE
 		)
 		.option(
 			'-p, --prompt <prompt>',
-			'Description of the task to add (required if not using manual fields)'
+			'NRD-style description of the arc/chapter/scene to add (required if not using manual fields)'
 		)
-		.option('-t, --title <title>', 'Task title (for manual task creation)')
+		.option(
+			'-t, --title <title>',
+			'Manual task title (e.g., "Act II Midpoint: Betrayal in the Bazaar")'
+		)
 		.option(
 			'-d, --description <description>',
-			'Task description (for manual task creation)'
+			'Manual description (use for quick scene summaries)'
 		)
 		.option(
 			'--details <details>',
-			'Implementation details (for manual task creation)'
+			'Manual details (emotional beats, sensory cues, research hooks)'
 		)
 		.option(
 			'--dependencies <dependencies>',
-			'Comma-separated list of task IDs this task depends on'
+			'Comma-separated list of prerequisite arcs/scenes (task IDs)'
 		)
 		.option(
 			'--priority <priority>',
-			'Task priority (high, medium, low)',
+			'Priority (e.g., high = plot-critical, low = optional vignette)',
 			'medium'
 		)
 		.option(
 			'-r, --research',
-			'Whether to use research capabilities for task creation'
+			'Pull in lore/genre research when generating the new outline step'
 		)
 		.option('--tag <tag>', 'Specify tag context for task operations')
 		.action(async (options) => {
@@ -1725,18 +1805,18 @@ ${result.result}
 				process.exit(1);
 			}
 
-			const tasksPath = options.file || TASKMASTER_TASKS_FILE;
+			const tasksPath = options.file || NOVELMASTER_TASKS_FILE;
 
 			if (!fs.existsSync(tasksPath)) {
 				console.error(
-					`❌ No tasks.json file found. Please run "task-master init" or create a tasks.json file at ${TASKMASTER_TASKS_FILE}`
+					`❌ No tasks.json file found. Please run "novel-master init" or create a tasks.json file at ${NOVELMASTER_TASKS_FILE}`
 				);
 				process.exit(1);
 			}
 
 			// Correctly determine projectRoot
 			// Initialize TaskMaster
-			const taskMaster = initTaskMaster({
+			const taskMaster = initNovelMaster({
 				tasksPath: options.file || true,
 				tag: options.tag
 			});
@@ -1758,12 +1838,16 @@ ${result.result}
 				};
 				// Restore specific logging for manual creation
 				console.log(
-					chalk.blue(`Creating task manually with title: "${options.title}"`)
+					chalk.blue(
+						`Creating narrative task manually with title: "${options.title}"`
+					)
 				);
 			} else {
 				// Restore specific logging for AI creation
 				console.log(
-					chalk.blue(`Creating task with AI using prompt: "${options.prompt}"`)
+					chalk.blue(
+						`Creating narrative task with AI using prompt: "${options.prompt}"`
+					)
 				);
 			}
 
@@ -1773,7 +1857,9 @@ ${result.result}
 				: [];
 			if (dependenciesArray.length > 0) {
 				console.log(
-					chalk.blue(`Dependencies: [${dependenciesArray.join(', ')}]`)
+					chalk.blue(
+						`Prerequisite arcs/scenes: [${dependenciesArray.join(', ')}]`
+					)
 				);
 			}
 			if (options.priority) {
@@ -1819,7 +1905,7 @@ ${result.result}
 		.option(
 			'-f, --file <file>',
 			'Path to the tasks file',
-			TASKMASTER_TASKS_FILE
+			NOVELMASTER_TASKS_FILE
 		)
 		.option('--tag <tag>', 'Specify tag context for task operations')
 		.action(async (options) => {
@@ -1829,7 +1915,7 @@ ${result.result}
 			};
 
 			// Initialize TaskMaster
-			const taskMaster = initTaskMaster(initOptions);
+			const taskMaster = initNovelMaster(initOptions);
 
 			const taskId = options.id;
 			const dependencyId = options.dependsOn;
@@ -1876,7 +1962,7 @@ ${result.result}
 		.option(
 			'-f, --file <file>',
 			'Path to the tasks file',
-			TASKMASTER_TASKS_FILE
+			NOVELMASTER_TASKS_FILE
 		)
 		.option('--tag <tag>', 'Specify tag context for task operations')
 		.action(async (options) => {
@@ -1886,7 +1972,7 @@ ${result.result}
 			};
 
 			// Initialize TaskMaster
-			const taskMaster = initTaskMaster(initOptions);
+			const taskMaster = initNovelMaster(initOptions);
 
 			const taskId = options.id;
 			const dependencyId = options.dependsOn;
@@ -1933,7 +2019,7 @@ ${result.result}
 		.option(
 			'-f, --file <file>',
 			'Path to the tasks file',
-			TASKMASTER_TASKS_FILE
+			NOVELMASTER_TASKS_FILE
 		)
 		.option('--tag <tag>', 'Specify tag context for task operations')
 		.action(async (options) => {
@@ -1943,7 +2029,7 @@ ${result.result}
 			};
 
 			// Initialize TaskMaster
-			const taskMaster = initTaskMaster(initOptions);
+			const taskMaster = initNovelMaster(initOptions);
 
 			// Resolve tag using standard pattern
 			const tag = taskMaster.getCurrentTag();
@@ -1963,7 +2049,7 @@ ${result.result}
 		.option(
 			'-f, --file <file>',
 			'Path to the tasks file',
-			TASKMASTER_TASKS_FILE
+			NOVELMASTER_TASKS_FILE
 		)
 		.option('--tag <tag>', 'Specify tag context for task operations')
 		.action(async (options) => {
@@ -1973,7 +2059,7 @@ ${result.result}
 			};
 
 			// Initialize TaskMaster
-			const taskMaster = initTaskMaster(initOptions);
+			const taskMaster = initNovelMaster(initOptions);
 
 			// Resolve tag using standard pattern
 			const tag = taskMaster.getCurrentTag();
@@ -2006,7 +2092,7 @@ ${result.result}
 			}
 
 			// Initialize TaskMaster
-			const taskMaster = initTaskMaster(initOptions);
+			const taskMaster = initNovelMaster(initOptions);
 
 			// Show current tag context
 			displayCurrentTagIndicator(taskMaster.getCurrentTag());
@@ -2017,30 +2103,41 @@ ${result.result}
 	// add-subtask command
 	programInstance
 		.command('add-subtask')
-		.description('Add a subtask to an existing task')
+		.description(
+			'Add a beat/subscene under an existing chapter/scene task or convert an existing task into a beat.'
+		)
 		.option(
 			'-f, --file <file>',
 			'Path to the tasks file',
-			TASKMASTER_TASKS_FILE
+			NOVELMASTER_TASKS_FILE
 		)
-		.option('-p, --parent <id>', 'Parent task ID (required)')
-		.option('-i, --task-id <id>', 'Existing task ID to convert to subtask')
+		.option('-p, --parent <id>', 'Parent chapter/scene ID (required)')
+		.option('-i, --task-id <id>', 'Existing task ID to convert into a beat')
 		.option(
 			'-t, --title <title>',
-			'Title for the new subtask (when creating a new subtask)'
+			'Title for the new beat (e.g., "Beat 3 – Betrayal in the Bazaar")'
 		)
-		.option('-d, --description <text>', 'Description for the new subtask')
-		.option('--details <text>', 'Implementation details for the new subtask')
+		.option(
+			'-d, --description <text>',
+			'Description for the new beat (action/emotional summary)'
+		)
+		.option(
+			'--details <text>',
+			'Sensory cues, research hooks, or POV notes for the beat'
+		)
 		.option(
 			'--dependencies <ids>',
-			'Comma-separated list of dependency IDs for the new subtask'
+			'Comma-separated list of preceding beats/arcs that must happen first'
 		)
-		.option('-s, --status <status>', 'Status for the new subtask', 'pending')
-		.option('--generate', 'Regenerate task files after adding subtask')
+		.option('-s, --status <status>', 'Status for the new beat', 'pending')
+		.option(
+			'--generate',
+			'Regenerate chapter Markdown files after adding the beat'
+		)
 		.option('--tag <tag>', 'Specify tag context for task operations')
 		.action(async (options) => {
 			// Initialize TaskMaster
-			const taskMaster = initTaskMaster({
+			const taskMaster = initNovelMaster({
 				tasksPath: options.file || true,
 				tag: options.tag
 			});
@@ -2058,7 +2155,7 @@ ${result.result}
 			if (!parentId) {
 				console.error(
 					chalk.red(
-						'Error: --parent parameter is required. Please provide a parent task ID.'
+						'Error: --parent parameter is required. Please provide a parent chapter/scene ID.'
 					)
 				);
 				showAddSubtaskHelp();
@@ -2079,7 +2176,7 @@ ${result.result}
 					// Convert existing task to subtask
 					console.log(
 						chalk.blue(
-							`Converting task ${existingTaskId} to a subtask of ${parentId}...`
+							`Converting task ${existingTaskId} into a beat under ${parentId}...`
 						)
 					);
 					await addSubtask(
@@ -2092,13 +2189,15 @@ ${result.result}
 					);
 					console.log(
 						chalk.green(
-							`✓ Task ${existingTaskId} successfully converted to a subtask of task ${parentId}`
+							`✓ Task ${existingTaskId} successfully converted into beat ${parentId}.${existingTaskId}`
 						)
 					);
 				} else if (options.title) {
 					// Create new subtask with provided data
 					console.log(
-						chalk.blue(`Creating new subtask for parent task ${parentId}...`)
+						chalk.blue(
+							`Creating new beat under parent task ${parentId}...`
+						)
 					);
 
 					const newSubtaskData = {
@@ -2127,7 +2226,7 @@ ${result.result}
 					console.log(
 						boxen(
 							chalk.white.bold(
-								`Subtask ${parentId}.${subtask.id} Added Successfully`
+								`Beat ${parentId}.${subtask.id} Added Successfully`
 							) +
 								'\n\n' +
 								chalk.white(`Title: ${subtask.title}`) +
@@ -2142,11 +2241,11 @@ ${result.result}
 								chalk.white.bold('Next Steps:') +
 								'\n' +
 								chalk.cyan(
-									`1. Run ${chalk.yellow(`task-master show ${parentId}`)} to see the parent task with all subtasks`
+									`1. Run ${chalk.yellow(`novel-master show ${parentId}`)} to see the chapter/scene with all beats`
 								) +
 								'\n' +
 								chalk.cyan(
-									`2. Run ${chalk.yellow(`task-master set-status --id=${parentId}.${subtask.id} --status=in-progress`)} to start working on it`
+									`2. Run ${chalk.yellow(`novel-master set-status --id=${parentId}.${subtask.id} --status=in-progress`)} to mark the beat as active`
 								),
 							{
 								padding: 1,
@@ -2164,16 +2263,16 @@ ${result.result}
 						boxen(
 							chalk.white.bold('Usage Examples:') +
 								'\n\n' +
-								chalk.white('Convert existing task to subtask:') +
+								chalk.white('Convert existing task into a beat:') +
 								'\n' +
 								chalk.yellow(
-									`  task-master add-subtask --parent=5 --task-id=8`
+									`  novel-master add-subtask --parent=5 --task-id=8`
 								) +
 								'\n\n' +
-								chalk.white('Create new subtask:') +
+								chalk.white('Create a new beat manually:') +
 								'\n' +
 								chalk.yellow(
-									`  task-master add-subtask --parent=5 --title="Implement login UI" --description="Create the login form"`
+									`  novel-master add-subtask --parent=5 --title="Beat: Confrontation" --description="Hero confronts mentor in arboretum"`
 								) +
 								'\n\n',
 							{ padding: 1, borderColor: 'blue', borderStyle: 'round' }
@@ -2197,7 +2296,7 @@ ${result.result}
 	function showAddSubtaskHelp() {
 		console.log(
 			boxen(
-				`${chalk.white.bold('Add Subtask Command Help')}\n\n${chalk.cyan('Usage:')}\n  task-master add-subtask --parent=<id> [options]\n\n${chalk.cyan('Options:')}\n  -p, --parent <id>         Parent task ID (required)\n  -i, --task-id <id>        Existing task ID to convert to subtask\n  -t, --title <title>       Title for the new subtask\n  -d, --description <text>  Description for the new subtask\n  --details <text>          Implementation details for the new subtask\n  --dependencies <ids>      Comma-separated list of dependency IDs\n  -s, --status <status>     Status for the new subtask (default: "pending")\n  -f, --file <file>         Path to the tasks file (default: "${TASKMASTER_TASKS_FILE}")\n  --generate                Regenerate task files after adding subtask\n\n${chalk.cyan('Examples:')}\n  task-master add-subtask --parent=5 --task-id=8\n  task-master add-subtask -p 5 -t "Implement login UI" -d "Create the login form" --generate`,
+				`${chalk.white.bold('Add Beat Command Help')}\n\n${chalk.cyan('Usage:')}\n  novel-master add-subtask --parent=<id> [options]\n\n${chalk.cyan('Options:')}\n  -p, --parent <id>         Parent chapter/scene ID (required)\n  -i, --task-id <id>        Existing task ID to convert into a beat\n  -t, --title <title>       Title for the new beat\n  -d, --description <text>  Description for the new beat\n  --details <text>          Sensory cues / research notes for the beat\n  --dependencies <ids>      Comma-separated list of prerequisite beats\n  -s, --status <status>     Status for the new beat (default: "pending")\n  -f, --file <file>         Path to the tasks file (default: "${NOVELMASTER_TASKS_FILE}")\n  --generate                Regenerate chapter Markdown files after adding\n\n${chalk.cyan('Examples:')}\n  novel-master add-subtask --parent=5 --task-id=8\n  novel-master add-subtask -p 5 -t "Beat: Rooftop Chase" -d "Hero leaps between skylights" --generate`,
 				{ padding: 1, borderColor: 'blue', borderStyle: 'round' }
 			)
 		);
@@ -2206,25 +2305,28 @@ ${result.result}
 	// remove-subtask command
 	programInstance
 		.command('remove-subtask')
-		.description('Remove a subtask from its parent task')
+		.description('Remove a beat/subscene from its parent task or convert it back into a standalone task')
 		.option(
 			'-f, --file <file>',
 			'Path to the tasks file',
-			TASKMASTER_TASKS_FILE
+			NOVELMASTER_TASKS_FILE
 		)
 		.option(
 			'-i, --id <id>',
-			'Subtask ID(s) to remove in format "parentId.subtaskId" (can be comma-separated for multiple subtasks)'
+			'Beat ID(s) to remove (format "chapterId.beatId", comma-separated allowed)'
 		)
 		.option(
 			'-c, --convert',
-			'Convert the subtask to a standalone task instead of deleting it'
+			'Convert the beat into a standalone chapter/scene instead of deleting it'
 		)
-		.option('--generate', 'Regenerate task files after removing subtask')
+		.option(
+			'--generate',
+			'Regenerate chapter Markdown files after removing the beat'
+		)
 		.option('--tag <tag>', 'Specify tag context for task operations')
 		.action(async (options) => {
 			// Initialize TaskMaster
-			const taskMaster = initTaskMaster({
+			const taskMaster = initNovelMaster({
 				tasksPath: options.file || true,
 				tag: options.tag
 			});
@@ -2294,11 +2396,11 @@ ${result.result}
 									chalk.white.bold('Next Steps:') +
 									'\n' +
 									chalk.cyan(
-										`1. Run ${chalk.yellow(`task-master show ${result.id}`)} to see details of the new task`
+										`1. Run ${chalk.yellow(`novel-master show ${result.id}`)} to see details of the new task`
 									) +
 									'\n' +
 									chalk.cyan(
-										`2. Run ${chalk.yellow(`task-master set-status --id=${result.id} --status=in-progress`)} to start working on it`
+										`2. Run ${chalk.yellow(`novel-master set-status --id=${result.id} --status=in-progress`)} to start working on it`
 									),
 								{
 									padding: 1,
@@ -2341,24 +2443,24 @@ ${result.result}
 	function showRemoveSubtaskHelp() {
 		console.log(
 			boxen(
-				chalk.white.bold('Remove Subtask Command Help') +
+				chalk.white.bold('Remove Beat Command Help') +
 					'\n\n' +
 					chalk.cyan('Usage:') +
 					'\n' +
-					`  task-master remove-subtask --id=<parentId.subtaskId> [options]\n\n` +
+					`  novel-master remove-subtask --id=<chapterId.beatId> [options]\n\n` +
 					chalk.cyan('Options:') +
 					'\n' +
-					'  -i, --id <id>       Subtask ID(s) to remove in format "parentId.subtaskId" (can be comma-separated, required)\n' +
-					'  -c, --convert       Convert the subtask to a standalone task instead of deleting it\n' +
+					'  -i, --id <id>       Beat ID(s) to remove in format "chapterId.beatId" (comma-separated, required)\n' +
+					'  -c, --convert       Promote the beat to a standalone chapter/scene instead of deleting it\n' +
 					'  -f, --file <file>   Path to the tasks file (default: "' +
-					TASKMASTER_TASKS_FILE +
+					NOVELMASTER_TASKS_FILE +
 					'")\n' +
-					'  --skip-generate     Skip regenerating task files\n\n' +
+					'  --skip-generate     Skip regenerating chapter Markdown files\n\n' +
 					chalk.cyan('Examples:') +
 					'\n' +
-					'  task-master remove-subtask --id=5.2\n' +
-					'  task-master remove-subtask --id=5.2,6.3,7.1\n' +
-					'  task-master remove-subtask --id=5.2 --convert',
+					'  novel-master remove-subtask --id=5.2\n' +
+					'  novel-master remove-subtask --id=5.2,6.3,7.1\n' +
+					'  novel-master remove-subtask --id=5.2 --convert',
 				{ padding: 1, borderColor: 'blue', borderStyle: 'round' }
 			)
 		);
@@ -2372,22 +2474,22 @@ ${result.result}
 					'\n\n' +
 					chalk.cyan('Usage:') +
 					'\n' +
-					`  task-master tags [options]\n\n` +
+					`  novel-master tags [options]\n\n` +
 					chalk.cyan('Options:') +
 					'\n' +
 					'  -f, --file <file>   Path to the tasks file (default: "' +
-					TASKMASTER_TASKS_FILE +
+					NOVELMASTER_TASKS_FILE +
 					'")\n' +
 					'  --show-metadata     Show detailed metadata for each tag\n\n' +
 					chalk.cyan('Examples:') +
 					'\n' +
-					'  task-master tags\n' +
-					'  task-master tags --show-metadata\n\n' +
+					'  novel-master tags\n' +
+					'  novel-master tags --show-metadata\n\n' +
 					chalk.cyan('Related Commands:') +
 					'\n' +
-					'  task-master add-tag <name>      Create a new tag\n' +
-					'  task-master use-tag <name>      Switch to a tag\n' +
-					'  task-master delete-tag <name>   Delete a tag',
+					'  novel-master add-tag <name>      Create a new tag\n' +
+					'  novel-master use-tag <name>      Switch to a tag\n' +
+					'  novel-master delete-tag <name>   Delete a tag',
 				{ padding: 1, borderColor: 'blue', borderStyle: 'round' }
 			)
 		);
@@ -2401,21 +2503,21 @@ ${result.result}
 					'\n\n' +
 					chalk.cyan('Usage:') +
 					'\n' +
-					`  task-master add-tag <tagName> [options]\n\n` +
+					`  novel-master add-tag <tagName> [options]\n\n` +
 					chalk.cyan('Options:') +
 					'\n' +
 					'  -f, --file <file>        Path to the tasks file (default: "' +
-					TASKMASTER_TASKS_FILE +
+					NOVELMASTER_TASKS_FILE +
 					'")\n' +
 					'  --copy-from-current      Copy tasks from the current tag to the new tag\n' +
 					'  --copy-from <tag>        Copy tasks from the specified tag to the new tag\n' +
 					'  -d, --description <text> Optional description for the tag\n\n' +
 					chalk.cyan('Examples:') +
 					'\n' +
-					'  task-master add-tag feature-xyz\n' +
-					'  task-master add-tag feature-xyz --copy-from-current\n' +
-					'  task-master add-tag feature-xyz --copy-from master\n' +
-					'  task-master add-tag feature-xyz -d "Feature XYZ development"',
+					'  novel-master add-tag feature-xyz\n' +
+					'  novel-master add-tag feature-xyz --copy-from-current\n' +
+					'  novel-master add-tag feature-xyz --copy-from master\n' +
+					'  novel-master add-tag feature-xyz -d "Feature XYZ development"',
 				{ padding: 1, borderColor: 'blue', borderStyle: 'round' }
 			)
 		);
@@ -2429,17 +2531,17 @@ ${result.result}
 					'\n\n' +
 					chalk.cyan('Usage:') +
 					'\n' +
-					`  task-master delete-tag <tagName> [options]\n\n` +
+					`  novel-master delete-tag <tagName> [options]\n\n` +
 					chalk.cyan('Options:') +
 					'\n' +
 					'  -f, --file <file>   Path to the tasks file (default: "' +
-					TASKMASTER_TASKS_FILE +
+					NOVELMASTER_TASKS_FILE +
 					'")\n' +
 					'  -y, --yes           Skip confirmation prompts\n\n' +
 					chalk.cyan('Examples:') +
 					'\n' +
-					'  task-master delete-tag feature-xyz\n' +
-					'  task-master delete-tag feature-xyz --yes\n\n' +
+					'  novel-master delete-tag feature-xyz\n' +
+					'  novel-master delete-tag feature-xyz --yes\n\n' +
 					chalk.yellow('Warning:') +
 					'\n' +
 					'  This will permanently delete the tag and all its tasks!',
@@ -2456,20 +2558,20 @@ ${result.result}
 					'\n\n' +
 					chalk.cyan('Usage:') +
 					'\n' +
-					`  task-master use-tag <tagName> [options]\n\n` +
+					`  novel-master use-tag <tagName> [options]\n\n` +
 					chalk.cyan('Options:') +
 					'\n' +
 					'  -f, --file <file>   Path to the tasks file (default: "' +
-					TASKMASTER_TASKS_FILE +
+					NOVELMASTER_TASKS_FILE +
 					'")\n\n' +
 					chalk.cyan('Examples:') +
 					'\n' +
-					'  task-master use-tag feature-xyz\n' +
-					'  task-master use-tag master\n\n' +
+					'  novel-master use-tag feature-xyz\n' +
+					'  novel-master use-tag master\n\n' +
 					chalk.cyan('Related Commands:') +
 					'\n' +
-					'  task-master tags                 List all available tags\n' +
-					'  task-master add-tag <name>       Create a new tag',
+					'  novel-master tags                 List all available tags\n' +
+					'  novel-master add-tag <name>       Create a new tag',
 				{ padding: 1, borderColor: 'blue', borderStyle: 'round' }
 			)
 		);
@@ -2483,27 +2585,27 @@ ${result.result}
 					'\n\n' +
 					chalk.cyan('Usage:') +
 					'\n' +
-					`  task-master research "<query>" [options]\n\n` +
+					`  novel-master research "<query>" [options]\n\n` +
 					chalk.cyan('Required:') +
 					'\n' +
-					'  <query>             Research question or prompt (required)\n\n' +
+					'  <query>             Narrative research question (worldbuilding, tone, continuity)\n\n' +
 					chalk.cyan('Context Options:') +
 					'\n' +
-					'  -i, --id <ids>      Comma-separated task/subtask IDs for context (e.g., "15,23.2")\n' +
-					'  -f, --files <paths> Comma-separated file paths for context\n' +
-					'  -c, --context <text> Additional custom context text\n' +
-					'  --tree              Include project file tree structure\n\n' +
+					'  -i, --id <ids>      Chapter/scene IDs for context (e.g., "3,7.2")\n' +
+					'  -f, --files <paths> Manuscript or lore files to include\n' +
+					'  -c, --context <text> Additional notes (character arcs, editorial goals)\n' +
+					'  --tree              Include project file tree (helpful for big lore bibles)\n\n' +
 					chalk.cyan('Output Options:') +
 					'\n' +
 					'  -d, --detail <level> Detail level: low, medium, high (default: medium)\n' +
-					'  --save-to <id>      Auto-save results to task/subtask ID (e.g., "15" or "15.2")\n' +
-					'  --tag <tag>         Specify tag context for task operations\n\n' +
+					'  --save-to <id>      Auto-save results to a chapter/scene task (e.g., "8" or "8.3")\n' +
+					'  --tag <tag>         Specify tag context (outline, draft, revision, etc.)\n\n' +
 					chalk.cyan('Examples:') +
 					'\n' +
-					'  task-master research "How should I implement user authentication?"\n' +
-					'  task-master research "What\'s the best approach?" --id=15,23.2\n' +
-					'  task-master research "How does auth work?" --files=src/auth.js --tree\n' +
-					'  task-master research "Implementation steps?" --save-to=15.2 --detail=high',
+					'  novel-master research "What sensory cues define Art Deco speakeasies?"\n' +
+					'  novel-master research "Space elevator failure consequences" --id=4,5.1\n' +
+					'  novel-master research "Noir dialogue beats" --files=manuscript/03-chapter.md --tree\n' +
+					'  novel-master research "Victorian mourning customs" --save-to=7.2 --detail=high',
 				{ padding: 1, borderColor: 'blue', borderStyle: 'round' }
 			)
 		);
@@ -2512,21 +2614,21 @@ ${result.result}
 	// remove-task command
 	programInstance
 		.command('remove-task')
-		.description('Remove one or more tasks or subtasks permanently')
+		.description('Remove one or more chapters/scenes/beats from the outline')
 		.option(
 			'-i, --id <ids>',
-			'ID(s) of the task(s) or subtask(s) to remove (e.g., "5", "5.2", or "5,6.1,7")'
+			'ID(s) of the chapters/scenes/beats to remove (e.g., "5", "5.2", or "5,6.1,7")'
 		)
 		.option(
 			'-f, --file <file>',
 			'Path to the tasks file',
-			TASKMASTER_TASKS_FILE
+			NOVELMASTER_TASKS_FILE
 		)
 		.option('-y, --yes', 'Skip confirmation prompt', false)
 		.option('--tag <tag>', 'Specify tag context for task operations')
 		.action(async (options) => {
 			// Initialize TaskMaster
-			const taskMaster = initTaskMaster({
+			const taskMaster = initNovelMaster({
 				tasksPath: options.file || true,
 				tag: options.tag
 			});
@@ -2543,7 +2645,7 @@ ${result.result}
 				console.error(chalk.red('Error: Task ID(s) are required'));
 				console.error(
 					chalk.yellow(
-						'Usage: task-master remove-task --id=<taskId1,taskId2...>'
+						'Usage: novel-master remove-task --id=<taskId1,taskId2...>'
 					)
 				);
 				process.exit(1);
@@ -2771,7 +2873,7 @@ ${result.result}
 	// init command (Directly calls the implementation from init.js)
 	programInstance
 		.command('init')
-		.description('Initialize a new project with Task Master structure')
+		.description('Initialize a new project with Novel Master structure')
 		.option('-y, --yes', 'Skip prompts and use default values')
 		.option('-n, --name <name>', 'Project name')
 		.option('-d, --description <description>', 'Project description')
@@ -2783,8 +2885,8 @@ ${result.result}
 		)
 		.option('--skip-install', 'Skip installing dependencies')
 		.option('--dry-run', 'Show what would be done without making changes')
-		.option('--aliases', 'Add shell aliases (tm, taskmaster)')
-		.option('--no-aliases', 'Skip shell aliases (tm, taskmaster)')
+		.option('--aliases', 'Add shell aliases (tm, novelmaster)')
+		.option('--no-aliases', 'Skip shell aliases (tm, novelmaster)')
 		.option('--git', 'Initialize Git repository')
 		.option('--no-git', 'Skip Git repository initialization')
 		.option('--git-tasks', 'Store tasks in Git')
@@ -2887,26 +2989,26 @@ ${result.result}
 			'after',
 			`
 Examples:
-  $ task-master models                              # View current configuration
-  $ task-master models --set-main gpt-4o             # Set main model (provider inferred)
-  $ task-master models --set-research sonar-pro       # Set research model
-  $ task-master models --set-fallback claude-3-5-sonnet-20241022 # Set fallback
-  $ task-master models --set-main my-custom-model --ollama  # Set custom Ollama model for main role
-  $ task-master models --set-main anthropic.claude-3-sonnet-20240229-v1:0 --bedrock # Set custom Bedrock model for main role
-  $ task-master models --set-main some/other-model --openrouter # Set custom OpenRouter model for main role
-  $ task-master models --set-main sonnet --claude-code           # Set Claude Code model for main role
-  $ task-master models --set-main gpt-4o --azure # Set custom Azure OpenAI model for main role
-  $ task-master models --set-main claude-3-5-sonnet@20241022 --vertex # Set custom Vertex AI model for main role
-  $ task-master models --set-main gemini-2.5-pro --gemini-cli # Set Gemini CLI model for main role
-  $ task-master models --set-main gpt-5-codex --codex-cli     # Set Codex CLI model for main role
-  $ task-master models --set-main qwen3-vl-4b --lmstudio      # Set LM Studio model for main role (defaults to http://localhost:1234/v1)
-  $ task-master models --set-main qwen3-vl-4b --lmstudio --baseURL http://localhost:8000/v1 # Set LM Studio model with custom base URL
-  $ task-master models --set-main my-model --openai-compatible --baseURL http://localhost:8000/v1 # Set custom OpenAI-compatible model with custom endpoint
-  $ task-master models --setup                            # Run interactive setup`
+  $ novel-master models                              # View current configuration
+  $ novel-master models --set-main gpt-4o             # Set main model (provider inferred)
+  $ novel-master models --set-research sonar-pro       # Set research model
+  $ novel-master models --set-fallback claude-3-5-sonnet-20241022 # Set fallback
+  $ novel-master models --set-main my-custom-model --ollama  # Set custom Ollama model for main role
+  $ novel-master models --set-main anthropic.claude-3-sonnet-20240229-v1:0 --bedrock # Set custom Bedrock model for main role
+  $ novel-master models --set-main some/other-model --openrouter # Set custom OpenRouter model for main role
+  $ novel-master models --set-main sonnet --claude-code           # Set Claude Code model for main role
+  $ novel-master models --set-main gpt-4o --azure # Set custom Azure OpenAI model for main role
+  $ novel-master models --set-main claude-3-5-sonnet@20241022 --vertex # Set custom Vertex AI model for main role
+  $ novel-master models --set-main gemini-2.5-pro --gemini-cli # Set Gemini CLI model for main role
+  $ novel-master models --set-main gpt-5-codex --codex-cli     # Set Codex CLI model for main role
+  $ novel-master models --set-main qwen3-vl-4b --lmstudio      # Set LM Studio model for main role (defaults to http://localhost:1234/v1)
+  $ novel-master models --set-main qwen3-vl-4b --lmstudio --baseURL http://localhost:8000/v1 # Set LM Studio model with custom base URL
+  $ novel-master models --set-main my-model --openai-compatible --baseURL http://localhost:8000/v1 # Set custom OpenAI-compatible model with custom endpoint
+  $ novel-master models --setup                            # Run interactive setup`
 		)
 		.action(async (options) => {
 			// Initialize TaskMaster
-			const taskMaster = initTaskMaster({
+			const taskMaster = initNovelMaster({
 				tasksPath: options.file || false
 			});
 
@@ -3135,7 +3237,7 @@ Examples:
 			if (!configExists) {
 				console.log(
 					chalk.yellow(
-						"\\nHint: Run 'task-master models --setup' to create or update your configuration."
+						"\\nHint: Run 'novel-master models --setup' to create or update your configuration."
 					)
 				);
 			}
@@ -3150,7 +3252,7 @@ Examples:
 		.option('--response <response_language>', 'Set the response language')
 		.option('--setup', 'Run interactive setup to configure response language')
 		.action(async (options) => {
-			const taskMaster = initTaskMaster({});
+			const taskMaster = initNovelMaster({});
 			const projectRoot = taskMaster.getProjectRoot(); // Find project root for context
 			const { response, setup } = options;
 			let responseLanguage = response !== undefined ? response : 'English';
@@ -3208,7 +3310,7 @@ Examples:
 		.option(
 			'-f, --file <file>',
 			'Path to the tasks file',
-			TASKMASTER_TASKS_FILE
+			NOVELMASTER_TASKS_FILE
 		)
 		.option(
 			'--from <id>',
@@ -3233,20 +3335,20 @@ Examples:
 						'\n\n' +
 						chalk.yellow.bold('Within-Tag Moves:') +
 						'\n' +
-						chalk.white('  task-master move --from=5 --to=7') +
+						chalk.white('  novel-master move --from=5 --to=7') +
 						'\n' +
-						chalk.white('  task-master move --from=5.2 --to=7.3') +
+						chalk.white('  novel-master move --from=5.2 --to=7.3') +
 						'\n' +
-						chalk.white('  task-master move --from=5,6,7 --to=10,11,12') +
+						chalk.white('  novel-master move --from=5,6,7 --to=10,11,12') +
 						'\n\n' +
 						chalk.yellow.bold('Cross-Tag Moves:') +
 						'\n' +
 						chalk.white(
-							'  task-master move --from=5 --from-tag=backlog --to-tag=in-progress'
+							'  novel-master move --from=5 --from-tag=backlog --to-tag=in-progress'
 						) +
 						'\n' +
 						chalk.white(
-							'  task-master move --from=5,6 --from-tag=backlog --to-tag=done'
+							'  novel-master move --from=5,6 --from-tag=backlog --to-tag=done'
 						) +
 						'\n\n' +
 						chalk.yellow.bold('Dependency Resolution:') +
@@ -3254,13 +3356,13 @@ Examples:
 						chalk.white('  # Move with dependencies') +
 						'\n' +
 						chalk.white(
-							'  task-master move --from=5 --from-tag=backlog --to-tag=in-progress --with-dependencies'
+							'  novel-master move --from=5 --from-tag=backlog --to-tag=in-progress --with-dependencies'
 						) +
 						'\n\n' +
 						chalk.white('  # Break dependencies') +
 						'\n' +
 						chalk.white(
-							'  task-master move --from=5 --from-tag=backlog --to-tag=in-progress --ignore-dependencies'
+							'  novel-master move --from=5 --from-tag=backlog --to-tag=in-progress --ignore-dependencies'
 						) +
 						'\n\n' +
 						'\n' +
@@ -3275,11 +3377,11 @@ Examples:
 						) +
 						'\n' +
 						chalk.white(
-							'  • Check dependencies first: task-master validate-dependencies'
+							'  • Check dependencies first: novel-master validate-dependencies'
 						) +
 						'\n' +
 						chalk.white(
-							'  • Fix dependency issues: task-master fix-dependencies'
+							'  • Fix dependency issues: novel-master fix-dependencies'
 						) +
 						'\n\n' +
 						chalk.yellow.bold('Error Resolution:') +
@@ -3293,10 +3395,10 @@ Examples:
 						) +
 						'\n' +
 						chalk.white(
-							'  • Invalid tags: Check available tags with task-master tags'
+							'  • Invalid tags: Check available tags with novel-master tags'
 						) +
 						'\n\n' +
-						chalk.gray('For more help, run: task-master move --help')
+						chalk.gray('For more help, run: novel-master move --help')
 				);
 			}
 
@@ -3353,19 +3455,17 @@ Examples:
 					tasksData.tasks.length > 0;
 
 				// Generate task files for the affected tags
-				await generateTaskFiles(
-					taskMaster.getTasksPath(),
-					path.dirname(taskMaster.getTasksPath()),
-					{ tag: toTag, projectRoot: taskMaster.getProjectRoot() }
-				);
+				await generateTaskFiles(taskMaster.getTasksPath(), undefined, {
+					tag: toTag,
+					projectRoot: taskMaster.getProjectRoot()
+				});
 
 				// Only regenerate source tag files if it still contains tasks
 				if (sourceTagHasTasks) {
-					await generateTaskFiles(
-						taskMaster.getTasksPath(),
-						path.dirname(taskMaster.getTasksPath()),
-						{ tag: sourceTag, projectRoot: taskMaster.getProjectRoot() }
-					);
+					await generateTaskFiles(taskMaster.getTasksPath(), undefined, {
+						tag: sourceTag,
+						projectRoot: taskMaster.getProjectRoot()
+					});
 				}
 			}
 
@@ -3381,7 +3481,7 @@ Examples:
 					);
 					console.log(
 						chalk.yellow(
-							'Usage: task-master move --from=<sourceId> --to=<destinationId>'
+							'Usage: novel-master move --from=<sourceId> --to=<destinationId>'
 						)
 					);
 					process.exit(1);
@@ -3399,7 +3499,7 @@ Examples:
 						)
 					);
 					console.log(
-						chalk.yellow('Example: task-master move --from=5,6,7 --to=10,11,12')
+						chalk.yellow('Example: novel-master move --from=5,6,7 --to=10,11,12')
 					);
 					process.exit(1);
 				}
@@ -3570,7 +3670,7 @@ Examples:
 			}
 
 			// Initialize TaskMaster
-			const taskMaster = initTaskMaster({
+			const taskMaster = initNovelMaster({
 				tasksPath: options.file || true,
 				tag: options.tag
 			});
@@ -3636,7 +3736,7 @@ Examples:
 	programInstance
 		.command('rules [action] [profiles...]')
 		.description(
-			`Add or remove rules for one or more profiles. Valid actions: ${Object.values(RULES_ACTIONS).join(', ')} (e.g., task-master rules ${RULES_ACTIONS.ADD} windsurf roo)`
+			`Add or remove rules for one or more profiles. Valid actions: ${Object.values(RULES_ACTIONS).join(', ')} (e.g., novel-master rules ${RULES_ACTIONS.ADD} windsurf roo)`
 		)
 		.option(
 			'-f, --force',
@@ -3650,12 +3750,12 @@ Examples:
 			'after',
 			`
 		Examples:
-		$ task-master rules ${RULES_ACTIONS.ADD} windsurf roo          # Add Windsurf and Roo rule sets
-		$ task-master rules ${RULES_ACTIONS.REMOVE} windsurf          # Remove Windsurf rule set
-		$ task-master rules --${RULES_SETUP_ACTION}                  # Interactive setup to select rule profiles`
+		$ novel-master rules ${RULES_ACTIONS.ADD} windsurf roo          # Add Windsurf and Roo rule sets
+		$ novel-master rules ${RULES_ACTIONS.REMOVE} windsurf          # Remove Windsurf rule set
+		$ novel-master rules --${RULES_SETUP_ACTION}                  # Interactive setup to select rule profiles`
 		)
 		.action(async (action, profiles, options) => {
-			const taskMaster = initTaskMaster({});
+			const taskMaster = initNovelMaster({});
 			const projectRoot = taskMaster.getProjectRoot();
 			if (!projectRoot) {
 				console.error(chalk.red('Error: Could not find project root.'));
@@ -3663,13 +3763,13 @@ Examples:
 			}
 
 			/**
-			 * 'task-master rules --setup' action:
+			 * 'novel-master rules --setup' action:
 			 *
 			 * Launches an interactive prompt to select which rule profiles to add to the current project.
 			 * This does NOT perform project initialization or ask about shell aliases—only rules selection.
 			 *
 			 * Example usage:
-			 *   $ task-master rules --setup
+			 *   $ novel-master rules --setup
 			 *
 			 * Useful for adding rules after project creation.
 			 *
@@ -3731,7 +3831,7 @@ Examples:
 				);
 				console.error(
 					chalk.yellow(
-						`For interactive setup, use: task-master rules --${RULES_SETUP_ACTION}`
+						`For interactive setup, use: novel-master rules --${RULES_SETUP_ACTION}`
 					)
 				);
 				process.exit(1);
@@ -3897,11 +3997,11 @@ Examples:
 	programInstance
 		.command('migrate')
 		.description(
-			'Migrate existing project to use the new .taskmaster directory structure'
+			'Migrate existing project to use the new .novelmaster directory structure'
 		)
 		.option(
 			'-f, --force',
-			'Force migration even if .taskmaster directory already exists'
+			'Force migration even if .novelmaster directory already exists'
 		)
 		.option(
 			'--backup',
@@ -3934,7 +4034,7 @@ Examples:
 		.option(
 			'-f, --file <file>',
 			'Path to the tasks file',
-			TASKMASTER_TASKS_FILE
+			NOVELMASTER_TASKS_FILE
 		)
 		.option('--with-subtasks', 'Include subtasks in the README output')
 		.option(
@@ -3944,7 +4044,7 @@ Examples:
 		.option('-t, --tag <tag>', 'Tag to use for the task list (default: master)')
 		.action(async (options) => {
 			// Initialize TaskMaster
-			const taskMaster = initTaskMaster({
+			const taskMaster = initNovelMaster({
 				tasksPath: options.file || true,
 				tag: options.tag
 			});
@@ -3988,7 +4088,7 @@ Examples:
 		.option(
 			'-f, --file <file>',
 			'Path to the tasks file',
-			TASKMASTER_TASKS_FILE
+			NOVELMASTER_TASKS_FILE
 		)
 		.option(
 			'--copy-from-current',
@@ -4016,7 +4116,7 @@ Examples:
 
 			try {
 				// Initialize TaskMaster
-				const taskMaster = initTaskMaster({
+				const taskMaster = initNovelMaster({
 					tasksPath: options.file || true
 				});
 				const tasksPath = taskMaster.getTasksPath();
@@ -4028,7 +4128,7 @@ Examples:
 					);
 					console.log(
 						chalk.yellow(
-							'Hint: Run task-master init or task-master parse-prd to create tasks.json first'
+							'Hint: Run novel-master init or novel-master parse-prd to create tasks.json first'
 						)
 					);
 					process.exit(1);
@@ -4042,8 +4142,8 @@ Examples:
 						)
 					);
 					console.log(chalk.yellow('Usage examples:'));
-					console.log(chalk.cyan('  task-master add-tag my-tag'));
-					console.log(chalk.cyan('  task-master add-tag --from-branch'));
+					console.log(chalk.cyan('  novel-master add-tag my-tag'));
+					console.log(chalk.cyan('  novel-master add-tag --from-branch'));
 					process.exit(1);
 				}
 
@@ -4154,7 +4254,7 @@ Examples:
 		.option(
 			'-f, --file <file>',
 			'Path to the tasks file',
-			TASKMASTER_TASKS_FILE
+			NOVELMASTER_TASKS_FILE
 		)
 		.option('-y, --yes', 'Skip confirmation prompts')
 		.action(async (tagName, options) => {
@@ -4170,7 +4270,7 @@ Examples:
 
 			try {
 				// Initialize TaskMaster
-				const taskMaster = initTaskMaster({
+				const taskMaster = initNovelMaster({
 					tasksPath: options.file || true
 				});
 				const tasksPath = taskMaster.getTasksPath();
@@ -4227,7 +4327,7 @@ Examples:
 		.option(
 			'-f, --file <file>',
 			'Path to the tasks file',
-			TASKMASTER_TASKS_FILE
+			NOVELMASTER_TASKS_FILE
 		)
 		.action(async (tagName, options) => {
 			// Show deprecation warning
@@ -4242,7 +4342,7 @@ Examples:
 
 			try {
 				// Initialize TaskMaster
-				const taskMaster = initTaskMaster({
+				const taskMaster = initNovelMaster({
 					tasksPath: options.file || true
 				});
 				const tasksPath = taskMaster.getTasksPath();
@@ -4285,7 +4385,7 @@ Examples:
 		.option(
 			'-f, --file <file>',
 			'Path to the tasks file',
-			TASKMASTER_TASKS_FILE
+			NOVELMASTER_TASKS_FILE
 		)
 		.action(async (oldName, newName, options) => {
 			// Show deprecation warning
@@ -4300,7 +4400,7 @@ Examples:
 
 			try {
 				// Initialize TaskMaster
-				const taskMaster = initTaskMaster({
+				const taskMaster = initNovelMaster({
 					tasksPath: options.file || true
 				});
 				const tasksPath = taskMaster.getTasksPath();
@@ -4348,7 +4448,7 @@ Examples:
 		.option(
 			'-f, --file <file>',
 			'Path to the tasks file',
-			TASKMASTER_TASKS_FILE
+			NOVELMASTER_TASKS_FILE
 		)
 		.option('-d, --description <text>', 'Optional description for the new tag')
 		.action(async (sourceName, targetName, options) => {
@@ -4364,7 +4464,7 @@ Examples:
 
 			try {
 				// Initialize TaskMaster
-				const taskMaster = initTaskMaster({
+				const taskMaster = initNovelMaster({
 					tasksPath: options.file || true
 				});
 				const tasksPath = taskMaster.getTasksPath();
@@ -4415,7 +4515,7 @@ Examples:
 function setupCLI() {
 	// Create a new program instance
 	const programInstance = new Command()
-		.name('task-master')
+		.name('novel-master')
 		.description('AI-driven development task management')
 		.version(process.env.TM_PUBLIC_VERSION || 'unknown')
 		.helpOption('-h, --help', 'Display help')
@@ -4459,7 +4559,7 @@ async function runCLI(argv = process.argv) {
 		}
 
 		// Check for updates BEFORE executing the command
-		const currentVersion = getTaskMasterVersion();
+		const currentVersion = getNovelMasterVersion();
 		const updateInfo = await checkForUpdate(currentVersion);
 
 		if (updateInfo.needsUpdate) {
@@ -4488,8 +4588,8 @@ async function runCLI(argv = process.argv) {
 
 		// Check if migration has occurred and show FYI notice once
 		try {
-			// Use initTaskMaster with no required fields - will only fail if no project root
-			const taskMaster = initTaskMaster({});
+			// Use initNovelMaster with no required fields - will only fail if no project root
+			const taskMaster = initNovelMaster({});
 
 			const tasksPath = taskMaster.getTasksPath();
 			const statePath = taskMaster.getStatePath();
@@ -4530,7 +4630,7 @@ async function runCLI(argv = process.argv) {
 				boxen(
 					chalk.red.bold('Configuration Update Required!') +
 						'\n\n' +
-						chalk.white('Taskmaster now uses a ') +
+						chalk.white('Novel Master now uses a ') +
 						chalk.yellow.bold('configuration file') +
 						chalk.white(
 							' in your project for AI model choices and settings.\n\n' +
@@ -4540,7 +4640,7 @@ async function runCLI(argv = process.argv) {
 						chalk.white('. No worries though.\n\n') +
 						chalk.cyan.bold('To create this file, run the interactive setup:') +
 						'\n' +
-						chalk.green('   task-master models --setup') +
+						chalk.green('   novel-master models --setup') +
 						'\n\n' +
 						chalk.white.bold('Key Points:') +
 						'\n' +
@@ -4555,10 +4655,10 @@ async function runCLI(argv = process.argv) {
 						chalk.red.bold('only') +
 						chalk.white(' for your AI provider API keys.\n\n') +
 						chalk.cyan(
-							'`task-master models` to check your config & available models\n'
+							'`novel-master models` to check your config & available models\n'
 						) +
 						chalk.cyan(
-							'`task-master models --setup` to adjust the AI models used by Taskmaster'
+							'`novel-master models --setup` to adjust the AI models used by Novel Master'
 						),
 					{
 						padding: 1,

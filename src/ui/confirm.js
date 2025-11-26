@@ -13,11 +13,11 @@ async function confirmProfilesRemove(profiles) {
 	console.log(
 		boxen(
 			chalk.yellow(
-				`WARNING: This will selectively remove Task Master components for: ${profileList}.
+				`WARNING: This will selectively remove Novel Master components for: ${profileList}.
 
 What will be removed:
-• Task Master specific rule files (e.g., cursor_rules.mdc, taskmaster.mdc, etc.)
-• Task Master MCP server configuration (if no other MCP servers exist)
+• Novel Master specific rule files (e.g., cursor_rules.mdc, novelmaster.mdc, etc.)
+• Novel Master MCP server configuration (if no other MCP servers exist)
 
 What will be preserved:
 • Your existing custom rule files
@@ -25,7 +25,7 @@ What will be preserved:
 • The profile directory itself (unless completely empty after removal)
 
 The .[profile] directory will only be removed if ALL of the following are true:
-• All rules in the directory were Task Master rules (no custom rules)
+• All rules in the directory were Novel Master rules (no custom rules)
 • No other files or folders exist in the profile directory
 • The MCP configuration was completely removed (no other servers)
 
@@ -61,17 +61,17 @@ async function confirmRemoveAllRemainingProfiles(profiles, remainingProfiles) {
 		boxen(
 			chalk.red.bold(
 				`⚠️  CRITICAL WARNING: REMOVING ALL TASK MASTER RULE PROFILES ⚠️\n\n` +
-					`You are about to remove Task Master components for: ${profileList}\n` +
-					`This will leave your project with NO Task Master rule profiles remaining!\n\n` +
+					`You are about to remove Novel Master components for: ${profileList}\n` +
+					`This will leave your project with NO Novel Master rule profiles remaining!\n\n` +
 					`What will be removed:\n` +
-					`• All Task Master specific rule files\n` +
-					`• Task Master MCP server configurations\n` +
+					`• All Novel Master specific rule files\n` +
+					`• Novel Master MCP server configurations\n` +
 					`• Profile directories (only if completely empty after removal)\n\n` +
 					`What will be preserved:\n` +
 					`• Your existing custom rule files\n` +
 					`• Other MCP server configurations\n` +
 					`• Profile directories with custom content\n\n` +
-					`This could impact Task Master functionality but will preserve your custom configurations.\n\n` +
+					`This could impact Novel Master functionality but will preserve your custom configurations.\n\n` +
 					`Are you absolutely sure you want to proceed?`
 			),
 			{
@@ -90,7 +90,7 @@ async function confirmRemoveAllRemainingProfiles(profiles, remainingProfiles) {
 			type: 'confirm',
 			name: 'confirm',
 			message:
-				'Type y to confirm removing ALL Task Master rule profiles, or n to abort:',
+				'Type y to confirm removing ALL Novel Master rule profiles, or n to abort:',
 			default: false
 		}
 	]);

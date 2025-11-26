@@ -6,7 +6,7 @@
  * - userId and email (for convenience)
  * - Any other app-specific data
  *
- * Stored at: ~/.taskmaster/context.json
+ * Stored at: ~/.novelmaster/context.json
  */
 
 import fs from 'fs';
@@ -16,7 +16,7 @@ import { AuthenticationError, UserContext } from '../types.js';
 
 const DEFAULT_CONTEXT_FILE = path.join(
 	process.env.HOME || process.env.USERPROFILE || '~',
-	'.taskmaster',
+	'.novelmaster',
 	'context.json'
 );
 

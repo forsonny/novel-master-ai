@@ -1,6 +1,6 @@
-# Task Master JSON Schemas
+# Novel Master JSON Schemas
 
-This directory contains JSON schemas for validating Task Master prompt templates. These schemas provide IDE support, validation, and better developer experience when working with prompt templates.
+This directory contains JSON schemas for validating Novel Master prompt templates. These schemas provide IDE support, validation, and better developer experience when working with prompt templates.
 
 ## Overview
 
@@ -15,7 +15,7 @@ The schema system provides:
 
 ### `prompt-template.schema.json` (Main Schema)
 **Version**: 1.0.0  
-**Purpose**: Main schema for Task Master prompt template files
+**Purpose**: Main schema for Novel Master prompt template files
 
 **Validates**:
 - Template metadata (id, version, description)
@@ -128,7 +128,7 @@ The VS Code profile automatically configures schema validation:
     {
       "fileMatch": [
         "src/prompts/**/*.json",
-        ".taskmaster/prompts/**/*.json",
+        ".novelmaster/prompts/**/*.json",
         "prompts/**/*.json"
       ],
       "url": "./src/prompts/schemas/prompt-template.schema.json"
@@ -148,11 +148,11 @@ For other development environments:
 
 **Schema URLs**:
 - **Local Development**: `./src/prompts/schemas/prompt-template.schema.json`
-- **GitHub Reference**: `https://github.com/eyaltoledano/claude-task-master/blob/main/src/prompts/schemas/prompt-template.schema.json`
+- **GitHub Reference**: `https://github.com/eyaltoledano/claude-novel-master/blob/main/src/prompts/schemas/prompt-template.schema.json`
 
 **File Patterns**:
 - `src/prompts/**/*.json`
-- `.taskmaster/prompts/**/*.json`
+- `.novelmaster/prompts/**/*.json`
 - `prompts/**/*.json`
 
 ## Validation Examples
@@ -164,7 +164,7 @@ For other development environments:
   "version": "1.0.0",
   "description": "Example prompt template with comprehensive validation",
   "metadata": {
-    "author": "Task Master Team",
+    "author": "Novel Master Team",
     "category": "task",
     "tags": ["example", "validation"]
   },
@@ -392,7 +392,7 @@ The schema includes custom validation for:
 
 ### Current Schema Locations
 - **Local Development**: `./src/prompts/schemas/prompt-template.schema.json`
-- **GitHub Blob**: `https://github.com/eyaltoledano/claude-task-master/blob/main/src/prompts/schemas/prompt-template.schema.json`
+- **GitHub Blob**: `https://github.com/eyaltoledano/claude-novel-master/blob/main/src/prompts/schemas/prompt-template.schema.json`
 - **Schema ID**: Used for internal references and validation
 
 ### URL Usage Guidelines

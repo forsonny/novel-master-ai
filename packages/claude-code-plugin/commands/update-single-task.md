@@ -1,34 +1,34 @@
-Update a single specific task with new information.
+Update a single specific chapter with new information.
 
 Arguments: $ARGUMENTS
 
-Parse task ID and update details.
+Parse chapter ID and update details.
 
-## Single Task Update
+## Single Chapter Update
 
-Precisely update one task with AI assistance to maintain consistency.
+Precisely update one chapter with AI assistance to maintain consistency.
 
 ## Argument Parsing
 
 Natural language updates:
-- "5: add caching requirement"
-- "update 5 to include error handling"
-- "task 5 needs rate limiting"
+- "5: add emotional depth requirement"
+- "update 5 to include character development"
+- "chapter 5 needs stronger pacing"
 - "5 change priority to high"
 
 ## Execution
 
 ```bash
-task-master update-task --id=<id> --prompt="<context>"
+novel-master update-task --id=<id> --prompt="<context>"
 ```
 
 ## Update Types
 
 ### 1. **Content Updates**
 - Enhance description
-- Add requirements
+- Add narrative requirements
 - Clarify details
-- Update acceptance criteria
+- Update narrative criteria
 
 ### 2. **Metadata Updates**
 - Change priority
@@ -37,16 +37,16 @@ task-master update-task --id=<id> --prompt="<context>"
 - Modify dependencies
 
 ### 3. **Strategic Updates**
-- Revise approach
-- Change test strategy
-- Update implementation notes
-- Adjust subtask needs
+- Revise narrative approach
+- Change continuity/pacing strategy
+- Update drafting notes
+- Adjust scene needs
 
 ## AI-Powered Updates
 
 The AI:
 1. **Understands Context**
-   - Reads current task state
+   - Reads current chapter state
    - Identifies update intent
    - Maintains consistency
    - Preserves important info
@@ -66,20 +66,20 @@ The AI:
 ## Example Updates
 
 ```
-/taskmaster:update/single 5: add rate limiting
-→ Updating Task #5: "Implement API endpoints"
+/novelmaster:update/single 5: add emotional depth
+→ Updating Chapter #5: "The Confrontation"
 
-Current: Basic CRUD endpoints
-Adding: Rate limiting requirements
+Current: Basic confrontation scene
+Adding: Emotional depth requirements
 
 Updated sections:
-✓ Description: Added rate limiting mention
-✓ Details: Added specific limits (100/min)
-✓ Test Strategy: Added rate limit tests
+✓ Description: Added emotional beat mention
+✓ Details: Added specific emotional beats (fear, anger, resolution)
+✓ Continuity/Pacing Strategy: Added emotional arc pacing
 ✓ Complexity: Increased from 5 to 6
 ✓ Time Estimate: Increased by 2 hours
 
-Suggestion: Also update task #6 (API Gateway) for consistency?
+Suggestion: Also update chapter #6 (Resolution) for consistency?
 ```
 
 ## Smart Features
@@ -91,8 +91,8 @@ Suggestion: Also update task #6 (API Gateway) for consistency?
    - Shows diff view
 
 2. **Consistency Checks**
-   - Related task alignment
-   - Subtask compatibility
+   - Related chapter alignment
+   - Scene compatibility
    - Dependency validity
    - Timeline impact
 
@@ -112,8 +112,8 @@ Quick syntax for specific fields:
 
 ## Post-Update
 
-- Show updated task
+- Show updated chapter
 - Highlight changes
-- Check related tasks
+- Check related chapters
 - Update suggestions
 - Timeline adjustments

@@ -1,6 +1,6 @@
-# Task Master Prompt Management System
+# Novel Master Prompt Management System
 
-This directory contains the centralized prompt templates for all AI-powered features in Task Master.
+This directory contains the centralized prompt templates for all AI-powered features in Novel Master.
 
 ## Overview
 
@@ -22,7 +22,7 @@ src/prompts/
 │   ├── prompt-template.schema.json  # Main template schema
 │   ├── parameter.schema.json        # Parameter validation schema
 │   └── variant.schema.json          # Prompt variant schema
-├── parse-prd.json          # PRD parsing prompts
+├── parse-prd.json          # NRD parsing prompts
 ├── expand-task.json        # Task expansion prompts
 ├── add-task.json           # Task creation prompts
 ├── update-tasks.json       # Bulk task update prompts
@@ -72,20 +72,21 @@ All prompt templates are validated against JSON schemas located in `/src/prompts
 ## Prompt Template Reference
 
 ### 1. parse-prd.json
-**Purpose**: Parse a Product Requirements Document into structured tasks  
+**Purpose**: Parse a Novel Requirements Document (NRD) into structured narrative tasks  
 **Variants**: `default`, `research` (when research mode is enabled)
 
 **Required Parameters**:
-- `numTasks` (number): Target number of tasks to generate
+- `numTasks` (number): Target number of narrative tasks to generate
 - `nextId` (number): Starting ID for tasks
-- `prdContent` (string): Content of the PRD file
-- `prdPath` (string): Path to the PRD file
-- `defaultTaskPriority` (string): Default priority for generated tasks
+- `nrdContent` (string): Content of the NRD file (also accepts deprecated `prdContent`)
+- `nrdPath` (string): Path to the NRD file (also accepts deprecated `prdPath`)
+- `defaultTaskPriority` (string): Default priority for generated narrative tasks
 
 **Optional Parameters**:
-- `research` (boolean): Enable research mode for latest best practices (default: false)
+- `research` (boolean): Enable research mode for genre/worldbuilding insights (default: false)
+- `hasManuscriptContext` (boolean): Whether manuscript context files are accessible (also accepts deprecated `hasCodebaseAnalysis` for backward compatibility)
 
-**Usage**: Used by `task-master parse-prd` command to convert PRD documents into actionable task lists.
+**Usage**: Used by `novel-master parse-prd` command to convert NRD documents into actionable story arc/chapter task lists.
 
 ### 2. add-task.json
 **Purpose**: Generate a new task based on user description  
@@ -97,13 +98,13 @@ All prompt templates are validated against JSON schemas located in `/src/prompts
 
 **Optional Parameters**:
 - `existingTasks` (array): List of existing tasks for context
-- `gatheredContext` (string): Context gathered from codebase analysis
+- `gatheredContext` (string): Context gathered from manuscript analysis (prior scenes, lore, character arcs, etc.)
 - `contextFromArgs` (string): Additional context from manual args
 - `priority` (string): Task priority (high/medium/low, default: medium)
 - `dependencies` (array): Task dependency IDs
 - `useResearch` (boolean): Use research mode (default: false)
 
-**Usage**: Used by `task-master add-task` command to create new tasks with AI assistance.
+**Usage**: Used by `novel-master add-task` command to create new tasks with AI assistance.
 
 ### 3. expand-task.json
 **Purpose**: Break down a task into detailed subtasks with three sophisticated strategies  
@@ -126,7 +127,7 @@ All prompt templates are validated against JSON schemas located in `/src/prompts
 2. **research**: Used when `useResearch === true && !expansionPrompt`
 3. **default**: Standard fallback strategy
 
-**Usage**: Used by `task-master expand` command to break complex tasks into manageable subtasks using the most appropriate strategy based on available context and complexity analysis.
+**Usage**: Used by `novel-master expand` command to break complex tasks into manageable subtasks using the most appropriate strategy based on available context and complexity analysis.
 
 ### 4. update-task.json
 **Purpose**: Update a single task with new information, supporting full updates and append mode  
@@ -143,7 +144,7 @@ All prompt templates are validated against JSON schemas located in `/src/prompts
 - `currentDetails` (string): Current task details for context (default: "(No existing details)")
 - `gatheredContext` (string): Additional project context
 
-**Usage**: Used by `task-master update-task` command to modify existing tasks.
+**Usage**: Used by `novel-master update-task` command to modify existing tasks.
 
 ### 5. update-tasks.json
 **Purpose**: Update multiple tasks based on new context or changes  
@@ -157,7 +158,7 @@ All prompt templates are validated against JSON schemas located in `/src/prompts
 - `useResearch` (boolean): Use research mode (default: false)
 - `projectContext` (string): Additional project context
 
-**Usage**: Used by `task-master update` command to bulk update multiple tasks.
+**Usage**: Used by `novel-master update` command to bulk update multiple tasks.
 
 ### 6. update-subtask.json
 **Purpose**: Append information to a subtask by generating only new content  
@@ -174,7 +175,7 @@ All prompt templates are validated against JSON schemas located in `/src/prompts
 - `useResearch` (boolean): Use research mode (default: false)
 - `gatheredContext` (string): Additional project context
 
-**Usage**: Used by `task-master update-subtask` command to log progress and findings on subtasks.
+**Usage**: Used by `novel-master update-subtask` command to log progress and findings on subtasks.
 
 ### 7. analyze-complexity.json
 **Purpose**: Analyze task complexity and generate expansion recommendations  
@@ -188,7 +189,7 @@ All prompt templates are validated against JSON schemas located in `/src/prompts
 - `threshold` (number): Complexity threshold for expansion recommendation (1-10, default: 5)
 - `useResearch` (boolean): Use research mode for deeper analysis (default: false)
 
-**Usage**: Used by `task-master analyze-complexity` command to determine which tasks need breakdown.
+**Usage**: Used by `novel-master analyze-complexity` command to determine which tasks need breakdown.
 
 ### 8. research.json
 **Purpose**: Perform AI-powered research with project context  
@@ -205,7 +206,7 @@ All prompt templates are validated against JSON schemas located in `/src/prompts
   - `taskCount` (number): Number of related tasks
   - `fileCount` (number): Number of related files
 
-**Usage**: Used by `task-master research` command to get contextual information and guidance.
+**Usage**: Used by `novel-master research` command to get contextual information and guidance.
 
 ## Template Structure
 

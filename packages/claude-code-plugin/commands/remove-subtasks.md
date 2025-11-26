@@ -1,23 +1,23 @@
-Clear all subtasks from a specific task.
+Clear all scenes from a specific chapter.
 
-Arguments: $ARGUMENTS (task ID)
+Arguments: $ARGUMENTS (chapter ID)
 
-Remove all subtasks from a parent task at once.
+Remove all scenes from a parent chapter at once.
 
-## Clearing Subtasks
+## Clearing Scenes
 
-Bulk removal of all subtasks from a parent task.
+Bulk removal of all scenes from a parent chapter.
 
 ## Execution
 
 ```bash
-task-master clear-subtasks --id=<task-id>
+novel-master clear-subtasks --id=<chapter-id>
 ```
 
 ## Pre-Clear Analysis
 
-1. **Subtask Summary**
-   - Number of subtasks
+1. **Scene Summary**
+   - Number of scenes
    - Completion status of each
    - Work already done
    - Dependencies affected
@@ -26,61 +26,61 @@ task-master clear-subtasks --id=<task-id>
    - Data that will be lost
    - Dependencies to be removed
    - Effect on project timeline
-   - Parent task implications
+   - Parent chapter implications
 
 ## Confirmation Required
 
 ```
-Clear Subtasks Confirmation
+Clear Scenes Confirmation
 ━━━━━━━━━━━━━━━━━━━━━━━━━
-Parent Task: #5 "Implement user authentication"
-Subtasks to remove: 4
-- #5.1 "Setup auth framework" (done)
-- #5.2 "Create login form" (in-progress)
-- #5.3 "Add validation" (pending)
-- #5.4 "Write tests" (pending)
+Parent Chapter: #5 "The Confrontation"
+Scenes to remove: 4
+- #5.1 "Opening tension" (done)
+- #5.2 "Rising conflict" (in-progress)
+- #5.3 "Climax scene" (pending)
+- #5.4 "Resolution" (pending)
 
-⚠️  This will permanently delete all subtask data
+⚠️  This will permanently delete all scene data
 Continue? (y/n)
 ```
 
 ## Smart Features
 
-- Option to convert to standalone tasks
-- Backup task data before clearing
+- Option to convert to standalone chapters
+- Backup scene data before clearing
 - Preserve completed work history
-- Update parent task appropriately
+- Update parent chapter appropriately
 
 ## Process
 
-1. List all subtasks for confirmation
+1. List all scenes for confirmation
 2. Check for in-progress work
-3. Remove all subtasks
-4. Update parent task
+3. Remove all scenes
+4. Update parent chapter
 5. Clean up dependencies
 
 ## Alternative Options
 
 Suggest alternatives:
-- Convert important subtasks to tasks
-- Keep completed subtasks
+- Convert important scenes to chapters
+- Keep completed scenes
 - Archive instead of delete
-- Export subtask data first
+- Export scene data first
 
 ## Post-Clear
 
-- Show updated parent task
+- Show updated parent chapter
 - Recalculate time estimates
-- Update task complexity
+- Update chapter complexity
 - Suggest next steps
 
 ## Example
 
 ```
-/taskmaster:clear-subtasks 5
-→ Found 4 subtasks to remove
-→ Warning: Subtask #5.2 is in-progress
-→ Cleared all subtasks from task #5
-→ Updated parent task estimates
+/novelmaster:clear-subtasks 5
+→ Found 4 scenes to remove
+→ Warning: Scene #5.2 is in-progress
+→ Cleared all scenes from chapter #5
+→ Updated parent chapter estimates
 → Suggestion: Consider re-expanding with better breakdown
 ```

@@ -97,9 +97,9 @@ export class StartCommand extends Command {
 			}
 
 			// Initialize tm-core with spinner
-			spinner = ora('Initializing Task Master...').start();
+			spinner = ora('Initializing Novel Master...').start();
 			await this.initializeCore(getProjectRoot(options.project));
-			spinner.succeed('Task Master initialized');
+			spinner.succeed('Novel Master initialized');
 
 			// Get the task ID from argument or option, or find next available task
 			const idArg = taskId || options.id || null;

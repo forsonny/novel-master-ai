@@ -1,5 +1,5 @@
 /**
- * Path utility functions for Task Master
+ * Path utility functions for Novel Master
  * Provides centralized path resolution logic for both CLI and MCP use cases
  *
  * NOTE: This file is a legacy wrapper around @tm/core utilities.
@@ -10,12 +10,12 @@
 import path from 'path';
 import fs from 'fs';
 import {
-	TASKMASTER_TASKS_FILE,
+	NOVELMASTER_TASKS_FILE,
 	LEGACY_TASKS_FILE,
-	TASKMASTER_DOCS_DIR,
-	TASKMASTER_REPORTS_DIR,
+	NOVELMASTER_DOCS_DIR,
+	NOVELMASTER_REPORTS_DIR,
 	COMPLEXITY_REPORT_FILE,
-	TASKMASTER_CONFIG_FILE,
+	NOVELMASTER_CONFIG_FILE,
 	LEGACY_CONFIG_FILE
 } from '../constants/paths.js';
 import { getLoggerOrDefault } from './logger-utils.js';
@@ -25,8 +25,8 @@ import {
 } from '@tm/core';
 
 /**
- * Normalize project root to ensure it doesn't end with .taskmaster
- * This prevents double .taskmaster paths when using constants that include .taskmaster
+ * Normalize project root to ensure it doesn't end with .novelmaster
+ * This prevents double .novelmaster paths when using constants that include .novelmaster
  *
  * @deprecated Use the TypeScript implementation from @tm/core instead
  * @param {string} projectRoot - The project root path to normalize
@@ -41,9 +41,9 @@ export function normalizeProjectRoot(projectRoot) {
  * Traverses upwards from startDir until a project marker is found or filesystem root is reached
  * Limited to 50 parent directory levels to prevent excessive traversal
  *
- * Strategy: First searches ALL parent directories for .taskmaster (highest priority).
+ * Strategy: First searches ALL parent directories for .novelmaster (highest priority).
  * If not found, then searches for other project markers starting from current directory.
- * This ensures .taskmaster in parent directories takes precedence over other markers in subdirectories.
+ * This ensures .novelmaster in parent directories takes precedence over other markers in subdirectories.
  *
  * @deprecated Use the TypeScript implementation from @tm/core instead
  * @param {string} startDir - Directory to start searching from (defaults to process.cwd())
@@ -72,7 +72,7 @@ export function findTasksPath(explicitPath = null, args = null, log = null) {
 		return null;
 	}
 
-	// 2. Normalize project root to prevent double .taskmaster paths
+	// 2. Normalize project root to prevent double .novelmaster paths
 	const projectRoot = normalizeProjectRoot(rawProjectRoot);
 
 	// 3. If explicit path is provided, resolve it relative to project root (highest priority)
@@ -93,7 +93,7 @@ export function findTasksPath(explicitPath = null, args = null, log = null) {
 
 	// 4. Check possible locations in order of preference
 	const possiblePaths = [
-		path.join(projectRoot, TASKMASTER_TASKS_FILE), // .taskmaster/tasks/tasks.json (NEW)
+		path.join(projectRoot, NOVELMASTER_TASKS_FILE), // .novelmaster/tasks/tasks.json (NEW)
 		path.join(projectRoot, LEGACY_TASKS_FILE) // tasks/tasks.json (LEGACY)
 	];
 
@@ -104,18 +104,18 @@ export function findTasksPath(explicitPath = null, args = null, log = null) {
 			// Issue deprecation warning for legacy paths
 			if (
 				tasksPath.includes('tasks/tasks.json') &&
-				!tasksPath.includes('.taskmaster')
+				!tasksPath.includes('.novelmaster')
 			) {
 				logger.warn?.(
-					`⚠️  DEPRECATION WARNING: Found tasks.json in legacy location '${tasksPath}'. Please migrate to the new .taskmaster directory structure. Run 'task-master migrate' to automatically migrate your project.`
+					`⚠️  DEPRECATION WARNING: Found tasks.json in legacy location '${tasksPath}'. Please migrate to the new .novelmaster directory structure. Run 'novel-master migrate' to automatically migrate your project.`
 				);
 			} else if (
 				tasksPath.endsWith('tasks.json') &&
-				!tasksPath.includes('.taskmaster') &&
+				!tasksPath.includes('.novelmaster') &&
 				!tasksPath.includes('tasks/')
 			) {
 				logger.warn?.(
-					`⚠️  DEPRECATION WARNING: Found tasks.json in legacy root location '${tasksPath}'. Please migrate to the new .taskmaster directory structure. Run 'task-master migrate' to automatically migrate your project.`
+					`⚠️  DEPRECATION WARNING: Found tasks.json in legacy root location '${tasksPath}'. Please migrate to the new .novelmaster directory structure. Run 'novel-master migrate' to automatically migrate your project.`
 				);
 			}
 
@@ -128,11 +128,11 @@ export function findTasksPath(explicitPath = null, args = null, log = null) {
 }
 
 /**
- * Find the PRD document file path with fallback logic
+ * Find the NRD document file path with fallback logic
  * @param {string|null} explicitPath - Explicit path provided by user (highest priority)
  * @param {Object|null} args - Args object for MCP context (optional)
  * @param {Object|null} log - Logger object (optional)
- * @returns {string|null} - Resolved PRD document path or null if not found
+ * @returns {string|null} - Resolved NRD (Novel Requirements Document) path or null if not found
  */
 export function findPRDPath(explicitPath = null, args = null, log = null) {
 	const logger = getLoggerOrDefault(log);
@@ -142,18 +142,18 @@ export function findPRDPath(explicitPath = null, args = null, log = null) {
 		// Use original cwd if available (set by dev.js), otherwise current cwd
 		// This ensures relative paths are resolved from where the user invoked the command
 		const cwdForResolution =
-			process.env.TASKMASTER_ORIGINAL_CWD || process.cwd();
+			process.env.NOVELMASTER_ORIGINAL_CWD || process.cwd();
 
 		const resolvedPath = path.isAbsolute(explicitPath)
 			? explicitPath
 			: path.resolve(cwdForResolution, explicitPath);
 
 		if (fs.existsSync(resolvedPath)) {
-			logger.info?.(`Using explicit PRD path: ${resolvedPath}`);
+			logger.info?.(`Using explicit NRD path: ${resolvedPath}`);
 			return resolvedPath;
 		} else {
 			logger.warn?.(
-				`Explicit PRD path not found: ${resolvedPath}, trying fallbacks`
+				`Explicit NRD path not found: ${resolvedPath}, trying fallbacks`
 			);
 		}
 	}
@@ -166,28 +166,37 @@ export function findPRDPath(explicitPath = null, args = null, log = null) {
 		return null;
 	}
 
-	// 3. Normalize project root to prevent double .taskmaster paths
+	// 3. Normalize project root to prevent double .novelmaster paths
 	const projectRoot = normalizeProjectRoot(rawProjectRoot);
 
 	// 4. Check possible locations in order of preference
 	const locations = [
-		TASKMASTER_DOCS_DIR, // .taskmaster/docs/ (NEW)
+		NOVELMASTER_DOCS_DIR, // .novelmaster/docs/ (NEW)
 		'scripts/', // Legacy location
 		'' // Project root
 	];
 
-	const fileNames = ['PRD.md', 'prd.md', 'PRD.txt', 'prd.txt'];
+	const fileNames = [
+		'nrd.txt',
+		'NRD.txt',
+		'nrd.md',
+		'NRD.md',
+		'PRD.md',
+		'prd.md',
+		'PRD.txt',
+		'prd.txt'
+	];
 
 	for (const location of locations) {
 		for (const fileName of fileNames) {
 			const prdPath = path.join(projectRoot, location, fileName);
 			if (fs.existsSync(prdPath)) {
-				logger.info?.(`Found PRD document at: ${prdPath}`);
+				logger.info?.(`Found NRD document at: ${prdPath}`);
 
 				// Issue deprecation warning for legacy paths
 				if (location === 'scripts/' || location === '') {
 					logger.warn?.(
-						`⚠️  DEPRECATION WARNING: Found PRD file in legacy location '${prdPath}'. Please migrate to .taskmaster/docs/ directory. Run 'task-master migrate' to automatically migrate your project.`
+						`⚠️  DEPRECATION WARNING: Found NRD/PRD file in legacy location '${prdPath}'. Please migrate to .novelmaster/docs/ directory. Run 'novel-master migrate' to automatically migrate your project.`
 					);
 				}
 
@@ -196,7 +205,7 @@ export function findPRDPath(explicitPath = null, args = null, log = null) {
 		}
 	}
 
-	logger.warn?.(`No PRD document found in project: ${projectRoot}`);
+	logger.warn?.(`No NRD document found in project: ${projectRoot}`);
 	return null;
 }
 
@@ -218,7 +227,7 @@ export function findComplexityReportPath(
 	if (explicitPath) {
 		// Use original cwd if available (set by dev.js), otherwise current cwd
 		const cwdForResolution =
-			process.env.TASKMASTER_ORIGINAL_CWD || process.cwd();
+			process.env.NOVELMASTER_ORIGINAL_CWD || process.cwd();
 
 		const resolvedPath = path.isAbsolute(explicitPath)
 			? explicitPath
@@ -242,12 +251,12 @@ export function findComplexityReportPath(
 		return null;
 	}
 
-	// 3. Normalize project root to prevent double .taskmaster paths
+	// 3. Normalize project root to prevent double .novelmaster paths
 	const projectRoot = normalizeProjectRoot(rawProjectRoot);
 
 	// 4. Check possible locations in order of preference
 	const locations = [
-		TASKMASTER_REPORTS_DIR, // .taskmaster/reports/ (NEW)
+		NOVELMASTER_REPORTS_DIR, // .novelmaster/reports/ (NEW)
 		'scripts/', // Legacy location
 		'' // Project root
 	];
@@ -272,7 +281,7 @@ export function findComplexityReportPath(
 				// Issue deprecation warning for legacy paths
 				if (location === 'scripts/' || location === '') {
 					logger.warn?.(
-						`⚠️  DEPRECATION WARNING: Found complexity report in legacy location '${reportPath}'. Please migrate to .taskmaster/reports/ directory. Run 'task-master migrate' to automatically migrate your project.`
+						`⚠️  DEPRECATION WARNING: Found complexity report in legacy location '${reportPath}'. Please migrate to .novelmaster/reports/ directory. Run 'novel-master migrate' to automatically migrate your project.`
 					);
 				}
 
@@ -303,7 +312,7 @@ export function resolveTasksOutputPath(
 	if (explicitPath) {
 		// Use original cwd if available (set by dev.js), otherwise current cwd
 		const cwdForResolution =
-			process.env.TASKMASTER_ORIGINAL_CWD || process.cwd();
+			process.env.NOVELMASTER_ORIGINAL_CWD || process.cwd();
 
 		const resolvedPath = path.isAbsolute(explicitPath)
 			? explicitPath
@@ -317,11 +326,11 @@ export function resolveTasksOutputPath(
 	const rawProjectRoot =
 		args?.projectRoot || findProjectRoot() || process.cwd();
 
-	// 3. Normalize project root to prevent double .taskmaster paths
+	// 3. Normalize project root to prevent double .novelmaster paths
 	const projectRoot = normalizeProjectRoot(rawProjectRoot);
 
-	// 4. Use new .taskmaster structure by default
-	const defaultPath = path.join(projectRoot, TASKMASTER_TASKS_FILE);
+	// 4. Use new .novelmaster structure by default
+	const defaultPath = path.join(projectRoot, NOVELMASTER_TASKS_FILE);
 	logger.info?.(`Using default output path: ${defaultPath}`);
 
 	// Ensure the directory exists
@@ -353,7 +362,7 @@ export function resolveComplexityReportOutputPath(
 	if (explicitPath) {
 		// Use original cwd if available (set by dev.js), otherwise current cwd
 		const cwdForResolution =
-			process.env.TASKMASTER_ORIGINAL_CWD || process.cwd();
+			process.env.NOVELMASTER_ORIGINAL_CWD || process.cwd();
 
 		const resolvedPath = path.isAbsolute(explicitPath)
 			? explicitPath
@@ -376,8 +385,8 @@ export function resolveComplexityReportOutputPath(
 		filename = `task-complexity-report_${tag}.json`;
 	}
 
-	// 4. Use new .taskmaster structure by default
-	const defaultPath = path.join(projectRoot, '.taskmaster/reports', filename);
+	// 4. Use new .novelmaster structure by default
+	const defaultPath = path.join(projectRoot, '.novelmaster/reports', filename);
 	logger.info?.(
 		`Using tag-aware complexity report output path: ${defaultPath}`
 	);
@@ -406,7 +415,7 @@ export function findConfigPath(explicitPath = null, args = null, log = null) {
 	if (explicitPath) {
 		// Use original cwd if available (set by dev.js), otherwise current cwd
 		const cwdForResolution =
-			process.env.TASKMASTER_ORIGINAL_CWD || process.cwd();
+			process.env.NOVELMASTER_ORIGINAL_CWD || process.cwd();
 
 		const resolvedPath = path.isAbsolute(explicitPath)
 			? explicitPath
@@ -430,12 +439,12 @@ export function findConfigPath(explicitPath = null, args = null, log = null) {
 		return null;
 	}
 
-	// 3. Normalize project root to prevent double .taskmaster paths
+	// 3. Normalize project root to prevent double .novelmaster paths
 	const projectRoot = normalizeProjectRoot(rawProjectRoot);
 
 	// 4. Check possible locations in order of preference
 	const possiblePaths = [
-		path.join(projectRoot, TASKMASTER_CONFIG_FILE), // NEW location
+		path.join(projectRoot, NOVELMASTER_CONFIG_FILE), // NEW location
 		path.join(projectRoot, LEGACY_CONFIG_FILE) // LEGACY location
 	];
 
@@ -444,7 +453,7 @@ export function findConfigPath(explicitPath = null, args = null, log = null) {
 			// Issue deprecation warning for legacy paths
 			if (configPath?.endsWith(LEGACY_CONFIG_FILE)) {
 				logger.warn?.(
-					`⚠️  DEPRECATION WARNING: Found configuration in legacy location '${configPath}'. Please migrate to .taskmaster/config.json. Run 'task-master migrate' to automatically migrate your project.`
+					`⚠️  DEPRECATION WARNING: Found configuration in legacy location '${configPath}'. Please migrate to .novelmaster/config.json. Run 'novel-master migrate' to automatically migrate your project.`
 				);
 			}
 

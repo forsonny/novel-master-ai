@@ -1,6 +1,6 @@
 /**
  * @fileoverview get-tasks MCP tool
- * Get all tasks from Task Master with optional filtering
+ * Get all tasks from Novel Master with optional filtering
  */
 
 import { z } from 'zod';
@@ -38,7 +38,7 @@ export function registerGetTasksTool(server: FastMCP) {
 	server.addTool({
 		name: 'get_tasks',
 		description:
-			'Get all tasks from Task Master, optionally filtering by status and including subtasks.',
+			'Get all tasks from Novel Master, optionally filtering by status and including subtasks.',
 		parameters: GetTasksSchema,
 		execute: withNormalizedProjectRoot(
 			async (args: GetTasksArgs, context: MCPContext) => {

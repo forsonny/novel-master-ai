@@ -268,9 +268,9 @@ export function displaySuggestedActions(taskId: string | number): void {
 		boxen(
 			chalk.white.bold('Suggested Actions:') +
 				'\n\n' +
-				`${chalk.cyan('1.')} Run ${chalk.yellow(`task-master set-status --id=${taskId} --status=in-progress`)} to start working\n` +
-				`${chalk.cyan('2.')} Run ${chalk.yellow(`task-master expand --id=${taskId}`)} to break down into subtasks\n` +
-				`${chalk.cyan('3.')} Run ${chalk.yellow(`task-master update-task --id=${taskId} --prompt="..."`)} to update details`,
+				`${chalk.cyan('1.')} Run ${chalk.yellow(`novel-master set-status --id=${taskId} --status=in-progress`)} to start working\n` +
+				`${chalk.cyan('2.')} Run ${chalk.yellow(`novel-master expand --id=${taskId}`)} to break down into subtasks\n` +
+				`${chalk.cyan('3.')} Run ${chalk.yellow(`novel-master update-task --id=${taskId} --prompt="..."`)} to update details`,
 			{
 				padding: 1,
 				margin: { top: 1 },

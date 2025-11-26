@@ -1,7 +1,7 @@
 {
-	"name": "task-master-hamster",
-	"displayName": "Taskmaster AI",
-	"description": "A visual Kanban board interface for Taskmaster projects in VS Code",
+	"name": "novel-master-hamster",
+	"displayName": "Novel Master AI",
+	"description": "A visual Kanban board interface for Novel Master projects in VS Code",
 	"version": "0.25.3",
 	"publisher": "Hamster",
 	"icon": "assets/icon.png",
@@ -16,7 +16,7 @@
 		"todo",
 		"task tracking",
 		"project management",
-		"task-master",
+		"novel-master",
 		"task management",
 		"agile",
 		"scrum",
@@ -42,24 +42,24 @@
 		"boards",
 		"cards"
 	],
-	"repository": "https://github.com/eyaltoledano/claude-task-master",
-	"activationEvents": ["onStartupFinished", "workspaceContains:.taskmaster/**"],
+	"repository": "https://github.com/eyaltoledano/claude-novel-master",
+	"activationEvents": ["onStartupFinished", "workspaceContains:.novelmaster/**"],
 	"main": "./dist/extension.js",
 	"contributes": {
 		"viewsContainers": {
 			"activitybar": [
 				{
-					"id": "taskmaster",
-					"title": "Taskmaster",
+					"id": "novelmaster",
+					"title": "Novel Master",
 					"icon": "assets/sidebar-icon.svg"
 				}
 			]
 		},
 		"views": {
-			"taskmaster": [
+			"novelmaster": [
 				{
-					"id": "taskmaster.welcome",
-					"name": "Taskmaster",
+					"id": "novelmaster.welcome",
+					"name": "Novel Master",
 					"type": "webview"
 				}
 			]
@@ -67,177 +67,177 @@
 		"commands": [
 			{
 				"command": "tm.showKanbanBoard",
-				"title": "Taskmaster: Show Board"
+				"title": "Novel Master: Show Board"
 			},
 			{
 				"command": "tm.checkConnection",
-				"title": "Taskmaster: Check Connection"
+				"title": "Novel Master: Check Connection"
 			},
 			{
 				"command": "tm.reconnect",
-				"title": "Taskmaster: Reconnect"
+				"title": "Novel Master: Reconnect"
 			},
 			{
 				"command": "tm.openSettings",
-				"title": "Taskmaster: Open Settings"
+				"title": "Novel Master: Open Settings"
 			}
 		],
 		"configuration": {
-			"title": "Taskmaster Kanban",
+			"title": "Novel Master Kanban",
 			"properties": {
-				"taskmaster.mcp.command": {
+				"novelmaster.mcp.command": {
 					"type": "string",
 					"default": "npx",
-					"description": "The command or absolute path to execute for the MCP server (e.g., 'npx' or '/usr/local/bin/task-master-ai')."
+					"description": "The command or absolute path to execute for the MCP server (e.g., 'npx' or '/usr/local/bin/novel-master-ai')."
 				},
-				"taskmaster.mcp.args": {
+				"novelmaster.mcp.args": {
 					"type": "array",
 					"items": {
 						"type": "string"
 					},
-					"default": ["-y", "task-master-ai"],
+					"default": ["-y", "novel-master-ai"],
 					"description": "An array of arguments to pass to the MCP server command."
 				},
-				"taskmaster.mcp.cwd": {
+				"novelmaster.mcp.cwd": {
 					"type": "string",
-					"description": "Working directory for the Task Master MCP server (defaults to workspace root)"
+					"description": "Working directory for the Novel Master MCP server (defaults to workspace root)"
 				},
-				"taskmaster.mcp.env": {
+				"novelmaster.mcp.env": {
 					"type": "object",
-					"description": "Environment variables for the Task Master MCP server"
+					"description": "Environment variables for the Novel Master MCP server"
 				},
-				"taskmaster.mcp.timeout": {
+				"novelmaster.mcp.timeout": {
 					"type": "number",
 					"default": 30000,
 					"minimum": 1000,
 					"maximum": 300000,
 					"description": "Connection timeout in milliseconds"
 				},
-				"taskmaster.mcp.maxReconnectAttempts": {
+				"novelmaster.mcp.maxReconnectAttempts": {
 					"type": "number",
 					"default": 5,
 					"minimum": 1,
 					"maximum": 20,
 					"description": "Maximum number of reconnection attempts"
 				},
-				"taskmaster.mcp.reconnectBackoffMs": {
+				"novelmaster.mcp.reconnectBackoffMs": {
 					"type": "number",
 					"default": 1000,
 					"minimum": 100,
 					"maximum": 10000,
 					"description": "Initial reconnection backoff delay in milliseconds"
 				},
-				"taskmaster.mcp.maxBackoffMs": {
+				"novelmaster.mcp.maxBackoffMs": {
 					"type": "number",
 					"default": 30000,
 					"minimum": 1000,
 					"maximum": 300000,
 					"description": "Maximum reconnection backoff delay in milliseconds"
 				},
-				"taskmaster.mcp.healthCheckIntervalMs": {
+				"novelmaster.mcp.healthCheckIntervalMs": {
 					"type": "number",
 					"default": 15000,
 					"minimum": 5000,
 					"maximum": 60000,
 					"description": "Health check interval in milliseconds"
 				},
-				"taskmaster.mcp.requestTimeoutMs": {
+				"novelmaster.mcp.requestTimeoutMs": {
 					"type": "number",
 					"default": 300000,
 					"minimum": 30000,
 					"maximum": 600000,
 					"description": "MCP request timeout in milliseconds (default: 5 minutes)"
 				},
-				"taskmaster.ui.autoRefresh": {
+				"novelmaster.ui.autoRefresh": {
 					"type": "boolean",
 					"default": true,
 					"description": "Automatically refresh tasks from the server"
 				},
-				"taskmaster.ui.refreshIntervalMs": {
+				"novelmaster.ui.refreshIntervalMs": {
 					"type": "number",
 					"default": 10000,
 					"minimum": 1000,
 					"maximum": 300000,
 					"description": "Auto-refresh interval in milliseconds"
 				},
-				"taskmaster.ui.theme": {
+				"novelmaster.ui.theme": {
 					"type": "string",
 					"enum": ["auto", "light", "dark"],
 					"default": "auto",
 					"description": "UI theme preference"
 				},
-				"taskmaster.ui.showCompletedTasks": {
+				"novelmaster.ui.showCompletedTasks": {
 					"type": "boolean",
 					"default": true,
 					"description": "Show completed tasks in the Kanban board"
 				},
-				"taskmaster.ui.taskDisplayLimit": {
+				"novelmaster.ui.taskDisplayLimit": {
 					"type": "number",
 					"default": 100,
 					"minimum": 1,
 					"maximum": 1000,
 					"description": "Maximum number of tasks to display"
 				},
-				"taskmaster.ui.showPriority": {
+				"novelmaster.ui.showPriority": {
 					"type": "boolean",
 					"default": true,
 					"description": "Show task priority indicators"
 				},
-				"taskmaster.ui.showTaskIds": {
+				"novelmaster.ui.showTaskIds": {
 					"type": "boolean",
 					"default": true,
 					"description": "Show task IDs in the interface"
 				},
-				"taskmaster.performance.maxConcurrentRequests": {
+				"novelmaster.performance.maxConcurrentRequests": {
 					"type": "number",
 					"default": 5,
 					"minimum": 1,
 					"maximum": 20,
 					"description": "Maximum number of concurrent MCP requests"
 				},
-				"taskmaster.performance.requestTimeoutMs": {
+				"novelmaster.performance.requestTimeoutMs": {
 					"type": "number",
 					"default": 30000,
 					"minimum": 1000,
 					"maximum": 300000,
 					"description": "Request timeout in milliseconds"
 				},
-				"taskmaster.performance.cacheTasksMs": {
+				"novelmaster.performance.cacheTasksMs": {
 					"type": "number",
 					"default": 5000,
 					"minimum": 0,
 					"maximum": 60000,
 					"description": "Task cache duration in milliseconds"
 				},
-				"taskmaster.performance.lazyLoadThreshold": {
+				"novelmaster.performance.lazyLoadThreshold": {
 					"type": "number",
 					"default": 50,
 					"minimum": 10,
 					"maximum": 500,
 					"description": "Number of tasks before enabling lazy loading"
 				},
-				"taskmaster.debug.enableLogging": {
+				"novelmaster.debug.enableLogging": {
 					"type": "boolean",
 					"default": true,
 					"description": "Enable debug logging"
 				},
-				"taskmaster.debug.logLevel": {
+				"novelmaster.debug.logLevel": {
 					"type": "string",
 					"enum": ["error", "warn", "info", "debug"],
 					"default": "info",
 					"description": "Logging level"
 				},
-				"taskmaster.debug.enableConnectionMetrics": {
+				"novelmaster.debug.enableConnectionMetrics": {
 					"type": "boolean",
 					"default": true,
 					"description": "Enable connection performance metrics"
 				},
-				"taskmaster.debug.saveEventLogs": {
+				"novelmaster.debug.saveEventLogs": {
 					"type": "boolean",
 					"default": false,
 					"description": "Save event logs to files"
 				},
-				"taskmaster.debug.maxEventLogSize": {
+				"novelmaster.debug.maxEventLogSize": {
 					"type": "number",
 					"default": 1000,
 					"minimum": 10,

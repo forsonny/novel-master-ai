@@ -1,6 +1,6 @@
 /**
  * create-tag-from-branch.js
- * Direct function implementation for creating tags from git branches
+ * Direct function implementation for creating tag contexts from git branches (useful for organizing chapters by branch)
  */
 
 import { createTagFromBranch } from '../../../../scripts/modules/task-manager/tag-management.js';
@@ -15,15 +15,15 @@ import {
 import { createLogWrapper } from '../../tools/utils.js';
 
 /**
- * Direct function wrapper for creating tags from git branches with error handling.
+ * Direct function wrapper for creating tag contexts from git branches (useful for organizing chapters by branch) with error handling.
  *
  * @param {Object} args - Command arguments
  * @param {string} args.tasksJsonPath - Path to the tasks.json file (resolved by tool)
  * @param {string} [args.branchName] - Git branch name (optional, uses current branch if not provided)
- * @param {boolean} [args.copyFromCurrent] - Copy tasks from current tag
- * @param {string} [args.copyFromTag] - Copy tasks from specific tag
- * @param {string} [args.description] - Custom description for the tag
- * @param {boolean} [args.autoSwitch] - Automatically switch to the new tag
+ * @param {boolean} [args.copyFromCurrent] - Copy chapters from current tag
+ * @param {string} [args.copyFromTag] - Copy chapters from specific tag
+ * @param {string} [args.description] - Custom description for the tag context
+ * @param {boolean} [args.autoSwitch] - Automatically switch to the new tag context
  * @param {string} [args.projectRoot] - Project root path
  * @param {Object} log - Logger object
  * @param {Object} context - Additional context (session)
@@ -57,7 +57,7 @@ export async function createTagFromBranchDirect(args, log, context = {}) {
 				success: false,
 				error: {
 					code: 'MISSING_ARGUMENT',
-					message: 'tasksJsonPath is required'
+					message: 'Tasks file path is required to create a tag context from a git branch'
 				}
 			};
 		}

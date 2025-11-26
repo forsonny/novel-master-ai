@@ -124,7 +124,7 @@ alwaysApply: true
 ---
 
 This references [dev_workflow.mdc](mdc:.cursor/rules/dev_workflow.mdc) and 
-[taskmaster.mdc](mdc:.cursor/rules/taskmaster.mdc).
+[novelmaster.mdc](mdc:.cursor/rules/novelmaster.mdc).
 Files are in the .cursor/rules directory and we should reference the rules directory.`;
 
 		// Mock file read to return our test content
@@ -150,10 +150,10 @@ Files are in the .cursor/rules directory and we should reference the rules direc
 		); // globs -> applyTo with path transformation
 		expect(transformedContent).toContain(
 			'(.github/instructions/dev_workflow.instructions.md)'
-		); // File path transformation - no taskmaster subdirectory for VS Code
+		); // File path transformation - no novelmaster subdirectory for VS Code
 		expect(transformedContent).toContain(
-			'(.github/instructions/taskmaster.instructions.md)'
-		); // File path transformation - no taskmaster subdirectory for VS Code
+			'(.github/instructions/novelmaster.instructions.md)'
+		); // File path transformation - no novelmaster subdirectory for VS Code
 		expect(transformedContent).toContain('instructions directory'); // "rules directory" -> "instructions directory"
 		expect(transformedContent).not.toContain('(mdc:.cursor/rules/');
 		expect(transformedContent).not.toContain('.cursor/rules');

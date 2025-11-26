@@ -1,0 +1,150 @@
+---
+description: Guide for version control workflows specific to novel writing and manuscript management
+globs: **/*
+alwaysApply: true
+---
+
+# Novel Master Git Workflow
+
+This guide outlines best practices for using Git with Novel Master to manage manuscript versions, draft branches, and revision tracking.
+
+## Manuscript Versioning Strategy
+
+### Branch Naming Conventions
+
+- **`master`/`main`**: The primary manuscript branch containing the most polished version
+- **`draft-v1`**, **`draft-v2`**: Major draft versions of the manuscript
+- **`rev-1`**, **`rev-2`**: Revision passes (structural edits, line edits, copy edits)
+- **`beta-feedback`**: Branch for incorporating beta reader feedback
+- **`chapter-<name>`**: Feature branches for individual chapters (e.g., `chapter-intro`, `chapter-climax`)
+- **`pov-<character>`**: Branches for multi-POV novels focusing on specific character arcs
+
+### Draft Management
+
+1. **Initial Draft**: Create `draft-v1` branch from `master`
+   ```bash
+   git checkout -b draft-v1
+   ```
+
+2. **Revision Passes**: Create revision branches from the draft
+   ```bash
+   git checkout -b rev-1 draft-v1
+   ```
+
+3. **Beta Feedback**: Create feedback branch from latest revision
+   ```bash
+   git checkout -b beta-feedback rev-2
+   ```
+
+### Chapter-Level Versioning
+
+For large novels, consider chapter-level branches:
+
+```bash
+# Create branch for specific chapter
+git checkout -b chapter-01-introduction
+
+# Work on chapter, commit frequently
+git add .novelmaster/manuscript/draft/chapters/chapter-01.md
+git commit -m "Draft Chapter 1: Introduction scene"
+
+# Merge back to draft branch when complete
+git checkout draft-v1
+git merge chapter-01-introduction
+```
+
+## Revision Tracking
+
+### Commit Messages for Novel Work
+
+Use descriptive commit messages that capture narrative changes:
+
+```bash
+# Good commit messages
+git commit -m "Chapter 3: Add emotional beat for protagonist's realization"
+git commit -m "Revise Chapter 7: Tighten pacing in confrontation scene"
+git commit -m "Beta feedback: Address POV consistency in Chapter 12"
+
+# Avoid generic messages
+git commit -m "Update file"  # Too vague
+git commit -m "Changes"      # Not helpful
+```
+
+### Tagging Major Milestones
+
+Tag significant manuscript milestones:
+
+```bash
+# Tag draft completion
+git tag -a draft-v1-complete -m "First complete draft (95,000 words)"
+
+# Tag revision completion
+git tag -a rev-2-complete -m "Second revision pass complete"
+
+# Tag beta feedback integration
+git tag -a beta-integrated -m "All beta feedback incorporated"
+```
+
+## Merge Strategies for Manuscript Revisions
+
+### Handling Revision Conflicts
+
+When merging revision branches:
+
+1. **Review conflicts carefully**: Manuscript conflicts often indicate narrative inconsistencies
+2. **Preserve authorial intent**: Choose the version that best serves the story
+3. **Document decisions**: Add notes about why certain revisions were kept or discarded
+
+### Merging Chapter Branches
+
+```bash
+# Merge chapter branch into draft
+git checkout draft-v1
+git merge --no-ff chapter-05-climax -m "Merge Chapter 5: Climax scene"
+
+# Resolve any conflicts in manuscript files
+# Commit the merge
+```
+
+## Integration with Novel Master Tags
+
+Novel Master tags can mirror Git branches:
+
+- **Tag `draft`** → Branch `draft-v1`
+- **Tag `rev-1`** → Branch `rev-1`
+- **Tag `beta-feedback`** → Branch `beta-feedback`
+
+This keeps task management and version control aligned.
+
+## Best Practices
+
+1. **Commit frequently**: Save your work often, especially after completing scenes
+2. **Use meaningful branch names**: Make it clear what each branch contains
+3. **Keep master clean**: Only merge polished work to master
+4. **Document major changes**: Use commit messages to track narrative evolution
+5. **Backup regularly**: Push branches to remote repository for safety
+
+## Workflow Example
+
+```bash
+# Start new draft
+git checkout -b draft-v2 master
+novel-master use-tag draft-v2
+
+# Work on chapters
+novel-master expand --id=1 --research
+# ... write prose ...
+git commit -m "Chapter 1: Complete first draft"
+
+# Create revision branch
+git checkout -b rev-1 draft-v2
+novel-master use-tag rev-1
+
+# Make revisions
+# ... revise prose ...
+git commit -m "Rev-1: Tighten Chapter 1 pacing"
+
+# Merge revision back
+git checkout draft-v2
+git merge rev-1
+```

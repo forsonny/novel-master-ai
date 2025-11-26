@@ -1,5 +1,6 @@
 /**
- * Direct function wrapper for expandAllTasks
+ * expand-all-tasks.js
+ * Direct function implementation for expanding all chapters into scenes/beats
  */
 
 import { expandAllTasks } from '../../../../scripts/modules/task-manager.js';
@@ -11,15 +12,15 @@ import { createLogWrapper } from '../../tools/utils.js';
 import { resolveComplexityReportOutputPath } from '../../../../src/utils/path-utils.js';
 
 /**
- * Expand all pending tasks with subtasks (Direct Function Wrapper)
+ * Expand all pending chapters into scenes/beats (Direct Function Wrapper)
  * @param {Object} args - Function arguments
  * @param {string} args.tasksJsonPath - Explicit path to the tasks.json file.
- * @param {number|string} [args.num] - Number of subtasks to generate
- * @param {boolean} [args.research] - Enable research-backed subtask generation
- * @param {string} [args.prompt] - Additional context to guide subtask generation
- * @param {boolean} [args.force] - Force regeneration of subtasks for tasks that already have them
+ * @param {number|string} [args.num] - Number of scenes/beats to generate per chapter
+ * @param {boolean} [args.research] - Enable research-backed beat generation (lore/genre-aware)
+ * @param {string} [args.prompt] - Additional narrative context to guide beat generation (tone, POV, stakes)
+ * @param {boolean} [args.force] - Force regeneration of beats for chapters that already have them
  * @param {string} [args.projectRoot] - Project root path.
- * @param {string} [args.tag] - Tag for the task (optional)
+ * @param {string} [args.tag] - Tag context (outline, draft, revision) for the task (optional)
  * @param {Object} log - Logger object from FastMCP
  * @param {Object} context - Context object containing session
  * @returns {Promise<{success: boolean, data?: Object, error?: {code: string, message: string}}>}
@@ -56,7 +57,7 @@ export async function expandAllTasksDirect(args, log, context = {}) {
 			success: false,
 			error: {
 				code: 'MISSING_ARGUMENT',
-				message: 'tasksJsonPath is required'
+				message: 'Tasks file path is required to expand chapters'
 			}
 		};
 	}
@@ -88,12 +89,12 @@ export async function expandAllTasksDirect(args, log, context = {}) {
 		return {
 			success: true,
 			data: {
-				message: `Expand all operation completed. Expanded: ${result.expandedCount}, Failed: ${result.failedCount}, Skipped: ${result.skippedCount}`,
+				message: `Expand all chapters operation completed. Expanded: ${result.expandedCount}, Failed: ${result.failedCount}, Skipped: ${result.skippedCount}`,
 				details: {
 					expandedCount: result.expandedCount,
 					failedCount: result.failedCount,
 					skippedCount: result.skippedCount,
-					tasksToExpand: result.tasksToExpand
+					chaptersExpanded: result.tasksToExpand
 				},
 				telemetryData: result.telemetryData // Pass the aggregated object
 			}

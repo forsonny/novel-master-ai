@@ -1,5 +1,6 @@
 /**
- * Direct function wrapper for removeDependency
+ * remove-dependency.js
+ * Direct function implementation for removing a narrative dependency
  */
 
 import { removeDependency } from '../../../../scripts/modules/dependency-manager.js';
@@ -9,13 +10,13 @@ import {
 } from '../../../../scripts/modules/utils.js';
 
 /**
- * Remove a dependency from a task
+ * Remove a narrative dependency (prerequisite relationship) from a chapter/scene
  * @param {Object} args - Function arguments
  * @param {string} args.tasksJsonPath - Explicit path to the tasks.json file.
- * @param {string|number} args.id - Task ID to remove dependency from
- * @param {string|number} args.dependsOn - Task ID to remove as a dependency
+ * @param {string|number} args.id - Chapter/scene ID to remove dependency from (e.g., "12" or "12.3")
+ * @param {string|number} args.dependsOn - Chapter/scene ID to remove as a prerequisite
  * @param {string} args.projectRoot - Project root path (for MCP/env fallback)
- * @param {string} args.tag - Tag for the task (optional)
+ * @param {string} args.tag - Tag context (outline, draft, revision) for the task (optional)
  * @param {Object} log - Logger object
  * @returns {Promise<{success: boolean, data?: Object, error?: {code: string, message: string}}>}
  */
@@ -32,7 +33,7 @@ export async function removeDependencyDirect(args, log) {
 				success: false,
 				error: {
 					code: 'MISSING_ARGUMENT',
-					message: 'tasksJsonPath is required'
+					message: 'Tasks file path is required to remove a narrative dependency'
 				}
 			};
 		}
@@ -43,7 +44,7 @@ export async function removeDependencyDirect(args, log) {
 				success: false,
 				error: {
 					code: 'INPUT_VALIDATION_ERROR',
-					message: 'Task ID (id) is required'
+					message: 'Chapter/scene ID (id) is required (e.g., "12" or "12.3")'
 				}
 			};
 		}
@@ -53,7 +54,7 @@ export async function removeDependencyDirect(args, log) {
 				success: false,
 				error: {
 					code: 'INPUT_VALIDATION_ERROR',
-					message: 'Dependency ID (dependsOn) is required'
+					message: 'Prerequisite chapter/scene ID (dependsOn) is required (e.g., "5" or "5.2")'
 				}
 			};
 		}
@@ -70,7 +71,7 @@ export async function removeDependencyDirect(args, log) {
 				: parseInt(dependsOn, 10);
 
 		log.info(
-			`Removing dependency: task ${taskId} no longer depends on ${dependencyId}`
+			`Removing narrative dependency: chapter/scene ${taskId} no longer depends on ${dependencyId}`
 		);
 
 		// Enable silent mode to prevent console logs from interfering with JSON response
@@ -88,7 +89,7 @@ export async function removeDependencyDirect(args, log) {
 		return {
 			success: true,
 			data: {
-				message: `Successfully removed dependency: Task ${taskId} no longer depends on ${dependencyId}`,
+				message: `Successfully removed narrative dependency: Chapter/scene ${taskId} no longer depends on ${dependencyId}`,
 				taskId: taskId,
 				dependencyId: dependencyId
 			}

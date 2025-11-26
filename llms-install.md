@@ -1,10 +1,10 @@
-# Taskmaster AI Installation Guide
+# Novel Master AI Installation Guide
 
-This guide helps AI assistants install and configure Taskmaster for users in their development projects.
+This guide helps AI assistants install and configure Novel Master for users in their development projects.
 
-## What is Taskmaster?
+## What is Novel Master?
 
-Taskmaster is an AI-driven task management system designed for development workflows. It helps break down projects into manageable tasks, track dependencies, and maintain development momentum through structured, AI-enhanced planning.
+Novel Master is an AI-driven task management system designed for development workflows. It helps break down projects into manageable tasks, track dependencies, and maintain development momentum through structured, AI-enhanced planning.
 
 ## Installation Steps
 
@@ -15,9 +15,9 @@ Add the following configuration to the user's MCP settings file (`.cursor/mcp.js
 ```json
 {
 	"mcpServers": {
-		"taskmaster-ai": {
+		"novelmaster-ai": {
 			"command": "npx",
-			"args": ["-y", "task-master-ai"],
+			"args": ["-y", "novel-master-ai"],
 			"env": {
 				"ANTHROPIC_API_KEY": "user_will_add_their_key_here",
 				"PERPLEXITY_API_KEY": "user_will_add_their_key_here",
@@ -48,9 +48,9 @@ The user will be able to define 3 separate roles (can be the same provider or se
 
 ### Step 3: Initialize Project
 
-Once the MCP server is configured and API keys are added, initialize Taskmaster in the user's project:
+Once the MCP server is configured and API keys are added, initialize Novel Master in the user's project:
 
-> Can you initialize Task Master in my project?
+> Can you initialize Novel Master in my project?
 
 This will run the `initialize_project` tool to set up the basic file structure.
 
@@ -93,7 +93,7 @@ If the user does not have a PRD, the AI agent can help them create one and store
 
 After installation, verify everything is working:
 
-1. **Check MCP Connection**: The AI should be able to access Task Master tools
+1. **Check MCP Connection**: The AI should be able to access Novel Master tools
 2. **Test Basic Commands**: Try `get_tasks` to list current tasks
 3. **Verify API Keys**: Ensure AI-powered commands work (like `add_task`)
 
@@ -117,7 +117,7 @@ When adding keys to `.env` only, the `models` tool will explain that the keys ar
 
 ## CLI Fallback
 
-Taskmaster is also available via CLI commands, by installing with `npm install task-master-ai@latest` in a terminal. Running `task-master help` will show all available commands, which offer a 1:1 experience with the MCP server. As the AI agent, you should refer to the system prompts and rules provided to you to identify Taskmaster-specific rules that help you understand how and when to use it.
+Novel Master is also available via CLI commands, by installing with `npm install novel-master-ai@latest` in a terminal. Running `novel-master help` will show all available commands, which offer a 1:1 experience with the MCP server. As the AI agent, you should refer to the system prompts and rules provided to you to identify Novel Master-specific rules that help you understand how and when to use it.
 
 ## Next Steps
 
@@ -128,4 +128,4 @@ Once installed, users can:
 - Expand tasks into subtasks with `expand-all` and `expand-task`
 - Explore advanced features like research mode and complexity analysis
 
-For detailed documentation, refer to the Task Master docs directory.``
+For detailed documentation, refer to the Novel Master docs directory.``

@@ -1,6 +1,6 @@
 /**
  * update-task-by-id.js
- * Direct function implementation for updating a single task by ID with new information
+ * Direct function implementation for updating a single chapter/scene by ID with new narrative information
  */
 
 import { updateTaskById } from '../../../../scripts/modules/task-manager.js';
@@ -13,16 +13,16 @@ import { createLogWrapper } from '../../tools/utils.js';
 import { findTasksPath } from '../utils/path-utils.js';
 
 /**
- * Direct function wrapper for updateTaskById with error handling.
+ * Direct function wrapper for updating a chapter/scene by ID with error handling.
  *
  * @param {Object} args - Command arguments containing id, prompt, useResearch, tasksJsonPath, and projectRoot.
  * @param {string} args.tasksJsonPath - Explicit path to the tasks.json file.
- * @param {string} args.id - Task ID (or subtask ID like "1.2").
- * @param {string} args.prompt - New information/context prompt.
- * @param {boolean} [args.research] - Whether to use research role.
- * @param {boolean} [args.append] - Whether to append timestamped information instead of full update.
+ * @param {string} args.id - Chapter/scene ID (or beat ID like "1.2").
+ * @param {string} args.prompt - New narrative context (tone shift, POV change, stakes, lore updates).
+ * @param {boolean} [args.research] - Whether to use research role for lore/genre-aware updates.
+ * @param {boolean} [args.append] - Whether to append timestamped notes instead of full update (good for progress logs).
  * @param {string} [args.projectRoot] - Project root path.
- * @param {string} [args.tag] - Tag for the task (optional)
+ * @param {string} [args.tag] - Tag context (outline, draft, revision) for the chapter (optional)
  * @param {Object} log - Logger object.
  * @param {Object} context - Context object containing session data.
  * @returns {Promise<Object>} - Result object with success status and data/error information.
@@ -37,13 +37,13 @@ export async function updateTaskByIdDirect(args, log, context = {}) {
 
 	try {
 		logWrapper.info(
-			`Updating task by ID via direct function. ID: ${id}, ProjectRoot: ${projectRoot}`
+			`Updating chapter/scene by ID via direct function. ID: ${id}, ProjectRoot: ${projectRoot}`
 		);
 
 		// Check required parameters (id and prompt)
 		if (!id) {
 			const errorMessage =
-				'No task ID specified. Please provide a task ID to update.';
+				'No chapter/scene ID specified. Please provide a chapter or beat ID to update (e.g., "12" or "12.3").';
 			logWrapper.error(errorMessage);
 			return {
 				success: false,
@@ -53,7 +53,7 @@ export async function updateTaskByIdDirect(args, log, context = {}) {
 
 		if (!prompt) {
 			const errorMessage =
-				'No prompt specified. Please provide a prompt with new information for the task update.';
+				'No narrative context provided. Please provide a prompt describing the new story direction (tone, POV, stakes, lore changes).';
 			logWrapper.error(errorMessage);
 			return {
 				success: false,
@@ -95,7 +95,7 @@ export async function updateTaskByIdDirect(args, log, context = {}) {
 		const useResearch = research === true;
 
 		logWrapper.info(
-			`Updating task with ID ${taskId} with prompt "${prompt}" and research: ${useResearch}`
+			`Updating chapter/scene ${taskId} with narrative context "${prompt}" and research: ${useResearch}`
 		);
 
 		const wasSilent = isSilentMode();
@@ -124,7 +124,7 @@ export async function updateTaskByIdDirect(args, log, context = {}) {
 
 			// Check if the core function returned null or an object without success
 			if (!coreResult || coreResult.updatedTask === null) {
-				const message = `Task ${taskId} was not updated (likely already completed).`;
+				const message = `Chapter/scene ${taskId} was not updated (likely already completed).`;
 				logWrapper.info(message);
 				return {
 					success: true,
@@ -138,7 +138,7 @@ export async function updateTaskByIdDirect(args, log, context = {}) {
 				};
 			}
 
-			const successMessage = `Successfully updated task with ID ${taskId} based on the prompt`;
+			const successMessage = `Successfully updated chapter/scene ${taskId} with new narrative context`;
 			logWrapper.info(successMessage);
 			return {
 				success: true,
@@ -154,12 +154,12 @@ export async function updateTaskByIdDirect(args, log, context = {}) {
 				}
 			};
 		} catch (error) {
-			logWrapper.error(`Error updating task by ID: ${error.message}`);
+			logWrapper.error(`Error updating chapter/scene: ${error.message}`);
 			return {
 				success: false,
 				error: {
 					code: 'UPDATE_TASK_CORE_ERROR',
-					message: error.message || 'Unknown error updating task'
+					message: error.message || 'Unknown error updating chapter/scene'
 				}
 			};
 		} finally {

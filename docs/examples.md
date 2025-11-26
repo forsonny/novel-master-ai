@@ -1,91 +1,91 @@
 # Example Cursor AI Interactions
 
-Here are some common interactions with Cursor AI when using Task Master:
+Here are some common interactions with Cursor AI when using Novel Master:
 
-## Starting a new project
-
-```
-I've just initialized a new project with Claude Task Master. I have a PRD at .taskmaster/docs/prd.txt.
-Can you help me parse it and set up the initial tasks?
-```
-
-## Working on tasks
+## Starting a new novel
 
 ```
-What's the next task I should work on? Please consider dependencies and priorities.
+I've just initialized a new project with Novel Master. I have an NRD at .novelmaster/docs/nrd.txt.
+Can you help me parse it and set up the initial story arcs?
 ```
 
-## Implementing a specific task
+## Working on chapters
 
 ```
-I'd like to implement task 4. Can you help me understand what needs to be done and how to approach it?
+What's the next chapter I should work on? Please consider dependencies and priorities.
 ```
 
-## Viewing multiple tasks
+## Expanding a specific chapter
 
 ```
-Can you show me tasks 1, 3, and 5 so I can understand their relationship?
+I'd like to expand chapter 4 into scenes. Can you help me understand what needs to be done and how to approach it?
 ```
 
+## Viewing multiple chapters
+
 ```
-I need to see the status of tasks 44, 55, and their subtasks. Can you show me those?
+Can you show me chapters 1, 3, and 5 so I can understand their relationship?
 ```
 
 ```
-Show me tasks 10, 12, and 15 and give me some batch actions I can perform on them.
+I need to see the status of chapters 44, 55, and their scenes. Can you show me those?
 ```
 
-## Managing subtasks
-
 ```
-I need to regenerate the subtasks for task 3 with a different approach. Can you help me clear and regenerate them?
+Show me chapters 10, 12, and 15 and give me some batch actions I can perform on them.
 ```
 
-## Handling changes
+## Managing scenes
 
 ```
-I've decided to use MongoDB instead of PostgreSQL. Can you update all future tasks to reflect this change?
+I need to regenerate the scenes for chapter 3 with a different approach. Can you help me clear and regenerate them?
+```
+
+## Handling story changes
+
+```
+I've decided to change the POV structure from third-person to first-person. Can you update all future chapters to reflect this change?
 ```
 
 ## Completing work
 
 ```
-I've finished implementing the authentication system described in task 2. All tests are passing.
+I've finished drafting chapter 2. All scenes are complete and the pacing feels right.
 Please mark it as complete and tell me what I should work on next.
 ```
 
-## Reorganizing tasks
+## Reorganizing story structure
 
 ```
-I think subtask 5.2 would fit better as part of task 7. Can you move it there?
+I think scene 5.2 would fit better as part of chapter 7. Can you move it there?
 ```
 
-(Agent runs: `task-master move --from=5.2 --to=7.3`)
+(Agent runs: `novel-master move --from=5.2 --to=7.3`)
 
 ```
-Task 8 should actually be a subtask of task 4. Can you reorganize this?
+Chapter 8 should actually be a scene of chapter 4. Can you reorganize this?
 ```
 
-(Agent runs: `task-master move --from=8 --to=4.1`)
+(Agent runs: `novel-master move --from=8 --to=4.1`)
 
 ```
-I just merged the main branch and there's a conflict in tasks.json. My teammates created tasks 10-15 on their branch while I created tasks 10-12 on my branch. Can you help me resolve this by moving my tasks?
+I just merged the main branch and there's a conflict in tasks.json. My co-writer created chapters 10-15 on their branch while I created chapters 10-12 on my branch. Can you help me resolve this by moving my chapters?
 ```
 
 (Agent runs:
 
 ```bash
-task-master move --from=10 --to=16
-task-master move --from=11 --to=17
-task-master move --from=12 --to=18
+novel-master move --from=10 --to=16
+novel-master move --from=11 --to=17
+novel-master move --from=12 --to=18
 ```
 
 )
 
-## Analyzing complexity
+## Analyzing narrative complexity
 
 ```
-Can you analyze the complexity of our tasks to help me understand which ones need to be broken down further?
+Can you analyze the pacing and complexity of our chapters to help me understand which ones need to be broken down further?
 ```
 
 ## Viewing complexity report
@@ -94,122 +94,122 @@ Can you analyze the complexity of our tasks to help me understand which ones nee
 Can you show me the complexity report in a more readable format?
 ```
 
-### Breaking Down Complex Tasks
+### Breaking Down Complex Chapters
 
 ```
-Task 5 seems complex. Can you break it down into subtasks?
+Chapter 5 seems complex. Can you break it down into scenes?
 ```
 
-(Agent runs: `task-master expand --id=5`)
+(Agent runs: `novel-master expand --id=5 --num=6 --tag outline`)
 
 ```
-Please break down task 5 using research-backed generation.
+Please break down chapter 5 using research-backed generation for worldbuilding details.
 ```
 
-(Agent runs: `task-master expand --id=5 --research`)
+(Agent runs: `novel-master expand --id=5 --research`)
 
-### Updating Tasks with Research
-
-```
-We need to update task 15 based on the latest React Query v5 changes. Can you research this and update the task?
-```
-
-(Agent runs: `task-master update-task --id=15 --prompt="Update based on React Query v5 changes" --research`)
-
-### Adding Tasks with Research
+### Updating Chapters with Research
 
 ```
-Please add a new task to implement user profile image uploads using Cloudinary, research the best approach.
+We need to update chapter 15 based on the latest research about medieval combat techniques. Can you research this and update the chapter?
 ```
 
-(Agent runs: `task-master add-task --prompt="Implement user profile image uploads using Cloudinary" --research`)
+(Agent runs: `novel-master update-task --id=15 --prompt="Update based on latest medieval combat research" --research`)
 
-## Research-Driven Development
+### Adding Chapters with Research
+
+```
+Please add a new chapter about the protagonist's backstory, research the best narrative techniques for flashback sequences.
+```
+
+(Agent runs: `novel-master add-task --prompt="Add chapter about protagonist's backstory using flashback techniques" --research`)
+
+## Research-Driven Writing
 
 ### Getting Fresh Information
 
 ```
-Research the latest best practices for implementing JWT authentication in Node.js applications.
+Research the latest best practices for writing science fiction worldbuilding.
 ```
 
-(Agent runs: `task-master research "Latest best practices for JWT authentication in Node.js"`)
+(Agent runs: `novel-master research "Latest best practices for writing science fiction worldbuilding"`)
 
-### Research with Project Context
-
-```
-I'm working on task 15 which involves API optimization. Can you research current best practices for our specific implementation?
-```
-
-(Agent runs: `task-master research "API optimization best practices" --id=15 --files=src/api.js`)
-
-### Research Before Implementation
+### Research with Story Context
 
 ```
-Before I implement task 8 (React Query integration), can you research the latest React Query v5 patterns and any breaking changes?
+I'm working on chapter 15 which involves a heist scene. Can you research current best practices for writing heist sequences?
 ```
 
-(Agent runs: `task-master research "React Query v5 patterns and breaking changes" --id=8`)
+(Agent runs: `novel-master research "Best practices for writing heist sequences" --id=15 --files=.novelmaster/manuscript/chapters/chapter-015.md`)
+
+### Research Before Writing
+
+```
+Before I draft chapter 8 (which involves medieval combat), can you research the latest historical accuracy requirements for sword fighting scenes?
+```
+
+(Agent runs: `novel-master research "Historical accuracy for medieval sword fighting scenes" --id=8`)
 
 ### Research and Update Pattern
 
 ```
-Research the latest security recommendations for Express.js applications and update our authentication task with the findings.
+Research the latest recommendations for writing multi-POV novels and update our POV structure chapter with the findings.
 ```
 
 (Agent runs:
 
-1. `task-master research "Latest Express.js security recommendations" --id=12`
-2. `task-master update-subtask --id=12.3 --prompt="Updated with latest security findings: [research results]"`)
+1. `novel-master research "Best practices for writing multi-POV novels" --id=12`
+2. `novel-master update-subtask --id=12.3 --prompt="Updated with latest POV findings: [research results]"`)
 
-### Research for Debugging
-
-```
-I'm having issues with our WebSocket implementation in task 20. Can you research common WebSocket problems and solutions?
-```
-
-(Agent runs: `task-master research "Common WebSocket implementation problems and solutions" --id=20 --files=src/websocket.js`)
-
-### Research Technology Comparisons
+### Research for Continuity
 
 ```
-We need to choose between Redis and Memcached for caching. Can you research the current recommendations for our use case?
+I'm having issues with timeline consistency in chapter 20. Can you research common timeline problems in novels and solutions?
 ```
 
-(Agent runs: `task-master research "Redis vs Memcached 2024 comparison for session caching" --tree`)
+(Agent runs: `novel-master research "Common timeline consistency problems in novels and solutions" --id=20 --files=.novelmaster/manuscript/chapters/chapter-020.md`)
 
-## Git Integration and Tag Management
-
-### Creating Tags for Feature Branches
+### Research Genre Comparisons
 
 ```
-I'm starting work on a new feature branch for user authentication. Can you create a matching task tag?
+We need to choose between first-person and third-person POV for our thriller. Can you research the current recommendations for our genre?
 ```
 
-(Agent runs: `task-master add-tag --from-branch`)
+(Agent runs: `novel-master research "First-person vs third-person POV in thriller novels 2024" --tree`)
+
+## Tag Management for Novel Workflows
+
+### Creating Tags for Draft Phases
+
+```
+I'm starting work on the first draft. Can you create a matching task tag?
+```
+
+(Agent runs: `novel-master add-tag draft --description="First draft writing phase"`)
 
 ### Creating Named Tags
 
 ```
-Create a new tag called 'api-v2' for our API redesign work.
+Create a new tag called 'rev-1' for our first revision pass.
 ```
 
-(Agent runs: `task-master add-tag api-v2 --description="API v2 redesign tasks"`)
+(Agent runs: `novel-master add-tag rev-1 --description="First revision pass"`)
 
 ### Switching Tag Contexts
 
 ```
-Switch to the 'testing' tag so I can work on QA tasks.
+Switch to the 'draft' tag so I can work on first-draft chapters.
 ```
 
-(Agent runs: `task-master use-tag testing`)
+(Agent runs: `novel-master use-tag draft`)
 
-### Copying Tasks Between Tags
+### Copying Chapters Between Tags
 
 ```
-I need to copy the current tasks to a new 'hotfix' tag for urgent fixes.
+I need to copy the current outline to a new 'draft' tag for writing.
 ```
 
-(Agent runs: `task-master add-tag hotfix --copy-from-current --description="Urgent hotfix tasks"`)
+(Agent runs: `novel-master add-tag draft --copy-from-current --description="First draft writing"`)
 
 ### Managing Multiple Contexts
 
@@ -217,42 +217,141 @@ I need to copy the current tasks to a new 'hotfix' tag for urgent fixes.
 Show me all available tags and their current status.
 ```
 
-(Agent runs: `task-master tags --show-metadata`)
+(Agent runs: `novel-master tags --show-metadata`)
 
 ### Tag Cleanup
 
 ```
-I've finished the 'user-auth' feature and merged the branch. Can you clean up the tag?
+I've finished the 'outline' phase and moved to draft. Can you clean up the outline tag?
 ```
 
-(Agent runs: `task-master delete-tag user-auth`)
+(Agent runs: `novel-master delete-tag outline`)
 
-### Working with Tag-Specific Tasks
-
-```
-List all tasks in the 'api-v2' tag context.
-```
-
-(Agent runs: `task-master use-tag api-v2` then `task-master list`)
-
-### Branch-Based Development Workflow
+### Working with Tag-Specific Chapters
 
 ```
-I'm switching to work on the 'feature/payments' branch. Can you set up the task context for this?
+List all chapters in the 'draft' tag context.
+```
+
+(Agent runs: `novel-master use-tag draft` then `novel-master list`)
+
+### Phase-Based Writing Workflow
+
+```
+I'm switching to work on the 'rev-1' revision phase. Can you set up the chapter context for this?
 ```
 
 (Agent runs:
-1. `git checkout feature/payments`
-2. `task-master add-tag --from-branch --description="Payment system implementation"`
-3. `task-master list` to show tasks in the new context)
 
-### Parallel Feature Development
+1. `novel-master use-tag rev-1`
+2. `novel-master list` to show chapters in the new context)
+
+### Parallel Revision Development
 
 ```
-I need to work on both authentication and payment features simultaneously. How should I organize the tasks?
+I need to work on both character development and pacing simultaneously. How should I organize the chapters?
 ```
 
 (Agent suggests and runs:
-1. `task-master add-tag auth --description="Authentication feature tasks"`
-2. `task-master add-tag payments --description="Payment system tasks"`
-3. `task-master use-tag auth` to start with authentication work)
+
+1. `novel-master add-tag rev-1-character --description="Character development revision"`
+2. `novel-master add-tag rev-1-pacing --description="Pacing revision"`
+3. `novel-master use-tag rev-1-character` to start with character work)
+
+## Character Arc Management
+
+### Adding Character-Focused Tags
+
+```
+I want to create a tag for working on the protagonist's character arc across multiple chapters.
+```
+
+(Agent runs: `novel-master add-tag character-protagonist --description="Protagonist character arc development"`)
+
+### Working on Character Arcs
+
+```
+Switch to the protagonist character tag and show me all chapters related to their development.
+```
+
+(Agent runs: `novel-master use-tag character-protagonist` then `novel-master list`)
+
+## Worldbuilding Research
+
+### Researching Historical Context
+
+```
+I'm writing a historical fiction novel set in 1920s Paris. Can you research the social and cultural context of that era?
+```
+
+(Agent runs: `novel-master research "1920s Paris social and cultural context" --save-to-file=worldbuilding-1920s-paris.md`)
+
+### Researching Scientific Concepts
+
+```
+Chapter 12 involves quantum mechanics. Can you research the basics of quantum entanglement for my worldbuilding?
+```
+
+(Agent runs: `novel-master research "Quantum entanglement basics for fiction writers" --id=12`)
+
+## Manuscript Generation
+
+### Generating Chapter Files
+
+```
+Please generate manuscript chapter files from the current outline.
+```
+
+(Agent runs: `novel-master generate --tag outline`)
+
+### Regenerating After Changes
+
+```
+I've updated several chapters. Can you regenerate the manuscript files to reflect the changes?
+```
+
+(Agent runs: `novel-master generate --tag draft`)
+
+### Compiling Final Manuscript
+
+```
+I'm ready to compile the final manuscript. Can you generate the complete manuscript file?
+```
+
+(Agent runs: `novel-master generate --tag final`)
+
+## Pacing and Structure Analysis
+
+### Analyzing Pacing
+
+```
+Can you analyze the pacing of chapters 10-15 to see if they're too fast or too slow?
+```
+
+(Agent runs: `novel-master analyze-complexity --ids=10,11,12,13,14,15`)
+
+### Checking Chapter Lengths
+
+```
+Show me the word count targets and current progress for all chapters.
+```
+
+(Agent runs: `novel-master list --show-metadata`)
+
+## Continuity Checks
+
+### Checking Character Consistency
+
+```
+I want to make sure the protagonist's personality is consistent across chapters 5, 12, and 20. Can you help me review this?
+```
+
+(Agent runs: `novel-master show 5,12,20` to review character details)
+
+### Timeline Verification
+
+```
+Can you help me verify that the timeline is consistent across chapters 8-12?
+```
+
+(Agent runs: `novel-master show 8,9,10,11,12` to review timeline markers)

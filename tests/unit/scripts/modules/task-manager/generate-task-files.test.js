@@ -1,306 +1,192 @@
-/**
- * Tests for the generate-task-files.js module
- */
 import { jest } from '@jest/globals';
-
-// Mock the dependencies before importing the module under test
-jest.unstable_mockModule('fs', () => ({
-	default: {
-		existsSync: jest.fn(),
-		mkdirSync: jest.fn(),
-		readdirSync: jest.fn(),
-		unlinkSync: jest.fn(),
-		writeFileSync: jest.fn()
-	},
-	existsSync: jest.fn(),
-	mkdirSync: jest.fn(),
-	readdirSync: jest.fn(),
-	unlinkSync: jest.fn(),
-	writeFileSync: jest.fn()
-}));
-
-jest.unstable_mockModule('path', () => ({
-	default: {
-		join: jest.fn((...args) => args.join('/')),
-		dirname: jest.fn((p) => p.split('/').slice(0, -1).join('/'))
-	},
-	join: jest.fn((...args) => args.join('/')),
-	dirname: jest.fn((p) => p.split('/').slice(0, -1).join('/'))
-}));
-
-jest.unstable_mockModule('../../../../../scripts/modules/utils.js', () => ({
-	readJSON: jest.fn(),
-	writeJSON: jest.fn(),
-	log: jest.fn(),
-	CONFIG: {
-		model: 'mock-claude-model',
-		maxTokens: 4000,
-		temperature: 0.7,
-		debug: false
-	},
-	sanitizePrompt: jest.fn((prompt) => prompt),
-	truncate: jest.fn((text) => text),
-	isSilentMode: jest.fn(() => false),
-	findTaskById: jest.fn((tasks, id) =>
-		tasks.find((t) => t.id === parseInt(id))
-	),
-	findProjectRoot: jest.fn(() => '/mock/project/root'),
-	resolveEnvVariable: jest.fn((varName) => `mock_${varName}`),
-	ensureTagMetadata: jest.fn()
-}));
-
-jest.unstable_mockModule('../../../../../scripts/modules/ui.js', () => ({
-	formatDependenciesWithStatus: jest.fn(),
-	displayBanner: jest.fn(),
-	displayTaskList: jest.fn(),
-	startLoadingIndicator: jest.fn(() => ({ stop: jest.fn() })),
-	stopLoadingIndicator: jest.fn(),
-	createProgressBar: jest.fn(() => ' MOCK_PROGRESS_BAR '),
-	getStatusWithColor: jest.fn((status) => status),
-	getComplexityWithColor: jest.fn((score) => `Score: ${score}`)
-}));
+import fs from 'fs';
+import os from 'os';
+import path from 'path';
 
 jest.unstable_mockModule(
 	'../../../../../scripts/modules/dependency-manager.js',
 	() => ({
-		validateAndFixDependencies: jest.fn(),
-		validateTaskDependencies: jest.fn()
+		validateAndFixDependencies: jest.fn()
 	})
 );
 
-jest.unstable_mockModule(
-	'../../../../../scripts/modules/config-manager.js',
-	() => ({
-		getDebugFlag: jest.fn(() => false),
-		getProjectName: jest.fn(() => 'Test Project')
-	})
-);
+jest.unstable_mockModule('../../../../../scripts/modules/ui.js', () => ({
+	formatDependenciesWithStatus: jest.fn(() => 'Dependency Summary')
+}));
 
-// Import the mocked modules
-const { readJSON, writeJSON, log, findProjectRoot, ensureTagMetadata } =
-	await import('../../../../../scripts/modules/utils.js');
-const { formatDependenciesWithStatus } = await import(
-	'../../../../../scripts/modules/ui.js'
-);
 const { validateAndFixDependencies } = await import(
 	'../../../../../scripts/modules/dependency-manager.js'
 );
-
-const fs = (await import('fs')).default;
-const path = (await import('path')).default;
-
-// Import the module under test
+const { formatDependenciesWithStatus } = await import(
+	'../../../../../scripts/modules/ui.js'
+);
 const { default: generateTaskFiles } = await import(
 	'../../../../../scripts/modules/task-manager/generate-task-files.js'
 );
 
-describe('generateTaskFiles', () => {
-	// Sample task data for testing - updated to tagged format
-	const sampleTasksData = {
-		master: {
+function createTaggedTasksData() {
+	return {
+		outline: {
 			tasks: [
 				{
 					id: 1,
-					title: 'Task 1',
-					description: 'First task description',
+					title: 'Act I – Spark',
+					description: 'Introduce the orbital habitat and looming sabotage.',
 					status: 'pending',
 					dependencies: [],
 					priority: 'high',
-					details: 'Detailed information for task 1',
-					testStrategy: 'Test strategy for task 1'
-				},
-				{
-					id: 2,
-					title: 'Task 2',
-					description: 'Second task description',
-					status: 'pending',
-					dependencies: [1],
-					priority: 'medium',
-					details: 'Detailed information for task 2',
-					testStrategy: 'Test strategy for task 2'
-				},
-				{
-					id: 3,
-					title: 'Task with Subtasks',
-					description: 'Task with subtasks description',
-					status: 'pending',
-					dependencies: [1, 2],
-					priority: 'high',
-					details: 'Detailed information for task 3',
-					testStrategy: 'Test strategy for task 3',
+					details: 'Ensure POV alternates between Aiko and Rafael.',
+					metadata: {
+						pov: 'Aiko ↔ Rafael',
+						timeline: 'Act I (0-25%)',
+						emotionalBeat: 'Distrust + wonder',
+						tensionLevel: 'Rising',
+						wordCountTarget: '25k',
+						sensoryNotes: 'Ozone, low-grav echoes',
+						researchHook: 'Orbital maintenance routines',
+						continuityCheck: 'Mention sister Mina subtly'
+					},
 					subtasks: [
 						{
 							id: 1,
-							title: 'Subtask 1',
-							description: 'First subtask',
+							title: 'Scene: Mirror Malfunction',
+							description: 'Describe the first mirror failure',
 							status: 'pending',
-							dependencies: [],
-							details: 'Details for subtask 1'
-						},
-						{
-							id: 2,
-							title: 'Subtask 2',
-							description: 'Second subtask',
-							status: 'pending',
-							dependencies: [1],
-							details: 'Details for subtask 2'
+							details: 'Focus on sound + metallic smell'
 						}
 					]
 				}
-			],
-			metadata: {
-				projectName: 'Test Project',
-				created: '2024-01-01T00:00:00.000Z',
-				updated: '2024-01-01T00:00:00.000Z'
-			}
+			]
+		},
+		draft: {
+			tasks: []
 		}
 	};
+}
+
+function writeTasksFixture(projectRoot, data) {
+	const tasksDir = path.join(projectRoot, '.novelmaster', 'tasks');
+	fs.mkdirSync(tasksDir, { recursive: true });
+	fs.writeFileSync(
+		path.join(tasksDir, 'tasks.json'),
+		JSON.stringify(data, null, 2)
+	);
+	return path.join(tasksDir, 'tasks.json');
+}
+
+describe('generateTaskFiles – manuscript generation', () => {
+	let projectRoot;
+	let tasksPath;
 
 	beforeEach(() => {
-		jest.clearAllMocks();
-		// Mock readJSON to return the full tagged structure
-		readJSON.mockImplementation((tasksPath, projectRoot, tag) => {
-			if (tag && sampleTasksData[tag]) {
-				return {
-					...sampleTasksData[tag],
-					tag,
-					_rawTaggedData: sampleTasksData
-				};
-			}
-			// Default to master if no tag or tag not found
-			return {
-				...sampleTasksData.master,
-				tag: 'master',
-				_rawTaggedData: sampleTasksData
-			};
-		});
+		projectRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'nm-manuscript-'));
+		tasksPath = writeTasksFixture(projectRoot, createTaggedTasksData());
+		validateAndFixDependencies.mockClear();
+		formatDependenciesWithStatus.mockClear();
 	});
 
-	test('should generate task files from tasks.json - working test', async () => {
-		// Set up mocks for this specific test
-		fs.existsSync.mockReturnValue(true);
+	afterEach(() => {
+		fs.rmSync(projectRoot, { recursive: true, force: true });
+	});
 
-		// Call the function
-		const tasksPath = 'tasks/tasks.json';
-		const outputDir = 'tasks';
-
-		await generateTaskFiles(tasksPath, outputDir, {
-			tag: 'master',
-			mcpLog: { info: jest.fn() }
+	test('creates chapter files, summary, and compiled manuscript', () => {
+		const result = generateTaskFiles(tasksPath, undefined, {
+			projectRoot,
+			tag: 'outline'
 		});
 
-		// Verify the data was read with new signature, defaulting to master
-		expect(readJSON).toHaveBeenCalledWith(tasksPath, undefined, 'master');
-
-		// Verify dependencies were validated with the raw tagged data
 		expect(validateAndFixDependencies).toHaveBeenCalledWith(
-			sampleTasksData,
+			expect.any(Object),
 			tasksPath,
-			undefined,
-			'master'
+			projectRoot,
+			'outline'
 		);
 
-		// Verify files were written for each task in the master tag
-		expect(fs.writeFileSync).toHaveBeenCalledTimes(3);
+		const chapterPath = path.join(
+			projectRoot,
+			'.novelmaster',
+			'manuscript',
+			'outline',
+			'chapters',
+			'chapter-001.md'
+		);
+		expect(fs.existsSync(chapterPath)).toBe(true);
+		const chapterContent = fs.readFileSync(chapterPath, 'utf8');
+		expect(chapterContent).toContain('<!-- novel-master:managed:start -->');
+		expect(chapterContent).toContain('## Scenes');
+		expect(chapterContent).toContain('Scene: Mirror Malfunction');
 
-		// Verify specific file paths
-		expect(fs.writeFileSync).toHaveBeenCalledWith(
-			'tasks/task_001.txt',
-			expect.any(String)
+		const summaryPath = path.join(
+			projectRoot,
+			'.novelmaster',
+			'manuscript',
+			'outline',
+			'manuscript-summary.json'
 		);
-		expect(fs.writeFileSync).toHaveBeenCalledWith(
-			'tasks/task_002.txt',
-			expect.any(String)
+		expect(fs.existsSync(summaryPath)).toBe(true);
+		const summaryData = JSON.parse(fs.readFileSync(summaryPath, 'utf8'));
+		expect(summaryData.totals.targetWords).toBe(25000);
+		expect(summaryData.chapters[0].title).toBe('Act I – Spark');
+
+		const compiledPath = path.join(
+			projectRoot,
+			'.novelmaster',
+			'manuscript',
+			'outline',
+			'compiled',
+			'manuscript-outline.md'
 		);
-		expect(fs.writeFileSync).toHaveBeenCalledWith(
-			'tasks/task_003.txt',
-			expect.any(String)
-		);
+		expect(fs.existsSync(compiledPath)).toBe(true);
+		const compiledContent = fs.readFileSync(compiledPath, 'utf8');
+		expect(compiledContent).toContain('# Manuscript (outline)');
+		expect(compiledContent).toContain('Draft not started');
+
+		expect(result.chapters[0].wordCountTarget).toBe(25000);
 	});
 
-	test('should format dependencies with status indicators', async () => {
-		// Set up mocks
-		fs.existsSync.mockReturnValue(true);
-		formatDependenciesWithStatus.mockReturnValue(
-			'✅ Task 1 (done), ⏱️ Task 2 (pending)'
+	test('preserves existing draft text and updates summary word counts', () => {
+		// Update task to have a dependency so formatDependenciesWithStatus is called
+		const data = createTaggedTasksData();
+		data.outline.tasks[0].dependencies = [99]; // Add dummy dependency
+		tasksPath = writeTasksFixture(projectRoot, data);
+
+		const manuscriptDir = path.join(
+			projectRoot,
+			'.novelmaster',
+			'manuscript',
+			'outline'
+		);
+		const chaptersDir = path.join(manuscriptDir, 'chapters');
+		fs.mkdirSync(chaptersDir, { recursive: true });
+		const existingChapterPath = path.join(chaptersDir, 'chapter-001.md');
+		const draftText = 'Solar storms ignite hope among the crew.';
+		fs.writeFileSync(
+			existingChapterPath,
+			[
+				'<!-- novel-master:managed:start -->',
+				'legacy content',
+				'<!-- novel-master:managed:end -->',
+				'## Draft',
+				'',
+				'<!-- novel-master:draft:start -->',
+				draftText,
+				'<!-- novel-master:draft:end -->'
+			].join('\n')
 		);
 
-		// Call the function
-		await generateTaskFiles('tasks/tasks.json', 'tasks', {
-			tag: 'master',
-			mcpLog: { info: jest.fn() }
+		const result = generateTaskFiles(tasksPath, undefined, {
+			projectRoot,
+			tag: 'outline'
 		});
 
-		// Verify formatDependenciesWithStatus was called for tasks with dependencies
-		// It will be called multiple times, once for each task that has dependencies.
+		const summaryPath = path.join(manuscriptDir, 'manuscript-summary.json');
+		const summary = JSON.parse(fs.readFileSync(summaryPath, 'utf8'));
+		expect(summary.chapters[0].draftWordCount).toBe(7);
+		expect(result.chapters[0].draftWordCount).toBe(7);
+
+		const updatedChapter = fs.readFileSync(existingChapterPath, 'utf8');
+		expect(updatedChapter).toContain(draftText);
 		expect(formatDependenciesWithStatus).toHaveBeenCalled();
 	});
-
-	test('should handle tasks with no subtasks', async () => {
-		// Create data with tasks that have no subtasks - updated to tagged format
-		const tasksWithoutSubtasks = {
-			master: {
-				tasks: [
-					{
-						id: 1,
-						title: 'Simple Task',
-						description: 'A simple task without subtasks',
-						status: 'pending',
-						dependencies: [],
-						priority: 'medium',
-						details: 'Simple task details',
-						testStrategy: 'Simple test strategy'
-					}
-				],
-				metadata: {
-					projectName: 'Test Project',
-					created: '2024-01-01T00:00:00.000Z',
-					updated: '2024-01-01T00:00:00.000Z'
-				}
-			}
-		};
-
-		// Update the mock for this specific test case
-		readJSON.mockImplementation((tasksPath, projectRoot, tag) => {
-			return {
-				...tasksWithoutSubtasks.master,
-				tag: 'master',
-				_rawTaggedData: tasksWithoutSubtasks
-			};
-		});
-
-		fs.existsSync.mockReturnValue(true);
-
-		// Call the function
-		await generateTaskFiles('tasks/tasks.json', 'tasks', {
-			tag: 'master',
-			mcpLog: { info: jest.fn() }
-		});
-
-		// Verify the file was written
-		expect(fs.writeFileSync).toHaveBeenCalledTimes(1);
-		expect(fs.writeFileSync).toHaveBeenCalledWith(
-			'tasks/task_001.txt',
-			expect.any(String)
-		);
-	});
-
-	test('should validate dependencies before generating files', async () => {
-		// Set up mocks
-		fs.existsSync.mockReturnValue(true);
-
-		// Call the function
-		await generateTaskFiles('tasks/tasks.json', 'tasks', {
-			tag: 'master',
-			mcpLog: { info: jest.fn() }
-		});
-
-		// Verify validateAndFixDependencies was called with the raw tagged data
-		expect(validateAndFixDependencies).toHaveBeenCalledWith(
-			sampleTasksData,
-			'tasks/tasks.json',
-			undefined,
-			'master'
-		);
-	});
 });
+

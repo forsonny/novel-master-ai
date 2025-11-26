@@ -1,5 +1,5 @@
 /**
- * @fileoverview Logger package for Task Master
+ * @fileoverview Logger package for Novel Master
  * Provides centralized logging with support for different modes and levels
  */
 

@@ -1,4 +1,4 @@
-# Task Master Progress Testing Guide
+# Novel Master Progress Testing Guide
 
 Quick reference for testing streaming/non-streaming functionality with token tracking.
 
@@ -24,7 +24,7 @@ node scripts/dev.js analyze-complexity --research
 node scripts/dev.js expand --id=1 --force
 node scripts/dev.js expand --all --force
 
-task-master [command]                          # Global CLI (non-streaming)
+novel-master [command]                          # Global CLI (non-streaming)
 ```
 
 ## ✅ Success Indicators
@@ -59,7 +59,7 @@ Example: 33% → 46% → 60% → 66% → 80% → 93% → 100%
 
 ```bash
 # Debug
-TASKMASTER_DEBUG=true node test-expand.js
+NOVELMASTER_DEBUG=true node test-expand.js
 npm run lint
 ```
 

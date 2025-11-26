@@ -24,7 +24,7 @@ describe('Zed Integration', () => {
 		jest.clearAllMocks();
 
 		// Create a temporary directory for testing
-		tempDir = fs.mkdtempSync(path.join(os.tmpdir(), 'task-master-test-'));
+		tempDir = fs.mkdtempSync(path.join(os.tmpdir(), 'novel-master-test-'));
 
 		// Spy on fs methods
 		jest.spyOn(fs, 'writeFileSync').mockImplementation(() => {});
@@ -61,7 +61,7 @@ describe('Zed Integration', () => {
 		// Create AGENTS.md in project root
 		fs.writeFileSync(
 			path.join(tempDir, 'AGENTS.md'),
-			'# Task Master Instructions\n\nThis is the Task Master agents file.'
+			'# Novel Master Instructions\n\nThis is the Novel Master agents file.'
 		);
 	}
 
@@ -93,7 +93,7 @@ describe('Zed Integration', () => {
 		// Assert
 		expect(fs.writeFileSync).toHaveBeenCalledWith(
 			path.join(tempDir, 'AGENTS.md'),
-			'# Task Master Instructions\n\nThis is the Task Master agents file.'
+			'# Novel Master Instructions\n\nThis is the Novel Master agents file.'
 		);
 	});
 });

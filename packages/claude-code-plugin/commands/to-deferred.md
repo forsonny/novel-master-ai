@@ -1,23 +1,23 @@
-Defer a task for later consideration.
+Defer a chapter for later consideration.
 
-Arguments: $ARGUMENTS (task ID)
+Arguments: $ARGUMENTS (chapter ID)
 
-## Deferring a Task
+## Deferring a Chapter
 
-This status indicates a task is valid but not currently actionable or prioritized.
+This status indicates a chapter is valid but not currently actionable or prioritized.
 
 ## Valid Reasons for Deferral
 
 - Waiting for external dependencies
-- Reprioritized for future sprint
-- Blocked by technical limitations
+- Reprioritized for future story arc
+- Blocked by research limitations
 - Resource constraints
 - Strategic timing considerations
 
 ## Execution
 
 ```bash
-task-master set-status --id=$ARGUMENTS --status=deferred
+novel-master set-status --id=$ARGUMENTS --status=deferred
 ```
 
 ## Deferral Management
@@ -29,7 +29,7 @@ When deferring:
    - Note any partial work completed
 
 2. **Impact Analysis**
-   - Check dependent tasks
+   - Check dependent chapters
    - Update project timeline
    - Notify affected stakeholders
 

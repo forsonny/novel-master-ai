@@ -118,10 +118,10 @@ function onRemoveRulesProfile(targetDir) {
 		const configContent = fs.readFileSync(openCodeConfigPath, 'utf8');
 		const config = JSON.parse(configContent);
 
-		// Check if it has the mcp section and taskmaster-ai server
-		if (config.mcp && config.mcp['taskmaster-ai']) {
-			// Remove taskmaster-ai server
-			delete config.mcp['taskmaster-ai'];
+		// Check if it has the mcp section and novelmaster-ai server
+		if (config.mcp && config.mcp['novelmaster-ai']) {
+			// Remove novelmaster-ai server
+			delete config.mcp['novelmaster-ai'];
 
 			// Check if there are other MCP servers
 			const remainingServers = Object.keys(config.mcp);

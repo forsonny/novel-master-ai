@@ -1,6 +1,6 @@
 # Codex CLI Provider Usage Examples
 
-This guide provides practical examples of using Task Master with the Codex CLI provider.
+This guide provides practical examples of using Novel Master with the Codex CLI provider.
 
 ## Prerequisites
 
@@ -14,97 +14,104 @@ npm install -g @openai/codex
 codex login
 
 # 3. Codex CLI configured as your provider
-task-master models --set-main gpt-5-codex --codex-cli
+novel-master models --set-main gpt-5-codex --codex-cli
 ```
 
-## Example 1: Basic Task Creation
+## Example 1: Basic Chapter Creation
 
-Use Codex CLI to create tasks from a simple description:
+Use Codex CLI to create chapters from a simple description:
 
 ```bash
-# Add a task with AI-powered enhancement
-task-master add-task --prompt="Implement user authentication with JWT" --research
+# Add a chapter with AI-powered enhancement
+novel-master add-task --prompt="Chapter 5: The Revelation - Protagonist discovers the truth about their past" --research
 ```
 
 **What happens**:
-1. Task Master sends your prompt to GPT-5-Codex via the CLI
-2. The AI analyzes your request and generates a detailed task
-3. The task is added to your `.taskmaster/tasks/tasks.json`
+1. Novel Master sends your prompt to GPT-5-Codex via the CLI
+2. The AI analyzes your request and generates a detailed chapter outline
+3. The chapter is added to your `.novelmaster/tasks/tasks.json`
 4. OAuth credentials are automatically used (no API key needed)
 
-## Example 2: Parsing a Product Requirements Document
+## Example 2: Parsing a Novel Requirements Document
 
-Create a comprehensive task list from a PRD:
+Create a comprehensive chapter list from an NRD:
 
 ```bash
-# Create your PRD
-cat > my-feature.txt <<EOF
-# User Profile Feature
+# Create your NRD
+cat > my-novel.txt <<EOF
+# The Glass Orbit
 
-## Requirements
-1. Users can view their profile
-2. Users can edit their information
-3. Profile pictures can be uploaded
-4. Email verification required
+## Story Overview
+A science fiction novel about a space station engineer who discovers a conspiracy.
 
-## Technical Constraints
-- Use React for frontend
-- Node.js/Express backend
-- PostgreSQL database
+## Act Structure
+- Act 1: Discovery (Chapters 1-5)
+- Act 2: Investigation (Chapters 6-15)
+- Act 3: Resolution (Chapters 16-20)
+
+## Key Characters
+- Protagonist: Engineer with trust issues
+- Antagonist: Station commander hiding secrets
+- Mentor: Retired engineer with knowledge
+
+## World Rules
+- Zero gravity environment
+- Limited communication with Earth
+- Resource scarcity creates tension
 EOF
 
 # Parse with Codex CLI
-task-master parse-prd my-feature.txt --num-tasks 12
+novel-master parse-prd my-novel.txt --num-tasks 20
 ```
 
 **What happens**:
-1. GPT-5-Codex reads and analyzes your PRD
-2. Generates structured tasks with dependencies
-3. Creates subtasks for complex items
-4. Saves everything to `.taskmaster/tasks/`
+1. GPT-5-Codex reads and analyzes your NRD
+2. Generates structured chapters with story dependencies
+3. Creates scenes for complex chapters
+4. Saves everything to `.novelmaster/tasks/`
 
-## Example 3: Expanding Tasks with Research
+## Example 3: Expanding Chapters with Research
 
-Break down a complex task into detailed subtasks:
+Break down a complex chapter into detailed scenes:
 
 ```bash
-# First, show your current tasks
-task-master list
+# First, show your current chapters
+novel-master list
 
-# Expand a specific task (e.g., task 1.2)
-task-master expand --id=1.2 --research --force
+# Expand a specific chapter (e.g., chapter 1.2)
+novel-master expand --id=1.2 --research --force
 ```
 
 **What happens**:
 1. Codex CLI uses GPT-5 for research-level analysis
-2. Breaks down the task into logical subtasks
-3. Adds implementation details and test strategies
-4. Updates the task with dependency information
+2. Breaks down the chapter into logical scenes
+3. Adds narrative details and continuity/pacing strategies
+4. Updates the chapter with story dependency information
 
-## Example 4: Analyzing Project Complexity
+## Example 4: Analyzing Narrative Complexity
 
-Get AI-powered insights into your project's task complexity:
+Get AI-powered insights into your novel's chapter complexity:
 
 ```bash
-# Analyze all tasks
-task-master analyze-complexity --research
+# Analyze all chapters
+novel-master analyze-complexity --research
 
 # View the complexity report
-task-master complexity-report
+novel-master complexity-report
 ```
 
 **What happens**:
-1. GPT-5 analyzes each task's scope and requirements
-2. Assigns complexity scores and estimates subtask counts
+1. GPT-5 analyzes each chapter's scope and narrative requirements
+2. Assigns complexity scores and estimates scene counts
 3. Generates a detailed report
-4. Saves to `.taskmaster/reports/task-complexity-report.json`
+4. Saves to `.novelmaster/reports/task-complexity-report.json`
 
 ## Example 5: Using Custom Codex CLI Settings
 
 Configure Codex CLI behavior for different commands:
 
 ```json
-// In .taskmaster/config.json
+// In .novelmaster/config.json
 {
   "models": {
     "main": {
@@ -134,62 +141,71 @@ Configure Codex CLI behavior for different commands:
 
 ```bash
 # Now parse-prd runs with verbose output and no approvals
-task-master parse-prd requirements.txt
+novel-master parse-prd nrd.txt
 
 # Expand runs with read-only mode
-task-master expand --id=2.1
+novel-master expand --id=2.1
 ```
 
-## Example 6: Workflow - Building a Feature End-to-End
+## Example 6: Workflow - Building a Novel End-to-End
 
-Complete workflow from PRD to implementation tracking:
+Complete workflow from NRD to manuscript tracking:
 
 ```bash
 # Step 1: Initialize project
-task-master init
+novel-master init
 
 # Step 2: Set up Codex CLI
-task-master models --set-main gpt-5-codex --codex-cli
-task-master models --set-fallback gpt-5 --codex-cli
+novel-master models --set-main gpt-5-codex --codex-cli
+novel-master models --set-fallback gpt-5 --codex-cli
 
-# Step 3: Create PRD
-cat > feature-prd.txt <<EOF
-# Authentication System
+# Step 3: Create NRD
+cat > novel-nrd.txt <<EOF
+# The Forgotten Station
 
-Implement a complete authentication system with:
-- User registration
-- Email verification
-- Password reset
-- Two-factor authentication
-- Session management
+A science fiction thriller about a space station engineer who uncovers a conspiracy.
+
+## Act 1: Discovery
+- Chapter 1: Ordinary world - Engineer's daily routine
+- Chapter 2: Inciting incident - Discovery of anomaly
+- Chapter 3: First plot point - Realization of conspiracy
+
+## Act 2: Investigation
+- Multiple chapters following the investigation
+- Character development arcs
+- Rising tension
+
+## Act 3: Resolution
+- Climax and resolution
+- Character arcs conclude
 EOF
 
-# Step 4: Parse PRD into tasks
-task-master parse-prd feature-prd.txt --num-tasks 8
+# Step 4: Parse NRD into chapters
+novel-master parse-prd novel-nrd.txt --num-tasks 20
 
 # Step 5: Analyze complexity
-task-master analyze-complexity --research
+novel-master analyze-complexity --research
 
-# Step 6: Expand complex tasks
-task-master expand --all --research
+# Step 6: Expand complex chapters
+novel-master expand --all --research
 
-# Step 7: Start working
-task-master next
-# Shows: Task 1.1: User registration database schema
+# Step 7: Start drafting
+novel-master next
+# Shows: Chapter 1.1: Engineer's morning routine scene
 
-# Step 8: Mark completed as you work
-task-master set-status --id=1.1 --status=done
+# Step 8: Mark completed as you draft
+novel-master set-status --id=1.1 --status=done
 
-# Step 9: Continue to next task
-task-master next
+# Step 9: Continue to next chapter
+novel-master next
 ```
 
 ## Example 7: Multi-Role Configuration
 
-Use Codex CLI for main tasks, Perplexity for research:
+Use Codex CLI for main chapters, Perplexity for research:
 
 ```json
-// In .taskmaster/config.json
+// In .novelmaster/config.json
 {
   "models": {
     "main": {
@@ -215,14 +231,14 @@ Use Codex CLI for main tasks, Perplexity for research:
 ```
 
 ```bash
-# Main task operations use GPT-5-Codex
-task-master add-task --prompt="Build REST API endpoint"
+# Main chapter operations use GPT-5-Codex
+novel-master add-task --prompt="Chapter 10: The Confrontation"
 
 # Research operations use Perplexity
-task-master analyze-complexity --research
+novel-master analyze-complexity --research
 
 # Fallback to GPT-5 if needed
-task-master expand --id=3.2 --force
+novel-master expand --id=3.2 --force
 ```
 
 ## Example 8: Troubleshooting Common Issues
@@ -237,7 +253,7 @@ codex --version
 npm install -g @openai/codex
 
 # Or enable npx fallback in config
-cat >> .taskmaster/config.json <<EOF
+cat >> .novelmaster/config.json <<EOF
 {
   "codexCli": {
     "allowNpx": true
@@ -261,7 +277,7 @@ codex login
 
 ```bash
 # Enable verbose mode in config
-cat >> .taskmaster/config.json <<EOF
+cat >> .novelmaster/config.json <<EOF
 {
   "codexCli": {
     "verbose": true
@@ -270,7 +286,7 @@ cat >> .taskmaster/config.json <<EOF
 EOF
 
 # Or for specific commands
-task-master parse-prd my-prd.txt
+novel-master parse-prd my-nrd.txt
 # (verbose output shows detailed Codex CLI interactions)
 ```
 
@@ -279,13 +295,13 @@ task-master parse-prd my-prd.txt
 Use Codex CLI in automated workflows:
 
 ```yaml
-# .github/workflows/task-analysis.yml
-name: Analyze Task Complexity
+# .github/workflows/chapter-analysis.yml
+name: Analyze Chapter Complexity
 
 on:
   push:
     paths:
-      - '.taskmaster/**'
+      - '.novelmaster/**'
 
 jobs:
   analyze:
@@ -298,8 +314,8 @@ jobs:
         with:
           node-version: '20'
 
-      - name: Install Task Master
-        run: npm install -g task-master-ai
+      - name: Install Novel Master
+        run: npm install -g novel-master-ai
 
       - name: Configure Codex CLI
         run: |
@@ -308,9 +324,9 @@ jobs:
         env:
           OPENAI_CODEX_API_KEY: ${{ secrets.OPENAI_CODEX_API_KEY }}
 
-      - name: Configure Task Master
+      - name: Configure Novel Master
         run: |
-          cat > .taskmaster/config.json <<EOF
+          cat > .novelmaster/config.json <<EOF
           {
             "models": {
               "main": {
@@ -328,13 +344,13 @@ jobs:
           EOF
 
       - name: Analyze Complexity
-        run: task-master analyze-complexity --research
+        run: novel-master analyze-complexity --research
 
       - name: Upload Report
         uses: actions/upload-artifact@v3
         with:
           name: complexity-report
-          path: .taskmaster/reports/task-complexity-report.json
+          path: .novelmaster/reports/task-complexity-report.json
 ```
 
 ## Best Practices
@@ -344,7 +360,7 @@ jobs:
 ```bash
 # For local development, use OAuth (no API key needed)
 codex login
-task-master models --set-main gpt-5-codex --codex-cli
+novel-master models --set-main gpt-5-codex --codex-cli
 ```
 
 ### 2. Configure Approval Modes Appropriately
@@ -365,11 +381,11 @@ task-master models --set-main gpt-5-codex --codex-cli
   "codexCli": {
     "commandSpecific": {
       "parse-prd": {
-        "approvalMode": "never",  // PRD parsing is safe
+        "approvalMode": "never",  // NRD parsing is safe
         "verbose": true
       },
       "expand": {
-        "approvalMode": "on-request",  // More cautious for task expansion
+        "approvalMode": "on-request",  // More cautious for chapter expansion
         "verbose": false
       }
     }
@@ -377,12 +393,12 @@ task-master models --set-main gpt-5-codex --codex-cli
 }
 ```
 
-### 4. Leverage Codebase Analysis
+### 4. Leverage Manuscript Analysis
 
 ```json
 {
   "global": {
-    "enableCodebaseAnalysis": true  // Let Codex analyze your code
+    "enableCodebaseAnalysis": true  // Let Codex analyze your manuscript
   }
 }
 ```
@@ -391,10 +407,10 @@ task-master models --set-main gpt-5-codex --codex-cli
 
 ```bash
 # Always configure a fallback model
-task-master models --set-fallback gpt-5 --codex-cli
+novel-master models --set-fallback gpt-5 --codex-cli
 
 # Or use a different provider as fallback
-task-master models --set-fallback claude-3-5-sonnet
+novel-master models --set-fallback claude-3-5-sonnet
 ```
 
 ## Next Steps
@@ -406,58 +422,58 @@ task-master models --set-fallback claude-3-5-sonnet
 
 ## Common Patterns
 
-### Pattern: Daily Development Workflow
+### Pattern: Daily Writing Workflow
 
 ```bash
-# Morning: Review tasks
-task-master list
+# Morning: Review chapters
+novel-master list
 
-# Get next task
-task-master next
+# Get next chapter
+novel-master next
 
-# Work on task...
+# Draft chapter...
 
-# Update task with notes
-task-master update-subtask --id=2.3 --prompt="Implemented authentication middleware"
+# Update chapter with notes
+novel-master update-subtask --id=2.3 --prompt="Drafted the confrontation scene, added emotional depth"
 
 # Mark complete
-task-master set-status --id=2.3 --status=done
+novel-master set-status --id=2.3 --status=done
 
 # Repeat
 ```
 
-### Pattern: Feature Planning
+### Pattern: Story Arc Planning
 
 ```bash
-# Write feature spec
-vim new-feature.txt
+# Write story arc spec
+vim act-2-arc.txt
 
-# Generate tasks
-task-master parse-prd new-feature.txt --num-tasks 10
+# Generate chapters
+novel-master parse-prd act-2-arc.txt --num-tasks 10
 
 # Analyze and expand
-task-master analyze-complexity --research
-task-master expand --all --research --force
+novel-master analyze-complexity --research
+novel-master expand --all --research --force
 
 # Review and adjust
-task-master list
+novel-master list
 ```
 
-### Pattern: Sprint Planning
+### Pattern: Complexity-Based Planning
 
 ```bash
-# Parse sprint requirements
-task-master parse-prd sprint-requirements.txt
+# Parse story arc requirements
+novel-master parse-prd story-arc-requirements.txt
 
 # Analyze complexity
-task-master analyze-complexity --research
+novel-master analyze-complexity --research
 
 # View report
-task-master complexity-report
+novel-master complexity-report
 
-# Adjust task estimates based on complexity scores
+# Adjust chapter estimates based on complexity scores
 ```
 
 ---
 
-For more examples and advanced usage, see the [full documentation](https://docs.task-master.dev).
+For more examples and advanced usage, see the [full documentation](https://docs.novel-master.dev).

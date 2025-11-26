@@ -1,0 +1,46 @@
+Title: The Glass Orbit
+Genre: Solarpunk mystery thriller
+Themes: community resilience, climate justice, trust vs secrecy
+Target length: 110k words
+POV: Dual first-person (engineer Aiko, investigator Rafael)
+Tone: Optimistic but tense
+Timeline: 3 acts, present day, orbital habitat around Venus
+
+Act I – Spark
+- Introduce orbital city Helion and energy cooperative
+- Aiko discovers energy fluctuations tied to sabotage
+- Rafael arrives to audit, distrust between leads
+- Stakes: power loss would freeze lower decks, harm seedlings
+
+Act II – Fracture
+- Parallel investigations in engineering deck and street-level markets
+- Reveal eco-fascist cult smuggling black-market sunshields
+- Aiko learns cult manipulates her sister; conflict of loyalty
+- Rafael uncovers council corruption; forced to go rogue with Aiko
+
+Act III – Confluence
+- Execute dual heist: disable cult sunshields + leak corruption proofs
+- Mass blackout threatens Helion garden domes
+- Aiko must convince sister to help reroute energy
+- Final reveal: sabotage hides data theft; choose truth over safety
+
+Key characters
+- Aiko Tanaka – solar engineer, methodical, protective of family, motif: origami sun charms
+- Rafael Costa – auditor, former journalist, struggles with cynicism, motif: analog recorder
+- Mina Tanaka – Aiko’s sister, conflicted cult insider
+- Councillor Nyla Vos – antagonist, believes in authoritarian stability
+
+World rules
+- Energy captured via orbital mirrors; redistribution is political power
+- Citizens trade growth credits for access to garden domes
+- Communication delays between orbital strata cause rumor-driven tension
+- Black-market sunshields can sterilize entire decks if misaligned
+
+Research hooks
+- Look up real solarpunk city planning concepts
+- Investigate how orbital mechanics impacts day/night cycles
+- Study cult deprogramming techniques for Mina’s arc
+
+Output expectations
+- 8 top-level tasks (acts + cross-cutting initiatives)
+- Each task should mention POV focus, emotional stakes, and test strategy referencing continuity/word-count checks

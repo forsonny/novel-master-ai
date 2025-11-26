@@ -17,7 +17,7 @@ import path from 'path';
  * @param {Object} [editorConfig.toolMappings={}] - Tool name mappings
  * @param {Array} [editorConfig.customReplacements=[]] - Custom text replacements
  * @param {Object} [editorConfig.fileMap={}] - Custom file name mappings
- * @param {boolean} [editorConfig.supportsRulesSubdirectories=false] - Whether to use taskmaster/ subdirectory for taskmaster-specific rules (only Cursor uses this by default)
+ * @param {boolean} [editorConfig.supportsRulesSubdirectories=false] - Whether to use novelmaster/ subdirectory for novelmaster-specific rules (only Cursor uses this by default)
  * @param {boolean} [editorConfig.includeDefaultRules=true] - Whether to include default rule files
  * @param {Function} [editorConfig.onAdd] - Lifecycle hook for profile addition
  * @param {Function} [editorConfig.onRemove] - Lifecycle hook for profile removal
@@ -51,13 +51,13 @@ export function createProfile(editorConfig) {
 		: null;
 
 	// Standard file mapping with custom overrides
-	// Use taskmaster subdirectory only if profile supports it
-	const taskmasterPrefix = supportsRulesSubdirectories ? 'taskmaster/' : '';
+	// Use novelmaster subdirectory only if profile supports it
+	const novelmasterPrefix = supportsRulesSubdirectories ? 'novelmaster/' : '';
 	const defaultFileMap = {
 		'rules/cursor_rules.mdc': `${name.toLowerCase()}_rules${targetExtension}`,
-		'rules/dev_workflow.mdc': `${taskmasterPrefix}dev_workflow${targetExtension}`,
+		'rules/dev_workflow.mdc': `${novelmasterPrefix}dev_workflow${targetExtension}`,
 		'rules/self_improve.mdc': `self_improve${targetExtension}`,
-		'rules/taskmaster.mdc': `${taskmasterPrefix}taskmaster${targetExtension}`
+		'rules/novelmaster.mdc': `${novelmasterPrefix}novelmaster${targetExtension}`
 	};
 
 	// Build final fileMap - merge defaults with custom entries when includeDefaultRules is true

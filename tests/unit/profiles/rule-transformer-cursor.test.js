@@ -118,7 +118,7 @@ alwaysApply: true
 ---
 
 This references [dev_workflow.mdc](mdc:.cursor/rules/dev_workflow.mdc) and 
-[taskmaster.mdc](mdc:.cursor/rules/taskmaster.mdc).`;
+[novelmaster.mdc](mdc:.cursor/rules/novelmaster.mdc).`;
 
 		// Mock file read to return our test content
 		mockReadFileSync.mockReturnValue(testContent);
@@ -137,12 +137,12 @@ This references [dev_workflow.mdc](mdc:.cursor/rules/dev_workflow.mdc) and
 		const writeCall = mockWriteFileSync.mock.calls[0];
 		const transformedContent = writeCall[1];
 
-		// Verify transformations (Cursor should keep the same references but in taskmaster subdirectory)
+		// Verify transformations (Cursor should keep the same references but in novelmaster subdirectory)
 		expect(transformedContent).toContain(
-			'(mdc:.cursor/rules/taskmaster/dev_workflow.mdc)'
+			'(mdc:.cursor/rules/novelmaster/dev_workflow.mdc)'
 		);
 		expect(transformedContent).toContain(
-			'(mdc:.cursor/rules/taskmaster/taskmaster.mdc)'
+			'(mdc:.cursor/rules/novelmaster/novelmaster.mdc)'
 		);
 	});
 

@@ -1,34 +1,34 @@
 /**
- * task-master.js
- * This module provides a centralized path management system for the Task Master application.
- * It exports the TaskMaster class and the initTaskMaster factory function to create a single,
+ * novel-master.js
+ * This module provides a centralized path management system for the Novel Master application.
+ * It exports the NovelMaster class and the initNovelMaster factory function to create a single,
  * authoritative source for all critical file and directory paths, resolving circular dependencies.
  */
 
 import path from 'path';
 import fs from 'fs';
 import {
-	TASKMASTER_DIR,
-	TASKMASTER_TASKS_FILE,
+	NOVELMASTER_DIR,
+	NOVELMASTER_TASKS_FILE,
 	LEGACY_TASKS_FILE,
-	TASKMASTER_DOCS_DIR,
-	TASKMASTER_REPORTS_DIR,
-	TASKMASTER_CONFIG_FILE,
+	NOVELMASTER_DOCS_DIR,
+	NOVELMASTER_REPORTS_DIR,
+	NOVELMASTER_CONFIG_FILE,
 	LEGACY_CONFIG_FILE,
 	COMPLEXITY_REPORT_FILE
 } from './constants/paths.js';
 import { findProjectRoot } from './utils/path-utils.js';
 
 /**
- * TaskMaster class manages all the paths for the application.
- * An instance of this class is created by the initTaskMaster function.
+ * NovelMaster class manages all the paths for the application.
+ * An instance of this class is created by the initNovelMaster function.
  */
-export class TaskMaster {
+export class NovelMaster {
 	#paths;
 	#tag;
 
 	/**
-	 * The constructor is intended to be used only by the initTaskMaster factory function.
+	 * The constructor is intended to be used only by the initNovelMaster factory function.
 	 * @param {object} paths - A pre-resolved object of all application paths.
 	 * @param {string|undefined} tag - The current tag.
 	 */
@@ -45,11 +45,12 @@ export class TaskMaster {
 	}
 
 	/**
-	 * @returns {string|null} The absolute path to the .taskmaster directory.
+	 * @returns {string|null} The absolute path to the .novelmaster directory.
 	 */
-	getTaskMasterDir() {
-		return this.#paths.taskMasterDir;
+	getNovelMasterDir() {
+		return this.#paths.novelMasterDir;
 	}
+
 
 	/**
 	 * @returns {string|null} The absolute path to the tasks.json file.
@@ -59,7 +60,7 @@ export class TaskMaster {
 	}
 
 	/**
-	 * @returns {string|null} The absolute path to the PRD file.
+	 * @returns {string|null} The absolute path to the NRD file.
 	 */
 	getPrdPath() {
 		return this.#paths.prdPath;
@@ -146,7 +147,7 @@ export class TaskMaster {
 }
 
 /**
- * Initializes a TaskMaster instance with resolved paths.
+ * Initializes a NovelMaster instance with resolved paths.
  * This function centralizes path resolution logic.
  *
  * @param {object} [overrides={}] - An object with possible path overrides.
@@ -157,9 +158,18 @@ export class TaskMaster {
  * @param {string} [overrides.configPath]
  * @param {string} [overrides.statePath]
  * @param {string} [overrides.tag]
- * @returns {TaskMaster} An initialized TaskMaster instance.
+ * @returns {NovelMaster} An initialized NovelMaster instance.
  */
-export function initTaskMaster(overrides = {}) {
+export function initNovelMaster(overrides = {}) {
+	return _initNovelMasterInternal(overrides);
+}
+
+
+/**
+ * Internal implementation of NovelMaster initialization.
+ * @private
+ */
+function _initNovelMasterInternal(overrides = {}) {
 	const resolvePath = (
 		pathType,
 		override,
@@ -234,16 +244,16 @@ export function initTaskMaster(overrides = {}) {
 			);
 		}
 
-		const hasTaskmasterDir = fs.existsSync(
-			path.join(resolvedOverride, TASKMASTER_DIR)
+		const hasNovelMasterDir = fs.existsSync(
+			path.join(resolvedOverride, NOVELMASTER_DIR)
 		);
 		const hasLegacyConfig = fs.existsSync(
 			path.join(resolvedOverride, LEGACY_CONFIG_FILE)
 		);
 
-		if (!hasTaskmasterDir && !hasLegacyConfig) {
+		if (!hasNovelMasterDir && !hasLegacyConfig) {
 			throw new Error(
-				`Project root override is not a valid taskmaster project: ${resolvedOverride}`
+				`Project root override is not a valid novelmaster project: ${resolvedOverride}`
 			);
 		}
 
@@ -253,38 +263,38 @@ export function initTaskMaster(overrides = {}) {
 		paths.projectRoot = findProjectRoot();
 	}
 
-	// TaskMaster Directory
-	if ('taskMasterDir' in overrides) {
-		paths.taskMasterDir = resolvePath(
-			'taskmaster directory',
-			overrides.taskMasterDir,
-			[TASKMASTER_DIR],
+	// NovelMaster Directory
+	if ('novelMasterDir' in overrides) {
+		paths.novelMasterDir = resolvePath(
+			'novelmaster directory',
+			overrides.novelMasterDir,
+			[NOVELMASTER_DIR],
 			paths.projectRoot
 		);
 	} else {
-		paths.taskMasterDir = resolvePath(
-			'taskmaster directory',
+		paths.novelMasterDir = resolvePath(
+			'novelmaster directory',
 			false,
-			[TASKMASTER_DIR],
+			[NOVELMASTER_DIR],
 			paths.projectRoot
 		);
 	}
 
 	// Always set default paths first
 	// These can be overridden below if needed
-	paths.configPath = path.join(paths.projectRoot, TASKMASTER_CONFIG_FILE);
+	paths.configPath = path.join(paths.projectRoot, NOVELMASTER_CONFIG_FILE);
 	paths.statePath = path.join(
-		paths.taskMasterDir || path.join(paths.projectRoot, TASKMASTER_DIR),
+		paths.novelMasterDir || path.join(paths.projectRoot, NOVELMASTER_DIR),
 		'state.json'
 	);
-	paths.tasksPath = path.join(paths.projectRoot, TASKMASTER_TASKS_FILE);
+	paths.tasksPath = path.join(paths.projectRoot, NOVELMASTER_TASKS_FILE);
 
 	// Handle overrides - only validate/resolve if explicitly provided
 	if ('configPath' in overrides) {
 		paths.configPath = resolvePath(
 			'config file',
 			overrides.configPath,
-			[TASKMASTER_CONFIG_FILE, LEGACY_CONFIG_FILE],
+			[NOVELMASTER_CONFIG_FILE, LEGACY_CONFIG_FILE],
 			paths.projectRoot
 		);
 	}
@@ -294,7 +304,7 @@ export function initTaskMaster(overrides = {}) {
 			'state file',
 			overrides.statePath,
 			['state.json'],
-			paths.taskMasterDir
+			paths.novelMasterDir
 		);
 	}
 
@@ -302,40 +312,64 @@ export function initTaskMaster(overrides = {}) {
 		paths.tasksPath = resolvePath(
 			'tasks file',
 			overrides.tasksPath,
-			[TASKMASTER_TASKS_FILE, LEGACY_TASKS_FILE],
+			[NOVELMASTER_TASKS_FILE, LEGACY_TASKS_FILE],
 			paths.projectRoot
 		);
 	}
 
-	if ('prdPath' in overrides) {
-		paths.prdPath = resolvePath(
-			'PRD file',
-			overrides.prdPath,
-			[
-				path.join(TASKMASTER_DOCS_DIR, 'PRD.md'),
-				path.join(TASKMASTER_DOCS_DIR, 'prd.md'),
-				path.join(TASKMASTER_DOCS_DIR, 'PRD.txt'),
-				path.join(TASKMASTER_DOCS_DIR, 'prd.txt'),
-				path.join('scripts', 'PRD.md'),
-				path.join('scripts', 'prd.md'),
-				path.join('scripts', 'PRD.txt'),
-				path.join('scripts', 'prd.txt'),
-				'PRD.md',
-				'prd.md',
-				'PRD.txt',
-				'prd.txt'
-			],
-			paths.projectRoot
-		);
-	}
+const NRD_CANDIDATES = [
+	path.join(NOVELMASTER_DOCS_DIR, 'nrd.txt'),
+	path.join(NOVELMASTER_DOCS_DIR, 'NRD.txt'),
+	path.join(NOVELMASTER_DOCS_DIR, 'nrd.md'),
+	path.join(NOVELMASTER_DOCS_DIR, 'NRD.md'),
+	path.join('scripts', 'nrd.txt'),
+	path.join('scripts', 'NRD.txt'),
+	path.join('scripts', 'nrd.md'),
+	path.join('scripts', 'NRD.md'),
+	'nrd.txt',
+	'NRD.txt',
+	'nrd.md',
+	'NRD.md'
+];
+
+const PRD_CANDIDATES = [
+	path.join(NOVELMASTER_DOCS_DIR, 'PRD.md'),
+	path.join(NOVELMASTER_DOCS_DIR, 'prd.md'),
+	path.join(NOVELMASTER_DOCS_DIR, 'PRD.txt'),
+	path.join(NOVELMASTER_DOCS_DIR, 'prd.txt'),
+	path.join('scripts', 'PRD.md'),
+	path.join('scripts', 'prd.md'),
+	path.join('scripts', 'PRD.txt'),
+	path.join('scripts', 'prd.txt'),
+	'PRD.md',
+	'prd.md',
+	'PRD.txt',
+	'prd.txt'
+];
+
+if ('prdPath' in overrides) {
+	paths.prdPath = resolvePath(
+		'NRD file',
+		overrides.prdPath,
+		[...NRD_CANDIDATES, ...PRD_CANDIDATES],
+		paths.projectRoot
+	);
+} else {
+	paths.prdPath = resolvePath(
+		'NRD file',
+		true,
+		[...NRD_CANDIDATES, ...PRD_CANDIDATES],
+		paths.projectRoot
+	);
+}
 
 	if ('complexityReportPath' in overrides) {
 		paths.complexityReportPath = resolvePath(
 			'complexity report',
 			overrides.complexityReportPath,
 			[
-				path.join(TASKMASTER_REPORTS_DIR, 'task-complexity-report.json'),
-				path.join(TASKMASTER_REPORTS_DIR, 'complexity-report.json'),
+				path.join(NOVELMASTER_REPORTS_DIR, 'task-complexity-report.json'),
+				path.join(NOVELMASTER_REPORTS_DIR, 'complexity-report.json'),
 				path.join('scripts', 'task-complexity-report.json'),
 				path.join('scripts', 'complexity-report.json'),
 				'task-complexity-report.json',
@@ -346,5 +380,5 @@ export function initTaskMaster(overrides = {}) {
 		);
 	}
 
-	return new TaskMaster(paths, overrides.tag);
+	return new NovelMaster(paths, overrides.tag);
 }

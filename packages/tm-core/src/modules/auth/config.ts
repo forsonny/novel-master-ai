@@ -33,8 +33,8 @@ function getDefaultAuthConfig(): AuthConfig {
 		baseUrl: getBaseDomain(),
 
 		// Configuration directory and file paths
-		configDir: path.join(os.homedir(), '.taskmaster'),
-		configFile: path.join(os.homedir(), '.taskmaster', 'auth.json')
+		configDir: path.join(os.homedir(), '.novelmaster'),
+		configFile: path.join(os.homedir(), '.novelmaster', 'auth.json')
 	};
 }
 

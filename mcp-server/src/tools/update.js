@@ -9,7 +9,7 @@ import {
 	createErrorResponse,
 	withNormalizedProjectRoot
 } from './utils.js';
-import { updateTasksDirect } from '../core/task-master-core.js';
+import { updateTasksDirect } from '../core/novel-master-core.js';
 import { findTasksPath } from '../core/utils/path-utils.js';
 import { resolveTag } from '../../../scripts/modules/utils.js';
 
@@ -21,20 +21,20 @@ export function registerUpdateTool(server) {
 	server.addTool({
 		name: 'update',
 		description:
-			"Update multiple upcoming tasks (with ID >= 'from' ID) based on new context or changes provided in the prompt. Use 'update_task' instead for a single specific task or 'update_subtask' for subtasks.",
+			"Update upcoming outline items (ID >= --from) when the story direction changes. Use 'update_task' for a single beat or 'update_subtask' for progress notes.",
 		parameters: z.object({
 			from: z
 				.string()
 				.describe(
-					"Task ID from which to start updating (inclusive). IMPORTANT: This tool uses 'from', not 'id'"
+					'First chapter/scene ID to update (inclusive). IMPORTANT: This tool uses --from, not --id.'
 				),
 			prompt: z
 				.string()
-				.describe('Explanation of changes or new context to apply'),
+				.describe('Explain the new story context to apply (tone, POV, stakes, lore).'),
 			research: z
 				.boolean()
 				.optional()
-				.describe('Use Perplexity AI for research-backed updates'),
+				.describe('Enable lore/genre-aware updates'),
 			file: z
 				.string()
 				.optional()

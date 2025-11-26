@@ -111,7 +111,7 @@ describe('Rule Transformer - General', () => {
 				'cursor_rules.mdc',
 				'dev_workflow.mdc',
 				'self_improve.mdc',
-				'taskmaster.mdc'
+				'novelmaster.mdc'
 			];
 
 			RULE_PROFILES.forEach((profile) => {

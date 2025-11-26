@@ -8,7 +8,7 @@ import path from 'path';
 
 describe('getTagAwareFilePath utility function', () => {
 	const projectRoot = '/test/project';
-	const basePath = '.taskmaster/reports/task-complexity-report.json';
+	const basePath = '.novelmaster/reports/task-complexity-report.json';
 
 	it('should return base path for master tag', () => {
 		const result = getTagAwareFilePath(basePath, 'master', projectRoot);
@@ -33,30 +33,30 @@ describe('getTagAwareFilePath utility function', () => {
 		const result = getTagAwareFilePath(basePath, tag, projectRoot);
 		const expected = path.join(
 			projectRoot,
-			'.taskmaster/reports/task-complexity-report_feature-branch.json'
+			'.novelmaster/reports/task-complexity-report_feature-branch.json'
 		);
 		expect(result).toBe(expected);
 	});
 
 	it('should handle different file extensions', () => {
-		const csvBasePath = '.taskmaster/reports/export.csv';
+		const csvBasePath = '.novelmaster/reports/export.csv';
 		const tag = 'dev-branch';
 		const result = getTagAwareFilePath(csvBasePath, tag, projectRoot);
 		const expected = path.join(
 			projectRoot,
-			'.taskmaster/reports/export_dev-branch.csv'
+			'.novelmaster/reports/export_dev-branch.csv'
 		);
 		expect(result).toBe(expected);
 	});
 
 	it('should handle paths without extensions', () => {
-		const noExtPath = '.taskmaster/reports/summary';
+		const noExtPath = '.novelmaster/reports/summary';
 		const tag = 'test-tag';
 		const result = getTagAwareFilePath(noExtPath, tag, projectRoot);
 		// Since there's no extension, it should append the tag
 		const expected = path.join(
 			projectRoot,
-			'.taskmaster/reports/summary_test-tag'
+			'.novelmaster/reports/summary_test-tag'
 		);
 		expect(result).toBe(expected);
 	});
@@ -66,7 +66,7 @@ describe('getTagAwareFilePath utility function', () => {
 		const result = getTagAwareFilePath(basePath, tag);
 		const expected = path.join(
 			'.',
-			'.taskmaster/reports/task-complexity-report_feature-tag.json'
+			'.novelmaster/reports/task-complexity-report_feature-tag.json'
 		);
 		expect(result).toBe(expected);
 	});
@@ -76,7 +76,7 @@ describe('getTagAwareFilePath utility function', () => {
 		const result = getTagAwareFilePath(basePath, tag, projectRoot);
 		const expected = path.join(
 			projectRoot,
-			'.taskmaster/reports/task-complexity-report_feature-user-auth-v2.json'
+			'.novelmaster/reports/task-complexity-report_feature-user-auth-v2.json'
 		);
 		expect(result).toBe(expected);
 	});

@@ -38,7 +38,7 @@ function onRemoveRulesProfile(targetDir) {
 	const userRulesFile = path.join(targetDir, '.rules');
 
 	try {
-		// Remove Task Master .rules
+		// Remove Novel Master .rules
 		if (fs.existsSync(userRulesFile)) {
 			fs.rmSync(userRulesFile, { force: true });
 			log('debug', `[Zed] Removed ${userRulesFile}`);
@@ -60,13 +60,13 @@ function onRemoveRulesProfile(targetDir) {
 		const configContent = fs.readFileSync(mcpConfigPath, 'utf8');
 		const config = JSON.parse(configContent);
 
-		// Check if it has the context_servers section and task-master-ai server
+		// Check if it has the context_servers section and novel-master-ai server
 		if (
 			config['context_servers'] &&
-			config['context_servers']['task-master-ai']
+			config['context_servers']['novel-master-ai']
 		) {
-			// Remove task-master-ai server
-			delete config['context_servers']['task-master-ai'];
+			// Remove novel-master-ai server
+			delete config['context_servers']['novel-master-ai'];
 
 			// Check if there are other MCP servers in context_servers
 			const remainingServers = Object.keys(config['context_servers']);
@@ -142,12 +142,12 @@ function onPostConvertRulesProfile(targetDir, assetsDir) {
 		// Transform to Zed format
 		const zedConfig = transformToZedFormat(mcpConfig);
 
-		// Add "source": "custom" to task-master-ai server for Zed
+		// Add "source": "custom" to novel-master-ai server for Zed
 		if (
 			zedConfig['context_servers'] &&
-			zedConfig['context_servers']['task-master-ai']
+			zedConfig['context_servers']['novel-master-ai']
 		) {
-			zedConfig['context_servers']['task-master-ai'].source = 'custom';
+			zedConfig['context_servers']['novel-master-ai'].source = 'custom';
 		}
 
 		// Write back the transformed config with proper formatting

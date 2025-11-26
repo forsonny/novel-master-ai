@@ -1,6 +1,6 @@
 # Codex CLI Provider
 
-The `codex-cli` provider integrates Task Master with OpenAI's Codex CLI via the community AI SDK provider [`ai-sdk-provider-codex-cli`](https://github.com/ben-vargas/ai-sdk-provider-codex-cli). It uses your ChatGPT subscription (OAuth) via `codex login`, with optional `OPENAI_CODEX_API_KEY` support.
+The `codex-cli` provider integrates Novel Master with OpenAI's Codex CLI via the community AI SDK provider [`ai-sdk-provider-codex-cli`](https://github.com/ben-vargas/ai-sdk-provider-codex-cli). It uses your ChatGPT subscription (OAuth) via `codex login`, with optional `OPENAI_CODEX_API_KEY` support.
 
 ## Why Use Codex CLI?
 
@@ -23,8 +23,8 @@ npm install -g @openai/codex
 # 2. Authenticate with your ChatGPT account
 codex login
 
-# 3. Configure Task Master to use Codex CLI
-task-master models --set-main gpt-5-codex --codex-cli
+# 3. Configure Novel Master to use Codex CLI
+novel-master models --set-main gpt-5-codex --codex-cli
 ```
 
 ## Requirements
@@ -32,7 +32,7 @@ task-master models --set-main gpt-5-codex --codex-cli
 - **Node.js**: >= 18.0.0
 - **Codex CLI**: >= 0.42.0 (>= 0.44.0 recommended)
 - **ChatGPT Subscription**: Required for OAuth access (Plus, Pro, Business, Edu, or Enterprise)
-- **Task Master**: >= 0.27.3 (version with Codex CLI support)
+- **Novel Master**: >= 0.27.3 (version with Codex CLI support)
 
 ### Checking Your Versions
 
@@ -43,8 +43,8 @@ node --version
 # Check Codex CLI version
 codex --version
 
-# Check Task Master version
-task-master --version
+# Check Novel Master version
+novel-master --version
 ```
 
 ## Installation
@@ -61,14 +61,14 @@ codex --version
 
 Expected output: `v0.44.0` or higher
 
-### Install Task Master (if not already installed)
+### Install Novel Master (if not already installed)
 
 ```bash
 # Install globally
-npm install -g task-master-ai
+npm install -g novel-master-ai
 
 # Or install in your project
-npm install --save-dev task-master-ai
+npm install --save-dev novel-master-ai
 ```
 
 ## Authentication
@@ -86,7 +86,7 @@ This will:
 1. Open a browser window for OAuth authentication
 2. Prompt you to log in with your ChatGPT account
 3. Store authentication credentials locally
-4. Allow Task Master to automatically use these credentials
+4. Allow Novel Master to automatically use these credentials
 
 To verify your authentication:
 ```bash
@@ -130,7 +130,7 @@ The Codex CLI provider supports only models available through ChatGPT subscripti
 
 ### Basic Configuration
 
-Add Codex CLI to your `.taskmaster/config.json`:
+Add Codex CLI to your `.novelmaster/config.json`:
 
 ```json
 {
@@ -253,7 +253,7 @@ The `codexCli` section allows you to customize Codex CLI behavior:
 
 ### Command-Specific Settings
 
-Override settings for specific Task Master commands:
+Override settings for specific Novel Master commands:
 
 ```json
 {
@@ -282,34 +282,34 @@ Override settings for specific Task Master commands:
 
 ```bash
 # Set Codex CLI for main role
-task-master models --set-main gpt-5-codex --codex-cli
+novel-master models --set-main gpt-5-codex --codex-cli
 
 # Set Codex CLI for fallback role
-task-master models --set-fallback gpt-5 --codex-cli
+novel-master models --set-fallback gpt-5 --codex-cli
 
 # Set Codex CLI for research role
-task-master models --set-research gpt-5 --codex-cli
+novel-master models --set-research gpt-5 --codex-cli
 
 # Verify configuration
-task-master models
+novel-master models
 ```
 
-### Using Codex CLI with Task Master Commands
+### Using Codex CLI with Novel Master Commands
 
-Once configured, use Task Master commands as normal:
+Once configured, use Novel Master commands as normal:
 
 ```bash
 # Parse a PRD with Codex CLI
-task-master parse-prd my-requirements.txt
+novel-master parse-prd my-requirements.txt
 
 # Analyze project complexity
-task-master analyze-complexity --research
+novel-master analyze-complexity --research
 
 # Expand a task into subtasks
-task-master expand --id=1.2
+novel-master expand --id=1.2
 
 # Add a new task with AI assistance
-task-master add-task --prompt="Implement user authentication" --research
+novel-master add-task --prompt="Implement user authentication" --research
 ```
 
 The provider will automatically use your OAuth credentials when Codex CLI is configured.
@@ -343,7 +343,7 @@ To verify or configure:
 
 ### "codex: command not found" Error
 
-**Symptoms**: Task Master reports that the Codex CLI is not found.
+**Symptoms**: Novel Master reports that the Codex CLI is not found.
 
 **Solutions**:
 1. **Install Codex CLI globally**:
@@ -428,7 +428,7 @@ To verify or configure:
 
 3. **Wrong provider selected**:
    - Verify you're using `--codex-cli` flag when setting models
-   - Check `.taskmaster/config.json` shows `"provider": "codex-cli"`
+   - Check `.novelmaster/config.json` shows `"provider": "codex-cli"`
 
 ### API Key Not Being Used
 
@@ -497,7 +497,7 @@ To verify or configure:
 - **OAuth subscription required**: No API key needed for basic operation, but requires active ChatGPT subscription
 - **Limited model selection**: Only `gpt-5` and `gpt-5-codex` available via OAuth
 - **Pricing information**: Not available for OAuth models (shows as "Unknown" in cost calculations)
-- **No automatic dependency**: The `@openai/codex` package is not added to Task Master's dependencies - install it globally or enable `allowNpx`
+- **No automatic dependency**: The `@openai/codex` package is not added to Novel Master's dependencies - install it globally or enable `allowNpx`
 - **Codebase analysis**: Automatically enabled when using `codex-cli` provider
 - **Safety first**: Default settings prioritize safety with `approvalMode: "on-failure"` and `sandboxMode: "workspace-write"`
 

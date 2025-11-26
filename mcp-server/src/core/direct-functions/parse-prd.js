@@ -1,6 +1,6 @@
 /**
  * parse-prd.js
- * Direct function implementation for parsing PRD documents
+ * Direct function implementation for parsing Novel Requirements Documents (NRDs) into story arcs and chapters
  */
 
 import path from 'path';
@@ -14,19 +14,19 @@ import {
 import { createLogWrapper } from '../../tools/utils.js';
 import { getDefaultNumTasks } from '../../../../scripts/modules/config-manager.js';
 import { resolvePrdPath, resolveProjectPath } from '../utils/path-utils.js';
-import { TASKMASTER_TASKS_FILE } from '../../../../src/constants/paths.js';
+import { NOVELMASTER_TASKS_FILE } from '../../../../src/constants/paths.js';
 
 /**
- * Direct function wrapper for parsing PRD documents and generating tasks.
+ * Direct function wrapper for parsing Novel Requirements Documents (NRDs) and generating story arcs/chapters.
  *
  * @param {Object} args - Command arguments containing projectRoot, input, output, numTasks options.
- * @param {string} args.input - Path to the input PRD file.
- * @param {string} args.output - Path to the output directory.
- * @param {string} args.numTasks - Number of tasks to generate.
- * @param {boolean} args.force - Whether to force parsing.
- * @param {boolean} args.append - Whether to append to the output file.
- * @param {boolean} args.research - Whether to use research mode.
- * @param {string} args.tag - Tag context for organizing tasks into separate task lists.
+ * @param {string} args.input - Path to the input NRD file (outline, character sheets, world rules).
+ * @param {string} args.output - Path to the output tasks.json file.
+ * @param {string} args.numTasks - Number of top-level narrative tasks (acts/chapters) to generate.
+ * @param {boolean} args.force - Whether to force parsing (overwrite existing tasks).
+ * @param {boolean} args.append - Whether to append new tasks to existing tasks.json.
+ * @param {boolean} args.research - Whether to use research mode for genre/worldbuilding insights.
+ * @param {string} args.tag - Tag context (outline, draft, revision) for organizing tasks into separate lists.
  * @param {Object} log - Logger object.
  * @param {Object} context - Context object containing session data.
  * @returns {Promise<Object>} - Result object with success status and data/error information.
@@ -66,7 +66,7 @@ export async function parsePRDDirect(args, log, context = {}) {
 		try {
 			inputPath = resolvePrdPath({ input: inputArg, projectRoot }, session);
 		} catch (error) {
-			logWrapper.error(`Error resolving PRD path: ${error.message}`);
+			logWrapper.error(`Error resolving NRD path: ${error.message}`);
 			return {
 				success: false,
 				error: { code: 'FILE_NOT_FOUND', message: error.message }
@@ -85,12 +85,12 @@ export async function parsePRDDirect(args, log, context = {}) {
 		? path.isAbsolute(outputArg)
 			? outputArg
 			: path.resolve(projectRoot, outputArg)
-		: resolveProjectPath(TASKMASTER_TASKS_FILE, args) ||
-			path.resolve(projectRoot, TASKMASTER_TASKS_FILE);
+		: resolveProjectPath(NOVELMASTER_TASKS_FILE, args) ||
+			path.resolve(projectRoot, NOVELMASTER_TASKS_FILE);
 
 	// Check if input file exists
 	if (!fs.existsSync(inputPath)) {
-		const errorMsg = `Input PRD file not found at resolved path: ${inputPath}`;
+		const errorMsg = `Input NRD file not found at resolved path: ${inputPath}`;
 		logWrapper.error(errorMsg);
 		return {
 			success: false,
@@ -137,12 +137,12 @@ export async function parsePRDDirect(args, log, context = {}) {
 
 	if (research) {
 		logWrapper.info(
-			'Research mode enabled. Using Perplexity AI for enhanced PRD analysis.'
+			'Research mode enabled. Using Perplexity AI for enhanced NRD analysis.'
 		);
 	}
 
 	logWrapper.info(
-		`Parsing PRD via direct function. Input: ${inputPath}, Output: ${outputPath}, NumTasks: ${numTasks}, Force: ${force}, Append: ${append}, Research: ${research}, ProjectRoot: ${projectRoot}`
+		`Parsing NRD via direct function. Input: ${inputPath}, Output: ${outputPath}, NumTasks: ${numTasks}, Force: ${force}, Append: ${append}, Research: ${research}, ProjectRoot: ${projectRoot}`
 	);
 
 	const wasSilent = isSilentMode();
@@ -173,7 +173,7 @@ export async function parsePRDDirect(args, log, context = {}) {
 
 		// Adjust check for the new return structure
 		if (result && result.success) {
-			const successMsg = `Successfully parsed PRD and generated tasks in ${result.tasksPath}`;
+			const successMsg = `Successfully parsed NRD and generated story arcs/chapters in ${result.tasksPath}`;
 			logWrapper.success(successMsg);
 			return {
 				success: true,
@@ -195,7 +195,7 @@ export async function parsePRDDirect(args, log, context = {}) {
 					code: 'CORE_FUNCTION_ERROR',
 					message:
 						result?.message ||
-						'Core function failed to parse PRD or returned unexpected result.'
+						'Core function failed to parse NRD or returned unexpected result.'
 				}
 			};
 		}
@@ -205,7 +205,7 @@ export async function parsePRDDirect(args, log, context = {}) {
 			success: false,
 			error: {
 				code: 'PARSE_PRD_CORE_ERROR',
-				message: error.message || 'Unknown error parsing PRD'
+				message: error.message || 'Unknown error parsing NRD'
 			}
 		};
 	} finally {

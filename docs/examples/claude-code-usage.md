@@ -4,7 +4,7 @@ The Claude Code provider allows you to use Claude models through the Claude Code
 
 ## Configuration
 
-To use the Claude Code provider, update your `.taskmaster/config.json`:
+To use the Claude Code provider, update your `.novelmaster/config.json`:
 
 ```json
 {
@@ -38,23 +38,23 @@ To use the Claude Code provider, update your `.taskmaster/config.json`:
 
 ## Usage
 
-Once configured, you can use Claude Code with all Task Master commands:
+Once configured, you can use Claude Code with all Novel Master commands:
 
 ```bash
-# Generate tasks from a PRD
-task-master parse-prd --input=prd.txt
+# Generate chapters from an NRD
+novel-master parse-prd --input=nrd.txt
 
-# Analyze project complexity
-task-master analyze-complexity
+# Analyze narrative complexity
+novel-master analyze-complexity
 
-# Show the next task to work on
-task-master next
+# Show the next chapter to work on
+novel-master next
 
-# View a specific task
-task-master show task-001
+# View a specific chapter
+novel-master show 1
 
-# Update task status
-task-master set-status --id=task-001 --status=in-progress
+# Update chapter status
+novel-master set-status --id=1 --status=in-progress
 ```
 
 ## Requirements
@@ -72,11 +72,11 @@ task-master set-status --id=task-001 --status=in-progress
 
 ## Advanced Settings
 
-The Claude Code SDK supports additional settings that provide fine-grained control over Claude's behavior.  These settings are implemented in the underlying SDK (`src/ai-providers/custom-sdk/claude-code/`), and can be managed through Task Master's configuration file.
+The Claude Code SDK supports additional settings that provide fine-grained control over Claude's behavior.  These settings are implemented in the underlying SDK (`src/ai-providers/custom-sdk/claude-code/`), and can be managed through Novel Master's configuration file.
 
 ### Advanced Settings Usage
 
-To update settings for Claude Code, update your `.taskmaster/config.json`:
+To update settings for Claude Code, update your `.novelmaster/config.json`:
 
 The Claude Code settings can be specified globally in the `claudeCode` section of the config, or on a per-command basis in the `commandSpecific` section:
 
@@ -89,10 +89,10 @@ The Claude Code settings can be specified globally in the `claudeCode` section o
     "maxTurns": 5,
     
     // Custom system prompt to override Claude Code's default behavior
-    "customSystemPrompt": "You are a helpful assistant focused on code quality",
+    "customSystemPrompt": "You are a helpful assistant focused on narrative quality and prose excellence",
 
     // Append additional content to the system prompt
-    "appendSystemPrompt": "Always follow coding best practices",
+    "appendSystemPrompt": "Always follow narrative best practices and maintain character consistency",
     
     // Permission mode for file system operations
     "permissionMode": "default", // Options: "default", "acceptEdits", "plan", "bypassPermissions"
@@ -120,25 +120,25 @@ The Claude Code settings can be specified globally in the `claudeCode` section o
     "parse-prd": {
       // Settings specific to the 'parse-prd' command
       "maxTurns": 10,
-      "customSystemPrompt": "You are a task breakdown specialist"
+      "customSystemPrompt": "You are a narrative breakdown specialist focused on story structure"
     },
     "analyze-complexity": {
       // Settings specific to the 'analyze-complexity' command
       "maxTurns": 3,
-      "appendSystemPrompt": "Focus on identifying bottlenecks"
+      "appendSystemPrompt": "Focus on identifying pacing issues and narrative complexity"
     }
   }
 }
 ```
 
-- For a full list of Cluaude Code settings, see the [Claude Code Settings documentation](https://docs.anthropic.com/en/docs/claude-code/settings).
+- For a full list of Claude Code settings, see the [Claude Code Settings documentation](https://docs.anthropic.com/en/docs/claude-code/settings).
 - For a full list of AI powered command names, see this file: `src/constants/commands.js`
 
 ### Why These Settings Matter
 
-- **maxTurns**: Useful for complex refactoring tasks that require multiple iterations
-- **customSystemPrompt**: Allows specializing Claude for specific domains or coding standards
-- **appendSystemPrompt**: Useful for enforcing coding standards or providing additional context
+- **maxTurns**: Useful for complex story revisions that require multiple iterations
+- **customSystemPrompt**: Allows specializing Claude for specific genres or narrative styles
+- **appendSystemPrompt**: Useful for enforcing narrative standards or providing additional story context
 - **permissionMode**: Critical for security in production environments
 - **allowedTools/disallowedTools**: Enable read-only analysis modes or restrict access to sensitive operations
 - **mcpServers**: Future extensibility for custom tool integrations

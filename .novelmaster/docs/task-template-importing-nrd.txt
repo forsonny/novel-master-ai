@@ -1,0 +1,52 @@
+# Scene Template Importing – Narrative Requirements
+
+This document explains how to drop pre-built outline or scene templates into `.novelmaster/tasks/` and immediately use them as tag contexts (e.g., `outline-act1`, `rev-pass-2`, `beta-reader-a`).
+
+## Why
+- Swap outline structures between series without merging JSON by hand
+- Share revision checklists with collaborators via version control
+- Keep experimental arcs separate from the main manuscript by parking them in template files
+
+## File Naming
+- Format: `tasks_<tag>.json` (e.g., `tasks_outline-act2.json`, `tasks_rev-pass.json`)
+- Each file must expose **one** tag key matching the filename suffix
+- Template tasks follow the standard Novel Master schema (title, description, details, testStrategy, etc.)
+
+## Workflow
+1. Drop `tasks_<tag>.json` into `.novelmaster/tasks/`
+2. Run `novel-master tags` → imported templates show with `(template)` suffix
+3. `novel-master use-tag <tag>` to inspect or copy tasks into your active context
+4. Templates are read-only; cloning to a working tag is done with `novel-master add-tag working-tag --copy-from=<tag>`
+
+## Template JSON Skeleton
+```json
+{
+  "meta": {
+    "projectName": "Act II Expansion",
+    "description": "Beat sheet for act two midpoint pivot",
+    "template": true
+  },
+  "tags": {
+    "outline-act2": {
+      "meta": {
+        "name": "Outline – Act II",
+        "description": "Scene beats for escalating tension"
+      },
+      "tasks": [
+        {
+          "id": 1,
+          "title": "Pinch Point – antagonist flex",
+          "description": "Show antagonist advantage via public spectacle",
+          "details": "POV: MC. Setting: market day. Sensory: smoke + cheering. Stakes: trust in mentor shaken.",
+          "testStrategy": "Continuity check against prior antagonist scene"
+        }
+      ]
+    }
+  }
+}
+```
+
+## Tips
+- Keep IDs small and sequential—Novel Master remaps them when cloning into a working tag
+- Include `details` fields with POV/tone cues so templates feel bespoke, not generic
+- Attach `testStrategy` guidance (continuity, emotional goal, timeline check) to speed revision passes

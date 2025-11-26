@@ -13,7 +13,7 @@ import packageJson from '../../../../package.json' with { type: 'json' };
 export function getVersionInfo() {
 	return {
 		version: packageJson.version || 'unknown',
-		name: packageJson.name || 'task-master-ai'
+		name: packageJson.name || 'novel-master-ai'
 	};
 }
 
@@ -23,7 +23,7 @@ export function getVersionInfo() {
 export function getCurrentTag(projectRoot: string): string | null {
 	try {
 		// Try to read current tag from state.json
-		const stateJsonPath = path.join(projectRoot, '.taskmaster', 'state.json');
+		const stateJsonPath = path.join(projectRoot, '.novelmaster', 'state.json');
 
 		if (fs.existsSync(stateJsonPath)) {
 			const stateData = JSON.parse(fs.readFileSync(stateJsonPath, 'utf-8'));
@@ -175,7 +175,7 @@ function getProjectRootFromSession(session: any): string | null {
  * Wrapper to normalize project root in args with proper precedence order
  *
  * PRECEDENCE ORDER:
- * 1. TASK_MASTER_PROJECT_ROOT environment variable (from process.env or session)
+ * 1. NOVEL_MASTER_PROJECT_ROOT environment variable (from process.env or session)
  * 2. args.projectRoot (explicitly provided)
  * 3. Session-based project root resolution
  * 4. Current directory fallback
@@ -192,39 +192,41 @@ export function withNormalizedProjectRoot<T extends { projectRoot?: string }>(
 		let rootSource = 'unknown';
 
 		try {
-			// 1. Check for TASK_MASTER_PROJECT_ROOT environment variable first
-			if (process.env.TASK_MASTER_PROJECT_ROOT) {
-				const envRoot = process.env.TASK_MASTER_PROJECT_ROOT;
+			// 1. Check for NOVEL_MASTER_PROJECT_ROOT environment variable first (with fallback to legacy)
+			const envRoot = process.env.NOVEL_MASTER_PROJECT_ROOT;
+			if (envRoot) {
 				normalizedRoot = path.isAbsolute(envRoot)
 					? envRoot
 					: path.resolve(process.cwd(), envRoot);
-				rootSource = 'TASK_MASTER_PROJECT_ROOT environment variable';
+				rootSource = 'NOVEL_MASTER_PROJECT_ROOT environment variable';
 				log?.info?.(`Using project root from ${rootSource}: ${normalizedRoot}`);
 			}
-			// Also check session environment variables for TASK_MASTER_PROJECT_ROOT
-			else if (session?.env?.TASK_MASTER_PROJECT_ROOT) {
-				const envRoot = session.env.TASK_MASTER_PROJECT_ROOT;
-				normalizedRoot = path.isAbsolute(envRoot)
-					? envRoot
-					: path.resolve(process.cwd(), envRoot);
-				rootSource = 'TASK_MASTER_PROJECT_ROOT session environment variable';
-				log?.info?.(`Using project root from ${rootSource}: ${normalizedRoot}`);
-			}
-			// 2. If no environment variable, try args.projectRoot
-			else if (args.projectRoot) {
-				normalizedRoot = normalizeProjectRoot(args.projectRoot);
-				rootSource = 'args.projectRoot';
-				log?.info?.(`Using project root from ${rootSource}: ${normalizedRoot}`);
-			}
-			// 3. If no args.projectRoot, try session-based resolution
+			// Also check session environment variables for NOVEL_MASTER_PROJECT_ROOT
 			else {
-				const sessionRoot = getProjectRootFromSession(session);
-				if (sessionRoot) {
-					normalizedRoot = sessionRoot;
-					rootSource = 'session';
-					log?.info?.(
-						`Using project root from ${rootSource}: ${normalizedRoot}`
-					);
+				const sessionEnvRoot = session?.env?.NOVEL_MASTER_PROJECT_ROOT;
+				if (sessionEnvRoot) {
+					normalizedRoot = path.isAbsolute(sessionEnvRoot)
+						? sessionEnvRoot
+						: path.resolve(process.cwd(), sessionEnvRoot);
+					rootSource = 'NOVEL_MASTER_PROJECT_ROOT session environment variable';
+					log?.info?.(`Using project root from ${rootSource}: ${normalizedRoot}`);
+				}
+				// 2. If no environment variable, try args.projectRoot
+				else if (args.projectRoot) {
+					normalizedRoot = normalizeProjectRoot(args.projectRoot);
+					rootSource = 'args.projectRoot';
+					log?.info?.(`Using project root from ${rootSource}: ${normalizedRoot}`);
+				}
+				// 3. If no args.projectRoot, try session-based resolution
+				else {
+					const sessionRoot = getProjectRootFromSession(session);
+					if (sessionRoot) {
+						normalizedRoot = sessionRoot;
+						rootSource = 'session';
+						log?.info?.(
+							`Using project root from ${rootSource}: ${normalizedRoot}`
+						);
+					}
 				}
 			}
 
@@ -237,7 +239,7 @@ export function withNormalizedProjectRoot<T extends { projectRoot?: string }>(
 						success: false,
 						error: {
 							message:
-								'Could not determine project root. Please provide projectRoot argument or ensure TASK_MASTER_PROJECT_ROOT environment variable is set.'
+								'Could not determine project root. Please provide projectRoot argument or ensure NOVEL_MASTER_PROJECT_ROOT environment variable is set.'
 						}
 					}
 				});

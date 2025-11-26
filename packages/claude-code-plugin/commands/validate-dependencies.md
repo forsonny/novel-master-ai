@@ -1,4 +1,4 @@
-Validate all task dependencies for issues.
+Validate all chapter dependencies for issues.
 
 ## Dependency Validation
 
@@ -7,7 +7,7 @@ Comprehensive check for dependency problems across the entire project.
 ## Execution
 
 ```bash
-task-master validate-dependencies
+novel-master validate-dependencies
 ```
 
 ## Validation Checks
@@ -18,19 +18,19 @@ task-master validate-dependencies
    - Self-dependencies
 
 2. **Missing Dependencies**
-   - References to non-existent tasks
-   - Deleted task references
-   - Invalid task IDs
+   - References to non-existent chapters
+   - Deleted chapter references
+   - Invalid chapter IDs
 
 3. **Logical Issues**
-   - Completed tasks depending on pending
-   - Cancelled tasks in dependency chains
+   - Completed chapters depending on pending
+   - Cancelled chapters in dependency chains
    - Impossible sequences
 
 4. **Complexity Warnings**
    - Over-complex dependency chains
-   - Too many dependencies per task
-   - Bottleneck tasks
+   - Too many dependencies per chapter
+   - Bottleneck chapters
 
 ## Smart Analysis
 
@@ -47,10 +47,10 @@ Dependency Validation Report
 ━━━━━━━━━━━━━━━━━━━━━━━━━━
 ✅ No circular dependencies found
 ⚠️  2 warnings found:
-   - Task #23 has 7 dependencies (consider breaking down)
-   - Task #45 blocks 5 other tasks (potential bottleneck)
+   - Chapter #23 has 7 dependencies (consider breaking down)
+   - Chapter #45 blocks 5 other chapters (potential bottleneck)
 ❌ 1 error found:
-   - Task #67 depends on deleted task #66
+   - Chapter #67 depends on deleted chapter #66
 
 Critical Path: #1 → #5 → #23 → #45 → #50 (15 days)
 ```
@@ -66,6 +66,6 @@ For each issue found:
 ## Next Steps
 
 After validation:
-- Run `/taskmaster:fix-dependencies` to auto-fix
+- Run `/novelmaster:fix-dependencies` to auto-fix
 - Manually adjust problematic dependencies
 - Rerun to verify fixes

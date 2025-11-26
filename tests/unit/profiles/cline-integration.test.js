@@ -24,7 +24,7 @@ describe('Cline Integration', () => {
 		jest.clearAllMocks();
 
 		// Create a temporary directory for testing
-		tempDir = fs.mkdtempSync(path.join(os.tmpdir(), 'task-master-test-'));
+		tempDir = fs.mkdtempSync(path.join(os.tmpdir(), 'novel-master-test-'));
 
 		// Spy on fs methods
 		jest.spyOn(fs, 'writeFileSync').mockImplementation(() => {});
@@ -55,7 +55,7 @@ describe('Cline Integration', () => {
 		// Create rule files
 		const ruleFiles = [
 			'dev_workflow.md',
-			'taskmaster.md',
+			'novelmaster.md',
 			'architecture.md',
 			'commands.md',
 			'dependencies.md'
@@ -90,7 +90,7 @@ describe('Cline Integration', () => {
 			expect.any(String)
 		);
 		expect(fs.writeFileSync).toHaveBeenCalledWith(
-			path.join(tempDir, '.clinerules', 'taskmaster.md'),
+			path.join(tempDir, '.clinerules', 'novelmaster.md'),
 			expect.any(String)
 		);
 		expect(fs.writeFileSync).toHaveBeenCalledWith(

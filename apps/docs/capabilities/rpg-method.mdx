@@ -1,22 +1,22 @@
 ---
-title: RPG Method for PRD Creation
+title: RPG Method for NRD Creation
 sidebarTitle: "RPG Method"
 ---
 
 # Repository Planning Graph (RPG) Method
 
-The RPG (Repository Planning Graph) method is an advanced approach to creating Product Requirements Documents that generate highly-structured, dependency-aware task graphs. It's based on Microsoft Research's methodology for scalable codebase generation.
+The RPG (Repository Planning Graph) method is an advanced approach to creating Novel Requirements Documents that generate highly-structured, dependency-aware story graphs. It's based on Microsoft Research's methodology for scalable narrative structure generation.
 
 ## When to Use RPG
 
-Use the RPG template (`example_prd_rpg.md`) for:
+Use the RPG template (`example_nrd_epic.md`) for:
 
-- **Complex multi-module systems** with intricate dependencies
-- **Large-scale codebases** being built from scratch
-- **Projects requiring explicit architecture** and clear module boundaries
-- **Teams needing dependency visibility** for parallel development
+- **Complex multi-arc stories** with intricate dependencies
+- **Large-scale novels** being planned from scratch
+- **Stories requiring explicit structure** and clear arc boundaries
+- **Teams needing dependency visibility** for parallel writing
 
-For simpler features or smaller projects, the standard `example_prd.md` template may be more appropriate.
+For simpler stories or smaller projects, the standard `example_nrd.md` template may be more appropriate.
 
 ---
 
@@ -68,7 +68,7 @@ Phase 2 (Core): algorithms, pipelines (depend on Phase 1)
 Phase 3 (API): routes, handlers (depend on Phase 2)
 ```
 
-Task Master automatically orders tasks based on this dependency chain.
+Novel Master automatically orders tasks based on this dependency chain.
 
 ### 4. Progressive Refinement
 
@@ -154,22 +154,22 @@ Data Layer (Phase 1):
 
 ---
 
-## Using RPG with Task Master
+## Using RPG with Novel Master
 
-### Step 1: Create PRD with RPG Template
+### Step 1: Create NRD with Epic Template
 
-Use a code-context-aware tool to fill out the template:
+Use a narrative-context-aware tool to fill out the template:
 
 ```bash
 # In Claude Code, Cursor, or similar
-"Create a PRD using @.taskmaster/templates/example_prd_rpg.txt for [your project]"
+"Create an NRD using @.novelmaster/templates/example_nrd_epic.md for [your story]"
 ```
 
-**Why code context matters:** The AI needs to understand your existing codebase to make informed decisions about:
-- Module boundaries
-- Dependency relationships
-- Integration points
-- Naming conventions
+**Why narrative context matters:** The AI needs to understand your existing story structure to make informed decisions about:
+- Story arc boundaries
+- Narrative dependency relationships
+- Character arc integration points
+- POV and timeline conventions
 
 **Recommended tools:**
 - Claude Code (claude-code CLI)
@@ -177,16 +177,16 @@ Use a code-context-aware tool to fill out the template:
 - Gemini CLI (large contexts)
 - Codex/Grok CLI
 
-### Step 2: Parse PRD into Tasks
+### Step 2: Parse NRD into Tasks
 
 ```bash
-task-master parse-prd .taskmaster/docs/your-prd.md --research
+novel-master parse-prd .novelmaster/docs/your-story.md --research
 ```
 
-Task Master will:
-1. Extract capabilities → Main tasks
-2. Extract features → Subtasks
-3. Parse dependencies → Task dependencies
+Novel Master will:
+1. Extract story arcs → Main tasks (chapters)
+2. Extract scenes → Subtasks (beats)
+3. Parse dependencies → Narrative dependencies
 4. Order by phases → Task priorities
 
 **Result:** A dependency-aware task graph ready for topological execution.
@@ -194,7 +194,7 @@ Task Master will:
 ### Step 3: Analyze Complexity
 
 ```bash
-task-master analyze-complexity --research
+novel-master analyze-complexity --research
 ```
 
 Review the complexity report to identify tasks that need expansion.
@@ -202,7 +202,7 @@ Review the complexity report to identify tasks that need expansion.
 ### Step 4: Expand Tasks
 
 ```bash
-task-master expand --all --research
+novel-master expand --all --research
 ```
 
 Break down complex tasks into manageable subtasks while preserving dependency chains.
@@ -221,7 +221,7 @@ Break down complex tasks into manageable subtasks while preserving dependency ch
 - Parallel development of independent modules
 - Clear contracts between modules (explicit dependencies)
 - Reduced merge conflicts (proper module boundaries)
-- Onboarding aid (architectural overview in PRD)
+- Onboarding aid (structural overview in NRD)
 
 ### For AI Agents
 - Structured context for code generation
@@ -259,17 +259,17 @@ Don't try to get everything perfect on the first pass:
 1. Fill out high-level sections
 2. Review and refine
 3. Add detail where needed
-4. Let `task-master expand` break down complex tasks further
+4. Let `novel-master expand` break down complex tasks further
 
 ### 4. Use Research Mode
 ```bash
-task-master parse-prd --research
+novel-master parse-prd --research
 ```
 The `--research` flag leverages AI to enhance task generation with domain knowledge.
 
 ### 5. Validate Early
 ```bash
-task-master validate-dependencies
+novel-master validate-dependencies
 ```
 Check for circular dependencies or orphaned modules before starting implementation.
 
@@ -303,19 +303,19 @@ Without test strategy, the AI won't know what to test during implementation.
 ## Example Workflow
 
 1. **Discuss idea with AI**: Explain your project concept
-2. **Reference RPG template**: Show AI the `example_prd_rpg.md`
-3. **Co-create PRD**: Work through each section with AI guidance
-4. **Save to docs**: Place in `.taskmaster/docs/your-project.md` (use `.md` for better editor support)
-5. **Parse PRD**: `task-master parse-prd .taskmaster/docs/your-project.md --research`
-6. **Analyze**: `task-master analyze-complexity --research`
-7. **Expand**: `task-master expand --all --research`
-8. **Start work**: `task-master next`
+2. **Reference epic template**: Show AI the `example_nrd_epic.md`
+3. **Co-create NRD**: Work through each section with AI guidance
+4. **Save to docs**: Place in `.novelmaster/docs/your-story.md` (use `.md` for better editor support)
+5. **Parse NRD**: `novel-master parse-prd .novelmaster/docs/your-story.md --research`
+6. **Analyze**: `novel-master analyze-complexity --research`
+7. **Expand**: `novel-master expand --all --research`
+8. **Start work**: `novel-master next`
 
 ---
 
 ## Further Reading
 
-- [PRD Creation and Parsing Guide](/getting-started/quick-start/prd-quick)
+- [NRD Creation and Parsing Guide](/getting-started/quick-start/prd-quick)
 - [Task Structure Documentation](/capabilities/task-structure)
 - [Microsoft Research RPG Paper](https://arxiv.org/abs/2410.21376) (Original methodology)
 

@@ -97,7 +97,7 @@ export function wouldRemovalLeaveNoProfiles(projectRoot, profilesToRemove) {
  * This function dynamically lists all available profiles (from RULE_PROFILES) and presents them as checkboxes.
  * The user must select at least one profile (no defaults are pre-selected). The result is an array of selected profile names.
  *
- * Used by both project initialization (init) and the CLI 'task-master rules setup' command.
+ * Used by both project initialization (init) and the CLI 'novel-master rules setup' command.
  *
  * @returns {Promise<string[]>} Array of selected profile names (e.g., ['cursor', 'windsurf'])
  */
@@ -115,9 +115,9 @@ export async function runInteractiveProfilesSetup() {
 		if (!profile.includeDefaultRules) {
 			// Integration guide profiles (claude, codex, gemini, opencode, zed, amp) - don't include standard coding rules
 			if (profileName === 'claude') {
-				description = 'Integration guide with Task Master slash commands';
+				description = 'Integration guide with Novel Master slash commands';
 			} else if (profileName === 'codex') {
-				description = 'Comprehensive Task Master integration guide';
+				description = 'Comprehensive Novel Master integration guide';
 			} else if (hasMcpConfig) {
 				description = 'Integration guide and MCP config';
 			} else {
@@ -152,7 +152,7 @@ export async function runInteractiveProfilesSetup() {
 	console.log(
 		boxen(
 			`${chalk.white.bold('Rule Profiles Setup')}\n\n${chalk.white(
-				'Rule profiles help enforce best practices and conventions for Task Master.\n' +
+				'Rule profiles help enforce best practices and conventions for Novel Master.\n' +
 					'Each profile provides coding guidelines tailored for specific AI coding environments.\n\n'
 			)}${chalk.cyan('Available Profiles:')}\n${profileListText}`,
 			{

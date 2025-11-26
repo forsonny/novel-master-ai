@@ -24,7 +24,7 @@ describe('Rules Files Inclusion in Package', () => {
 		// Check for the 4 files that currently exist
 		const expectedFiles = [
 			'dev_workflow.mdc',
-			'taskmaster.mdc',
+			'novelmaster.mdc',
 			'self_improve.mdc',
 			'cursor_rules.mdc'
 		];

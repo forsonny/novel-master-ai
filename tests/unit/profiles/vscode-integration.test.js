@@ -39,7 +39,7 @@ describe('VS Code Integration', () => {
 		jest.clearAllMocks();
 
 		// Create a temporary directory for testing
-		tempDir = fs.mkdtempSync(path.join(os.tmpdir(), 'task-master-test-'));
+		tempDir = fs.mkdtempSync(path.join(os.tmpdir(), 'novel-master-test-'));
 
 		// Spy on fs methods
 		jest.spyOn(fs, 'writeFileSync').mockImplementation(() => {});
@@ -47,7 +47,7 @@ describe('VS Code Integration', () => {
 			if (filePath.toString().includes('mcp.json')) {
 				return JSON.stringify({
 					mcpServers: {
-						'task-master-ai': {
+						'novel-master-ai': {
 							command: 'node',
 							args: ['mcp-server/src/index.js']
 						}
@@ -81,14 +81,14 @@ describe('VS Code Integration', () => {
 		fs.mkdirSync(path.join(tempDir, '.github', 'instructions'), {
 			recursive: true
 		});
-		fs.mkdirSync(path.join(tempDir, '.github', 'instructions', 'taskmaster'), {
+		fs.mkdirSync(path.join(tempDir, '.github', 'instructions', 'novelmaster'), {
 			recursive: true
 		});
 
 		// Create MCP configuration file
 		const mcpConfig = {
 			mcpServers: {
-				'task-master-ai': {
+				'novel-master-ai': {
 					command: 'node',
 					args: ['mcp-server/src/index.js'],
 					env: {
@@ -126,22 +126,22 @@ This is a VS Code custom instruction file.`;
 			);
 		}
 
-		// Create taskmaster subdirectory with additional instructions
-		const taskmasterFiles = ['taskmaster.md', 'commands.md', 'architecture.md'];
+		// Create novelmaster subdirectory with additional instructions
+		const novelmasterFiles = ['novelmaster.md', 'commands.md', 'architecture.md'];
 
-		for (const file of taskmasterFiles) {
+		for (const file of novelmasterFiles) {
 			const content = `---
-description: Task Master specific instruction for ${file}
+description: Novel Master specific instruction for ${file}
 applyTo: "**/*.ts,**/*.js"
 alwaysApply: true
 ---
 
 # ${file.replace('.md', '').toUpperCase()}
 
-Task Master specific VS Code instruction.`;
+Novel Master specific VS Code instruction.`;
 
 			fs.writeFileSync(
-				path.join(tempDir, '.github', 'instructions', 'taskmaster', file),
+				path.join(tempDir, '.github', 'instructions', 'novelmaster', file),
 				content
 			);
 		}
@@ -162,9 +162,9 @@ Task Master specific VS Code instruction.`;
 			{ recursive: true }
 		);
 
-		// Assert - taskmaster subdirectory
+		// Assert - novelmaster subdirectory
 		expect(fs.mkdirSync).toHaveBeenCalledWith(
-			path.join(tempDir, '.github', 'instructions', 'taskmaster'),
+			path.join(tempDir, '.github', 'instructions', 'novelmaster'),
 			{ recursive: true }
 		);
 	});
@@ -177,7 +177,7 @@ Task Master specific VS Code instruction.`;
 		const expectedMcpPath = path.join(tempDir, '.vscode', 'mcp.json');
 		expect(fs.writeFileSync).toHaveBeenCalledWith(
 			expectedMcpPath,
-			expect.stringContaining('task-master-ai')
+			expect.stringContaining('novel-master-ai')
 		);
 	});
 
@@ -201,19 +201,19 @@ Task Master specific VS Code instruction.`;
 		}
 	});
 
-	test('creates taskmaster specific instruction files', () => {
+	test('creates novelmaster specific instruction files', () => {
 		// Act
 		mockCreateVSCodeStructure();
 
-		// Assert taskmaster subdirectory files
-		const taskmasterFiles = ['taskmaster.md', 'commands.md', 'architecture.md'];
+		// Assert novelmaster subdirectory files
+		const novelmasterFiles = ['novelmaster.md', 'commands.md', 'architecture.md'];
 
-		for (const file of taskmasterFiles) {
+		for (const file of novelmasterFiles) {
 			const expectedPath = path.join(
 				tempDir,
 				'.github',
 				'instructions',
-				'taskmaster',
+				'novelmaster',
 				file
 			);
 			expect(fs.writeFileSync).toHaveBeenCalledWith(
@@ -256,13 +256,13 @@ Task Master specific VS Code instruction.`;
 
 		// Assert MCP structure
 		expect(mcpConfig).toHaveProperty('mcpServers');
-		expect(mcpConfig.mcpServers).toHaveProperty('task-master-ai');
-		expect(mcpConfig.mcpServers['task-master-ai']).toHaveProperty(
+		expect(mcpConfig.mcpServers).toHaveProperty('novel-master-ai');
+		expect(mcpConfig.mcpServers['novel-master-ai']).toHaveProperty(
 			'command',
 			'node'
 		);
-		expect(mcpConfig.mcpServers['task-master-ai']).toHaveProperty('args');
-		expect(mcpConfig.mcpServers['task-master-ai'].args).toContain(
+		expect(mcpConfig.mcpServers['novel-master-ai']).toHaveProperty('args');
+		expect(mcpConfig.mcpServers['novel-master-ai'].args).toContain(
 			'mcp-server/src/index.js'
 		);
 	});
@@ -275,7 +275,7 @@ Task Master specific VS Code instruction.`;
 		const expectedDirs = [
 			path.join(tempDir, '.vscode'),
 			path.join(tempDir, '.github', 'instructions'),
-			path.join(tempDir, '.github', 'instructions', 'taskmaster')
+			path.join(tempDir, '.github', 'instructions', 'novelmaster')
 		];
 
 		for (const dir of expectedDirs) {

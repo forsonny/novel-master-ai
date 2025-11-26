@@ -1,5 +1,5 @@
 /**
- * Claude executor implementation for Task Master
+ * Claude executor implementation for Novel Master
  */
 
 import { spawn } from 'child_process';

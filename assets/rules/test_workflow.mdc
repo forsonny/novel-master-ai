@@ -1,0 +1,229 @@
+---
+description: Guide for narrative testing workflows including continuity checks, pacing analysis, and character consistency validation
+globs: **/*
+alwaysApply: true
+---
+
+# Novel Master Narrative Testing Workflow
+
+This guide outlines testing strategies for novel writing, focusing on continuity, pacing, character consistency, and narrative quality.
+
+## Types of Narrative Testing
+
+### 1. Continuity Checks
+
+**Purpose**: Ensure consistency across the manuscript (timeline, character details, world rules, plot threads).
+
+**When to Run**:
+- After completing each chapter
+- Before major revision passes
+- When incorporating beta feedback
+
+**What to Check**:
+- **Timeline consistency**: Events occur in logical order, dates align
+- **Character consistency**: Physical descriptions, personality traits, voice remain consistent
+- **World rules**: Magic systems, technology, social structures follow established rules
+- **Plot threads**: Subplots are properly introduced, developed, and resolved
+- **POV consistency**: Point of view remains clear and consistent within scenes
+
+**Tools**:
+```bash
+# Use Novel Master to analyze continuity
+novel-master analyze-complexity --research
+
+# Review complexity report for continuity issues
+novel-master complexity-report
+```
+
+**Manual Checks**:
+- Search for character names to verify descriptions match
+- Review timeline markers (dates, seasons, time references)
+- Check worldbuilding details for consistency
+
+### 2. Pacing Analysis
+
+**Purpose**: Ensure the story maintains appropriate rhythm and tension throughout.
+
+**When to Run**:
+- After completing each act
+- During revision passes
+- When beta readers note pacing issues
+
+**What to Analyze**:
+- **Chapter length**: Are chapters appropriately sized for the genre?
+- **Scene length**: Do scenes feel rushed or dragged out?
+- **Tension curve**: Does tension rise and fall appropriately?
+- **Pacing density**: Are there appropriate quiet moments between action?
+- **Word count distribution**: Are chapters balanced in length?
+
+**Tools**:
+```bash
+# Generate manuscript with word count tracking
+novel-master generate --compile
+
+# Review manuscript summary for pacing metrics
+cat .novelmaster/manuscript/draft/manuscript-summary.json
+```
+
+**Metrics to Review**:
+- Word count per chapter (target vs actual)
+- Scene count per chapter
+- Tension level distribution (from task metadata)
+- Pacing density scores
+
+### 3. Character Consistency Validation
+
+**Purpose**: Ensure characters behave consistently and maintain distinct voices.
+
+**When to Run**:
+- After writing scenes with specific characters
+- Before revision passes
+- When switching between POV characters
+
+**What to Validate**:
+- **Voice consistency**: Each POV character has a distinct voice
+- **Behavior consistency**: Characters act according to established personality
+- **Character arc progression**: Characters grow/change in believable ways
+- **Dialogue authenticity**: Each character's speech patterns are distinct
+- **Physical descriptions**: Character appearances remain consistent
+
+**Tools**:
+```bash
+# Use tags to isolate character-specific work
+novel-master use-tag pov-protagonist
+novel-master list --status=done
+
+# Review character-specific chapters
+novel-master show <chapter-id>
+```
+
+**Manual Checks**:
+- Read all scenes from a single POV character in sequence
+- Verify dialogue matches character voice
+- Check that character motivations remain consistent
+
+### 4. Timeline Validation
+
+**Purpose**: Ensure events occur in logical sequence and time references are consistent.
+
+**When to Run**:
+- After completing each chapter
+- When working with multiple timelines
+- Before final revision
+
+**What to Verify**:
+- **Chronological order**: Events happen in logical sequence
+- **Time references**: Days, weeks, months align correctly
+- **Seasonal consistency**: Weather, holidays, seasons match timeline
+- **Age progression**: Characters age appropriately over time
+- **Parallel timelines**: Multiple storylines align correctly
+
+**Tools**:
+```bash
+# Use timeline tags to organize work
+novel-master use-tag timeline-act-1
+novel-master list
+
+# Review timeline metadata in tasks
+novel-master show <task-id>
+```
+
+### 5. POV Balance Analysis
+
+**Purpose**: Ensure point-of-view distribution serves the story effectively.
+
+**When to Run**:
+- After completing each act
+- When working with multiple POV characters
+- During revision passes
+
+**What to Analyze**:
+- **POV distribution**: Are POVs balanced appropriately?
+- **POV transitions**: Are scene breaks clear when switching POV?
+- **POV voice**: Does each POV character have a distinct voice?
+- **POV relevance**: Does each POV scene advance the story?
+
+**Tools**:
+```bash
+# Use POV-specific tags
+novel-master use-tag pov-protagonist
+novel-master list
+
+# Count POV scenes per character
+novel-master list | grep -i "pov"
+```
+
+## Testing Workflow
+
+### Per-Chapter Testing
+
+After completing each chapter:
+
+1. **Continuity Check**: Review chapter for consistency with previous chapters
+2. **Pacing Review**: Verify chapter length and scene count are appropriate
+3. **Character Validation**: Ensure character voices and behaviors are consistent
+4. **Timeline Verification**: Confirm time references align with story timeline
+
+### Per-Act Testing
+
+After completing each act:
+
+1. **Full Continuity Audit**: Review entire act for consistency
+2. **Pacing Analysis**: Analyze tension curve and pacing density
+3. **Character Arc Review**: Verify character development progresses logically
+4. **Plot Thread Check**: Ensure all subplots are properly developed
+
+### Pre-Revision Testing
+
+Before major revision passes:
+
+1. **Complete Manuscript Review**: Full continuity, pacing, and character check
+2. **Complexity Analysis**: Run `analyze-complexity` to identify issues
+3. **Beta Feedback Integration**: Address reader feedback systematically
+4. **Final Validation**: One last pass for all narrative elements
+
+## Automated Testing Tools
+
+### Novel Master Commands
+
+```bash
+# Analyze narrative complexity
+novel-master analyze-complexity --research
+
+# Generate manuscript with metrics
+novel-master generate --compile
+
+# Review complexity report
+novel-master complexity-report
+```
+
+### Manual Testing Checklist
+
+- [ ] Timeline consistency verified
+- [ ] Character descriptions match across chapters
+- [ ] World rules followed consistently
+- [ ] POV transitions are clear
+- [ ] Tension curve is appropriate
+- [ ] Chapter lengths are balanced
+- [ ] Dialogue matches character voice
+- [ ] Plot threads are resolved
+- [ ] Word count targets met
+- [ ] Beta feedback addressed
+
+## Integration with Revision Workflow
+
+Testing should be integrated into the revision process:
+
+1. **Draft Phase**: Basic continuity and pacing checks
+2. **Rev-1 (Structural)**: Full continuity audit, pacing analysis
+3. **Rev-2 (Line Edits)**: Character voice, dialogue refinement
+4. **Beta Feedback**: Address reader-identified issues
+5. **Final Pass**: Complete validation before publication
+
+## Best Practices
+
+1. **Test incrementally**: Don't wait until the end to check continuity
+2. **Document issues**: Keep notes on continuity problems as you find them
+3. **Use tags effectively**: Organize testing by POV, timeline, or revision phase
+4. **Leverage AI**: Use Novel Master's analysis tools to identify issues
+5. **Trust beta readers**: External feedback is invaluable for narrative testing

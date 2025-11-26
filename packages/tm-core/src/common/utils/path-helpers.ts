@@ -1,14 +1,14 @@
 /**
- * @fileoverview Path construction utilities for Task Master
- * Provides standardized paths for Task Master project structure
+ * @fileoverview Path construction utilities for Novel Master
+ * Provides standardized paths for Novel Master project structure
  */
 
 import { join, resolve } from 'node:path';
-import { TASKMASTER_TASKS_FILE } from '../constants/paths.js';
+import { NOVELMASTER_TASKS_FILE } from '../constants/paths.js';
 import { findProjectRoot } from './project-root-finder.js';
 
 /**
- * Get standard Task Master project paths
+ * Get standard Novel Master project paths
  * Automatically detects project root using smart detection
  *
  * @param projectPath - Optional explicit project path (if not provided, auto-detects)
@@ -22,7 +22,7 @@ import { findProjectRoot } from './project-root-finder.js';
  * // Or specify explicit path
  * const { projectRoot, tasksPath } = getProjectPaths('./my-project');
  * // projectRoot: '/absolute/path/to/my-project'
- * // tasksPath: '/absolute/path/to/my-project/.taskmaster/tasks/tasks.json'
+ * // tasksPath: '/absolute/path/to/my-project/.novelmaster/tasks/tasks.json'
  * ```
  */
 export function getProjectPaths(projectPath?: string): {
@@ -35,6 +35,6 @@ export function getProjectPaths(projectPath?: string): {
 
 	return {
 		projectRoot,
-		tasksPath: join(projectRoot, TASKMASTER_TASKS_FILE)
+		tasksPath: join(projectRoot, NOVELMASTER_TASKS_FILE)
 	};
 }

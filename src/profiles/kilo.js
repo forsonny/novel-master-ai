@@ -175,7 +175,7 @@ export const kiloProfile = createProfile({
 		'rules/cursor_rules.mdc': 'kilo_rules.md',
 		'rules/dev_workflow.mdc': 'dev_workflow.md',
 		'rules/self_improve.mdc': 'self_improve.md',
-		'rules/taskmaster.mdc': 'taskmaster.md'
+		'rules/novelmaster.mdc': 'novelmaster.md'
 	},
 	onAdd: onAddRulesProfile,
 	onRemove: onRemoveRulesProfile,

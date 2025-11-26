@@ -1,5 +1,5 @@
 /**
- * @fileoverview Constants for Task Master Core
+ * @fileoverview Constants for Novel Master Core
  * Single source of truth for all constant values
  */
 
@@ -13,15 +13,15 @@ import type {
 import packageJson from '../../../../../package.json' with { type: 'json' };
 
 /**
- * Task Master version from root package.json
+ * Novel Master version from root package.json
  * Centralized to avoid fragile relative paths throughout the codebase
  */
-export const TASKMASTER_VERSION = packageJson.version || 'unknown';
+export const NOVELMASTER_VERSION = packageJson.version || 'unknown';
 
 /**
  * Package name from root package.json
  */
-export const PACKAGE_NAME = packageJson.name || 'task-master-ai';
+export const PACKAGE_NAME = packageJson.name || 'novel-master-ai';
 
 /**
  * Valid task status values

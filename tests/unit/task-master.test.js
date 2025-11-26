@@ -1,31 +1,31 @@
 /**
- * Tests for task-master.js initTaskMaster function
+ * Tests for novel-master.js initTaskMaster function
  */
 
 import { jest } from '@jest/globals';
 import path from 'path';
 import fs from 'fs';
 import os from 'os';
-import { initTaskMaster, TaskMaster } from '../../src/task-master.js';
+import { initNovelMaster, NovelMaster } from '../../src/task-master.js';
 import {
-	TASKMASTER_DIR,
-	TASKMASTER_TASKS_FILE,
+	NOVELMASTER_DIR,
+	NOVELMASTER_TASKS_FILE,
 	LEGACY_CONFIG_FILE,
-	TASKMASTER_CONFIG_FILE,
+	NOVELMASTER_CONFIG_FILE,
 	LEGACY_TASKS_FILE
 } from '../../src/constants/paths.js';
 
 // Mock the console to prevent noise during tests
 jest.spyOn(console, 'error').mockImplementation(() => {});
 
-describe('initTaskMaster', () => {
+describe('initNovelMaster', () => {
 	let tempDir;
 	let originalCwd;
 
 	beforeEach(() => {
 		// Create a temporary directory for testing
 		tempDir = fs.realpathSync(
-			fs.mkdtempSync(path.join(os.tmpdir(), 'taskmaster-test-'))
+			fs.mkdtempSync(path.join(os.tmpdir(), 'novelmaster-test-'))
 		);
 		originalCwd = process.cwd();
 
@@ -44,20 +44,20 @@ describe('initTaskMaster', () => {
 	});
 
 	describe('Project root detection', () => {
-		test('should find project root when .taskmaster directory exists', () => {
-			// Arrange - Create .taskmaster directory in temp dir
-			const taskMasterDir = path.join(tempDir, TASKMASTER_DIR);
+		test('should find project root when .novelmaster directory exists', () => {
+			// Arrange - Create .novelmaster directory in temp dir
+			const taskMasterDir = path.join(tempDir, NOVELMASTER_DIR);
 			fs.mkdirSync(taskMasterDir, { recursive: true });
 
 			// Change to temp directory
 			process.chdir(tempDir);
 
 			// Act
-			const taskMaster = initTaskMaster({});
+			const taskMaster = initNovelMaster({});
 
 			// Assert
 			expect(taskMaster.getProjectRoot()).toBe(tempDir);
-			expect(taskMaster).toBeInstanceOf(TaskMaster);
+			expect(taskMaster).toBeInstanceOf(NovelMaster);
 		});
 
 		test('should find project root when legacy config file exists', () => {
@@ -69,15 +69,15 @@ describe('initTaskMaster', () => {
 			process.chdir(tempDir);
 
 			// Act
-			const taskMaster = initTaskMaster({});
+			const taskMaster = initNovelMaster({});
 
 			// Assert
 			expect(taskMaster.getProjectRoot()).toBe(tempDir);
 		});
 
 		test('should find project root from subdirectory', () => {
-			// Arrange - Create .taskmaster directory in temp dir
-			const taskMasterDir = path.join(tempDir, TASKMASTER_DIR);
+			// Arrange - Create .novelmaster directory in temp dir
+			const taskMasterDir = path.join(tempDir, NOVELMASTER_DIR);
 			fs.mkdirSync(taskMasterDir, { recursive: true });
 
 			// Create a subdirectory and change to it
@@ -86,15 +86,15 @@ describe('initTaskMaster', () => {
 			process.chdir(srcDir);
 
 			// Act
-			const taskMaster = initTaskMaster({});
+			const taskMaster = initNovelMaster({});
 
 			// Assert
 			expect(taskMaster.getProjectRoot()).toBe(tempDir);
 		});
 
 		test('should find project root from deeply nested subdirectory', () => {
-			// Arrange - Create .taskmaster directory in temp dir
-			const taskMasterDir = path.join(tempDir, TASKMASTER_DIR);
+			// Arrange - Create .novelmaster directory in temp dir
+			const taskMasterDir = path.join(tempDir, NOVELMASTER_DIR);
 			fs.mkdirSync(taskMasterDir, { recursive: true });
 
 			// Create deeply nested subdirectory and change to it
@@ -103,7 +103,7 @@ describe('initTaskMaster', () => {
 			process.chdir(deepDir);
 
 			// Act
-			const taskMaster = initTaskMaster({});
+			const taskMaster = initNovelMaster({});
 
 			// Assert
 			expect(taskMaster.getProjectRoot()).toBe(tempDir);
@@ -114,7 +114,7 @@ describe('initTaskMaster', () => {
 			process.chdir(tempDir);
 
 			// Act
-			const taskMaster = initTaskMaster({});
+			const taskMaster = initNovelMaster({});
 
 			// Assert
 			expect(taskMaster.getProjectRoot()).toBe(tempDir);
@@ -122,9 +122,9 @@ describe('initTaskMaster', () => {
 	});
 
 	describe('Project root override validation', () => {
-		test('should accept valid project root override with .taskmaster directory', () => {
-			// Arrange - Create .taskmaster directory in temp dir
-			const taskMasterDir = path.join(tempDir, TASKMASTER_DIR);
+		test('should accept valid project root override with .novelmaster directory', () => {
+			// Arrange - Create .novelmaster directory in temp dir
+			const taskMasterDir = path.join(tempDir, NOVELMASTER_DIR);
 			fs.mkdirSync(taskMasterDir, { recursive: true });
 
 			// Act
@@ -165,13 +165,13 @@ describe('initTaskMaster', () => {
 			expect(() => {
 				initTaskMaster({ projectRoot: tempDir });
 			}).toThrow(
-				`Project root override is not a valid taskmaster project: ${tempDir}`
+				`Project root override is not a valid novelmaster project: ${tempDir}`
 			);
 		});
 
 		test('should resolve relative project root override', () => {
-			// Arrange - Create .taskmaster directory in temp dir
-			const taskMasterDir = path.join(tempDir, TASKMASTER_DIR);
+			// Arrange - Create .novelmaster directory in temp dir
+			const taskMasterDir = path.join(tempDir, NOVELMASTER_DIR);
 			fs.mkdirSync(taskMasterDir, { recursive: true });
 
 			// Create subdirectory and change to it
@@ -192,14 +192,14 @@ describe('initTaskMaster', () => {
 
 		beforeEach(() => {
 			// Setup a valid project structure
-			taskMasterDir = path.join(tempDir, TASKMASTER_DIR);
+			taskMasterDir = path.join(tempDir, NOVELMASTER_DIR);
 			fs.mkdirSync(taskMasterDir, { recursive: true });
 
-			tasksPath = path.join(tempDir, TASKMASTER_TASKS_FILE);
+			tasksPath = path.join(tempDir, NOVELMASTER_TASKS_FILE);
 			fs.mkdirSync(path.dirname(tasksPath), { recursive: true });
 			fs.writeFileSync(tasksPath, '[]');
 
-			configPath = path.join(tempDir, TASKMASTER_CONFIG_FILE);
+			configPath = path.join(tempDir, NOVELMASTER_CONFIG_FILE);
 			fs.writeFileSync(configPath, '{}');
 
 			statePath = path.join(taskMasterDir, 'state.json');
@@ -230,7 +230,7 @@ describe('initTaskMaster', () => {
 			expect(() => {
 				initTaskMaster({ tasksPath: true });
 			}).toThrow(
-				'Required tasks file not found. Searched: .taskmaster/tasks/tasks.json, tasks/tasks.json'
+				'Required tasks file not found. Searched: .novelmaster/tasks/tasks.json, tasks/tasks.json'
 			);
 		});
 
@@ -254,17 +254,17 @@ describe('initTaskMaster', () => {
 			fs.unlinkSync(statePath);
 
 			// Act - Don't specify any optional paths
-			const taskMaster = initTaskMaster({});
+			const taskMaster = initNovelMaster({});
 
 			// Assert - Should return absolute paths with default locations
 			expect(taskMaster.getTasksPath()).toBe(
-				path.join(tempDir, TASKMASTER_TASKS_FILE)
+				path.join(tempDir, NOVELMASTER_TASKS_FILE)
 			);
 			expect(taskMaster.getConfigPath()).toBe(
-				path.join(tempDir, TASKMASTER_CONFIG_FILE)
+				path.join(tempDir, NOVELMASTER_CONFIG_FILE)
 			);
 			expect(taskMaster.getStatePath()).toBe(
-				path.join(tempDir, TASKMASTER_DIR, 'state.json')
+				path.join(tempDir, NOVELMASTER_DIR, 'state.json')
 			);
 		});
 	});
@@ -273,7 +273,7 @@ describe('initTaskMaster', () => {
 		let taskMasterDir;
 
 		beforeEach(() => {
-			taskMasterDir = path.join(tempDir, TASKMASTER_DIR);
+			taskMasterDir = path.join(tempDir, NOVELMASTER_DIR);
 			fs.mkdirSync(taskMasterDir, { recursive: true });
 			process.chdir(tempDir);
 		});
@@ -320,7 +320,7 @@ describe('initTaskMaster', () => {
 	describe('Legacy file support', () => {
 		beforeEach(() => {
 			// Setup basic project structure
-			const taskMasterDir = path.join(tempDir, TASKMASTER_DIR);
+			const taskMasterDir = path.join(tempDir, NOVELMASTER_DIR);
 			fs.mkdirSync(taskMasterDir, { recursive: true });
 			process.chdir(tempDir);
 		});
@@ -341,7 +341,7 @@ describe('initTaskMaster', () => {
 
 		test('should prefer new format over legacy when both exist', () => {
 			// Arrange - Create both new and legacy files
-			const newTasksPath = path.join(tempDir, TASKMASTER_TASKS_FILE);
+			const newTasksPath = path.join(tempDir, NOVELMASTER_TASKS_FILE);
 			fs.mkdirSync(path.dirname(newTasksPath), { recursive: true });
 			fs.writeFileSync(newTasksPath, '[]');
 
@@ -373,14 +373,14 @@ describe('initTaskMaster', () => {
 	describe('TaskMaster class methods', () => {
 		test('should return all paths via getAllPaths method', () => {
 			// Arrange - Setup project with all files
-			const taskMasterDir = path.join(tempDir, TASKMASTER_DIR);
+			const taskMasterDir = path.join(tempDir, NOVELMASTER_DIR);
 			fs.mkdirSync(taskMasterDir, { recursive: true });
 
-			const tasksPath = path.join(tempDir, TASKMASTER_TASKS_FILE);
+			const tasksPath = path.join(tempDir, NOVELMASTER_TASKS_FILE);
 			fs.mkdirSync(path.dirname(tasksPath), { recursive: true });
 			fs.writeFileSync(tasksPath, '[]');
 
-			const configPath = path.join(tempDir, TASKMASTER_CONFIG_FILE);
+			const configPath = path.join(tempDir, NOVELMASTER_CONFIG_FILE);
 			fs.writeFileSync(configPath, '{}');
 
 			process.chdir(tempDir);
@@ -410,22 +410,22 @@ describe('initTaskMaster', () => {
 
 		test('should return correct individual paths', () => {
 			// Arrange
-			const taskMasterDir = path.join(tempDir, TASKMASTER_DIR);
+			const taskMasterDir = path.join(tempDir, NOVELMASTER_DIR);
 			fs.mkdirSync(taskMasterDir, { recursive: true });
 			process.chdir(tempDir);
 
 			// Act
-			const taskMaster = initTaskMaster({});
+			const taskMaster = initNovelMaster({});
 
 			// Assert
 			expect(taskMaster.getProjectRoot()).toBe(tempDir);
 			expect(taskMaster.getTaskMasterDir()).toBe(taskMasterDir);
 			// Default paths are always set for tasks, config, and state
 			expect(taskMaster.getTasksPath()).toBe(
-				path.join(tempDir, TASKMASTER_TASKS_FILE)
+				path.join(tempDir, NOVELMASTER_TASKS_FILE)
 			);
 			expect(taskMaster.getConfigPath()).toBe(
-				path.join(tempDir, TASKMASTER_CONFIG_FILE)
+				path.join(tempDir, NOVELMASTER_CONFIG_FILE)
 			);
 			expect(taskMaster.getStatePath()).toBe(
 				path.join(taskMasterDir, 'state.json')

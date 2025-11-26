@@ -4,14 +4,14 @@ import {
 	handleApiResult,
 	withNormalizedProjectRoot
 } from './utils.js';
-import { initializeProjectDirect } from '../core/task-master-core.js';
+import { initializeProjectDirect } from '../core/novel-master-core.js';
 import { RULE_PROFILES } from '../../../src/constants/profiles.js';
 
 export function registerInitializeProjectTool(server) {
 	server.addTool({
 		name: 'initialize_project',
 		description:
-			'Initializes a new Task Master project structure by calling the core initialization logic. Creates necessary folders and configuration files for Task Master in the current directory.',
+			'Initializes a new Novel Master project structure by calling the core initialization logic. Creates necessary folders and configuration files for Novel Master in the current directory.',
 		parameters: z.object({
 			skipInstall: z
 				.boolean()
@@ -24,7 +24,7 @@ export function registerInitializeProjectTool(server) {
 				.boolean()
 				.optional()
 				.default(true)
-				.describe('Add shell aliases (tm, taskmaster) to shell config file.'),
+				.describe('Add shell aliases (tm, novelmaster) to shell config file.'),
 			initGit: z
 				.boolean()
 				.optional()

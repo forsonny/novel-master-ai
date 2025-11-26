@@ -7,37 +7,37 @@ Arguments: $ARGUMENTS
 Parse pipeline specification from arguments. Supported formats:
 
 ### Simple Pipeline
-`init → expand-all → sprint-plan`
+`init → expand-all → story-arc-plan`
 
 ### Conditional Pipeline  
-`status → if:pending>10 → sprint-plan → else → next`
+`status → if:pending>10 → story-arc-plan → else → next`
 
 ### Iterative Pipeline
-`for:pending-tasks → expand → complexity-check`
+`for:pending-chapters → expand → complexity-check`
 
 ### Smart Pipeline Patterns
 
 **1. Project Setup Pipeline**
 ```
-init [prd] → 
+init [nrd] → 
 expand-all → 
 complexity-report → 
-sprint-plan → 
-show first-sprint
+story-arc-plan → 
+show first-arc
 ```
 
-**2. Daily Work Pipeline**
+**2. Daily Writing Pipeline**
 ```
 standup →
 if:in-progress → continue →
 else → next → start
 ```
 
-**3. Task Completion Pipeline**
+**3. Chapter Completion Pipeline**
 ```
 complete [id] →
 git-commit →
-if:blocked-tasks-freed → show-freed →
+if:blocked-chapters-freed → show-freed →
 next
 ```
 
@@ -53,15 +53,15 @@ if:idle>1day → prompt-update
 **Variables**
 - Store results: `status → $count=pending-count`
 - Use in conditions: `if:$count>10`
-- Pass between commands: `expand $high-priority-tasks`
+- Pass between commands: `expand $high-priority-chapters`
 
 **Error Handling**
 - On failure: `try:complete → catch:show-blockers`
-- Skip on error: `optional:test-run`
+- Skip on error: `optional:continuity-check`
 - Retry logic: `retry:3:commit`
 
 **Parallel Execution**
-- Parallel branches: `[analyze | test | lint]`
+- Parallel branches: `[analyze | continuity-check | pacing-check]`
 - Join results: `parallel → join:report`
 
 ### Execution Flow
@@ -74,4 +74,4 @@ if:idle>1day → prompt-update
 6. Show summary
 
 This enables complex workflows like:
-`parse-prd → expand-all → filter:complex>70 → assign:senior → sprint-plan:weighted`
+`parse-prd → expand-all → filter:complex>70 → assign:senior → story-arc-plan:weighted`

@@ -1,4 +1,4 @@
-Initialize a new Task Master project.
+Initialize a new Novel Master project.
 
 Arguments: $ARGUMENTS
 
@@ -7,13 +7,13 @@ Parse arguments to determine initialization preferences.
 ## Initialization Process
 
 1. **Parse Arguments**
-   - PRD file path (if provided)
+   - NRD file path (if provided)
    - Project name
    - Auto-confirm flag (-y)
 
 2. **Project Setup**
    ```bash
-   task-master init
+   novel-master init
    ```
 
 3. **Smart Initialization**
@@ -26,7 +26,7 @@ Parse arguments to determine initialization preferences.
 
 Based on arguments:
 - `quick` / `-y` → Skip confirmations
-- `<file.md>` → Use as PRD after init
+- `<file.md>` → Use as NRD after init
 - `--name=<name>` → Set project name
 - `--description=<desc>` → Set description
 
@@ -36,15 +36,15 @@ After successful init:
 1. Show project structure created
 2. Verify AI models configured
 3. Suggest next steps:
-   - Parse PRD if available
+   - Parse NRD if available
    - Configure AI providers
    - Set up git hooks
-   - Create first tasks
+   - Create first chapters
 
 ## Integration
 
-If PRD file provided:
+If NRD file provided:
 ```
-/taskmaster:init my-prd.md
+/novelmaster:init my-nrd.md
 → Automatically runs parse-prd after init
 ```

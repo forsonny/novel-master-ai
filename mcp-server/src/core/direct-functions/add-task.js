@@ -1,6 +1,6 @@
 /**
  * add-task.js
- * Direct function implementation for adding a new task
+ * Direct function implementation for adding a new narrative task (chapter/scene/arc)
  */
 
 import { addTask } from '../../../../scripts/modules/task-manager.js';
@@ -11,20 +11,20 @@ import {
 import { createLogWrapper } from '../../tools/utils.js';
 
 /**
- * Direct function wrapper for adding a new task with error handling.
+ * Direct function wrapper for adding a new narrative task (chapter, scene, or story arc) with error handling.
  *
  * @param {Object} args - Command arguments
- * @param {string} [args.prompt] - Description of the task to add (required if not using manual fields)
- * @param {string} [args.title] - Task title (for manual task creation)
- * @param {string} [args.description] - Task description (for manual task creation)
- * @param {string} [args.details] - Implementation details (for manual task creation)
- * @param {string} [args.testStrategy] - Test strategy (for manual task creation)
- * @param {string} [args.dependencies] - Comma-separated list of task IDs this task depends on
- * @param {string} [args.priority='medium'] - Task priority (high, medium, low)
+ * @param {string} [args.prompt] - NRD-style description of the narrative beat to add (required if not using manual fields)
+ * @param {string} [args.title] - Chapter/scene title (for manual task creation)
+ * @param {string} [args.description] - Chapter/scene description (for manual task creation)
+ * @param {string} [args.details] - Narrative details (POV, emotional beats, sensory cues, research hooks)
+ * @param {string} [args.testStrategy] - Continuity/pacing validation approach
+ * @param {string} [args.dependencies] - Comma-separated list of prerequisite chapter/scene IDs this task depends on
+ * @param {string} [args.priority='medium'] - Narrative priority (high = plot-critical, medium, low = optional vignette)
  * @param {string} [args.tasksJsonPath] - Path to the tasks.json file (resolved by tool)
- * @param {boolean} [args.research=false] - Whether to use research capabilities for task creation
+ * @param {boolean} [args.research=false] - Whether to use research capabilities for lore/genre-aware task creation
  * @param {string} [args.projectRoot] - Project root path
- * @param {string} [args.tag] - Tag for the task (optional)
+ * @param {string} [args.tag] - Tag context (outline, draft, revision) for the task (optional)
  * @param {Object} log - Logger object
  * @param {Object} context - Additional context (session)
  * @returns {Promise<Object>} - Result object { success: boolean, data?: any, error?: { code: string, message: string } }
@@ -57,7 +57,7 @@ export async function addTaskDirect(args, log, context = {}) {
 				success: false,
 				error: {
 					code: 'MISSING_ARGUMENT',
-					message: 'tasksJsonPath is required'
+					message: 'Tasks file path is required to add a new chapter/scene'
 				}
 			};
 		}
@@ -79,7 +79,7 @@ export async function addTaskDirect(args, log, context = {}) {
 				error: {
 					code: 'MISSING_PARAMETER',
 					message:
-						'Either the prompt parameter or both title and description parameters are required for adding a task'
+						'Either provide a narrative prompt describing the chapter/scene, or provide both title and description for manual creation'
 				}
 			};
 		}
@@ -169,7 +169,7 @@ export async function addTaskDirect(args, log, context = {}) {
 			success: true,
 			data: {
 				taskId: newTaskId,
-				message: `Successfully added new task #${newTaskId}`,
+				message: `Successfully added new chapter/scene #${newTaskId}`,
 				telemetryData: telemetryData,
 				tagInfo: tagInfo
 			}

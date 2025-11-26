@@ -51,12 +51,12 @@ describe('ConfigPersistence', () => {
 
 			await persistence.saveConfig(mockConfig);
 
-			expect(fs.mkdir).toHaveBeenCalledWith('/test/project/.taskmaster', {
+			expect(fs.mkdir).toHaveBeenCalledWith('/test/project/.novelmaster', {
 				recursive: true
 			});
 
 			expect(fs.writeFile).toHaveBeenCalledWith(
-				'/test/project/.taskmaster/config.json',
+				'/test/project/.novelmaster/config.json',
 				JSON.stringify(mockConfig, null, 2),
 				'utf-8'
 			);
@@ -71,15 +71,15 @@ describe('ConfigPersistence', () => {
 
 			// Should write to temp file first
 			expect(fs.writeFile).toHaveBeenCalledWith(
-				'/test/project/.taskmaster/config.json.tmp',
+				'/test/project/.novelmaster/config.json.tmp',
 				JSON.stringify(mockConfig, null, 2),
 				'utf-8'
 			);
 
 			// Then rename to final location
 			expect(fs.rename).toHaveBeenCalledWith(
-				'/test/project/.taskmaster/config.json.tmp',
-				'/test/project/.taskmaster/config.json'
+				'/test/project/.novelmaster/config.json.tmp',
+				'/test/project/.novelmaster/config.json'
 			);
 		});
 
@@ -94,19 +94,19 @@ describe('ConfigPersistence', () => {
 
 			// Should create backup directory
 			expect(fs.mkdir).toHaveBeenCalledWith(
-				'/test/project/.taskmaster/backups',
+				'/test/project/.novelmaster/backups',
 				{ recursive: true }
 			);
 
 			// Should read existing config for backup
 			expect(fs.readFile).toHaveBeenCalledWith(
-				'/test/project/.taskmaster/config.json',
+				'/test/project/.novelmaster/config.json',
 				'utf-8'
 			);
 
 			// Should write backup file
 			expect(fs.writeFile).toHaveBeenCalledWith(
-				expect.stringContaining('/test/project/.taskmaster/backups/config-'),
+				expect.stringContaining('/test/project/.novelmaster/backups/config-'),
 				'{"old": "config"}',
 				'utf-8'
 			);
@@ -140,7 +140,7 @@ describe('ConfigPersistence', () => {
 			const exists = await persistence.configExists();
 
 			expect(fs.access).toHaveBeenCalledWith(
-				'/test/project/.taskmaster/config.json'
+				'/test/project/.novelmaster/config.json'
 			);
 			expect(exists).toBe(true);
 		});
@@ -161,7 +161,7 @@ describe('ConfigPersistence', () => {
 			await persistence.deleteConfig();
 
 			expect(fs.unlink).toHaveBeenCalledWith(
-				'/test/project/.taskmaster/config.json'
+				'/test/project/.novelmaster/config.json'
 			);
 		});
 
@@ -194,7 +194,7 @@ describe('ConfigPersistence', () => {
 			const backups = await persistence.getBackups();
 
 			expect(fs.readdir).toHaveBeenCalledWith(
-				'/test/project/.taskmaster/backups'
+				'/test/project/.novelmaster/backups'
 			);
 
 			expect(backups).toEqual([
@@ -238,12 +238,12 @@ describe('ConfigPersistence', () => {
 			await persistence.restoreFromBackup(backupFile);
 
 			expect(fs.readFile).toHaveBeenCalledWith(
-				`/test/project/.taskmaster/backups/${backupFile}`,
+				`/test/project/.novelmaster/backups/${backupFile}`,
 				'utf-8'
 			);
 
 			expect(fs.writeFile).toHaveBeenCalledWith(
-				'/test/project/.taskmaster/config.json',
+				'/test/project/.novelmaster/config.json',
 				backupContent,
 				'utf-8'
 			);
@@ -290,10 +290,10 @@ describe('ConfigPersistence', () => {
 
 			// Should delete oldest backups (keeping 5)
 			expect(fs.unlink).toHaveBeenCalledWith(
-				'/test/project/.taskmaster/backups/config-2024-01-01T10-00-00-000Z.json'
+				'/test/project/.novelmaster/backups/config-2024-01-01T10-00-00-000Z.json'
 			);
 			expect(fs.unlink).toHaveBeenCalledWith(
-				'/test/project/.taskmaster/backups/config-2024-01-02T10-00-00-000Z.json'
+				'/test/project/.novelmaster/backups/config-2024-01-02T10-00-00-000Z.json'
 			);
 		});
 

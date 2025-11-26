@@ -1,6 +1,6 @@
 /**
  * cache-stats.js
- * Direct function implementation for retrieving cache statistics
+ * Direct function implementation for retrieving cache statistics (context caching for Novel Master operations)
  */
 
 import { contextManager } from '../context-manager.js';

@@ -2,18 +2,18 @@
 
 ## Overview
 
-Task Master provides a **unified MCP provider** for AI operations:
+Novel Master provides a **unified MCP provider** for AI operations:
 
 **MCP Provider** (`mcp`) - Modern AI SDK-compatible provider with full structured object generation support
 
-The MCP provider enables Task Master to act as an MCP client, using MCP servers as AI providers alongside traditional API-based providers. This integration follows the existing provider pattern and supports all standard AI operations including structured object generation for PRD parsing and task creation.
+The MCP provider enables Novel Master to act as an MCP client, using MCP servers as AI providers alongside traditional API-based providers. This integration follows the existing provider pattern and supports all standard AI operations including structured object generation for NRD parsing and story arc creation.
 
 ## MCP Provider Features
 
 The **MCP Provider** (`mcp`) provides:
 
 ✅ **Full AI SDK Compatibility** - Complete LanguageModelV1 interface implementation  
-✅ **Structured Object Generation** - Schema-driven outputs for PRD parsing and task creation  
+✅ **Structured Object Generation** - Schema-driven outputs for NRD parsing and story arc creation  
 ✅ **Enhanced Error Handling** - Robust JSON extraction and validation  
 ✅ **Session Management** - Automatic session detection and context handling  
 ✅ **Schema Validation** - Type-safe object generation with Zod validation  
@@ -22,14 +22,14 @@ The **MCP Provider** (`mcp`) provides:
 
 ```bash
 # Set MCP provider for main role  
-task-master models set-main --provider mcp --model claude-3-5-sonnet-20241022
+novel-master models set-main --provider mcp --model claude-3-5-sonnet-20241022
 ```
 
 For detailed information, see [MCP Provider Documentation](mcp-provider.md).
 
 ## What is MCP Provider?
 
-The MCP provider allows Task Master to:
+The MCP provider allows Novel Master to:
 - Connect to MCP servers/tools as AI providers
 - Use session-based authentication instead of API keys
 - Map AI operations to MCP tool calls
@@ -41,7 +41,7 @@ The MCP provider allows Task Master to:
 
 ### MCP Provider Setup
 
-Add MCP provider to your `.taskmaster/config.json`:
+Add MCP provider to your `.novelmaster/config.json`:
 
 ```json
 {
@@ -174,31 +174,31 @@ const research = await generateTextService({
 
 ## CLI Integration
 
-The MCP provider works seamlessly with Task Master CLI commands when running in an MCP context:
+The MCP provider works seamlessly with Novel Master CLI commands when running in an MCP context:
 
 ```bash
-# Generate tasks using MCP provider (if configured as main)
-task-master add-task "Implement user authentication"
+# Generate chapters using MCP provider (if configured as main)
+novel-master add-task "Add chapter about protagonist's backstory"
 
 # Research using MCP provider (if configured as research)
-task-master research "OAuth 2.0 best practices"
+novel-master research "Medieval combat techniques for historical fiction"
 
-# Parse PRD using MCP provider
-task-master parse-prd requirements.txt
+# Parse NRD using MCP provider
+novel-master parse-prd .novelmaster/docs/nrd.txt
 ```
 
 ## Architecture Details
 
 ### Provider Architecture
 **MCPProvider** (`mcp-server/src/providers/mcp-provider.js`)
-   - Modern AI SDK-compliant provider for Task Master's MCP server
-   - Auto-registers when MCP sessions connect to Task Master
-   - Enables Task Master to use MCP sessions for AI operations
+   - Modern AI SDK-compliant provider for Novel Master's MCP server
+   - Auto-registers when MCP sessions connect to Novel Master
+   - Enables Novel Master to use MCP sessions for AI operations
    - Supports both text generation and structured object generation
 
 ### Auto-Registration Process
 
-When running as an MCP server, Task Master automatically:
+When running as an MCP server, Novel Master automatically:
 
 ```javascript
 // On MCP session connect
@@ -314,7 +314,7 @@ const result = await generateTextService({
 
 ### 3. Session Management
 
-Ensure your MCP session remains active throughout Task Master operations:
+Ensure your MCP session remains active throughout Novel Master operations:
 
 ```javascript
 // Check session health before operations
@@ -407,7 +407,7 @@ Enable debug logging to see MCP provider operations:
 // Set debug flag in config or environment
 process.env.DEBUG = 'true';
 
-// Or in .taskmasterconfig
+// Or in .novelmasterconfig
 {
   "debug": true,
   "models": { /* ... */ }
@@ -439,25 +439,25 @@ if (session && session.clientCapabilities && session.clientCapabilities.sampling
 
 ### VS Code with MCP Extension
 
-When using Task Master in VS Code with MCP support:
+When using Novel Master in VS Code with MCP support:
 
-1. Configure Task Master MCP server in your `.vscode/mcp.json`
-2. Set MCP provider as main/research in `.taskmaster/config.json`
-3. Benefit from integrated AI assistance within your development workflow
-4. Use Task Master tools directly from VS Code's MCP interface
+1. Configure Novel Master MCP server in your `.vscode/mcp.json`
+2. Set MCP provider as main/research in `.novelmaster/config.json`
+3. Benefit from integrated AI assistance within your writing workflow
+4. Use Novel Master tools directly from VS Code's MCP interface
 
 **Example VS Code MCP Configuration:**
 ```json
 {
   "servers": {
-    "task-master-dev": {
+    "novel-master-dev": {
       "command": "npx",
-      "args": ["-y", "task-master-ai"],
-      "cwd": "/path/to/your/task-master-project",
+      "args": ["-y", "novel-master-ai"],
+      "cwd": "/path/to/your/novel-master-project",
       "env": {
         "NODE_ENV": "development",
         "ANTHROPIC_API_KEY": "${env:ANTHROPIC_API_KEY}",
-        "TASK_MASTER_PROJECT_ROOT": "/path/to/your/project"
+        "NOVEL_MASTER_PROJECT_ROOT": "/path/to/your/project"
       }
     }
   }
@@ -466,10 +466,10 @@ When using Task Master in VS Code with MCP support:
 
 ### Claude Desktop
 
-When using Task Master through Claude Desktop's MCP integration:
+When using Novel Master through Claude Desktop's MCP integration:
 
-1. Configure Task Master as MCP provider in Claude Desktop
-2. Use MCP provider for AI operations within Task Master
+1. Configure Novel Master as MCP provider in Claude Desktop
+2. Use MCP provider for AI operations within Novel Master
 3. Benefit from nested MCP tool calling capabilities
 
 ### Cursor and Other MCP Clients
@@ -477,8 +477,8 @@ When using Task Master through Claude Desktop's MCP integration:
 The MCP provider works with any MCP-compatible development environment:
 
 1. Ensure your IDE has MCP client capabilities
-2. Configure Task Master MCP server endpoint
-3. Use MCP provider for enhanced AI-driven development
+2. Configure Novel Master MCP server endpoint
+3. Use MCP provider for enhanced AI-driven novel writing
 
 ## Advanced Configuration
 

@@ -1,6 +1,6 @@
 /**
  * remove-task.js
- * Direct function implementation for removing a task
+ * Direct function implementation for removing a chapter/scene/beat
  */
 
 import {
@@ -14,16 +14,16 @@ import {
 } from '../../../../scripts/modules/utils.js';
 
 /**
- * Direct function wrapper for removeTask with error handling.
- * Supports removing multiple tasks at once with comma-separated IDs.
+ * Direct function wrapper for removing chapters/scenes/beats with error handling.
+ * Supports removing multiple items at once with comma-separated IDs.
  *
  * @param {Object} args - Command arguments
  * @param {string} args.tasksJsonPath - Explicit path to the tasks.json file.
- * @param {string} args.id - The ID(s) of the task(s) or subtask(s) to remove (comma-separated for multiple).
+ * @param {string} args.id - The ID(s) of the chapter(s), scene(s), or beat(s) to remove (comma-separated for multiple, e.g., "5" or "5,7,8.3").
  * @param {string} args.projectRoot - Project root path (for MCP/env fallback)
- * @param {string} args.tag - Tag for the task (optional)
+ * @param {string} args.tag - Tag context (outline, draft, revision) for the task (optional)
  * @param {Object} log - Logger object
- * @returns {Promise<Object>} - Remove task result { success: boolean, data?: any, error?: { code: string, message: string } }
+ * @returns {Promise<Object>} - Remove result { success: boolean, data?: any, error?: { code: string, message: string } }
  */
 export async function removeTaskDirect(args, log, context = {}) {
 	// Destructure expected args
@@ -37,28 +37,28 @@ export async function removeTaskDirect(args, log, context = {}) {
 				success: false,
 				error: {
 					code: 'MISSING_ARGUMENT',
-					message: 'tasksJsonPath is required'
+					message: 'Tasks file path is required to remove chapters/scenes'
 				}
 			};
 		}
 
-		// Validate task ID parameter
+		// Validate chapter/scene ID parameter
 		if (!id) {
-			log.error('Task ID is required');
+			log.error('Chapter/scene ID is required');
 			return {
 				success: false,
 				error: {
 					code: 'INPUT_VALIDATION_ERROR',
-					message: 'Task ID is required'
+					message: 'Chapter/scene ID is required (e.g., "12" or "12.3" for a beat)'
 				}
 			};
 		}
 
-		// Split task IDs if comma-separated
+		// Split IDs if comma-separated
 		const taskIdArray = id.split(',').map((taskId) => taskId.trim());
 
 		log.info(
-			`Removing ${taskIdArray.length} task(s) with ID(s): ${taskIdArray.join(', ')} from ${tasksJsonPath}${tag ? ` in tag '${tag}'` : ''}`
+			`Removing ${taskIdArray.length} chapter(s)/scene(s) with ID(s): ${taskIdArray.join(', ')} from ${tasksJsonPath}${tag ? ` in tag '${tag}'` : ''}`
 		);
 
 		// Validate all task IDs exist before proceeding
@@ -68,7 +68,7 @@ export async function removeTaskDirect(args, log, context = {}) {
 				success: false,
 				error: {
 					code: 'INVALID_TASKS_FILE',
-					message: `No valid tasks found in ${tasksJsonPath}${tag ? ` for tag '${tag}'` : ''}`
+					message: `No valid chapters found in ${tasksJsonPath}${tag ? ` for tag '${tag}'` : ''}`
 				}
 			};
 		}
@@ -82,7 +82,7 @@ export async function removeTaskDirect(args, log, context = {}) {
 				success: false,
 				error: {
 					code: 'INVALID_TASK_ID',
-					message: `The following tasks were not found${tag ? ` in tag '${tag}'` : ''}: ${invalidTasks.join(', ')}`
+					message: `The following chapters/scenes were not found${tag ? ` in tag '${tag}'` : ''}: ${invalidTasks.join(', ')}`
 				}
 			};
 		}
@@ -102,12 +102,12 @@ export async function removeTaskDirect(args, log, context = {}) {
 					success: false,
 					error: {
 						code: 'REMOVE_TASK_ERROR',
-						message: result.error || 'Failed to remove tasks'
+						message: result.error || 'Failed to remove chapters/scenes'
 					}
 				};
 			}
 
-			log.info(`Successfully removed ${result.removedTasks.length} task(s)`);
+			log.info(`Successfully removed ${result.removedTasks.length} chapter(s)/scene(s)`);
 
 			return {
 				success: true,

@@ -1,12 +1,16 @@
 /**
- * Helper functions for PRD parsing
+ * Helper functions for NRD parsing
  */
 
 import fs from 'fs';
 import path from 'path';
 import boxen from 'boxen';
 import chalk from 'chalk';
-import { ensureTagMetadata, findTaskById } from '../../utils.js';
+import {
+	ensureNarrativeTagDefaults,
+	ensureTagMetadata,
+	findTaskById
+} from '../../utils.js';
 import { displayParsePrdSummary } from '../../../../src/ui/parse-prd.js';
 import { TimeoutManager } from '../../../../src/utils/timeout-manager.js';
 import { displayAiUsageSummary } from '../../ui.js';
@@ -24,17 +28,17 @@ export function estimateTokens(text) {
 }
 
 /**
- * Read and validate PRD content
- * @param {string} prdPath - Path to PRD file
- * @returns {string} PRD content
+ * Read and validate NRD content
+ * @param {string} nrdPath - Path to NRD file
+ * @returns {string} NRD content
  * @throws {Error} If file is empty or cannot be read
  */
-export function readPrdContent(prdPath) {
-	const prdContent = fs.readFileSync(prdPath, 'utf8');
-	if (!prdContent) {
-		throw new Error(`Input file ${prdPath} is empty or could not be read.`);
+export function readNrdContent(nrdPath) {
+	const nrdContent = fs.readFileSync(nrdPath, 'utf8');
+	if (!nrdContent) {
+		throw new Error(`Input file ${nrdPath} is empty or could not be read.`);
 	}
-	return prdContent;
+	return nrdContent;
 }
 
 /**
@@ -213,6 +217,9 @@ export function saveTasksToFile(tasksPath, tasks, targetTag, logger) {
 		description: `Tasks for ${targetTag} context`
 	});
 
+	// Ensure canonical narrative tags always exist
+	ensureNarrativeTagDefaults(outputData);
+
 	// Write back to file
 	fs.writeFileSync(tasksPath, JSON.stringify(outputData, null, 2));
 
@@ -225,7 +232,7 @@ export function saveTasksToFile(tasksPath, tasks, targetTag, logger) {
 /**
  * Build prompts for AI service
  * @param {Object} config - Configuration object
- * @param {string} prdContent - PRD content
+ * @param {string} prdContent - NRD content
  * @param {number} nextId - Next task ID
  * @returns {Promise<{systemPrompt: string, userPrompt: string}>}
  */
@@ -238,10 +245,13 @@ export async function buildPrompts(config, prdContent, nextId) {
 		research: config.research,
 		numTasks: config.numTasks,
 		nextId,
-		prdContent,
-		prdPath: config.prdPath,
+		nrdContent: prdContent, // New parameter name
+		nrdPath: config.prdPath, // New parameter name
+		prdContent, // Keep for backward compatibility
+		prdPath: config.prdPath, // Keep for backward compatibility
 		defaultTaskPriority,
-		hasCodebaseAnalysis: config.hasCodebaseAnalysis(),
+		hasManuscriptContext: config.hasCodebaseAnalysis(), // New parameter name
+		hasCodebaseAnalysis: config.hasCodebaseAnalysis(), // Keep for backward compatibility
 		projectRoot: config.projectRoot || ''
 	});
 }
@@ -366,8 +376,8 @@ export function displayNonStreamingCliOutput({
 		boxen(
 			chalk.white.bold('Next Steps:') +
 				'\n\n' +
-				`${chalk.cyan('1.')} Run ${chalk.yellow('task-master list')} to view all tasks\n` +
-				`${chalk.cyan('2.')} Run ${chalk.yellow('task-master expand --id=<id>')} to break down a task into subtasks`,
+				`${chalk.cyan('1.')} Run ${chalk.yellow('novel-master list')} to view all tasks\n` +
+				`${chalk.cyan('2.')} Run ${chalk.yellow('novel-master expand --id=<id>')} to break down a task into subtasks`,
 			{
 				padding: 1,
 				borderColor: 'cyan',

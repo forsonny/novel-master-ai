@@ -19,7 +19,7 @@
 │                                                              │
 │  ┌─────────────────────────────────────────────────────┐   │
 │  │            TaskMasterCore (Facade)                   │   │
-│  │  src/task-master-core.ts                            │   │
+│  │  src/novel-master-core.ts                            │   │
 │  │                                                      │   │
 │  │  - listTasks(options)                               │   │
 │  │    • tag filtering                                  │   │
@@ -93,7 +93,7 @@ const storage = StorageFactory.create(config, projectPath);
 ### 4. Data Loading
 ```typescript
 // FileStorage
-- Reads from .taskmaster/tasks/tasks.json (or tag-specific file)
+- Reads from .novelmaster/tasks/tasks.json (or tag-specific file)
 - Local file system operations
 
 // ApiStorage (Hamster)
@@ -132,7 +132,7 @@ interface ListTasksResult {
 - [ ] Handle output formatting in CLI layer
 
 ### 2. Configuration Loading
-- [ ] Load `.taskmaster/config.json` for storage settings
+- [ ] Load `.novelmaster/config.json` for storage settings
 - [ ] Support environment variables for API tokens
 - [ ] Handle storage type selection
 

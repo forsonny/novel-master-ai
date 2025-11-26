@@ -1,22 +1,22 @@
-# Task Master Commands for Claude Code
+# Novel Master Commands for Claude Code
 
-Complete guide to using Task Master through Claude Code's slash commands.
+Complete guide to using Novel Master through Claude Code's slash commands.
 
 ## Overview
 
-All Task Master functionality is available through the `/project:tm/` namespace with natural language support and intelligent features.
+All Novel Master functionality is available through the `/project:tm/` namespace with natural language support and intelligent features.
 
 ## Quick Start
 
 ```bash
-# Install Task Master
+# Install Novel Master
 /project:tm/setup/quick-install
 
 # Initialize project
 /project:tm/init/quick
 
 # Parse requirements
-/project:tm/parse-prd requirements.md
+/project:tm/parse-prd nrd.md
 
 # Start working
 /project:tm/next
@@ -24,7 +24,7 @@ All Task Master functionality is available through the `/project:tm/` namespace 
 
 ## Command Structure
 
-Commands are organized hierarchically to match Task Master's CLI:
+Commands are organized hierarchically to match Novel Master's CLI:
 - Main commands at `/project:tm/[command]`
 - Subcommands for specific operations `/project:tm/[command]/[subcommand]`
 - Natural language arguments accepted throughout
@@ -39,19 +39,19 @@ Commands are organized hierarchically to match Task Master's CLI:
 - `/project:tm/models` - View AI config
 - `/project:tm/models/setup` - Configure AI
 
-### Task Generation
-- `/project:tm/parse-prd` - Generate from PRD
+### Story Arc Generation
+- `/project:tm/parse-prd` - Generate from NRD (accepts NRD files)
 - `/project:tm/parse-prd/with-research` - Enhanced parsing
-- `/project:tm/generate` - Create task files
+- `/project:tm/generate` - Create manuscript files
 
-### Task Management
+### Chapter/Scene Management
 - `/project:tm/list` - List with natural language filters
 - `/project:tm/list/with-subtasks` - Hierarchical view
 - `/project:tm/list/by-status <status>` - Filter by status
-- `/project:tm/show <id>` - Task details
-- `/project:tm/add-task` - Create task
-- `/project:tm/update` - Update tasks
-- `/project:tm/remove-task` - Delete task
+- `/project:tm/show <id>` - Chapter details
+- `/project:tm/add-task` - Create chapter
+- `/project:tm/update` - Update chapters
+- `/project:tm/remove-task` - Delete chapter
 
 ### Status Management
 - `/project:tm/set-status/to-pending <id>`
@@ -61,10 +61,10 @@ Commands are organized hierarchically to match Task Master's CLI:
 - `/project:tm/set-status/to-deferred <id>`
 - `/project:tm/set-status/to-cancelled <id>`
 
-### Task Analysis
+### Narrative Analysis
 - `/project:tm/analyze-complexity` - AI analysis
 - `/project:tm/complexity-report` - View report
-- `/project:tm/expand <id>` - Break down task
+- `/project:tm/expand <id>` - Break down chapter
 - `/project:tm/expand/all` - Expand all complex
 
 ### Dependencies
@@ -76,11 +76,11 @@ Commands are organized hierarchically to match Task Master's CLI:
 ### Workflows
 - `/project:tm/workflows/smart-flow` - Adaptive workflows
 - `/project:tm/workflows/pipeline` - Chain commands
-- `/project:tm/workflows/auto-implement` - AI implementation
+- `/project:tm/workflows/auto-implement` - AI drafting
 
 ### Utilities
 - `/project:tm/status` - Project dashboard
-- `/project:tm/next` - Next task recommendation
+- `/project:tm/next` - Next chapter recommendation
 - `/project:tm/utils/analyze` - Project analysis
 - `/project:tm/learn` - Interactive help
 
@@ -91,14 +91,14 @@ All commands understand natural language:
 ```
 /project:tm/list pending high priority
 /project:tm/update mark 23 as done
-/project:tm/add-task implement OAuth login
+/project:tm/add-task create Chapter 5: The Revelation
 ```
 
 ### Smart Context
 Commands analyze project state and provide intelligent suggestions based on:
-- Current task status
-- Dependencies
-- Team patterns
+- Current chapter status
+- Story dependencies
+- Writing patterns
 - Project phase
 
 ### Visual Enhancements
@@ -109,7 +109,7 @@ Commands analyze project state and provide intelligent suggestions based on:
 
 ## Common Workflows
 
-### Daily Development
+### Daily Writing
 ```
 /project:tm/workflows/smart-flow morning
 /project:tm/next
@@ -117,14 +117,14 @@ Commands analyze project state and provide intelligent suggestions based on:
 /project:tm/set-status/to-done <id>
 ```
 
-### Task Breakdown
+### Chapter Breakdown
 ```
 /project:tm/show <id>
 /project:tm/expand <id>
 /project:tm/list/with-subtasks
 ```
 
-### Sprint Planning
+### Story Arc Planning
 ```
 /project:tm/analyze-complexity
 /project:tm/workflows/pipeline init → expand/all → status
@@ -134,8 +134,8 @@ Commands analyze project state and provide intelligent suggestions based on:
 
 | Old | New |
 |-----|-----|
-| `/project:task-master:list` | `/project:tm/list` |
-| `/project:task-master:complete` | `/project:tm/set-status/to-done` |
+| `/project:novel-master:list` | `/project:tm/list` |
+| `/project:novel-master:complete` | `/project:tm/set-status/to-done` |
 | `/project:workflows:auto-implement` | `/project:tm/workflows/auto-implement` |
 
 ## Tips

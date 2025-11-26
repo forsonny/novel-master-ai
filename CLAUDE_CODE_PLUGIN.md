@@ -1,4 +1,4 @@
-# Taskmaster AI - Claude Code Marketplace
+# Novel Master AI - Claude Code Marketplace
 
 This repository includes a Claude Code plugin marketplace in `.claude-plugin/marketplace.json`.
 
@@ -10,17 +10,17 @@ Once this repository is pushed to GitHub, users can install with:
 
 ```bash
 # Add the marketplace
-/plugin marketplace add eyaltoledano/claude-task-master
+/plugin marketplace add eyaltoledano/claude-novel-master
 
 # Install the plugin
-/plugin install taskmaster@taskmaster
+/plugin install novelmaster@novelmaster
 ```
 
 ### Local Development/Testing
 
 ```bash
 # From the project root directory
-cd /path/to/claude-task-master
+cd /path/to/claude-novel-master
 
 # Build the plugin first
 cd packages/claude-code-plugin
@@ -29,13 +29,13 @@ cd ../..
 
 # In Claude Code
 /plugin marketplace add .
-/plugin install taskmaster@taskmaster
+/plugin install novelmaster@novelmaster
 ```
 
 ## Marketplace Structure
 
 ```
-claude-task-master/
+claude-novel-master/
 ├── .claude-plugin/
 │   └── marketplace.json        # Marketplace manifest (at repo root)
 │
@@ -50,18 +50,18 @@ claude-task-master/
 
 ## Available Plugins
 
-### taskmaster
+### novelmaster
 
-AI-powered task management system for ambitious development workflows.
+AI-powered novel writing system for ambitious writing workflows.
 
 **Features:**
 
-- 49 slash commands for comprehensive task management
+- 49 slash commands for comprehensive chapter/scene management
 - 3 specialized AI agents (orchestrator, executor, checker)
 - MCP server integration
-- Complexity analysis and auto-expansion
-- Dependency management and validation
-- Automated workflow capabilities
+- Narrative complexity analysis and auto-expansion
+- Story dependency management and validation
+- Automated manuscript generation capabilities
 
 **Quick Start:**
 
@@ -94,7 +94,7 @@ To add more plugins to this marketplace:
 
 2. **Commit and push** the changes
 
-3. **Users update** with: `/plugin marketplace update taskmaster`
+3. **Users update** with: `/plugin marketplace update novelmaster`
 
 ### Marketplace Versioning
 
@@ -117,16 +117,16 @@ Organizations can auto-install this marketplace for all team members by adding t
 ```json
 {
   "extraKnownMarketplaces": {
-    "task-master": {
+    "novel-master": {
       "source": {
         "source": "github",
-        "repo": "eyaltoledano/claude-task-master"
+        "repo": "eyaltoledano/claude-novel-master"
       }
     }
   },
   "enabledPlugins": {
-    "taskmaster": {
-      "marketplace": "taskmaster"
+    "novelmaster": {
+      "marketplace": "novelmaster"
     }
   }
 }

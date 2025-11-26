@@ -9,7 +9,7 @@ import {
 	handleApiResult,
 	withNormalizedProjectRoot
 } from './utils.js';
-import { useTagDirect } from '../core/task-master-core.js';
+import { useTagDirect } from '../core/novel-master-core.js';
 import { findTasksPath } from '../core/utils/path-utils.js';
 
 /**
@@ -19,7 +19,7 @@ import { findTasksPath } from '../core/utils/path-utils.js';
 export function registerUseTagTool(server) {
 	server.addTool({
 		name: 'use_tag',
-		description: 'Switch to a different tag context for task operations',
+		description: 'Switch to a different tag context for task operations. For novel workflows, switch between tags like "outline" (story planning), "draft" (writing phase), "rev-1" (first revision), "character-protagonist" (protagonist POV chapters), "timeline-act-1" (first act), or "beta-feedback" (reader feedback). Example: Use "use_tag" with name="draft" to switch to your draft writing context, then list tasks to see draft chapters.',
 		parameters: z.object({
 			name: z.string().describe('Name of the tag to switch to'),
 			file: z

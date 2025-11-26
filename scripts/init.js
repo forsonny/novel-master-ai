@@ -1,5 +1,5 @@
 /**
- * Task Master
+ * Novel Master
  * Copyright (c) 2025 Eyal Toledano, Ralph Khreish
  *
  * This software is licensed under the MIT License with Commons Clause.
@@ -36,13 +36,13 @@ import { assetExists, readAsset } from '../src/utils/asset-resolver.js';
 import { execSync } from 'child_process';
 import {
 	EXAMPLE_PRD_FILE,
-	TASKMASTER_CONFIG_FILE,
-	TASKMASTER_TEMPLATES_DIR,
-	TASKMASTER_DIR,
-	TASKMASTER_TASKS_DIR,
-	TASKMASTER_DOCS_DIR,
-	TASKMASTER_REPORTS_DIR,
-	TASKMASTER_STATE_FILE,
+	NOVELMASTER_CONFIG_FILE,
+	NOVELMASTER_TEMPLATES_DIR,
+	NOVELMASTER_DIR,
+	NOVELMASTER_TASKS_DIR,
+	NOVELMASTER_DOCS_DIR,
+	NOVELMASTER_REPORTS_DIR,
+	NOVELMASTER_STATE_FILE,
 	ENV_EXAMPLE_FILE,
 	GITIGNORE_FILE
 } from '../src/constants/paths.js';
@@ -57,8 +57,8 @@ const LOG_LEVELS = {
 };
 
 // Determine log level from environment variable or default to 'info'
-const LOG_LEVEL = process.env.TASKMASTER_LOG_LEVEL
-	? LOG_LEVELS[process.env.TASKMASTER_LOG_LEVEL.toLowerCase()]
+const LOG_LEVEL = process.env.NOVELMASTER_LOG_LEVEL
+	? LOG_LEVELS[process.env.NOVELMASTER_LOG_LEVEL.toLowerCase()]
 	: LOG_LEVELS.info; // Default to info
 
 // Create a color gradient for the banner
@@ -70,7 +70,7 @@ function displayBanner() {
 	if (isSilentMode()) return;
 
 	console.clear();
-	const bannerText = figlet.textSync('Task Master AI', {
+	const bannerText = figlet.textSync('Novel Master AI', {
 		font: 'Standard',
 		horizontalLayout: 'default',
 		verticalLayout: 'default'
@@ -164,20 +164,20 @@ function addShellAliases() {
 
 		// Check if aliases already exist
 		const configContent = fs.readFileSync(shellConfigFile, 'utf8');
-		if (configContent.includes("alias tm='task-master'")) {
-			log('info', 'Task Master aliases already exist in shell config.');
+		if (configContent.includes("alias tm='novel-master'")) {
+			log('info', 'Novel Master aliases already exist in shell config.');
 			return true;
 		}
 
 		// Add aliases to the shell config file
 		const aliasBlock = `
-# Task Master aliases added on ${new Date().toLocaleDateString()}
-alias tm='task-master'
-alias taskmaster='task-master'
+# Novel Master aliases added on ${new Date().toLocaleDateString()}
+alias tm='novel-master'
+alias novelmaster='novel-master'
 `;
 
 		fs.appendFileSync(shellConfigFile, aliasBlock);
-		log('success', `Added Task Master aliases to ${shellConfigFile}`);
+		log('success', `Added Novel Master aliases to ${shellConfigFile}`);
 		log(
 			'info',
 			`To use the aliases in your current terminal, run: source ${shellConfigFile}`
@@ -192,7 +192,7 @@ alias taskmaster='task-master'
 
 // Function to create initial state.json file for tag management
 function createInitialStateFile(targetDir) {
-	const stateFilePath = path.join(targetDir, TASKMASTER_STATE_FILE);
+	const stateFilePath = path.join(targetDir, NOVELMASTER_STATE_FILE);
 
 	// Check if state.json already exists
 	if (fs.existsSync(stateFilePath)) {
@@ -200,12 +200,37 @@ function createInitialStateFile(targetDir) {
 		return;
 	}
 
-	// Create initial state configuration
+	// Create initial state configuration with manuscript progress tracking
 	const initialState = {
 		currentTag: 'master',
 		lastSwitched: new Date().toISOString(),
 		branchTagMapping: {},
-		migrationNoticeShown: false
+		migrationNoticeShown: false,
+		manuscriptProgress: {
+			// Track progress per tag
+			tags: {},
+			// Global manuscript statistics
+			lastGenerated: null,
+			totalChapters: 0,
+			totalWords: 0,
+			targetWords: null,
+			// Chapter completion breakdown
+			chapterCompletion: {
+				completed: 0,
+				inProgress: 0,
+				pending: 0,
+				draft: 0,
+				revision: 0
+			},
+			// Word count tracking
+			wordCounts: {
+				total: 0,
+				byChapter: {},
+				byTag: {}
+			},
+			// Progress percentage (0-100)
+			progressPercentage: null
+		}
 	};
 
 	try {
@@ -252,7 +277,7 @@ function copyTemplateFile(templateName, targetPath, replacements = {}) {
 
 			if (newLines.length > 0) {
 				// Add a comment to separate the original content from our additions
-				const updatedContent = `${existingContent.trim()}\n\n# Added by Task Master AI\n${newLines.join('\n')}`;
+				const updatedContent = `${existingContent.trim()}\n\n# Added by Novel Master AI\n${newLines.join('\n')}`;
 				fs.writeFileSync(targetPath, updatedContent);
 				log('success', `Updated ${targetPath} with additional entries`);
 			} else {
@@ -262,17 +287,17 @@ function copyTemplateFile(templateName, targetPath, replacements = {}) {
 		}
 
 		// Handle README.md - offer to preserve or create a different file
-		if (filename === 'README-task-master.md') {
+		if (filename === 'README-novel-master.md') {
 			log('info', `${targetPath} already exists`);
 			// Create a separate README file specifically for this project
 			const taskMasterReadmePath = path.join(
 				path.dirname(targetPath),
-				'README-task-master.md'
+				'README-novel-master.md'
 			);
 			fs.writeFileSync(taskMasterReadmePath, content);
 			log(
 				'success',
-				`Created ${taskMasterReadmePath} (preserved original README-task-master.md)`
+				`Created ${taskMasterReadmePath} (preserved original README-novel-master.md)`
 			);
 			return;
 		}
@@ -364,9 +389,9 @@ async function initializeProject(options = {}) {
 		}
 
 		// Use provided options or defaults
-		const projectName = options.name || 'task-master-project';
+		const projectName = options.name || 'novel-master-project';
 		const projectDescription =
-			options.description || 'A project managed with Task Master AI';
+			options.description || 'A project managed with Novel Master AI';
 		const projectVersion = options.version || '0.1.0';
 		const authorName = options.author || 'Vibe coder';
 		const dryRun = options.dryRun || false;
@@ -378,13 +403,13 @@ async function initializeProject(options = {}) {
 
 		if (dryRun) {
 			log('info', 'DRY RUN MODE: No files will be modified');
-			log('info', 'Would initialize Task Master project');
+			log('info', 'Would initialize Novel Master project');
 			log('info', 'Would create/update necessary project files');
 
 			// Show flag-specific behavior
 			log(
 				'info',
-				`${addAliases ? 'Would add shell aliases (tm, taskmaster)' : 'Would skip shell aliases'}`
+				`${addAliases ? 'Would add shell aliases (tm, novelmaster)' : 'Would skip shell aliases'}`
 			);
 			log(
 				'info',
@@ -425,7 +450,7 @@ async function initializeProject(options = {}) {
 				const addAliasesInput = await promptQuestion(
 					rl,
 					chalk.cyan(
-						'Add shell aliases for task-master? This lets you type "tm" instead of "task-master" (Y/n): '
+						'Add shell aliases for novel-master? This lets you type "tm" instead of "novel-master" (Y/n): '
 					)
 				);
 				addAliasesPrompted = addAliasesInput.trim().toLowerCase() !== 'n';
@@ -458,10 +483,10 @@ async function initializeProject(options = {}) {
 			}
 
 			// Confirm settings...
-			console.log('\nTask Master Project settings:');
+			console.log('\nNovel Master Project settings:');
 			console.log(
 				chalk.blue(
-					'Add shell aliases (so you can use "tm" instead of "task-master"):'
+					'Add shell aliases (so you can use "tm" instead of "novel-master"):'
 				),
 				chalk.white(addAliasesPrompted ? 'Yes' : 'No')
 			);
@@ -499,13 +524,13 @@ async function initializeProject(options = {}) {
 
 			if (dryRun) {
 				log('info', 'DRY RUN MODE: No files will be modified');
-				log('info', 'Would initialize Task Master project');
+				log('info', 'Would initialize Novel Master project');
 				log('info', 'Would create/update necessary project files');
 
 				// Show flag-specific behavior
 				log(
 					'info',
-					`${addAliasesPrompted ? 'Would add shell aliases (tm, taskmaster)' : 'Would skip shell aliases'}`
+					`${addAliasesPrompted ? 'Would add shell aliases (tm, novelmaster)' : 'Would skip shell aliases'}`
 				);
 				log(
 					'info',
@@ -562,12 +587,12 @@ function createProjectStructure(
 	const targetDir = process.cwd();
 	log('info', `Initializing project in ${targetDir}`);
 
-	// Create NEW .taskmaster directory structure (using constants)
-	ensureDirectoryExists(path.join(targetDir, TASKMASTER_DIR));
-	ensureDirectoryExists(path.join(targetDir, TASKMASTER_TASKS_DIR));
-	ensureDirectoryExists(path.join(targetDir, TASKMASTER_DOCS_DIR));
-	ensureDirectoryExists(path.join(targetDir, TASKMASTER_REPORTS_DIR));
-	ensureDirectoryExists(path.join(targetDir, TASKMASTER_TEMPLATES_DIR));
+	// Create NEW .novelmaster directory structure (using constants)
+	ensureDirectoryExists(path.join(targetDir, NOVELMASTER_DIR));
+	ensureDirectoryExists(path.join(targetDir, NOVELMASTER_TASKS_DIR));
+	ensureDirectoryExists(path.join(targetDir, NOVELMASTER_DOCS_DIR));
+	ensureDirectoryExists(path.join(targetDir, NOVELMASTER_REPORTS_DIR));
+	ensureDirectoryExists(path.join(targetDir, NOVELMASTER_TEMPLATES_DIR));
 
 	// Create initial state.json file for tag management
 	createInitialStateFile(targetDir);
@@ -598,14 +623,14 @@ function createProjectStructure(
 	// Copy config.json with project name to NEW location
 	copyTemplateFile(
 		'config.json',
-		path.join(targetDir, TASKMASTER_CONFIG_FILE),
+		path.join(targetDir, NOVELMASTER_CONFIG_FILE),
 		{
 			...replacements
 		}
 	);
 
 	// Update config.json with correct maxTokens values from supported-models.json
-	const configPath = path.join(targetDir, TASKMASTER_CONFIG_FILE);
+	const configPath = path.join(targetDir, NOVELMASTER_CONFIG_FILE);
 	if (updateConfigMaxTokens(configPath)) {
 		log('info', 'Updated config with correct maxTokens values');
 	} else {
@@ -631,7 +656,7 @@ function createProjectStructure(
 	// Copy example_prd_rpg.txt to templates directory
 	copyTemplateFile(
 		'example_prd_rpg.txt',
-		path.join(targetDir, TASKMASTER_TEMPLATES_DIR, 'example_prd_rpg.txt')
+		path.join(targetDir, NOVELMASTER_TEMPLATES_DIR, 'example_prd_rpg.txt')
 	);
 
 	// Initialize git repository if git is available
@@ -724,14 +749,14 @@ function createProjectStructure(
 		);
 		try {
 			// Correct command confirmed by you.
-			execSync('npx task-master rules --setup', {
+			execSync('npx novel-master rules --setup', {
 				stdio: 'inherit',
 				cwd: targetDir
 			});
 			log('success', 'Rule profiles configured.');
 		} catch (error) {
 			log('error', 'Failed to configure rule profiles:', error.message);
-			log('warn', 'You may need to run "task-master rules --setup" manually.');
+			log('warn', 'You may need to run "novel-master rules --setup" manually.');
 		}
 	} else if (isSilentMode() || dryRun || options?.yes) {
 		// This branch can log why setup was skipped, similar to the model setup logic.
@@ -761,14 +786,14 @@ function createProjectStructure(
 			'Running interactive response language setup. Please input your preferred language.'
 		);
 		try {
-			execSync('npx task-master lang --setup', {
+			execSync('npx novel-master lang --setup', {
 				stdio: 'inherit',
 				cwd: targetDir
 			});
 			log('success', 'Response Language configured.');
 		} catch (error) {
 			log('error', 'Failed to configure response language:', error.message);
-			log('warn', 'You may need to run "task-master lang --setup" manually.');
+			log('warn', 'You may need to run "novel-master lang --setup" manually.');
 		}
 	} else if (isSilentMode() && !dryRun) {
 		log(
@@ -777,7 +802,7 @@ function createProjectStructure(
 		);
 		log(
 			'warn',
-			'Please configure response language using "task-master models --set-response-language" or the "models" MCP tool.'
+			'Please configure response language using "novel-master models --set-response-language" or the "models" MCP tool.'
 		);
 	} else if (dryRun) {
 		log('info', 'DRY RUN: Skipping interactive response language setup.');
@@ -799,20 +824,20 @@ function createProjectStructure(
 			'Running interactive model setup. Please select your preferred AI models.'
 		);
 		try {
-			execSync('npx task-master models --setup', {
+			execSync('npx novel-master models --setup', {
 				stdio: 'inherit',
 				cwd: targetDir
 			});
 			log('success', 'AI Models configured.');
 		} catch (error) {
 			log('error', 'Failed to configure AI models:', error.message);
-			log('warn', 'You may need to run "task-master models --setup" manually.');
+			log('warn', 'You may need to run "novel-master models --setup" manually.');
 		}
 	} else if (isSilentMode() && !dryRun) {
 		log('info', 'Skipping interactive model setup in silent (MCP) mode.');
 		log(
 			'warn',
-			'Please configure AI models using "task-master models --set-..." or the "models" MCP tool.'
+			'Please configure AI models using "novel-master models --set-..." or the "models" MCP tool.'
 		);
 	} else if (dryRun) {
 		log('info', 'DRY RUN: Skipping interactive model setup.');
@@ -820,7 +845,7 @@ function createProjectStructure(
 		log('info', 'Skipping interactive model setup due to --yes flag.');
 		log(
 			'info',
-			'Default AI models will be used. You can configure different models later using "task-master models --setup" or "task-master models --set-..." commands.'
+			'Default AI models will be used. You can configure different models later using "novel-master models --setup" or "novel-master models --set-..." commands.'
 		);
 	}
 	// ====================================
@@ -833,7 +858,7 @@ function createProjectStructure(
 			log('success', 'Shell aliases added successfully');
 		}
 	} else if (addAliases && dryRun) {
-		log('info', 'DRY RUN: Would add shell aliases (tm, taskmaster)');
+		log('info', 'DRY RUN: Would add shell aliases (tm, novelmaster)');
 	}
 
 	// Display success message
@@ -859,15 +884,15 @@ function createProjectStructure(
 			boxen(
 				`${chalk.cyan.bold('Things you should do next:')}\n\n${chalk.white('1. ')}${chalk.yellow(
 					'Configure AI models (if needed) and add API keys to `.env`'
-				)}\n${chalk.white('   ├─ ')}${chalk.dim('Models: Use `task-master models` commands')}\n${chalk.white('   └─ ')}${chalk.dim(
+				)}\n${chalk.white('   ├─ ')}${chalk.dim('Models: Use `novel-master models` commands')}\n${chalk.white('   └─ ')}${chalk.dim(
 					'Keys: Add provider API keys to .env (or inside the MCP config file i.e. .cursor/mcp.json)'
 				)}\n${chalk.white('2. ')}${chalk.yellow(
-					'Discuss your idea with AI and ask for a PRD, and save it to .taskmaster/docs/prd.txt'
-				)}\n${chalk.white('   ├─ ')}${chalk.dim('Simple projects: Use ')}${chalk.cyan('example_prd.txt')}${chalk.dim(' template')}\n${chalk.white('   └─ ')}${chalk.dim('Complex systems: Use ')}${chalk.cyan('example_prd_rpg.txt')}${chalk.dim(' template (for dependency-aware task graphs)')}\n${chalk.white('3. ')}${chalk.yellow(
-					'Ask Cursor Agent (or run CLI) to parse your PRD and generate initial tasks:'
-				)}\n${chalk.white('   └─ ')}${chalk.dim('MCP Tool: ')}${chalk.cyan('parse_prd')}${chalk.dim(' | CLI: ')}${chalk.cyan('task-master parse-prd .taskmaster/docs/prd.txt')}\n${chalk.white('4. ')}${chalk.yellow(
-					'Ask Cursor to analyze the complexity of the tasks in your PRD using research'
-				)}\n${chalk.white('   └─ ')}${chalk.dim('MCP Tool: ')}${chalk.cyan('analyze_project_complexity')}${chalk.dim(' | CLI: ')}${chalk.cyan('task-master analyze-complexity')}\n${chalk.white('5. ')}${chalk.yellow(
+					'Discuss your idea with AI and ask for an NRD (Novel Requirements Document), and save it to .novelmaster/docs/nrd.txt'
+				)}\n${chalk.white('   ├─ ')}${chalk.dim('Simple projects: Use ')}${chalk.cyan('example_nrd.md')}${chalk.dim(' template')}\n${chalk.white('   └─ ')}${chalk.dim('Complex novels: Use ')}${chalk.cyan('example_nrd_epic.md')}${chalk.dim(' template (for multi-arc story structures)')}\n${chalk.white('3. ')}${chalk.yellow(
+					'Ask Cursor Agent (or run CLI) to parse your NRD and generate initial story arcs:'
+				)}\n${chalk.white('   └─ ')}${chalk.dim('MCP Tool: ')}${chalk.cyan('parse_prd')}${chalk.dim(' | CLI: ')}${chalk.cyan('novel-master parse-prd .novelmaster/docs/nrd.txt')}\n${chalk.white('4. ')}${chalk.yellow(
+					'Ask Cursor to analyze the complexity of the story arcs in your NRD using research'
+				)}\n${chalk.white('   └─ ')}${chalk.dim('MCP Tool: ')}${chalk.cyan('analyze_project_complexity')}${chalk.dim(' | CLI: ')}${chalk.cyan('novel-master analyze-complexity')}\n${chalk.white('5. ')}${chalk.yellow(
 					'Ask Cursor to expand all of your tasks using the complexity analysis'
 				)}\n${chalk.white('6. ')}${chalk.yellow('Ask Cursor to begin working on the next task')}\n${chalk.white('7. ')}${chalk.yellow(
 					'Add new tasks anytime using the add-task command or MCP tool'
@@ -878,7 +903,7 @@ function createProjectStructure(
 				)}\n${chalk.white('10. ')}${chalk.green.bold('Ship it!')}\n\n${chalk.dim(
 					'* Review the README.md file to learn how to use other commands via Cursor Agent.'
 				)}\n${chalk.dim(
-					'* Use the task-master command without arguments to see all available commands.'
+					'* Use the novel-master command without arguments to see all available commands.'
 				)}`,
 				{
 					padding: 1,

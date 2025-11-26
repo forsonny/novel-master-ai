@@ -11,7 +11,7 @@
  *
  * We handle:
  * - Simple get/set/remove/clear operations
- * - Persistence to ~/.taskmaster/session.json with atomic writes via steno
+ * - Persistence to ~/.novelmaster/session.json with atomic writes via steno
  */
 
 import fs from 'fs/promises';
@@ -23,7 +23,7 @@ import { getLogger } from '../../../common/logger/index.js';
 
 const DEFAULT_SESSION_FILE = path.join(
 	process.env.HOME || process.env.USERPROFILE || '~',
-	'.taskmaster',
+	'.novelmaster',
 	'session.json'
 );
 

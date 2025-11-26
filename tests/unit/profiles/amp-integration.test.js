@@ -41,7 +41,7 @@ describe('Amp Profile Integration', () => {
 
 		test('should have correct file mapping', () => {
 			expect(ampProfile.fileMap).toEqual({
-				'AGENTS.md': '.taskmaster/AGENT.md'
+				'AGENTS.md': '.novelmaster/AGENT.md'
 			});
 		});
 
@@ -51,14 +51,14 @@ describe('Amp Profile Integration', () => {
 			fs.mkdirSync(assetsDir, { recursive: true });
 			fs.writeFileSync(
 				path.join(assetsDir, 'AGENTS.md'),
-				'Task Master instructions'
+				'Novel Master instructions'
 			);
 
 			// Call onAddRulesProfile
 			ampProfile.onAddRulesProfile(tempDir, assetsDir);
 
-			// Should only have created .taskmaster directory and AGENT.md
-			expect(fs.existsSync(path.join(tempDir, '.taskmaster'))).toBe(true);
+			// Should only have created .novelmaster directory and AGENT.md
+			expect(fs.existsSync(path.join(tempDir, '.novelmaster'))).toBe(true);
 			expect(fs.existsSync(path.join(tempDir, 'AGENT.md'))).toBe(true);
 
 			// Should not have created any other directories (like .claude)
@@ -80,7 +80,7 @@ describe('Amp Profile Integration', () => {
 
 			// Should not create any files
 			expect(fs.existsSync(path.join(tempDir, 'AGENT.md'))).toBe(false);
-			expect(fs.existsSync(path.join(tempDir, '.taskmaster', 'AGENT.md'))).toBe(
+			expect(fs.existsSync(path.join(tempDir, '.novelmaster', 'AGENT.md'))).toBe(
 				false
 			);
 		});
@@ -96,7 +96,7 @@ describe('Amp Profile Integration', () => {
 			fs.mkdirSync(assetsDir, { recursive: true });
 			fs.writeFileSync(
 				path.join(assetsDir, 'AGENTS.md'),
-				'Task Master instructions'
+				'Novel Master instructions'
 			);
 
 			// Call onAddRulesProfile
@@ -111,7 +111,7 @@ describe('Amp Profile Integration', () => {
 			expect(updatedContent).toContain('This is my custom configuration.');
 			expect(updatedContent).toContain('## Custom Section');
 			expect(updatedContent).toContain('Some custom rules here.');
-			expect(updatedContent).toContain('@./.taskmaster/AGENT.md');
+			expect(updatedContent).toContain('@./.novelmaster/AGENT.md');
 		});
 	});
 
@@ -151,9 +151,9 @@ describe('Amp Profile Integration', () => {
 				'editor.fontSize': 14,
 				'editor.tabSize': 2,
 				mcpServers: {
-					'task-master-ai': {
+					'novel-master-ai': {
 						command: 'npx',
-						args: ['-y', 'task-master-ai']
+						args: ['-y', 'novel-master-ai']
 					}
 				},
 				'workbench.colorTheme': 'Dark+'
@@ -213,9 +213,9 @@ describe('Amp Profile Integration', () => {
 
 			const initialConfig = {
 				'amp.mcpServers': {
-					'task-master-ai': {
+					'novel-master-ai': {
 						command: 'npx',
-						args: ['-y', 'task-master-ai']
+						args: ['-y', 'novel-master-ai']
 					}
 				}
 			};
@@ -250,14 +250,14 @@ describe('Amp Profile Integration', () => {
 			fs.mkdirSync(assetsDir, { recursive: true });
 			fs.writeFileSync(
 				path.join(assetsDir, 'AGENTS.md'),
-				'Task Master instructions'
+				'Novel Master instructions'
 			);
 
 			// Call onPostConvertRulesProfile
 			ampProfile.onPostConvertRulesProfile(tempDir, assetsDir);
 
 			// Should have same result as onAddRulesProfile
-			expect(fs.existsSync(path.join(tempDir, '.taskmaster', 'AGENT.md'))).toBe(
+			expect(fs.existsSync(path.join(tempDir, '.novelmaster', 'AGENT.md'))).toBe(
 				true
 			);
 			expect(fs.existsSync(path.join(tempDir, 'AGENT.md'))).toBe(true);
@@ -266,7 +266,7 @@ describe('Amp Profile Integration', () => {
 				path.join(tempDir, 'AGENT.md'),
 				'utf8'
 			);
-			expect(agentContent).toContain('@./.taskmaster/AGENT.md');
+			expect(agentContent).toContain('@./.novelmaster/AGENT.md');
 		});
 	});
 
@@ -284,7 +284,7 @@ describe('Amp Profile Integration', () => {
 			originalWriteFileSync.call(
 				fs,
 				path.join(assetsDir, 'AGENTS.md'),
-				'Task Master instructions'
+				'Novel Master instructions'
 			);
 
 			// Should not throw error

@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-import TaskMasterMCPServer from './src/index.js';
+import NovelMasterMCPServer from './src/index.js';
 import dotenv from 'dotenv';
 import logger from './src/logger.js';
 
@@ -8,13 +8,13 @@ import logger from './src/logger.js';
 dotenv.config();
 
 // Set MCP mode to silence tm-core console output
-process.env.TASK_MASTER_MCP = 'true';
+process.env.NOVEL_MASTER_MCP = 'true';
 
 /**
  * Start the MCP server
  */
 async function startServer() {
-	const server = new TaskMasterMCPServer();
+	const server = new NovelMasterMCPServer();
 
 	// Handle graceful shutdown
 	process.on('SIGINT', async () => {

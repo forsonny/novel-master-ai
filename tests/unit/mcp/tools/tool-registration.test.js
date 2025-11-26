@@ -1,6 +1,6 @@
 /**
  * tool-registration.test.js
- * Comprehensive unit tests for the Task Master MCP tool registration system
+ * Comprehensive unit tests for the Novel Master MCP tool registration system
  * Tests environment variable control system covering all configuration modes and edge cases
  */
 
@@ -20,7 +20,7 @@ import {
 	validateToolStructure
 } from '../../../helpers/tool-counts.js';
 
-import { registerTaskMasterTools } from '../../../../mcp-server/src/tools/index.js';
+import { registerNovelMasterTools } from '../../../../mcp-server/src/tools/index.js';
 import {
 	toolRegistry,
 	coreTools,
@@ -32,12 +32,12 @@ const ALL_COUNT = Object.keys(toolRegistry).length;
 const CORE_COUNT = coreTools.length;
 const STANDARD_COUNT = standardTools.length;
 
-describe('Task Master Tool Registration System', () => {
+describe('Novel Master Tool Registration System', () => {
 	let mockServer;
 	let originalEnv;
 
 	beforeEach(() => {
-		originalEnv = process.env.TASK_MASTER_TOOLS;
+		originalEnv = process.env.NOVEL_MASTER_TOOLS;
 
 		mockServer = {
 			tools: [],
@@ -47,14 +47,14 @@ describe('Task Master Tool Registration System', () => {
 			})
 		};
 
-		delete process.env.TASK_MASTER_TOOLS;
+		delete process.env.NOVEL_MASTER_TOOLS;
 	});
 
 	afterEach(() => {
 		if (originalEnv !== undefined) {
-			process.env.TASK_MASTER_TOOLS = originalEnv;
+			process.env.NOVEL_MASTER_TOOLS = originalEnv;
 		} else {
-			delete process.env.TASK_MASTER_TOOLS;
+			delete process.env.NOVEL_MASTER_TOOLS;
 		}
 
 		jest.clearAllMocks();
@@ -121,26 +121,26 @@ describe('Task Master Tool Registration System', () => {
 	});
 
 	describe('Configuration Modes', () => {
-		it(`should register all tools (${ALL_COUNT}) when TASK_MASTER_TOOLS is not set (default behavior)`, () => {
-			delete process.env.TASK_MASTER_TOOLS;
+		it(`should register all tools (${ALL_COUNT}) when NOVEL_MASTER_TOOLS is not set (default behavior)`, () => {
+			delete process.env.NOVEL_MASTER_TOOLS;
 
-			registerTaskMasterTools(mockServer);
+			registerNovelMasterTools(mockServer);
 
 			expect(mockServer.addTool).toHaveBeenCalledTimes(
 				EXPECTED_TOOL_COUNTS.total
 			);
 		});
 
-		it(`should register all tools (${ALL_COUNT}) when TASK_MASTER_TOOLS=all`, () => {
-			process.env.TASK_MASTER_TOOLS = 'all';
+		it(`should register all tools (${ALL_COUNT}) when NOVEL_MASTER_TOOLS=all`, () => {
+			process.env.NOVEL_MASTER_TOOLS = 'all';
 
-			registerTaskMasterTools(mockServer);
+			registerNovelMasterTools(mockServer);
 
 			expect(mockServer.addTool).toHaveBeenCalledTimes(ALL_COUNT);
 		});
 
-		it(`should register exactly ${CORE_COUNT} core tools when TASK_MASTER_TOOLS=core`, () => {
-			process.env.TASK_MASTER_TOOLS = 'core';
+		it(`should register exactly ${CORE_COUNT} core tools when NOVEL_MASTER_TOOLS=core`, () => {
+			process.env.NOVEL_MASTER_TOOLS = 'core';
 
 			registerTaskMasterTools(mockServer, 'core');
 
@@ -149,8 +149,8 @@ describe('Task Master Tool Registration System', () => {
 			);
 		});
 
-		it(`should register exactly ${STANDARD_COUNT} standard tools when TASK_MASTER_TOOLS=standard`, () => {
-			process.env.TASK_MASTER_TOOLS = 'standard';
+		it(`should register exactly ${STANDARD_COUNT} standard tools when NOVEL_MASTER_TOOLS=standard`, () => {
+			process.env.NOVEL_MASTER_TOOLS = 'standard';
 
 			registerTaskMasterTools(mockServer, 'standard');
 
@@ -160,7 +160,7 @@ describe('Task Master Tool Registration System', () => {
 		});
 
 		it(`should treat lean as alias for core mode (${CORE_COUNT} tools)`, () => {
-			process.env.TASK_MASTER_TOOLS = 'lean';
+			process.env.NOVEL_MASTER_TOOLS = 'lean';
 
 			registerTaskMasterTools(mockServer, 'lean');
 
@@ -168,7 +168,7 @@ describe('Task Master Tool Registration System', () => {
 		});
 
 		it('should handle case insensitive configuration values', () => {
-			process.env.TASK_MASTER_TOOLS = 'CORE';
+			process.env.NOVEL_MASTER_TOOLS = 'CORE';
 
 			registerTaskMasterTools(mockServer, 'CORE');
 
@@ -178,7 +178,7 @@ describe('Task Master Tool Registration System', () => {
 
 	describe('Custom Tool Selection and Edge Cases', () => {
 		it('should register specific tools from comma-separated list', () => {
-			process.env.TASK_MASTER_TOOLS = 'get_tasks,next_task,get_task';
+			process.env.NOVEL_MASTER_TOOLS = 'get_tasks,next_task,get_task';
 
 			registerTaskMasterTools(mockServer, 'get_tasks,next_task,get_task');
 
@@ -186,7 +186,7 @@ describe('Task Master Tool Registration System', () => {
 		});
 
 		it('should handle mixed valid and invalid tool names gracefully', () => {
-			process.env.TASK_MASTER_TOOLS =
+			process.env.NOVEL_MASTER_TOOLS =
 				'invalid_tool,get_tasks,fake_tool,next_task';
 
 			registerTaskMasterTools(
@@ -198,23 +198,23 @@ describe('Task Master Tool Registration System', () => {
 		});
 
 		it('should default to all tools with completely invalid input', () => {
-			process.env.TASK_MASTER_TOOLS = 'completely_invalid';
+			process.env.NOVEL_MASTER_TOOLS = 'completely_invalid';
 
-			registerTaskMasterTools(mockServer);
+			registerNovelMasterTools(mockServer);
 
 			expect(mockServer.addTool).toHaveBeenCalledTimes(ALL_COUNT);
 		});
 
 		it('should handle empty string environment variable', () => {
-			process.env.TASK_MASTER_TOOLS = '';
+			process.env.NOVEL_MASTER_TOOLS = '';
 
-			registerTaskMasterTools(mockServer);
+			registerNovelMasterTools(mockServer);
 
 			expect(mockServer.addTool).toHaveBeenCalledTimes(ALL_COUNT);
 		});
 
 		it('should handle whitespace in comma-separated lists', () => {
-			process.env.TASK_MASTER_TOOLS = ' get_tasks , next_task , get_task ';
+			process.env.NOVEL_MASTER_TOOLS = ' get_tasks , next_task , get_task ';
 
 			registerTaskMasterTools(mockServer, ' get_tasks , next_task , get_task ');
 
@@ -222,7 +222,7 @@ describe('Task Master Tool Registration System', () => {
 		});
 
 		it('should ignore duplicate tools in list', () => {
-			process.env.TASK_MASTER_TOOLS = 'get_tasks,get_tasks,next_task,get_tasks';
+			process.env.NOVEL_MASTER_TOOLS = 'get_tasks,get_tasks,next_task,get_tasks';
 
 			registerTaskMasterTools(
 				mockServer,
@@ -233,15 +233,15 @@ describe('Task Master Tool Registration System', () => {
 		});
 
 		it('should handle only commas and empty entries', () => {
-			process.env.TASK_MASTER_TOOLS = ',,,';
+			process.env.NOVEL_MASTER_TOOLS = ',,,';
 
-			registerTaskMasterTools(mockServer);
+			registerNovelMasterTools(mockServer);
 
 			expect(mockServer.addTool).toHaveBeenCalledTimes(ALL_COUNT);
 		});
 
 		it('should handle single tool selection', () => {
-			process.env.TASK_MASTER_TOOLS = 'get_tasks';
+			process.env.NOVEL_MASTER_TOOLS = 'get_tasks';
 
 			registerTaskMasterTools(mockServer, 'get_tasks');
 
@@ -287,15 +287,15 @@ describe('Task Master Tool Registration System', () => {
 			];
 
 			testCases.forEach((testCase) => {
-				delete process.env.TASK_MASTER_TOOLS;
+				delete process.env.NOVEL_MASTER_TOOLS;
 				if (testCase.env !== undefined) {
-					process.env.TASK_MASTER_TOOLS = testCase.env;
+					process.env.NOVEL_MASTER_TOOLS = testCase.env;
 				}
 
 				mockServer.tools = [];
 				mockServer.addTool.mockClear();
 
-				registerTaskMasterTools(mockServer, testCase.env || 'all');
+				registerNovelMasterTools(mockServer, testCase.env || 'all');
 
 				expect(mockServer.addTool).toHaveBeenCalledTimes(
 					testCase.expectedCount
@@ -306,9 +306,9 @@ describe('Task Master Tool Registration System', () => {
 		it('should have optimal performance characteristics', () => {
 			const startTime = Date.now();
 
-			process.env.TASK_MASTER_TOOLS = 'all';
+			process.env.NOVEL_MASTER_TOOLS = 'all';
 
-			registerTaskMasterTools(mockServer);
+			registerNovelMasterTools(mockServer);
 
 			const endTime = Date.now();
 			const executionTime = endTime - startTime;
@@ -352,7 +352,7 @@ describe('Task Master Tool Registration System', () => {
 		});
 
 		it('should handle concurrent registration attempts', () => {
-			process.env.TASK_MASTER_TOOLS = 'core';
+			process.env.NOVEL_MASTER_TOOLS = 'core';
 
 			registerTaskMasterTools(mockServer, 'core');
 			registerTaskMasterTools(mockServer, 'core');
@@ -399,7 +399,7 @@ describe('Task Master Tool Registration System', () => {
 				mockServer.tools = [];
 				mockServer.addTool.mockClear();
 
-				process.env.TASK_MASTER_TOOLS = input;
+				process.env.NOVEL_MASTER_TOOLS = input;
 
 				expect(() => registerTaskMasterTools(mockServer)).not.toThrow();
 

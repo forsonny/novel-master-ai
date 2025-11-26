@@ -34,7 +34,7 @@ export class RuntimeStateManager {
 	private readonly logger = getLogger('RuntimeStateManager');
 
 	constructor(projectRoot: string) {
-		this.stateFilePath = path.join(projectRoot, '.taskmaster', 'state.json');
+		this.stateFilePath = path.join(projectRoot, '.novelmaster', 'state.json');
 		this.currentState = {
 			currentTag: DEFAULT_CONFIG_VALUES.TAGS.DEFAULT_TAG
 		};
@@ -59,8 +59,8 @@ export class RuntimeStateManager {
 			};
 
 			// Apply environment variable override for current tag
-			if (process.env.TASKMASTER_TAG) {
-				state.currentTag = process.env.TASKMASTER_TAG;
+			if (process.env.NOVELMASTER_TAG) {
+				state.currentTag = process.env.NOVELMASTER_TAG;
 			}
 
 			this.currentState = state;
@@ -71,8 +71,8 @@ export class RuntimeStateManager {
 				this.logger.debug('No state.json found, using default state');
 
 				// Check environment variable
-				if (process.env.TASKMASTER_TAG) {
-					this.currentState.currentTag = process.env.TASKMASTER_TAG;
+				if (process.env.NOVELMASTER_TAG) {
+					this.currentState.currentTag = process.env.NOVELMASTER_TAG;
 				}
 
 				return this.currentState;

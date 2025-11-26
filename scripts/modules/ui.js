@@ -1,6 +1,6 @@
 /**
  * ui.js
- * User interface functions for the Task Master CLI
+ * User interface functions for the Novel Master CLI
  */
 
 import chalk from 'chalk';
@@ -27,14 +27,36 @@ import {
 import { getProjectName, getDefaultSubtasks } from './config-manager.js';
 import { TASK_STATUS_OPTIONS } from '../../src/constants/task-status.js';
 import {
-	TASKMASTER_CONFIG_FILE,
-	TASKMASTER_TASKS_FILE
+	NOVELMASTER_CONFIG_FILE,
+	NOVELMASTER_TASKS_FILE
 } from '../../src/constants/paths.js';
-import { getTaskMasterVersion } from '../../src/utils/getVersion.js';
+import { getNovelMasterVersion } from '../../src/utils/getVersion.js';
 
 // Create a color gradient for the banner
 const coolGradient = gradient(['#00b4d8', '#0077b6', '#03045e']);
 const warmGradient = gradient(['#fb8b24', '#e36414', '#9a031e']);
+
+const NARRATIVE_LABELS = {
+	pov: 'POV',
+	timeline: 'Timeline',
+	emotionalBeat: 'Emotional Beat',
+	tensionLevel: 'Tension',
+	wordCountTarget: 'Word Count Target',
+	sensoryNotes: 'Sensory Notes',
+	researchHook: 'Research Hook',
+	continuityCheck: 'Continuity Check'
+};
+
+function formatNarrativeMetadata(metadata) {
+	if (!metadata) return null;
+	const entries = Object.entries(NARRATIVE_LABELS)
+		.map(([key, label]) => {
+			if (!metadata[key]) return null;
+			return `${chalk.cyan(label + ':')} ${metadata[key]}`;
+		})
+		.filter(Boolean);
+	return entries.length ? entries.join('\n') : null;
+}
 
 /**
  * Display FYI notice about tagged task lists (only if migration occurred)
@@ -46,7 +68,7 @@ function displayTaggedTasksFYI(data) {
 	console.log(
 		boxen(
 			chalk.white.bold('FYI: ') +
-				chalk.gray('Taskmaster now supports separate task lists per tag. ') +
+				chalk.gray('Novel Master now supports separate task lists per tag. ') +
 				chalk.cyan(
 					'Use the --tag flag to create/read/update/filter tasks by tag.'
 				),
@@ -91,7 +113,7 @@ function displayBanner() {
 	if (isSilentMode()) return;
 
 	// console.clear(); // Removing this to avoid clearing the terminal per command
-	const bannerText = figlet.textSync('Task Master', {
+	const bannerText = figlet.textSync('Novel Master', {
 		font: 'Standard',
 		horizontalLayout: 'default',
 		verticalLayout: 'default'
@@ -105,7 +127,7 @@ function displayBanner() {
 	);
 
 	// Read version directly from package.json
-	const version = getTaskMasterVersion();
+	const version = getNovelMasterVersion();
 
 	console.log(
 		boxen(
@@ -534,7 +556,7 @@ function displayHelp() {
 	const terminalWidth = process.stdout.columns || 100; // Default to 100 if can't detect
 
 	console.log(
-		boxen(chalk.white.bold('Task Master CLI'), {
+		boxen(chalk.white.bold('Novel Master CLI'), {
 			padding: 1,
 			borderColor: 'blue',
 			borderStyle: 'round',
@@ -551,7 +573,7 @@ function displayHelp() {
 				{
 					name: 'init',
 					args: '[--name=<name>] [--description=<desc>] [-y]',
-					desc: 'Initialize a new project with Task Master structure'
+					desc: 'Initialize a new project with Novel Master structure'
 				},
 				{
 					name: 'models',
@@ -587,7 +609,7 @@ function displayHelp() {
 				{
 					name: 'parse-prd',
 					args: '--input=<file.txt> [--num-tasks=10]',
-					desc: 'Generate tasks from a PRD document'
+					desc: 'Parse NRD (Novel Requirements Document) and generate story arcs/chapters'
 				},
 				{
 					name: 'generate',
@@ -881,7 +903,7 @@ function displayHelp() {
 
 	configTable.push(
 		[
-			`${chalk.yellow(TASKMASTER_CONFIG_FILE)}${chalk.reset('')}`,
+			`${chalk.yellow(NOVELMASTER_CONFIG_FILE)}${chalk.reset('')}`,
 			`${chalk.white('AI model configuration file (project root)')}${chalk.reset('')}`,
 			`${chalk.dim('Managed by models cmd')}${chalk.reset('')}`
 		],
@@ -906,19 +928,19 @@ function displayHelp() {
 			chalk.white.bold('Quick Start:') +
 				'\n\n' +
 				chalk.cyan('1. Create Project: ') +
-				chalk.white('task-master init') +
+				chalk.white('novel-master init') +
 				'\n' +
 				chalk.cyan('2. Setup Models: ') +
-				chalk.white('task-master models --setup') +
+				chalk.white('novel-master models --setup') +
 				'\n' +
-				chalk.cyan('3. Parse PRD: ') +
-				chalk.white('task-master parse-prd --input=<prd-file>') +
+				chalk.cyan('3. Parse NRD: ') +
+				chalk.white('novel-master parse-prd --input=<nrd-file>') +
 				'\n' +
 				chalk.cyan('4. List Tasks: ') +
-				chalk.white('task-master list') +
+				chalk.white('novel-master list') +
 				'\n' +
 				chalk.cyan('5. Find Next Task: ') +
-				chalk.white('task-master next'),
+				chalk.white('novel-master next'),
 			{
 				padding: 1,
 				borderColor: 'yellow',
@@ -1176,6 +1198,18 @@ async function displayNextTask(
 		});
 
 		console.log(subtaskTable.toString());
+
+		const subtaskMetadata = formatNarrativeMetadata(task.metadata);
+		if (subtaskMetadata) {
+			console.log(
+				boxen(chalk.white.bold('Narrative Notes:') + '\n\n' + subtaskMetadata, {
+					padding: { top: 0, bottom: 0, left: 1, right: 1 },
+					borderColor: 'magenta',
+					borderStyle: 'round',
+					margin: { top: 1, bottom: 0 }
+				})
+			);
+		}
 	}
 
 	// Suggest expanding if no subtasks (only for parent tasks without subtasks)
@@ -1185,7 +1219,7 @@ async function displayNextTask(
 				chalk.yellow('No subtasks found. Consider breaking down this task:') +
 					'\n' +
 					chalk.white(
-						`Run: ${chalk.cyan(`task-master expand --id=${nextTask.id}`)}`
+						`Run: ${chalk.cyan(`novel-master expand --id=${nextTask.id}`)}`
 					),
 				{
 					padding: { top: 0, bottom: 0, left: 1, right: 1 },
@@ -1202,17 +1236,17 @@ async function displayNextTask(
 	if (isSubtask) {
 		// Suggested actions for a subtask
 		suggestedActionsContent +=
-			`${chalk.cyan('1.')} Mark as in-progress: ${chalk.yellow(`task-master set-status --id=${nextTask.id} --status=in-progress`)}\n` +
-			`${chalk.cyan('2.')} Mark as done when completed: ${chalk.yellow(`task-master set-status --id=${nextTask.id} --status=done`)}\n` +
-			`${chalk.cyan('3.')} View parent task: ${chalk.yellow(`task-master show --id=${nextTask.parentId}`)}`;
+			`${chalk.cyan('1.')} Mark as in-progress: ${chalk.yellow(`novel-master set-status --id=${nextTask.id} --status=in-progress`)}\n` +
+			`${chalk.cyan('2.')} Mark as done when completed: ${chalk.yellow(`novel-master set-status --id=${nextTask.id} --status=done`)}\n` +
+			`${chalk.cyan('3.')} View parent task: ${chalk.yellow(`novel-master show --id=${nextTask.parentId}`)}`;
 	} else {
 		// Suggested actions for a parent task
 		suggestedActionsContent +=
-			`${chalk.cyan('1.')} Mark as in-progress: ${chalk.yellow(`task-master set-status --id=${nextTask.id} --status=in-progress`)}\n` +
-			`${chalk.cyan('2.')} Mark as done when completed: ${chalk.yellow(`task-master set-status --id=${nextTask.id} --status=done`)}\n` +
+			`${chalk.cyan('1.')} Mark as in-progress: ${chalk.yellow(`novel-master set-status --id=${nextTask.id} --status=in-progress`)}\n` +
+			`${chalk.cyan('2.')} Mark as done when completed: ${chalk.yellow(`novel-master set-status --id=${nextTask.id} --status=done`)}\n` +
 			(nextTask.subtasks && nextTask.subtasks.length > 0
-				? `${chalk.cyan('3.')} Update subtask status: ${chalk.yellow(`task-master set-status --id=${nextTask.id}.1 --status=done`)}` // Example: first subtask
-				: `${chalk.cyan('3.')} Break down into subtasks: ${chalk.yellow(`task-master expand --id=${nextTask.id}`)}`);
+				? `${chalk.cyan('3.')} Update subtask status: ${chalk.yellow(`novel-master set-status --id=${nextTask.id}.1 --status=done`)}` // Example: first subtask
+				: `${chalk.cyan('3.')} Break down into subtasks: ${chalk.yellow(`novel-master expand --id=${nextTask.id}`)}`);
 	}
 
 	console.log(
@@ -1348,9 +1382,9 @@ async function displayTaskById(
 			boxen(
 				chalk.white.bold('Suggested Actions:') +
 					'\n' +
-					`${chalk.cyan('1.')} Mark as in-progress: ${chalk.yellow(`task-master set-status --id=${task.parentTask.id}.${task.id} --status=in-progress`)}\n` +
-					`${chalk.cyan('2.')} Mark as done when completed: ${chalk.yellow(`task-master set-status --id=${task.parentTask.id}.${task.id} --status=done`)}\n` +
-					`${chalk.cyan('3.')} View parent task: ${chalk.yellow(`task-master show --id=${task.parentTask.id}`)}`,
+					`${chalk.cyan('1.')} Mark as in-progress: ${chalk.yellow(`novel-master set-status --id=${task.parentTask.id}.${task.id} --status=in-progress`)}\n` +
+					`${chalk.cyan('2.')} Mark as done when completed: ${chalk.yellow(`novel-master set-status --id=${task.parentTask.id}.${task.id} --status=done`)}\n` +
+					`${chalk.cyan('3.')} View parent task: ${chalk.yellow(`novel-master show --id=${task.parentTask.id}`)}`,
 				{
 					padding: { top: 0, bottom: 0, left: 1, right: 1 },
 					borderColor: 'green',
@@ -1417,6 +1451,18 @@ async function displayTaskById(
 		[chalk.cyan.bold('Description:'), task.description]
 	);
 	console.log(taskTable.toString());
+
+	const taskMetadata = formatNarrativeMetadata(task.metadata);
+	if (taskMetadata) {
+		console.log(
+			boxen(chalk.white.bold('Narrative Notes:') + '\n\n' + taskMetadata, {
+				padding: { top: 0, bottom: 0, left: 1, right: 1 },
+				borderColor: 'magenta',
+				borderStyle: 'round',
+				margin: { top: 1, bottom: 0 }
+			})
+		);
+	}
 
 	if (task.details && task.details.trim().length > 0) {
 		console.log(
@@ -1589,7 +1635,7 @@ async function displayTaskById(
 					chalk.yellow('No subtasks found. Consider breaking down this task:') +
 						'\n' +
 						chalk.white(
-							`Run: ${chalk.cyan(`task-master expand --id=${task.id}`)}`
+							`Run: ${chalk.cyan(`novel-master expand --id=${task.id}`)}`
 						),
 					{
 						padding: { top: 0, bottom: 0, left: 1, right: 1 },
@@ -1681,22 +1727,22 @@ async function displayTaskById(
 
 	// Basic actions
 	actions.push(
-		`${chalk.cyan(`${actionNumber}.`)} Mark as in-progress: ${chalk.yellow(`task-master set-status --id=${task.id} --status=in-progress`)}`
+		`${chalk.cyan(`${actionNumber}.`)} Mark as in-progress: ${chalk.yellow(`novel-master set-status --id=${task.id} --status=in-progress`)}`
 	);
 	actionNumber++;
 	actions.push(
-		`${chalk.cyan(`${actionNumber}.`)} Mark as done when completed: ${chalk.yellow(`task-master set-status --id=${task.id} --status=done`)}`
+		`${chalk.cyan(`${actionNumber}.`)} Mark as done when completed: ${chalk.yellow(`novel-master set-status --id=${task.id} --status=done`)}`
 	);
 	actionNumber++;
 
 	// Subtask-related action
 	if (subtasksForProgress && subtasksForProgress.length > 0) {
 		actions.push(
-			`${chalk.cyan(`${actionNumber}.`)} Update subtask status: ${chalk.yellow(`task-master set-status --id=${task.id}.1 --status=done`)}`
+			`${chalk.cyan(`${actionNumber}.`)} Update subtask status: ${chalk.yellow(`novel-master set-status --id=${task.id}.1 --status=done`)}`
 		);
 	} else {
 		actions.push(
-			`${chalk.cyan(`${actionNumber}.`)} Break down into subtasks: ${chalk.yellow(`task-master expand --id=${task.id}`)}`
+			`${chalk.cyan(`${actionNumber}.`)} Break down into subtasks: ${chalk.yellow(`novel-master expand --id=${task.id}`)}`
 		);
 	}
 	actionNumber++;
@@ -1705,7 +1751,7 @@ async function displayTaskById(
 	if (task.complexityScore) {
 		const complexityScore = task.complexityScore;
 		actions.push(
-			`${chalk.cyan(`${actionNumber}.`)} Re-analyze complexity: ${chalk.yellow(`task-master analyze-complexity --id=${task.id}`)}`
+			`${chalk.cyan(`${actionNumber}.`)} Re-analyze complexity: ${chalk.yellow(`novel-master analyze-complexity --id=${task.id}`)}`
 		);
 		actionNumber++;
 
@@ -1713,31 +1759,31 @@ async function displayTaskById(
 		if (complexityScore >= 7) {
 			// High complexity - suggest scoping down
 			actions.push(
-				`${chalk.cyan(`${actionNumber}.`)} Scope down (simplify): ${chalk.yellow(`task-master scope-down --id=${task.id} --strength=regular`)}`
+				`${chalk.cyan(`${actionNumber}.`)} Scope down (simplify): ${chalk.yellow(`novel-master scope-down --id=${task.id} --strength=regular`)}`
 			);
 			actionNumber++;
 			if (complexityScore >= 9) {
 				actions.push(
-					`${chalk.cyan(`${actionNumber}.`)} Heavy scope down: ${chalk.yellow(`task-master scope-down --id=${task.id} --strength=heavy`)}`
+					`${chalk.cyan(`${actionNumber}.`)} Heavy scope down: ${chalk.yellow(`novel-master scope-down --id=${task.id} --strength=heavy`)}`
 				);
 				actionNumber++;
 			}
 		} else if (complexityScore <= 4) {
 			// Low complexity - suggest scoping up
 			actions.push(
-				`${chalk.cyan(`${actionNumber}.`)} Scope up (add detail): ${chalk.yellow(`task-master scope-up --id=${task.id} --strength=regular`)}`
+				`${chalk.cyan(`${actionNumber}.`)} Scope up (add detail): ${chalk.yellow(`novel-master scope-up --id=${task.id} --strength=regular`)}`
 			);
 			actionNumber++;
 			if (complexityScore <= 2) {
 				actions.push(
-					`${chalk.cyan(`${actionNumber}.`)} Heavy scope up: ${chalk.yellow(`task-master scope-up --id=${task.id} --strength=heavy`)}`
+					`${chalk.cyan(`${actionNumber}.`)} Heavy scope up: ${chalk.yellow(`novel-master scope-up --id=${task.id} --strength=heavy`)}`
 				);
 				actionNumber++;
 			}
 		} else {
 			// Medium complexity (5-6) - offer both options
 			actions.push(
-				`${chalk.cyan(`${actionNumber}.`)} Scope up/down: ${chalk.yellow(`task-master scope-up --id=${task.id} --strength=light`)} or ${chalk.yellow(`scope-down --id=${task.id} --strength=light`)}`
+				`${chalk.cyan(`${actionNumber}.`)} Scope up/down: ${chalk.yellow(`novel-master scope-up --id=${task.id} --strength=light`)} or ${chalk.yellow(`scope-down --id=${task.id} --strength=light`)}`
 			);
 			actionNumber++;
 		}
@@ -1789,10 +1835,10 @@ async function displayComplexityReport(reportPath) {
 		if (answer.toLowerCase() === 'y' || answer.toLowerCase() === 'yes') {
 			// Call the analyze-complexity command
 			console.log(chalk.blue('Generating complexity report...'));
-			const tasksPath = TASKMASTER_TASKS_FILE;
+			const tasksPath = NOVELMASTER_TASKS_FILE;
 			if (!fs.existsSync(tasksPath)) {
 				console.error(
-					'❌ No tasks.json file found. Please run "task-master init" or create a tasks.json file.'
+					'❌ No tasks.json file found. Please run "novel-master init" or create a tasks.json file.'
 				);
 				return null;
 			}
@@ -1938,7 +1984,7 @@ async function displayComplexityReport(reportPath) {
 
 	// When adding rows, don't truncate the expansion command
 	tasksNeedingExpansion.forEach((task) => {
-		const expansionCommand = `task-master expand --id=${task.taskId} --num=${task.recommendedSubtasks}${task.expansionPrompt ? ` --prompt="${task.expansionPrompt}"` : ''}`;
+		const expansionCommand = `novel-master expand --id=${task.taskId} --num=${task.recommendedSubtasks}${task.expansionPrompt ? ` --prompt="${task.expansionPrompt}"` : ''}`;
 
 		complexTable.push([
 			task.taskId,
@@ -1990,9 +2036,9 @@ async function displayComplexityReport(reportPath) {
 		boxen(
 			chalk.white.bold('Suggested Actions:') +
 				'\n\n' +
-				`${chalk.cyan('1.')} Expand all complex tasks: ${chalk.yellow(`task-master expand --all`)}\n` +
-				`${chalk.cyan('2.')} Expand a specific task: ${chalk.yellow(`task-master expand --id=<id>`)}\n` +
-				`${chalk.cyan('3.')} Regenerate with research: ${chalk.yellow(`task-master analyze-complexity --research`)}`,
+				`${chalk.cyan('1.')} Expand all complex tasks: ${chalk.yellow(`novel-master expand --all`)}\n` +
+				`${chalk.cyan('2.')} Expand a specific task: ${chalk.yellow(`novel-master expand --id=<id>`)}\n` +
+				`${chalk.cyan('3.')} Regenerate with research: ${chalk.yellow(`novel-master analyze-complexity --research`)}`,
 			{
 				padding: 1,
 				borderColor: 'cyan',
@@ -2113,7 +2159,7 @@ function displayApiKeyStatus(statusReport) {
 	console.log(table.toString());
 	console.log(
 		chalk.gray(
-			`  Note: Some providers (e.g., Azure, Ollama) may require additional endpoint configuration in ${TASKMASTER_CONFIG_FILE}.`
+			`  Note: Some providers (e.g., Azure, Ollama) may require additional endpoint configuration in ${NOVELMASTER_CONFIG_FILE}.`
 		)
 	);
 }
@@ -2261,23 +2307,23 @@ function displayAvailableModels(availableModels) {
 			chalk.white.bold('Next Steps:') +
 				'\n' +
 				chalk.cyan(
-					`1. Set main model: ${chalk.yellow('task-master models --set-main <model_id>')}`
+					`1. Set main model: ${chalk.yellow('novel-master models --set-main <model_id>')}`
 				) +
 				'\n' +
 				chalk.cyan(
-					`2. Set research model: ${chalk.yellow('task-master models --set-research <model_id>')}`
+					`2. Set research model: ${chalk.yellow('novel-master models --set-research <model_id>')}`
 				) +
 				'\n' +
 				chalk.cyan(
-					`3. Set fallback model: ${chalk.yellow('task-master models --set-fallback <model_id>')}`
+					`3. Set fallback model: ${chalk.yellow('novel-master models --set-fallback <model_id>')}`
 				) +
 				'\n' +
 				chalk.cyan(
-					`4. Run interactive setup: ${chalk.yellow('task-master models --setup')}`
+					`4. Run interactive setup: ${chalk.yellow('novel-master models --setup')}`
 				) +
 				'\n' +
 				chalk.cyan(
-					`5. Use custom ollama/openrouter models: ${chalk.yellow('task-master models --openrouter|ollama --set-main|research|fallback <model_id>')}`
+					`5. Use custom ollama/openrouter models: ${chalk.yellow('novel-master models --openrouter|ollama --set-main|research|fallback <model_id>')}`
 				),
 			{
 				padding: 1,
@@ -2618,7 +2664,7 @@ async function displayMultipleTasksSummary(
 				case '1':
 					console.log(
 						chalk.blue(
-							`\n→ Command: task-master set-status --id=${taskIdList} --status=in-progress`
+							`\n→ Command: novel-master set-status --id=${taskIdList} --status=in-progress`
 						)
 					);
 					console.log(
@@ -2630,7 +2676,7 @@ async function displayMultipleTasksSummary(
 				case '2':
 					console.log(
 						chalk.blue(
-							`\n→ Command: task-master set-status --id=${taskIdList} --status=done`
+							`\n→ Command: novel-master set-status --id=${taskIdList} --status=done`
 						)
 					);
 					console.log(
@@ -2638,7 +2684,7 @@ async function displayMultipleTasksSummary(
 					);
 					break;
 				case '3':
-					console.log(chalk.blue(`\n→ Command: task-master next`));
+					console.log(chalk.blue(`\n→ Command: novel-master next`));
 					console.log(
 						chalk.green(
 							'✓ Copy and run this command to see the next available task'
@@ -2648,7 +2694,7 @@ async function displayMultipleTasksSummary(
 				case '4':
 					console.log(
 						chalk.blue(
-							`\n→ Command: task-master expand --id=${taskIdList} --research`
+							`\n→ Command: novel-master expand --id=${taskIdList} --research`
 						)
 					);
 					console.log(
@@ -2677,7 +2723,7 @@ async function displayMultipleTasksSummary(
 					break;
 				}
 				case '6':
-					console.log(chalk.blue(`\n→ Command: task-master generate`));
+					console.log(chalk.blue(`\n→ Command: novel-master generate`));
 					console.log(
 						chalk.green('✓ Copy and run this command to generate task files')
 					);
@@ -2705,9 +2751,9 @@ async function displayMultipleTasksSummary(
 			boxen(
 				chalk.white.bold('Suggested Actions:') +
 					'\n' +
-					`${chalk.cyan('1.')} View full details: ${chalk.yellow(`task-master show ${task.id}`)}\n` +
-					`${chalk.cyan('2.')} Mark as in-progress: ${chalk.yellow(`task-master set-status --id=${task.id} --status=in-progress`)}\n` +
-					`${chalk.cyan('3.')} Mark as done: ${chalk.yellow(`task-master set-status --id=${task.id} --status=done`)}`,
+					`${chalk.cyan('1.')} View full details: ${chalk.yellow(`novel-master show ${task.id}`)}\n` +
+					`${chalk.cyan('2.')} Mark as in-progress: ${chalk.yellow(`novel-master set-status --id=${task.id} --status=in-progress`)}\n` +
+					`${chalk.cyan('3.')} Mark as done: ${chalk.yellow(`novel-master set-status --id=${task.id} --status=done`)}`,
 				{
 					padding: { top: 0, bottom: 0, left: 1, right: 1 },
 					borderColor: 'green',
@@ -2867,17 +2913,17 @@ export function displayCrossTagDependencyError(
 
 	console.log(chalk.cyan(`\nResolution options:`));
 	console.log(
-		`  1. Move with dependencies: task-master move --from=${sourceIds} --from-tag=${sourceTag} --to-tag=${targetTag} --with-dependencies`
+		`  1. Move with dependencies: novel-master move --from=${sourceIds} --from-tag=${sourceTag} --to-tag=${targetTag} --with-dependencies`
 	);
 	console.log(
-		`  2. Break dependencies: task-master move --from=${sourceIds} --from-tag=${sourceTag} --to-tag=${targetTag} --ignore-dependencies`
+		`  2. Break dependencies: novel-master move --from=${sourceIds} --from-tag=${sourceTag} --to-tag=${targetTag} --ignore-dependencies`
 	);
 	console.log(
-		`  3. Validate and fix dependencies: task-master validate-dependencies && task-master fix-dependencies`
+		`  3. Validate and fix dependencies: novel-master validate-dependencies && novel-master fix-dependencies`
 	);
 	if (conflicts.length > 0) {
 		console.log(
-			`  4. Move dependencies first: task-master move --from=${conflicts.map((c) => c.dependencyId).join(',')} --from-tag=${conflicts[0].dependencyTag} --to-tag=${targetTag}`
+			`  4. Move dependencies first: novel-master move --from=${conflicts.map((c) => c.dependencyId).join(',')} --from-tag=${conflicts[0].dependencyTag} --to-tag=${targetTag}`
 		);
 	}
 }
@@ -2939,13 +2985,13 @@ export function displaySubtaskMoveError(taskId, sourceTag, targetTag) {
 
 	console.log(chalk.cyan(`\nResolution options:`));
 	console.log(
-		`  1. Promote subtask to full task: task-master remove-subtask --id=${displayTaskId} --convert`
+		`  1. Promote subtask to full task: novel-master remove-subtask --id=${displayTaskId} --convert`
 	);
 	console.log(
-		`  2. Then move the promoted task: task-master move --from=${parentId} --from-tag=${sourceTag} --to-tag=${targetTag}`
+		`  2. Then move the promoted task: novel-master move --from=${parentId} --from-tag=${sourceTag} --to-tag=${targetTag}`
 	);
 	console.log(
-		`  3. Or move the parent task with all subtasks: task-master move --from=${parentId} --from-tag=${sourceTag} --to-tag=${targetTag} --with-dependencies`
+		`  3. Or move the parent task with all subtasks: novel-master move --from=${parentId} --from-tag=${sourceTag} --to-tag=${targetTag} --with-dependencies`
 	);
 }
 
@@ -2969,9 +3015,9 @@ export function displayInvalidTagCombinationError(
 	console.log(chalk.cyan(`\nResolution options:`));
 	console.log(`  1. Use different tags for cross-tag moves`);
 	console.log(
-		`  2. Use within-tag move: task-master move --from=<id> --to=<id> --tag=${sourceTag}`
+		`  2. Use within-tag move: novel-master move --from=<id> --to=<id> --tag=${sourceTag}`
 	);
-	console.log(`  3. Check available tags: task-master tags`);
+	console.log(`  3. Check available tags: novel-master tags`);
 }
 
 /**
@@ -2981,19 +3027,19 @@ export function displayInvalidTagCombinationError(
 export function displayDependencyValidationHints(context = 'general') {
 	const hints = {
 		'before-move': [
-			'💡 Tip: Run "task-master validate-dependencies" to check for dependency issues before moving tasks',
-			'💡 Tip: Use "task-master fix-dependencies" to automatically resolve common dependency problems',
+			'💡 Tip: Run "novel-master validate-dependencies" to check for dependency issues before moving tasks',
+			'💡 Tip: Use "novel-master fix-dependencies" to automatically resolve common dependency problems',
 			'💡 Tip: Consider using --with-dependencies flag to move dependent tasks together'
 		],
 		'after-error': [
-			'🔧 Quick fix: Run "task-master validate-dependencies" to identify specific issues',
-			'🔧 Quick fix: Use "task-master fix-dependencies" to automatically resolve problems',
-			'🔧 Quick fix: Check "task-master show <id>" to see task dependencies before moving'
+			'🔧 Quick fix: Run "novel-master validate-dependencies" to identify specific issues',
+			'🔧 Quick fix: Use "novel-master fix-dependencies" to automatically resolve problems',
+			'🔧 Quick fix: Check "novel-master show <id>" to see task dependencies before moving'
 		],
 		general: [
-			'💡 Use "task-master validate-dependencies" to check for dependency issues',
-			'💡 Use "task-master fix-dependencies" to automatically resolve problems',
-			'💡 Use "task-master show <id>" to view task dependencies',
+			'💡 Use "novel-master validate-dependencies" to check for dependency issues',
+			'💡 Use "novel-master fix-dependencies" to automatically resolve problems',
+			'💡 Use "novel-master show <id>" to view task dependencies',
 			'💡 Use --with-dependencies flag to move dependent tasks together'
 		]
 	};

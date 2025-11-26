@@ -24,7 +24,7 @@ describe('Kiro Integration', () => {
 		jest.clearAllMocks();
 
 		// Create a temporary directory for testing
-		tempDir = fs.mkdtempSync(path.join(os.tmpdir(), 'task-master-test-'));
+		tempDir = fs.mkdtempSync(path.join(os.tmpdir(), 'novel-master-test-'));
 
 		// Spy on fs methods
 		jest.spyOn(fs, 'writeFileSync').mockImplementation(() => {});
@@ -79,8 +79,8 @@ describe('Kiro Integration', () => {
 			'# Self Improvement\n\nSelf improvement guidelines.'
 		);
 		fs.writeFileSync(
-			path.join(tempDir, '.kiro', 'steering', 'taskmaster.md'),
-			'# Task Master\n\nTask Master integration instructions.'
+			path.join(tempDir, '.kiro', 'steering', 'novelmaster.md'),
+			'# Novel Master\n\nNovel Master integration instructions.'
 		);
 	}
 
@@ -135,8 +135,8 @@ describe('Kiro Integration', () => {
 			'# Self Improvement\n\nSelf improvement guidelines.'
 		);
 		expect(fs.writeFileSync).toHaveBeenCalledWith(
-			path.join(tempDir, '.kiro', 'steering', 'taskmaster.md'),
-			'# Task Master\n\nTask Master integration instructions.'
+			path.join(tempDir, '.kiro', 'steering', 'novelmaster.md'),
+			'# Novel Master\n\nNovel Master integration instructions.'
 		);
 	});
 });

@@ -32,7 +32,7 @@ export class AzureProvider extends BaseAIProvider {
 
 		if (!params.baseURL) {
 			throw new Error(
-				'Azure endpoint URL is required. Set it in .taskmasterconfig global.azureBaseURL or models.[role].baseURL'
+				'Azure endpoint URL is required. Set it in .novelmasterconfig global.azureBaseURL or models.[role].baseURL'
 			);
 		}
 	}
@@ -41,7 +41,7 @@ export class AzureProvider extends BaseAIProvider {
 	 * Creates and returns an Azure OpenAI client instance.
 	 * @param {object} params - Parameters for client initialization
 	 * @param {string} params.apiKey - Azure OpenAI API key
-	 * @param {string} params.baseURL - Azure OpenAI endpoint URL (from .taskmasterconfig global.azureBaseURL or models.[role].baseURL)
+	 * @param {string} params.baseURL - Azure OpenAI endpoint URL (from .novelmasterconfig global.azureBaseURL or models.[role].baseURL)
 	 * @returns {Function} Azure OpenAI client function
 	 * @throws {Error} If client initialization fails
 	 */

@@ -1,0 +1,185 @@
+# Novel Requirements Document (NRD) Schema Reference
+
+This document provides a comprehensive reference for creating Novel Requirements Documents (NRDs) that Novel Master can parse into structured story arcs, chapters, and scenes.
+
+## Required Sections
+
+An NRD must include the following sections for validation to pass:
+
+### 1. Premise
+**Purpose:** Core story concept and central idea
+**Required Elements:**
+- Logline (one-sentence summary)
+- 2-3 paragraph premise description
+- Core conflict or question the story explores
+
+**Example:**
+```
+**Logline:** A retired detective must solve a murder that mirrors a case from her past, forcing her to confront the truth about her own involvement.
+
+**Premise:** 
+When a body is discovered with the same signature as a case Detective Sarah Chen closed twenty years ago, she's pulled back into a world she thought she'd left behind. The victim's connection to her old partner raises questions about the original investigation's integrity. As new evidence emerges, Sarah must choose between protecting her reputation and uncovering the truth, even if it means exposing her own mistakes.
+```
+
+### 2. Act Structure
+**Purpose:** Three-act or alternative narrative structure
+**Required Elements:**
+- Act I: Setup (inciting incident, key characters, world establishment)
+- Act II: Confrontation (rising action, midpoint, crisis)
+- Act III: Resolution (climax, falling action, resolution)
+
+**Format:**
+```
+### Act I: Setup
+- **Inciting Incident:** [Event that sets story in motion]
+- **Key Characters Introduced:** [List]
+- **World/Setting Established:** [Description]
+- **End of Act I:** [Event propelling into Act II]
+
+### Act II: Confrontation
+- **Rising Action:** [Major obstacles]
+- **Midpoint:** [Major turning point]
+- **Crisis:** [Darkest moment]
+- **End of Act II:** [Event leading to climax]
+
+### Act III: Resolution
+- **Climax:** [Final confrontation]
+- **Falling Action:** [Story winds down]
+- **Resolution:** [How everything resolves]
+```
+
+### 3. Character Roster
+**Purpose:** Main characters with basic details
+**Required Elements:**
+- Protagonist (name, goal, internal conflict, arc)
+- Antagonist (name, goal, motivation)
+- Supporting characters (3-5 key characters with brief descriptions)
+
+**Format:**
+```
+### Protagonist
+- **Name:** [Character name]
+- **Goal:** [What they want]
+- **Internal Conflict:** [Internal struggle]
+- **Arc:** [How they change]
+
+### Antagonist
+- **Name:** [Character name]
+- **Goal:** [What they want]
+- **Motivation:** [Why they oppose protagonist]
+
+### Supporting Characters
+- [Character name]: [Brief description]
+```
+
+### 4. POV Plan
+**Purpose:** Point of view strategy
+**Required Elements:**
+- POV Style (First person, Third person limited, Third person omniscient, Multiple POV)
+- POV Characters (if multiple, list who and why)
+- Tense (Past tense, Present tense)
+
+**Format:**
+```
+- **POV Style:** [Style]
+- **POV Characters:** [If multiple, list]
+- **Tense:** [Past/Present]
+```
+
+### 5. World Rules
+**Purpose:** Setting, magic system, technology, or historical constraints
+**Required Elements:**
+- Key Rules (3-5 fundamental rules)
+- Limitations (constraints or costs)
+- Consistency Requirements (what must remain consistent)
+
+**Format:**
+```
+- **Key Rules:** 
+  1. [Rule 1]
+  2. [Rule 2]
+  3. [Rule 3]
+
+- **Limitations:** [Constraints or costs]
+
+- **Consistency Requirements:** [What must remain consistent]
+```
+
+### 6. Themes
+**Purpose:** Central themes and motifs
+**Required Elements:**
+- List 2-4 major themes the novel explores
+
+**Format:**
+```
+- [Theme 1]: [Brief description]
+- [Theme 2]: [Brief description]
+- [Theme 3]: [Brief description]
+```
+
+## Optional Sections
+
+These sections enhance the NRD but are not required for validation:
+
+### Tone & Style
+- Tone (Dark, Lighthearted, Suspenseful, etc.)
+- Writing Style (Literary, Commercial, Experimental)
+- Voice (Narrative voice description)
+
+### Chapter-Level Beats
+- Optional chapter-by-chapter breakdown
+- Brief descriptions of key chapters
+
+### Research Needs
+- Topics requiring research
+- Historical periods, scientific concepts, cultural elements
+
+### Revision Priorities
+- Character consistency
+- Pacing and tension
+- World-building consistency
+- Dialogue authenticity
+
+## NRD Validation
+
+Novel Master's `validate_nrd` tool checks for:
+- Presence of all required sections
+- Completeness of section content
+- Structural integrity
+
+**Validation Report Format:**
+```json
+{
+  "complete": true/false,
+  "missingSections": ["section1", "section2"],
+  "recommendations": ["suggestion1", "suggestion2"],
+  "sectionsFound": {
+    "premise": true,
+    "actStructure": true,
+    "characterRoster": true,
+    "povPlan": true,
+    "worldRules": true,
+    "themes": true
+  }
+}
+```
+
+## Best Practices
+
+1. **Be Specific:** Vague NRDs produce vague story structures
+2. **Include Examples:** Reference similar works or specific scenes
+3. **Define Constraints:** Clear world rules prevent continuity issues
+4. **Character Depth:** Even brief character descriptions should hint at arcs
+5. **Act Clarity:** Each act should have clear beginning and end points
+
+## NRD Templates
+
+Novel Master provides genre-specific NRD templates:
+- `assets/templates/example_nrd.md` - Standard template
+- `assets/templates/example_nrd_fantasy.md` - Fantasy-specific
+- `assets/templates/example_nrd_thriller.md` - Thriller-specific
+- `assets/templates/example_nrd_literary.md` - Literary fiction
+- `assets/templates/example_nrd_epic.md` - Multi-arc epics
+
+Use these as starting points and customize for your project.
+

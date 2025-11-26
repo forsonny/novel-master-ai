@@ -1,11 +1,11 @@
 ---
-description: 
+description: Tag system patterns and narrative tag conventions for Novel Master
 globs: scripts/modules/*
 alwaysApply: false
 ---
 # Tagged Task Lists Command Patterns
 
-This document outlines the standardized patterns that **ALL** Task Master commands must follow to properly support the tagged task lists system.
+This document outlines the standardized patterns that **ALL** Novel Master commands must follow to properly support the tagged task lists system.
 
 ## Core Principles
 
@@ -13,6 +13,122 @@ This document outlines the standardized patterns that **ALL** Task Master comman
 - **Consistent tag resolution** across all commands using `getCurrentTag(projectRoot)`
 - **Proper context passing** to core functions with `{ projectRoot, tag }`
 - **Standardized CLI options** with `--tag <tag>` flag
+- **Canonical tag presets** (`outline`, `draft`, `rev-1`) are automatically created when writing tasks so manuscript workflows always have the required contexts available.
+
+## Narrative Tag Taxonomy
+
+Use tags to express both **phase** of the manuscript and **focus** of a pass. Tags enable isolated contexts for different stages of novel development, character arcs, timeline segments, and revision passes.
+
+### Phase Tags (Typical Progression)
+
+These tags represent the standard workflow stages:
+
+- **`outline`**: Initial story arc planning tasks
+  - Use during: NRD parsing, initial chapter planning, story structure development
+  - Contains: High-level story arcs, chapter outlines, plot structure, act breakdowns
+  - Example: `novel-master parse-prd nrd.txt --tag=outline`
+  - Agent guidance: Default to `outline` when parsing/expanding NRDs
+
+- **`draft`**: First-pass chapter/scene writing tasks
+  - Use during: Initial prose writing, first complete draft, scene development
+  - Contains: Raw prose, scene development, basic narrative structure
+  - Example: `novel-master use-tag draft`
+  - Agent guidance: Default to `draft` when generating or revising prose in chapter files
+
+- **`rev-1`**, **`rev-2`**, **`rev-N`**: Revision pass contexts
+  - Use during: Structural edits, line edits, copy edits, successive refinement passes
+  - Contains: Revised chapters, tightened prose, improved pacing, character consistency fixes
+  - Example: `novel-master add-tag rev-1 --copy-from=draft`
+  - Agent guidance: Default to `rev-1` for the first comprehensive revision pass
+
+- **`beta-feedback`**: Tasks tracking reader feedback and changes
+  - Use during: Beta reader review phase, external feedback integration
+  - Contains: Feedback integration, reader-suggested changes, beta reader notes
+  - Example: `novel-master add-tag beta-feedback --copy-from=rev-2`
+
+- **`release`**: Final, stable version used for publication/export
+  - Use during: Final compilation, publication preparation
+  - Contains: Polished, publication-ready manuscript
+  - Example: `novel-master add-tag release --copy-from=rev-2`
+
+### Focus Tags (Can Be Combined with Phase Tags)
+
+These tags isolate specific narrative elements or revision focuses:
+
+- **`character-<name>`**: POV-specific task isolation for multi-POV novels
+  - Use during: Multi-POV novel development, character arc refinement
+  - Contains: Chapters/scenes from specific character's perspective
+  - Examples:
+    - `character-protagonist`: Protagonist's POV chapters
+    - `character-antagonist`: Antagonist's POV chapters
+    - `character-mina`: Character named Mina's chapters
+    - `character-sidekick`: Supporting character's chapters
+  - Usage pattern:
+    ```bash
+    # Work on protagonist's chapters
+    novel-master add-tag character-protagonist --copy-from=outline
+    novel-master use-tag character-protagonist
+    novel-master expand --id=1  # Protagonist's chapters
+    ```
+
+- **`timeline-<period>`**: Tasks organized by story timeline segments
+  - Use during: Complex timelines, flashbacks, parallel storylines, act-based organization
+  - Contains: Chapters/scenes from specific time periods or story acts
+  - Examples:
+    - `timeline-act-1`: First act chapters
+    - `timeline-act-2`: Second act chapters
+    - `timeline-act-3`: Third act chapters
+    - `timeline-flashback`: Flashback sequences
+    - `timeline-present`: Present-day storyline
+    - `timeline-war-years`: Specific historical period
+  - Usage pattern:
+    ```bash
+    # Work on Act 1 chapters
+    novel-master add-tag timeline-act-1 --copy-from=outline
+    novel-master use-tag timeline-act-1
+    novel-master expand --id=1
+    ```
+
+- **`worldbuilding-<topic>`**: Focused worldbuilding work
+  - Use during: Worldbuilding refinement, setting development
+  - Contains: Worldbuilding research, setting details, magic system rules
+  - Examples:
+    - `worldbuilding-magic-system`: Magic system development
+    - `worldbuilding-technology`: Technology/sci-fi elements
+    - `worldbuilding-culture`: Cultural worldbuilding
+
+- **`theme-<name>`**: Organize work by thematic elements
+  - Use during: Thematic development, subplot management
+  - Examples:
+    - `theme-romance`: Romance subplot
+    - `theme-mystery`: Mystery elements
+    - `theme-family`: Family dynamics
+
+### Combined Tag Patterns
+
+Tags can be combined for focused revision work:
+
+- **`rev-1-character-mina`**: First revision pass focused on character Mina
+- **`rev-2-pacing`**: Second revision pass focused on pacing
+- **`draft-timeline-act-1`**: Drafting focused on Act 1 timeline
+
+### Agent Guidance
+
+- **Default tag selection**:
+  - Default to `outline` when parsing/expanding NRDs
+  - Default to `draft` when generating or revising prose in chapter files
+  - Default to `rev-1` for the first comprehensive revision pass
+
+- **Tag proposal strategy**:
+  - Propose more specific tags (e.g., `rev-1-character-mina`) when the user describes a focused revision
+  - Suggest character-based tags for multi-POV novels
+  - Suggest timeline-based tags for complex temporal structures
+  - Use combined tags for focused revision passes
+
+- **Tag workflow patterns**:
+  - Linear: `outline` → `draft` → `rev-1` → `rev-2` → `beta-feedback`
+  - Multi-POV: `outline` → `character-protagonist` → `character-antagonist` → `draft`
+  - Timeline-based: `outline` → `timeline-act-1` → `timeline-act-2` → `timeline-act-3` → `draft`
 
 ## Required Imports
 
@@ -208,15 +324,15 @@ Test each command with:
 
 ```bash
 # Test with explicit tag
-node bin/task-master command-name --tag test-tag
+node bin/novel-master command-name --tag test-tag
 
 # Test with active tag (should use current active tag)
-node bin/task-master use-tag test-tag
-node bin/task-master command-name
+node bin/novel-master use-tag test-tag
+node bin/novel-master command-name
 
 # Test with master tag (default)
-node bin/task-master use-tag master  
-node bin/task-master command-name
+node bin/novel-master use-tag master  
+node bin/novel-master command-name
 ```
 
 ## Migration Strategy
@@ -226,4 +342,4 @@ node bin/task-master command-name
 3. **Test Phase**: Verify tag resolution works correctly
 4. **Document Phase**: Update command documentation with tag support
 
-This ensures consistent, predictable behavior across all Task Master commands and prevents tag deletion bugs.
+This ensures consistent, predictable behavior across all Novel Master commands and prevents tag deletion bugs.

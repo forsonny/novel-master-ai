@@ -1,12 +1,12 @@
-List tasks filtered by a specific status.
+List chapters filtered by a specific status.
 
 Arguments: $ARGUMENTS
 
-Parse the status from arguments and list only tasks matching that status.
+Parse the status from arguments and list only chapters matching that status.
 
 ## Status Options
 - `pending` - Not yet started
-- `in-progress` - Currently being worked on
+- `in-progress` - Currently being drafted
 - `done` - Completed
 - `review` - Awaiting review
 - `deferred` - Postponed
@@ -16,7 +16,7 @@ Parse the status from arguments and list only tasks matching that status.
 
 Based on $ARGUMENTS, run:
 ```bash
-task-master list --status=$ARGUMENTS
+novel-master list --status=$ARGUMENTS
 ```
 
 ## Enhanced Display
@@ -24,7 +24,7 @@ task-master list --status=$ARGUMENTS
 For the filtered results:
 - Group by priority within the status
 - Show time in current status
-- Highlight tasks approaching deadlines
+- Highlight chapters approaching deadlines
 - Display blockers and dependencies
 - Suggest next actions for each status group
 
@@ -33,7 +33,7 @@ For the filtered results:
 Based on the status filter:
 - **Pending**: Show recommended start order
 - **In-Progress**: Display idle time warnings
-- **Done**: Show newly unblocked tasks
+- **Done**: Show newly unblocked chapters
 - **Review**: Indicate review duration
 - **Deferred**: Show reactivation criteria
 - **Cancelled**: Display impact analysis

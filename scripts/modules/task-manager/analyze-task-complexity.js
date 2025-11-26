@@ -82,7 +82,7 @@ async function analyzeTaskComplexity(options, context = {}) {
 	if (outputFormat === 'text') {
 		console.log(
 			chalk.blue(
-				'Analyzing task complexity and generating expansion recommendations...'
+				'Analyzing narrative complexity (pacing, POV load, dependencies) and suggesting where to deepen the outline...'
 			)
 		);
 	}
@@ -138,7 +138,7 @@ async function analyzeTaskComplexity(options, context = {}) {
 					if (filteredTasks.length === 0 && specificIds.length > 0) {
 						console.log(
 							chalk.yellow(
-								`Warning: No active tasks found with IDs: ${specificIds.join(', ')}`
+								`Warning: No active chapters/scenes found with IDs: ${specificIds.join(', ')}`
 							)
 						);
 					} else if (filteredTasks.length < specificIds.length) {
@@ -148,7 +148,7 @@ async function analyzeTaskComplexity(options, context = {}) {
 						);
 						console.log(
 							chalk.yellow(
-								`Warning: Some requested task IDs were not found or are not active: ${missingIds.join(', ')}`
+								`Warning: Some requested chapter/scene IDs were not found or are not active: ${missingIds.join(', ')}`
 							)
 						);
 					}
@@ -173,7 +173,7 @@ async function analyzeTaskComplexity(options, context = {}) {
 				if (outputFormat === 'text' && filteredTasks.length === 0) {
 					console.log(
 						chalk.yellow(
-							`Warning: No active tasks found in range: ${effectiveFromId}-${effectiveToId}`
+							`Warning: No active narrative units found in range: ${effectiveFromId}-${effectiveToId}`
 						)
 					);
 				}
@@ -348,9 +348,9 @@ async function analyzeTaskComplexity(options, context = {}) {
 					boxen(
 						chalk.white.bold('Suggested Next Steps:') +
 							'\n\n' +
-							`${chalk.cyan('1.')} Run ${chalk.yellow('task-master complexity-report')} to review detailed findings\n` +
-							`${chalk.cyan('2.')} Run ${chalk.yellow('task-master expand --id=<id>')} to break down complex tasks\n` +
-							`${chalk.cyan('3.')} Run ${chalk.yellow('task-master expand --all')} to expand all pending tasks based on complexity`,
+							`${chalk.cyan('1.')} Run ${chalk.yellow('novel-master complexity-report')} to review detailed findings\n` +
+							`${chalk.cyan('2.')} Run ${chalk.yellow('novel-master expand --id=<id>')} to break down complex tasks\n` +
+							`${chalk.cyan('3.')} Run ${chalk.yellow('novel-master expand --all')} to expand all pending tasks based on complexity`,
 						{
 							padding: 1,
 							borderColor: 'cyan',
@@ -567,9 +567,9 @@ async function analyzeTaskComplexity(options, context = {}) {
 					boxen(
 						chalk.white.bold('Suggested Next Steps:') +
 							'\n\n' +
-							`${chalk.cyan('1.')} Run ${chalk.yellow('task-master complexity-report')} to review detailed findings\n` +
-							`${chalk.cyan('2.')} Run ${chalk.yellow('task-master expand --id=<id>')} to break down complex tasks\n` +
-							`${chalk.cyan('3.')} Run ${chalk.yellow('task-master expand --all')} to expand all pending tasks based on complexity`,
+							`${chalk.cyan('1.')} Run ${chalk.yellow('novel-master complexity-report')} to review detailed findings\n` +
+							`${chalk.cyan('2.')} Run ${chalk.yellow('novel-master expand --id=<id>')} to break down complex tasks\n` +
+							`${chalk.cyan('3.')} Run ${chalk.yellow('novel-master expand --all')} to expand all pending tasks based on complexity`,
 						{
 							padding: 1,
 							borderColor: 'cyan',
@@ -607,11 +607,11 @@ async function analyzeTaskComplexity(options, context = {}) {
 				if (aiError.message.includes('API key')) {
 					console.log(
 						chalk.yellow(
-							'\nPlease ensure your API keys are correctly configured in .env or ~/.taskmaster/.env'
+							'\nPlease ensure your API keys are correctly configured in .env or ~/.novelmaster/.env'
 						)
 					);
 					console.log(
-						chalk.yellow("Run 'task-master models --setup' if needed.")
+						chalk.yellow("Run 'novel-master models --setup' if needed.")
 					);
 				}
 			}

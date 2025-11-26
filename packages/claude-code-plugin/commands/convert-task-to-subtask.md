@@ -1,43 +1,43 @@
-Convert an existing task into a subtask.
+Convert an existing chapter into a scene.
 
 Arguments: $ARGUMENTS
 
-Parse parent ID and task ID to convert.
+Parse parent ID and chapter ID to convert.
 
-## Task Conversion
+## Chapter Conversion
 
-Converts an existing standalone task into a subtask of another task.
+Converts an existing standalone chapter into a scene of another chapter.
 
 ## Argument Parsing
 
-- "move task 8 under 5"
-- "make 8 a subtask of 5"
+- "move chapter 8 under 5"
+- "make 8 a scene of 5"
 - "nest 8 in 5"
-- "5 8" → make task 8 a subtask of task 5
+- "5 8" → make chapter 8 a scene of chapter 5
 
 ## Execution
 
 ```bash
-task-master add-subtask --parent=<parent-id> --task-id=<task-to-convert>
+novel-master add-subtask --parent=<parent-id> --task-id=<chapter-to-convert>
 ```
 
 ## Pre-Conversion Checks
 
 1. **Validation**
-   - Both tasks exist and are valid
+   - Both chapters exist and are valid
    - No circular parent relationships
-   - Task isn't already a subtask
+   - Chapter isn't already a scene
    - Logical hierarchy makes sense
 
 2. **Impact Analysis**
    - Dependencies that will be affected
-   - Tasks that depend on converting task
+   - Chapters that depend on converting chapter
    - Priority alignment needed
    - Status compatibility
 
 ## Conversion Process
 
-1. Change task ID from "8" to "5.1" (next available)
+1. Change chapter ID from "8" to "5.1" (next available)
 2. Update all dependency references
 3. Inherit parent's context where appropriate
 4. Adjust priorities if needed
@@ -45,7 +45,7 @@ task-master add-subtask --parent=<parent-id> --task-id=<task-to-convert>
 
 ## Smart Features
 
-- Preserve task history
+- Preserve chapter history
 - Maintain dependencies
 - Update all references
 - Create conversion log
@@ -53,19 +53,19 @@ task-master add-subtask --parent=<parent-id> --task-id=<task-to-convert>
 ## Example
 
 ```
-/taskmaster:add-subtask/from-task 5 8
-→ Converting: Task #8 becomes subtask #5.1
+/novelmaster:add-subtask/from-task 5 8
+→ Converting: Chapter #8 becomes scene #5.1
 → Updated: 3 dependency references
-→ Parent task #5 now has 1 subtask
-→ Note: Subtask inherits parent's priority
+→ Parent chapter #5 now has 1 scene
+→ Note: Scene inherits parent's priority
 
-Before: #8 "Implement validation" (standalone)
-After:  #5.1 "Implement validation" (subtask of #5)
+Before: #8 "The Revelation" (standalone)
+After:  #5.1 "The Revelation" (scene of #5)
 ```
 
 ## Post-Conversion
 
-- Show new task hierarchy
+- Show new chapter hierarchy
 - List updated dependencies
 - Verify project integrity
 - Suggest related conversions

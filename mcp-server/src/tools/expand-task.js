@@ -9,7 +9,7 @@ import {
 	createErrorResponse,
 	withNormalizedProjectRoot
 } from './utils.js';
-import { expandTaskDirect } from '../core/task-master-core.js';
+import { expandTaskDirect } from '../core/novel-master-core.js';
 import {
 	findTasksPath,
 	findComplexityReportPath
@@ -23,19 +23,25 @@ import { resolveTag } from '../../../scripts/modules/utils.js';
 export function registerExpandTaskTool(server) {
 	server.addTool({
 		name: 'expand_task',
-		description: 'Expand a task into subtasks for detailed implementation',
+		description:
+			'Expand a chapter/scene task into narrative beats (POV goals, sensory cues, research hooks).',
 		parameters: z.object({
-			id: z.string().describe('ID of task to expand'),
-			num: z.string().optional().describe('Number of subtasks to generate'),
+			id: z.string().describe('ID of the chapter/scene to expand'),
+			num: z
+				.string()
+				.optional()
+				.describe('Number of beats to generate (defaults to complexity guidance)'),
 			research: z
 				.boolean()
 				.optional()
 				.default(false)
-				.describe('Use research role for generation'),
+				.describe('Pull in lore/genre research while generating beats'),
 			prompt: z
 				.string()
 				.optional()
-				.describe('Additional context for subtask generation'),
+				.describe(
+					'Additional context for beat generation (tone, POV focus, stakes, motifs)'
+				),
 			file: z
 				.string()
 				.optional()
@@ -49,7 +55,7 @@ export function registerExpandTaskTool(server) {
 				.boolean()
 				.optional()
 				.default(false)
-				.describe('Force expansion even if subtasks exist'),
+				.describe('Force expansion even if beats already exist (clears when true)'),
 			tag: z.string().optional().describe('Tag context to operate on')
 		}),
 		execute: withNormalizedProjectRoot(async (args, { log, session }) => {

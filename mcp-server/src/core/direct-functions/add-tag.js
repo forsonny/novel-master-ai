@@ -1,6 +1,6 @@
 /**
  * add-tag.js
- * Direct function implementation for creating a new tag
+ * Direct function implementation for creating a new tag context (e.g., outline, draft, revision) to organize chapters/scenes
  */
 
 import {
@@ -14,14 +14,15 @@ import {
 import { createLogWrapper } from '../../tools/utils.js';
 
 /**
- * Direct function wrapper for creating a new tag with error handling.
+ * Direct function wrapper for creating a new tag context (e.g., outline, draft, revision) with error handling.
+ * Tags organize chapters/scenes into separate, isolated lists for different stages of novel development.
  *
  * @param {Object} args - Command arguments
- * @param {string} args.name - Name of the new tag to create
- * @param {boolean} [args.copyFromCurrent=false] - Whether to copy tasks from current tag
- * @param {string} [args.copyFromTag] - Specific tag to copy tasks from
+ * @param {string} args.name - Name of the new tag context to create (e.g., "draft", "rev-1", "beta-feedback")
+ * @param {boolean} [args.copyFromCurrent=false] - Whether to copy chapters from current tag
+ * @param {string} [args.copyFromTag] - Specific tag to copy chapters from
  * @param {boolean} [args.fromBranch=false] - Create tag name from current git branch
- * @param {string} [args.description] - Optional description for the tag
+ * @param {string} [args.description] - Optional description for the tag context
  * @param {string} [args.tasksJsonPath] - Path to the tasks.json file (resolved by tool)
  * @param {string} [args.projectRoot] - Project root path
  * @param {Object} log - Logger object
@@ -56,7 +57,7 @@ export async function addTagDirect(args, log, context = {}) {
 				success: false,
 				error: {
 					code: 'MISSING_ARGUMENT',
-					message: 'tasksJsonPath is required'
+					message: 'Tasks file path is required to create a new tag context'
 				}
 			};
 		}

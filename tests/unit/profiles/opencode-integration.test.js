@@ -10,7 +10,7 @@ describe('OpenCode Profile Integration', () => {
 		jest.clearAllMocks();
 
 		// Create a temporary directory for testing
-		tempDir = fs.mkdtempSync(path.join(os.tmpdir(), 'task-master-test-'));
+		tempDir = fs.mkdtempSync(path.join(os.tmpdir(), 'novel-master-test-'));
 
 		// Spy on fs methods
 		jest.spyOn(fs, 'writeFileSync').mockImplementation(() => {});
@@ -76,7 +76,7 @@ describe('OpenCode Profile Integration', () => {
 		// Assert - OpenCode profile should not create any directories
 		// Only the temp directory creation calls should exist
 		const mkdirCalls = fs.mkdirSync.mock.calls.filter(
-			(call) => !call[0].includes('task-master-test-')
+			(call) => !call[0].includes('novel-master-test-')
 		);
 		expect(mkdirCalls).toHaveLength(0);
 	});
@@ -85,7 +85,7 @@ describe('OpenCode Profile Integration', () => {
 		// This test simulates the transformation behavior that would happen in onPostConvert
 		const standardMcpConfig = {
 			mcpServers: {
-				'taskmaster-ai': {
+				'novelmaster-ai': {
 					command: 'node',
 					args: ['path/to/server.js'],
 					env: {
@@ -98,7 +98,7 @@ describe('OpenCode Profile Integration', () => {
 		const expectedOpenCodeConfig = {
 			$schema: 'https://opencode.ai/config.json',
 			mcp: {
-				'taskmaster-ai': {
+				'novelmaster-ai': {
 					type: 'local',
 					command: ['node', 'path/to/server.js'],
 					enabled: true,

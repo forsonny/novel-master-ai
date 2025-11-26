@@ -9,7 +9,7 @@ const __dirname = dirname(__filename);
 const rootDir = join(__dirname, '../..');
 
 // Define allowed public packages that can be referenced in changesets
-const PUBLIC_PACKAGES = ['task-master-ai', 'extension'];
+const PUBLIC_PACKAGES = ['novel-master-ai', 'extension'];
 
 /**
  * Parse a changeset file and extract package names from the frontmatter

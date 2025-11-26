@@ -1,202 +1,420 @@
-import path from 'path';
 import fs from 'fs';
-import chalk from 'chalk';
+import path from 'path';
 
-import { log, readJSON } from '../utils.js';
+import {
+	log,
+	readJSON,
+	writeJSON,
+	slugifyTagForFilePath,
+	ensureNarrativeTagDefaults,
+	findProjectRoot
+} from '../utils.js';
 import { formatDependenciesWithStatus } from '../ui.js';
 import { validateAndFixDependencies } from '../dependency-manager.js';
-import { getDebugFlag } from '../config-manager.js';
+import { NOVELMASTER_MANUSCRIPT_DIR } from '../../../src/constants/paths.js';
+import {
+	countWords,
+	parseWordCountTarget,
+	calculateWordCountStats,
+	calculateProgress
+} from '../utils/word-count.js';
+import { getTargetWordCount } from '../config-manager.js';
+import { updateManuscriptProgress } from '../utils.js';
 
-/**
- * Generate individual task files from tasks.json
- * @param {string} tasksPath - Path to the tasks.json file
- * @param {string} outputDir - Output directory for task files
- * @param {Object} options - Additional options (mcpLog for MCP mode, projectRoot, tag)
- * @param {string} [options.projectRoot] - Project root path
- * @param {string} [options.tag] - Tag for the task
- * @param {Object} [options.mcpLog] - MCP logger object
- * @returns {Object|undefined} Result object in MCP mode, undefined in CLI mode
- */
-function generateTaskFiles(tasksPath, outputDir, options = {}) {
-	try {
-		const isMcpMode = !!options?.mcpLog;
-		const { projectRoot, tag } = options;
+const MANAGED_START = '<!-- novel-master:managed:start -->';
+const MANAGED_END = '<!-- novel-master:managed:end -->';
+const DRAFT_START = '<!-- novel-master:draft:start -->';
+const DRAFT_END = '<!-- novel-master:draft:end -->';
 
-		// 1. Read the raw data structure, ensuring we have all tags.
-		// We call readJSON without a specific tag to get the resolved default view,
-		// which correctly contains the full structure in `_rawTaggedData`.
-		const resolvedData = readJSON(tasksPath, projectRoot, tag);
-		if (!resolvedData) {
-			throw new Error(`Could not read or parse tasks file: ${tasksPath}`);
-		}
-		// Prioritize the _rawTaggedData if it exists, otherwise use the data as is.
-		const rawData = resolvedData._rawTaggedData || resolvedData;
+const noopLogger = {
+	info: (...args) => log('info', ...args),
+	warn: (...args) => log('warn', ...args),
+	error: (...args) => log('error', ...args),
+	debug: (...args) => log('debug', ...args)
+};
 
-		// 2. Determine the target tag we need to generate files for.
-		const tagData = rawData[tag];
+function ensureDirectory(dirPath) {
+	if (!fs.existsSync(dirPath)) {
+		fs.mkdirSync(dirPath, { recursive: true });
+	}
+}
 
-		if (!tagData || !tagData.tasks) {
-			throw new Error(`Tag '${tag}' not found or has no tasks in the data.`);
-		}
-		const tasksForGeneration = tagData.tasks;
+function getChapterFilename(taskId) {
+	return `chapter-${String(taskId).padStart(3, '0')}.md`;
+}
 
-		// Create the output directory if it doesn't exist
-		if (!fs.existsSync(outputDir)) {
-			fs.mkdirSync(outputDir, { recursive: true });
-		}
+function buildMarkdownTableRow(label, value) {
+	const sanitized = Array.isArray(value) ? value.join(', ') : value || '—';
+	return `| ${label} | ${sanitized} |`;
+}
 
-		log(
-			'info',
-			`Preparing to regenerate ${tasksForGeneration.length} task files for tag '${tag}'`
-		);
+function buildManagedSection(task, tag, allTasksInTag) {
+	const metadata = task.metadata || {};
+	const dependencies =
+		task.dependencies && task.dependencies.length > 0
+			? formatDependenciesWithStatus(task.dependencies, allTasksInTag, false)
+			: 'None';
 
-		// 3. Validate dependencies using the FULL, raw data structure to prevent data loss.
-		validateAndFixDependencies(
-			rawData, // Pass the entire object with all tags
-			tasksPath,
-			projectRoot,
-			tag // Provide the current tag context for the operation
-		);
+	const summaryTable = [
+		'| Field | Value |',
+		'| --- | --- |',
+		buildMarkdownTableRow('Status', task.status || 'pending'),
+		buildMarkdownTableRow('Priority', task.priority || 'medium'),
+		buildMarkdownTableRow('Dependencies', dependencies),
+		buildMarkdownTableRow('POV', metadata.pov || '—'),
+		buildMarkdownTableRow('Timeline', metadata.timeline || '—'),
+		buildMarkdownTableRow('Emotional Beat', metadata.emotionalBeat || '—'),
+		buildMarkdownTableRow('Tension Level', metadata.tensionLevel || '—'),
+		buildMarkdownTableRow('Word Count Target', metadata.wordCountTarget || '—')
+	].join('\n');
 
-		const allTasksInTag = tagData.tasks;
-		const validTaskIds = allTasksInTag.map((task) => task.id);
+	const summaryParagraphs = [
+		metadata.sensoryNotes
+			? `- **Sensory Notes:** ${metadata.sensoryNotes}`
+			: null,
+		metadata.researchHook
+			? `- **Research Hooks:** ${metadata.researchHook}`
+			: null,
+		metadata.continuityCheck
+			? `- **Continuity Check:** ${metadata.continuityCheck}`
+			: null
+	]
+		.filter(Boolean)
+		.join('\n');
 
-		// Cleanup orphaned task files
-		log('info', 'Checking for orphaned task files to clean up...');
-		try {
-			const files = fs.readdirSync(outputDir);
-			// Tag-aware file patterns: master -> task_001.txt, other tags -> task_001_tagname.txt
-			const masterFilePattern = /^task_(\d+)\.txt$/;
-			const taggedFilePattern = new RegExp(`^task_(\\d+)_${tag}\\.txt$`);
+	const frontMatter = [
+		'---',
+		`title: "${(task.title || '').replace(/"/g, '\\"')}"`,
+		`taskId: ${task.id}`,
+		`tag: ${tag}`,
+		`status: ${task.status || 'pending'}`,
+		`wordCountTarget: ${metadata.wordCountTarget || ''}`,
+		'---'
+	].join('\n');
 
-			const orphanedFiles = files.filter((file) => {
-				let match = null;
-				let fileTaskId = null;
-
-				// Check if file belongs to current tag
-				if (tag === 'master') {
-					match = file.match(masterFilePattern);
-					if (match) {
-						fileTaskId = parseInt(match[1], 10);
-						// Only clean up master files when processing master tag
-						return !validTaskIds.includes(fileTaskId);
-					}
-				} else {
-					match = file.match(taggedFilePattern);
-					if (match) {
-						fileTaskId = parseInt(match[1], 10);
-						// Only clean up files for the current tag
-						return !validTaskIds.includes(fileTaskId);
-					}
-				}
-				return false;
-			});
-
-			if (orphanedFiles.length > 0) {
-				log(
-					'info',
-					`Found ${orphanedFiles.length} orphaned task files to remove for tag '${tag}'`
-				);
-				orphanedFiles.forEach((file) => {
-					const filePath = path.join(outputDir, file);
-					fs.unlinkSync(filePath);
-				});
-			} else {
-				log('info', 'No orphaned task files found.');
-			}
-		} catch (err) {
-			log('warn', `Error cleaning up orphaned task files: ${err.message}`);
-		}
-
-		// Generate task files for the target tag
-		log('info', `Generating individual task files for tag '${tag}'...`);
-		tasksForGeneration.forEach((task) => {
-			// Tag-aware file naming: master -> task_001.txt, other tags -> task_001_tagname.txt
-			const taskFileName =
-				tag === 'master'
-					? `task_${task.id.toString().padStart(3, '0')}.txt`
-					: `task_${task.id.toString().padStart(3, '0')}_${tag}.txt`;
-
-			const taskPath = path.join(outputDir, taskFileName);
-
-			let content = `# Task ID: ${task.id}\n`;
-			content += `# Title: ${task.title}\n`;
-			content += `# Status: ${task.status || 'pending'}\n`;
-
-			if (task.dependencies && task.dependencies.length > 0) {
-				content += `# Dependencies: ${formatDependenciesWithStatus(task.dependencies, allTasksInTag, false)}\n`;
-			} else {
-				content += '# Dependencies: None\n';
-			}
-
-			content += `# Priority: ${task.priority || 'medium'}\n`;
-			content += `# Description: ${task.description || ''}\n`;
-			content += '# Details:\n';
-			content += (task.details || '')
-				.split('\n')
-				.map((line) => line)
-				.join('\n');
-			content += '\n\n';
-			content += '# Test Strategy:\n';
-			content += (task.testStrategy || '')
-				.split('\n')
-				.map((line) => line)
-				.join('\n');
-			content += '\n';
-
-			if (task.subtasks && task.subtasks.length > 0) {
-				content += '\n# Subtasks:\n';
-				task.subtasks.forEach((subtask) => {
-					content += `## ${subtask.id}. ${subtask.title} [${subtask.status || 'pending'}]\n`;
-					if (subtask.dependencies && subtask.dependencies.length > 0) {
-						const subtaskDeps = subtask.dependencies
-							.map((depId) =>
-								typeof depId === 'number'
-									? `${task.id}.${depId}`
-									: depId.toString()
-							)
-							.join(', ');
-						content += `### Dependencies: ${subtaskDeps}\n`;
-					} else {
-						content += '### Dependencies: None\n';
-					}
-					content += `### Description: ${subtask.description || ''}\n`;
-					content += '### Details:\n';
-					content += (subtask.details || '')
-						.split('\n')
-						.map((line) => line)
+	const scenesSection = Array.isArray(task.subtasks) && task.subtasks.length > 0
+		? task.subtasks
+				.map((scene, index) => {
+					const sceneMeta = [
+						scene.description ? `- **Description:** ${scene.description}` : null,
+						scene.details ? `- **Details:** ${scene.details}` : null,
+						scene.dependencies?.length
+							? `- **Dependencies:** ${scene.dependencies
+									.map((dep) =>
+										typeof dep === 'number'
+											? `${task.id}.${dep}`
+											: dep.toString()
+									)
+									.join(', ')}`
+							: null
+					]
+						.filter(Boolean)
 						.join('\n');
-					content += '\n\n';
-				});
-			}
+					return `### Scene ${index + 1}: ${scene.title || 'Untitled'} [${
+						scene.status || 'pending'
+					}]\n${sceneMeta || '- No additional details provided.'}`;
+				})
+				.join('\n\n')
+		: '_No beats generated yet. Use `expand` to add scenes._';
 
-			fs.writeFileSync(taskPath, content);
+	return [
+		frontMatter,
+		'# Chapter Overview',
+		summaryTable,
+		summaryParagraphs,
+		'',
+		'## Scenes',
+		scenesSection
+	]
+		.filter(Boolean)
+		.join('\n');
+}
+
+function mergeManagedContent(existingContent, managedSection) {
+	const managedBlock = `${MANAGED_START}\n${managedSection.trim()}\n${MANAGED_END}`;
+
+	if (!existingContent) {
+		return `${managedBlock}\n\n## Draft\n\n${DRAFT_START}\n\n${DRAFT_END}\n`;
+	}
+
+	if (existingContent.includes(MANAGED_START) && existingContent.includes(MANAGED_END)) {
+		return existingContent.replace(
+			new RegExp(
+				`${MANAGED_START}[\\s\\S]*?${MANAGED_END}`,
+				'm'
+			),
+			managedBlock
+		);
+	}
+
+	return `${managedBlock}\n\n${existingContent.trim()}\n`;
+}
+
+function ensureDraftSection(content) {
+	if (content.includes(DRAFT_START) && content.includes(DRAFT_END)) {
+		return content;
+	}
+
+	const draftTemplate = [
+		'## Draft',
+		'',
+		DRAFT_START,
+		'',
+		'<!-- Write your prose between the draft markers. -->',
+		'',
+		DRAFT_END,
+		''
+	].join('\n');
+
+	return `${content.trim()}\n\n${draftTemplate}\n`;
+}
+
+function extractDraftContent(content) {
+	const startIndex = content.indexOf(DRAFT_START);
+	const endIndex = content.indexOf(DRAFT_END);
+	if (startIndex === -1 || endIndex === -1 || endIndex <= startIndex) {
+		return '';
+	}
+	return content
+		.slice(startIndex + DRAFT_START.length, endIndex)
+		.replace(/^\s+|\s+$/g, '');
+}
+
+function resolveProjectRoot(projectRoot) {
+	return projectRoot || findProjectRoot() || process.cwd();
+}
+
+function generateTaskFiles(tasksPath, outputDir, options = {}) {
+	const {
+		projectRoot: incomingProjectRoot,
+		tag = 'outline',
+		mcpLog,
+		compile = true,
+		summary = true,
+		format = 'md'
+	} = options;
+
+	const logger = mcpLog || noopLogger;
+	const projectRoot = resolveProjectRoot(incomingProjectRoot);
+
+	const resolvedData = readJSON(tasksPath, projectRoot, tag);
+	if (!resolvedData) {
+		throw new Error(`Unable to read tasks file at ${tasksPath}`);
+	}
+
+	const rawData = resolvedData._rawTaggedData
+		? ensureNarrativeTagDefaults(resolvedData._rawTaggedData)
+		: ensureNarrativeTagDefaults({
+				[tag]: {
+					tasks: resolvedData.tasks || [],
+					metadata: resolvedData.metadata || {}
+				}
+		  });
+
+	const tagData = rawData[tag];
+	if (!tagData || !Array.isArray(tagData.tasks)) {
+		throw new Error(`Tag '${tag}' not found or contains no tasks.`);
+	}
+
+	validateAndFixDependencies(rawData, tasksPath, projectRoot, tag);
+
+	const baseOutputDir = outputDir
+		? path.isAbsolute(outputDir)
+			? outputDir
+			: path.join(projectRoot, outputDir)
+		: path.join(projectRoot, NOVELMASTER_MANUSCRIPT_DIR);
+
+	const tagSlug = slugifyTagForFilePath(tag);
+	const tagRootDir = path.join(baseOutputDir, tagSlug);
+	const chaptersDir = path.join(tagRootDir, 'chapters');
+	const compiledDir = path.join(tagRootDir, 'compiled');
+
+	ensureDirectory(tagRootDir);
+	ensureDirectory(chaptersDir);
+	if (compile) {
+		ensureDirectory(compiledDir);
+	}
+
+	logger.info(
+		`Generating ${tagData.tasks.length} chapter files in ${chaptersDir} for tag '${tag}'`
+	);
+
+	const chapterSummaries = [];
+	const statusCounts = {};
+
+	tagData.tasks.forEach((task) => {
+		const chapterFileName = getChapterFilename(task.id);
+		const chapterPath = path.join(chaptersDir, chapterFileName);
+		const managedSection = buildManagedSection(task, tag, tagData.tasks);
+		const existingContent = fs.existsSync(chapterPath)
+			? fs.readFileSync(chapterPath, 'utf8')
+			: null;
+
+		const mergedContent = ensureDraftSection(
+			mergeManagedContent(existingContent, managedSection)
+		);
+
+		fs.writeFileSync(chapterPath, mergedContent);
+
+		const draftContent = extractDraftContent(mergedContent);
+		const draftWordCount = countWords(draftContent);
+		const targetWordCount = parseWordCountTarget(
+			task.metadata?.wordCountTarget
+		);
+		const progress = calculateProgress(draftWordCount, targetWordCount);
+
+		// Write progress metadata back to task
+		if (!task.metadata) {
+			task.metadata = {};
+		}
+		task.metadata.draftWordCount = draftWordCount;
+		if (progress !== null) {
+			task.metadata.progress = progress;
+		}
+
+		const statusKey = task.status || 'pending';
+		statusCounts[statusKey] = (statusCounts[statusKey] || 0) + 1;
+
+		chapterSummaries.push({
+			id: task.id,
+			title: task.title || `Chapter ${task.id}`,
+			status: statusKey,
+			wordCountTarget: targetWordCount,
+			draftWordCount,
+			progress,
+			path: chapterPath
+		});
+	});
+
+	// Write updated tasks back to file with progress metadata
+	const updatedData = readJSON(tasksPath, projectRoot, tag);
+	if (updatedData && updatedData.tasks) {
+		// Update tasks with progress metadata
+		updatedData.tasks.forEach((task) => {
+			const summary = chapterSummaries.find((ch) => ch.id === task.id);
+			if (summary && task.metadata) {
+				task.metadata.draftWordCount = summary.draftWordCount;
+				if (summary.progress !== null && summary.progress !== undefined) {
+					task.metadata.progress = summary.progress;
+				}
+			}
+		});
+		writeJSON(tasksPath, updatedData, projectRoot, tag);
+	}
+
+	let summaryPath = null;
+	if (summary) {
+		const stats = calculateWordCountStats(chapterSummaries);
+		const globalTarget = getTargetWordCount(projectRoot);
+
+		const summaryData = {
+			tag,
+			generatedAt: new Date().toISOString(),
+			totals: {
+				chapters: chapterSummaries.length,
+				targetWords: stats.totalTarget,
+				draftedWords: stats.totalDraft,
+				averageTarget: stats.averageTarget,
+				averageDraft: stats.averageDraft,
+				completion: stats.completion,
+				globalTarget: globalTarget || null,
+				globalProgress:
+					globalTarget && globalTarget > 0
+						? Number((stats.totalDraft / globalTarget).toFixed(2))
+						: null
+			},
+			statusCounts,
+			chapters: chapterSummaries
+		};
+
+		summaryPath = path.join(tagRootDir, 'manuscript-summary.json');
+		fs.writeFileSync(summaryPath, JSON.stringify(summaryData, null, 2));
+
+		// Update manuscript progress in state.json
+		const completedChapters = chapterSummaries.filter(
+			(ch) => ch.status === 'done' || ch.status === 'completed'
+		).length;
+
+		updateManuscriptProgress(projectRoot, tag, {
+			totalChapters: chapterSummaries.length,
+			totalWords: stats.totalDraft,
+			targetWords: globalTarget || stats.totalTarget,
+			completedChapters: completedChapters,
+			lastGenerated: new Date(),
+			chapterStatus: chapterSummaries.reduce((acc, ch) => {
+				acc[ch.id] = {
+					status: ch.status,
+					wordCount: ch.draftWordCount,
+					targetWordCount: ch.wordCountTarget,
+					progress: ch.progress
+				};
+				return acc;
+			}, {})
+		});
+	}
+
+	let compiledPath = null;
+	if (compile) {
+		const compiledSections = chapterSummaries.map((chapter, index) => {
+			const content = fs.readFileSync(chapter.path, 'utf8');
+			const draft = extractDraftContent(content).trim();
+			const safeDraft = draft || '_Draft not started._';
+			
+			if (format === 'txt') {
+				// Plain text format: remove markdown, use simple headers
+				const plainDraft = safeDraft
+					.replace(/^#+\s+/gm, '') // Remove markdown headers
+					.replace(/\*\*(.*?)\*\*/g, '$1') // Remove bold
+					.replace(/\*(.*?)\*/g, '$1') // Remove italic
+					.replace(/\[([^\]]+)\]\([^\)]+\)/g, '$1') // Remove links
+					.trim();
+				return `CHAPTER ${index + 1}\n${chapter.title}\n\n${plainDraft}`;
+			} else {
+				// Markdown format (default)
+				return `## Chapter ${index + 1}: ${chapter.title}\n\n${safeDraft}`;
+			}
 		});
 
-		log(
-			'success',
-			`All ${tasksForGeneration.length} tasks for tag '${tag}' have been generated into '${outputDir}'.`
-		);
-
-		if (isMcpMode) {
-			return {
-				success: true,
-				count: tasksForGeneration.length,
-				directory: outputDir
-			};
-		}
-	} catch (error) {
-		log('error', `Error generating task files: ${error.message}`);
-		if (!options?.mcpLog) {
-			console.error(chalk.red(`Error generating task files: ${error.message}`));
-			if (getDebugFlag()) {
-				console.error(error);
-			}
-			process.exit(1);
+		let compiledContent;
+		if (format === 'txt') {
+			// Plain text format
+			compiledContent = [
+				`MANUSCRIPT: ${tag.toUpperCase()}`,
+				'',
+				compiledSections.join('\n\n' + '='.repeat(60) + '\n\n')
+			]
+				.filter(Boolean)
+				.join('\n');
 		} else {
-			throw error;
+			// Markdown format (default)
+			compiledContent = [
+				`# Manuscript (${tag})`,
+				'',
+				compiledSections.join('\n\n---\n\n')
+			]
+				.filter(Boolean)
+				.join('\n');
 		}
+
+		const extension = format === 'txt' ? 'txt' : 'md';
+		compiledPath = path.join(
+			compiledDir,
+			`manuscript-${slugifyTagForFilePath(tag)}.${extension}`
+		);
+		fs.writeFileSync(compiledPath, `${compiledContent.trim()}\n`);
 	}
+
+	logger.info(
+		`Finished generating manuscript assets for tag '${tag}'. Chapters: ${chapterSummaries.length}`
+	);
+
+	return {
+		tag,
+		outputDir: chaptersDir,
+		summaryPath,
+		compiledPath,
+		chapters: chapterSummaries
+	};
 }
 
 export default generateTaskFiles;

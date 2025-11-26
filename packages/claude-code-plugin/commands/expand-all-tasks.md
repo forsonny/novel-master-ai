@@ -1,40 +1,40 @@
-Expand all pending tasks that need subtasks.
+Expand all pending chapters that need scenes.
 
-## Bulk Task Expansion
+## Bulk Chapter Expansion
 
-Intelligently expands all tasks that would benefit from breakdown.
+Intelligently expands all chapters that would benefit from breakdown.
 
 ## Execution
 
 ```bash
-task-master expand --all
+novel-master expand --all
 ```
 
 ## Smart Selection
 
-Only expands tasks that:
+Only expands chapters that:
 - Are marked as pending
 - Have high complexity (>5)
-- Lack existing subtasks
+- Lack existing scenes
 - Would benefit from breakdown
 
 ## Expansion Process
 
 1. **Analysis Phase**
    - Identify expansion candidates
-   - Group related tasks
+   - Group related chapters
    - Plan expansion strategy
 
 2. **Batch Processing**
-   - Expand tasks in logical order
+   - Expand chapters in logical order
    - Maintain consistency
    - Preserve relationships
    - Optimize for parallelism
 
 3. **Quality Control**
-   - Ensure subtask quality
+   - Ensure scene quality
    - Avoid over-decomposition
-   - Maintain task coherence
+   - Maintain chapter coherence
    - Update dependencies
 
 ## Options
@@ -45,7 +45,7 @@ Only expands tasks that:
 ## Results
 
 After bulk expansion:
-- Summary of tasks expanded
-- New subtask count
+- Summary of chapters expanded
+- New scene count
 - Updated complexity metrics
-- Suggested task order
+- Suggested chapter order

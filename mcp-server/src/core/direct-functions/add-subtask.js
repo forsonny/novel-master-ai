@@ -1,5 +1,5 @@
 /**
- * Direct function wrapper for addSubtask
+ * Direct function wrapper for adding a beat/scene to an existing chapter
  */
 
 import { addSubtask } from '../../../../scripts/modules/task-manager.js';
@@ -9,19 +9,19 @@ import {
 } from '../../../../scripts/modules/utils.js';
 
 /**
- * Add a subtask to an existing task
+ * Add a beat/scene to an existing chapter
  * @param {Object} args - Function arguments
  * @param {string} args.tasksJsonPath - Explicit path to the tasks.json file.
- * @param {string} args.id - Parent task ID
- * @param {string} [args.taskId] - Existing task ID to convert to subtask (optional)
- * @param {string} [args.title] - Title for new subtask (when creating a new subtask)
- * @param {string} [args.description] - Description for new subtask
- * @param {string} [args.details] - Implementation details for new subtask
- * @param {string} [args.status] - Status for new subtask (default: 'pending')
- * @param {string} [args.dependencies] - Comma-separated list of dependency IDs
- * @param {boolean} [args.skipGenerate] - Skip regenerating task files
+ * @param {string} args.id - Parent chapter ID
+ * @param {string} [args.taskId] - Existing chapter ID to convert to beat (optional)
+ * @param {string} [args.title] - Title for new beat/scene (when creating a new beat)
+ * @param {string} [args.description] - Description for new beat/scene
+ * @param {string} [args.details] - Narrative details (POV, emotional beats, sensory cues, research hooks)
+ * @param {string} [args.status] - Status for new beat (default: 'pending')
+ * @param {string} [args.dependencies] - Comma-separated list of prerequisite beat/chapter IDs
+ * @param {boolean} [args.skipGenerate] - Skip regenerating manuscript files
  * @param {string} [args.projectRoot] - Project root directory
- * @param {string} [args.tag] - Tag for the task
+ * @param {string} [args.tag] - Tag context (outline, draft, revision) for the chapter
  * @param {Object} log - Logger object
  * @returns {Promise<{success: boolean, data?: Object, error?: string}>}
  */
@@ -50,7 +50,7 @@ export async function addSubtaskDirect(args, log) {
 				success: false,
 				error: {
 					code: 'MISSING_ARGUMENT',
-					message: 'tasksJsonPath is required'
+					message: 'Tasks file path is required to add a beat/scene'
 				}
 			};
 		}
@@ -60,7 +60,7 @@ export async function addSubtaskDirect(args, log) {
 				success: false,
 				error: {
 					code: 'INPUT_VALIDATION_ERROR',
-					message: 'Parent task ID is required'
+					message: 'Parent chapter ID is required'
 				}
 			};
 		}
@@ -71,7 +71,7 @@ export async function addSubtaskDirect(args, log) {
 				success: false,
 				error: {
 					code: 'INPUT_VALIDATION_ERROR',
-					message: 'Either taskId or title must be provided'
+					message: 'Either provide an existing chapter ID to convert to a beat, or provide a title for a new beat/scene'
 				}
 			};
 		}
@@ -102,9 +102,9 @@ export async function addSubtaskDirect(args, log) {
 
 		const context = { projectRoot, tag };
 
-		// Case 1: Convert existing task to subtask
+		// Case 1: Convert existing chapter to beat
 		if (existingTaskId) {
-			log.info(`Converting task ${existingTaskId} to a subtask of ${parentId}`);
+			log.info(`Converting chapter ${existingTaskId} to a beat within chapter ${parentId}`);
 			const result = await addSubtask(
 				tasksPath,
 				parentId,
@@ -120,14 +120,14 @@ export async function addSubtaskDirect(args, log) {
 			return {
 				success: true,
 				data: {
-					message: `Task ${existingTaskId} successfully converted to a subtask of task ${parentId}`,
+					message: `Chapter ${existingTaskId} successfully converted to a beat within chapter ${parentId}`,
 					subtask: result
 				}
 			};
 		}
-		// Case 2: Create new subtask
+		// Case 2: Create new beat/scene
 		else {
-			log.info(`Creating new subtask for parent task ${parentId}`);
+			log.info(`Creating new beat/scene for chapter ${parentId}`);
 
 			const newSubtaskData = {
 				title: title,
@@ -152,7 +152,7 @@ export async function addSubtaskDirect(args, log) {
 			return {
 				success: true,
 				data: {
-					message: `New subtask ${parentId}.${result.id} successfully created`,
+					message: `New beat/scene ${parentId}.${result.id} successfully created`,
 					subtask: result
 				}
 			};

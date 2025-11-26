@@ -1,5 +1,5 @@
 /**
- * Streaming handler for PRD parsing
+ * Streaming handler for NRD parsing
  */
 
 import { createParsePrdTracker } from '../../../../src/progress/parse-prd-tracker.js';
@@ -180,7 +180,7 @@ function createStreamingContext(config, prompts, numTasks) {
  */
 function validateStreamingResult(streamingResult) {
 	if (streamingResult.parsedTasks.length === 0) {
-		throw new Error('No tasks were generated from the PRD');
+		throw new Error('No tasks were generated from the NRD');
 	}
 }
 
@@ -192,7 +192,7 @@ async function initializeProgress(config, numTasks, estimatedInputTokens) {
 		await config.reportProgress({
 			progress: 0,
 			total: numTasks,
-			message: `Starting PRD analysis (Input: ${estimatedInputTokens} tokens)${config.research ? ' with research' : ''}...`
+			message: `Starting NRD analysis (Input: ${estimatedInputTokens} tokens)${config.research ? ' with research' : ''}...`
 		});
 	}
 }
@@ -537,7 +537,7 @@ async function reportAllTasks(tasks, estimatedOutputTokens, context) {
  * Process with generateObject as fallback when streaming fails
  */
 async function processWithGenerateObject(context, logger) {
-	logger.report('Using generateObject fallback for PRD parsing', 'info');
+	logger.report('Using generateObject fallback for NRD parsing', 'info');
 
 	// Show placeholder tasks while generating
 	if (context.progressTracker) {

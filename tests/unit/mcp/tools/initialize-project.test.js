@@ -62,7 +62,7 @@ const registerInitializeProjectTool = (server) => {
 	server.addTool({
 		name: 'initialize_project',
 		description:
-			"Initializes a new Task Master project structure in the current working directory by running 'task-master init'.",
+			"Initializes a new Novel Master project structure in the current working directory by running 'novel-master init'.",
 		parameters: mockZod,
 		execute: async (args, { log }) => {
 			try {
@@ -71,7 +71,7 @@ const registerInitializeProjectTool = (server) => {
 				);
 
 				// Construct the command arguments
-				let command = 'npx task-master init';
+				let command = 'npx novel-master init';
 				const cliArgs = [];
 				if (args.projectName) {
 					cliArgs.push(`--name "${args.projectName.replace(/"/g, '\\"')}"`);
@@ -167,7 +167,7 @@ describe('Initialize Project MCP Tool', () => {
 		// Verify tool properties
 		expect(toolDefinition.name).toBe('initialize_project');
 		expect(toolDefinition.description).toContain(
-			'Initializes a new Task Master project'
+			'Initializes a new Novel Master project'
 		);
 		expect(toolDefinition).toHaveProperty('parameters');
 		expect(toolDefinition).toHaveProperty('execute');
@@ -193,8 +193,8 @@ describe('Initialize Project MCP Tool', () => {
 
 		const command = mockExecSync.mock.calls[0][0];
 
-		// Check that the command includes npx task-master init
-		expect(command).toContain('npx task-master init');
+		// Check that the command includes npx novel-master init
+		expect(command).toContain('npx novel-master init');
 
 		// Verify each argument is correctly formatted in the command
 		expect(command).toContain('--name "Test Project"');

@@ -1,6 +1,6 @@
 /**
  * response-language.js
- * Direct function for managing response language via MCP
+ * Direct function for managing AI response language for Novel Master (affects generated narrative content language)
  */
 
 import { setResponseLanguage } from '../../../../scripts/modules/task-manager.js';

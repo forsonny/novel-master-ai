@@ -5,7 +5,7 @@ import { fileURLToPath } from 'url';
 import fs from 'fs';
 import logger from './logger.js';
 import {
-	registerTaskMasterTools,
+	registerNovelMasterTools,
 	getToolsConfiguration
 } from './tools/index.js';
 import ProviderRegistry from '../../src/provider-registry/index.js';
@@ -19,12 +19,12 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 /**
- * Main MCP server class that integrates with Task Master
+ * Main MCP server class that integrates with Novel Master
  */
-class TaskMasterMCPServer {
+class NovelMasterMCPServer {
 	constructor() {
 		this.options = {
-			name: 'Task Master MCP Server',
+			name: 'Novel Master MCP Server',
 			version: packageJson.version
 		};
 
@@ -46,10 +46,10 @@ class TaskMasterMCPServer {
 
 		const normalizedToolMode = getToolsConfiguration();
 
-		this.logger.info('Task Master MCP Server starting...');
+		this.logger.info('Novel Master MCP Server starting...');
 		this.logger.info(`Tool mode configuration: ${normalizedToolMode}`);
 
-		const registrationResult = registerTaskMasterTools(
+		const registrationResult = registerNovelMasterTools(
 			this.server,
 			normalizedToolMode
 		);
@@ -73,9 +73,103 @@ class TaskMasterMCPServer {
 			);
 		}
 
+		// Register novel-writing reference materials as MCP resources
+		this.registerNovelWritingResources();
+
 		this.initialized = true;
 
 		return this;
+	}
+
+	/**
+	 * Register novel-writing reference materials as MCP resources
+	 * These resources expose narrative documentation to Cursor and other MCP clients
+	 */
+	registerNovelWritingResources() {
+		const contextDir = path.resolve(__dirname, '../../context');
+
+		// NRD Schema Reference
+		this.server.addResource({
+			uri: 'novelmaster://reference/nrd-schema',
+			name: 'NRD Schema Reference',
+			description:
+				'Complete NRD schema with required sections, validation rules, and best practices',
+			mimeType: 'text/plain',
+			async load() {
+				const filePath = path.join(contextDir, 'nrd-schema-reference.txt');
+				try {
+					const content = fs.readFileSync(filePath, 'utf-8');
+					return { text: content };
+				} catch (error) {
+					return { text: `Error loading NRD schema reference: ${error.message}` };
+				}
+			}
+		});
+
+		// Genre Best Practices
+		this.server.addResource({
+			uri: 'novelmaster://reference/genre-best-practices',
+			name: 'Genre Best Practices',
+			description:
+				'Genre-specific conventions, pacing guidelines, and research needs for Fantasy, SF, Thriller, Literary Fiction, Romance, Mystery, Horror, and YA',
+			mimeType: 'text/plain',
+			async load() {
+				const filePath = path.join(contextDir, 'genre-best-practices.txt');
+				try {
+					const content = fs.readFileSync(filePath, 'utf-8');
+					return { text: content };
+				} catch (error) {
+					return {
+						text: `Error loading genre best practices: ${error.message}`
+					};
+				}
+			}
+		});
+
+		// Narrative Techniques Reference
+		this.server.addResource({
+			uri: 'novelmaster://reference/narrative-techniques',
+			name: 'Narrative Techniques Reference',
+			description:
+				"Story structures (Three-Act, Hero's Journey, Save the Cat), POV techniques, pacing strategies, character development, and revision techniques",
+			mimeType: 'text/plain',
+			async load() {
+				const filePath = path.join(
+					contextDir,
+					'narrative-techniques-reference.txt'
+				);
+				try {
+					const content = fs.readFileSync(filePath, 'utf-8');
+					return { text: content };
+				} catch (error) {
+					return {
+						text: `Error loading narrative techniques reference: ${error.message}`
+					};
+				}
+			}
+		});
+
+		// Outline Templates Guide
+		this.server.addResource({
+			uri: 'novelmaster://reference/outline-templates',
+			name: 'Outline Templates Guide',
+			description:
+				'Outline templates and patterns for different story structures, scene breakdowns, and outline best practices',
+			mimeType: 'text/plain',
+			async load() {
+				const filePath = path.join(contextDir, 'outline-templates-guide.txt');
+				try {
+					const content = fs.readFileSync(filePath, 'utf-8');
+					return { text: content };
+				} catch (error) {
+					return {
+						text: `Error loading outline templates guide: ${error.message}`
+					};
+				}
+			}
+		});
+
+		this.logger.info('Registered 4 novel-writing reference resources');
 	}
 
 	/**
@@ -162,4 +256,4 @@ class TaskMasterMCPServer {
 	}
 }
 
-export default TaskMasterMCPServer;
+export default NovelMasterMCPServer;

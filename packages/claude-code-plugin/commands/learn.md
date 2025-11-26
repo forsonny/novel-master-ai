@@ -1,8 +1,8 @@
-Learn about Task Master capabilities through interactive exploration.
+Learn about Novel Master capabilities through interactive exploration.
 
 Arguments: $ARGUMENTS
 
-## Interactive Task Master Learning
+## Interactive Novel Master Learning
 
 Based on your input, I'll help you discover capabilities:
 
@@ -10,7 +10,7 @@ Based on your input, I'll help you discover capabilities:
 
 If $ARGUMENTS contains:
 - "start" / "begin" → Show project initialization workflows
-- "manage" / "organize" → Show task management commands  
+- "manage" / "organize" → Show chapter/scene management commands  
 - "automate" / "auto" → Show automation workflows
 - "analyze" / "report" → Show analysis tools
 - "fix" / "problem" → Show troubleshooting commands
@@ -20,57 +20,57 @@ If $ARGUMENTS contains:
 
 Based on your project state:
 
-**No tasks yet?**
+**No chapters yet?**
 ```
 You'll want to start with:
-1. /project:task-master:init <prd-file>
-   → Creates tasks from requirements
+1. /project:novel-master:init <nrd-file>
+   → Creates chapters from requirements
    
-2. /project:task-master:parse-prd <file>
-   → Alternative task generation
+2. /project:novel-master:parse-prd <file>
+   → Alternative chapter generation
 
-Try: /project:task-master:init demo-prd.md
+Try: /project:novel-master:init demo-nrd.md
 ```
 
-**Have tasks?**
+**Have chapters?**
 Let me analyze what you might need...
-- Many pending tasks? → Learn sprint planning
-- Complex tasks? → Learn task expansion
+- Many pending chapters? → Learn story arc planning
+- Complex chapters? → Learn chapter expansion
 - Daily work? → Learn workflow automation
 
 ### 3. **Command Discovery**
 
 **By Category:**
-- 📋 Task Management: list, show, add, update, complete
-- 🔄 Workflows: auto-implement, sprint-plan, daily-standup
+- 📋 Chapter/Scene Management: list, show, add, update, complete
+- 🔄 Workflows: auto-draft, story-arc-plan, daily-writing
 - 🛠️ Utilities: check-health, complexity-report, sync-memory
 - 🔍 Analysis: validate-deps, show dependencies
 
 **By Scenario:**
-- "I want to see what to work on" → `/project:task-master:next`
-- "I need to break this down" → `/project:task-master:expand <id>`
-- "Show me everything" → `/project:task-master:status`
+- "I want to see what to work on" → `/project:novel-master:next`
+- "I need to break this down" → `/project:novel-master:expand <id>`
+- "Show me everything" → `/project:novel-master:status`
 - "Just do it for me" → `/project:workflows:auto-implement`
 
 ### 4. **Power User Patterns**
 
 **Command Chaining:**
 ```
-/project:task-master:next
-/project:task-master:start <id>
+/project:novel-master:next
+/project:novel-master:start <id>
 /project:workflows:auto-implement
 ```
 
 **Smart Filters:**
 ```
-/project:task-master:list pending high
-/project:task-master:list blocked
-/project:task-master:list 1-5 tree
+/project:novel-master:list pending high
+/project:novel-master:list blocked
+/project:novel-master:list 1-5 tree
 ```
 
 **Automation:**
 ```
-/project:workflows:pipeline init → expand-all → sprint-plan
+/project:workflows:pipeline init → expand-all → story-arc-plan
 ```
 
 ### 5. **Learning Path**
@@ -81,11 +81,11 @@ Based on your experience level:
 1. init → Create project
 2. status → Understand state
 3. next → Find work
-4. complete → Finish task
+4. complete → Finish chapter
 
 **Intermediate Path:**
-1. expand → Break down complex tasks
-2. sprint-plan → Organize work
+1. expand → Break down complex chapters
+2. story-arc-plan → Organize work
 3. complexity-report → Understand difficulty
 4. validate-deps → Ensure consistency
 

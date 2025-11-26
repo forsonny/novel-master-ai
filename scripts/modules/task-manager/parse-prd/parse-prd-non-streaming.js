@@ -1,5 +1,5 @@
 /**
- * Non-streaming handler for PRD parsing
+ * Non-streaming handler for NRD parsing
  */
 
 import ora from 'ora';
@@ -21,13 +21,13 @@ export async function handleNonStreamingService(config, prompts) {
 	// Initialize spinner for CLI
 	let spinner = null;
 	if (config.outputFormat === 'text' && !config.isMCP) {
-		spinner = ora('Parsing PRD and generating tasks...\n').start();
+		spinner = ora('Parsing NRD and generating tasks...\n').start();
 	}
 
 	try {
 		// Call AI service
 		logger.report(
-			`Calling AI service to generate tasks from PRD${config.research ? ' with research-backed analysis' : ''}...`,
+			`Calling AI service to generate tasks from NRD${config.research ? ' with research-backed analysis' : ''}...`,
 			'info'
 		);
 
@@ -78,7 +78,7 @@ export async function handleNonStreamingService(config, prompts) {
 		};
 	} catch (error) {
 		if (spinner) {
-			spinner.fail(`Error parsing PRD: ${error.message}`);
+			spinner.fail(`Error parsing NRD: ${error.message}`);
 		}
 		throw error;
 	}

@@ -1,18 +1,18 @@
 # Licensing
 
-Task Master is licensed under the MIT License with Commons Clause. This means you can:
+Novel Master is licensed under the MIT License with Commons Clause. This means you can:
 
 ## ✅ Allowed:
 
-- Use Task Master for any purpose (personal, commercial, academic)
+- Use Novel Master for any purpose (personal, commercial, academic)
 - Modify the code
 - Distribute copies
-- Create and sell products built using Task Master
+- Create and sell products built using Novel Master
 
 ## ❌ Not Allowed:
 
-- Sell Task Master itself
-- Offer Task Master as a hosted service
-- Create competing products based on Task Master
+- Sell Novel Master itself
+- Offer Novel Master as a hosted service
+- Create competing products based on Novel Master
 
 {/* See the [LICENSE](../LICENSE) file for the complete license text. */}

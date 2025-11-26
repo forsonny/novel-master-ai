@@ -9,7 +9,7 @@ import {
 	createErrorResponse,
 	withNormalizedProjectRoot
 } from './utils.js';
-import { updateSubtaskByIdDirect } from '../core/task-master-core.js';
+import { updateSubtaskByIdDirect } from '../core/novel-master-core.js';
 import { findTasksPath } from '../core/utils/path-utils.js';
 import { resolveTag } from '../../../scripts/modules/utils.js';
 
@@ -21,18 +21,20 @@ export function registerUpdateSubtaskTool(server) {
 	server.addTool({
 		name: 'update_subtask',
 		description:
-			'Appends timestamped information to a specific subtask without replacing existing content. If you just want to update the subtask status, use set_task_status instead.',
+			'Append timestamped notes to a beat/subscene without overwriting its existing details. Use set_task_status if you only need to change status.',
 		parameters: z.object({
 			id: z
 				.string()
 				.describe(
-					'ID of the subtask to update in format "parentId.subtaskId" (e.g., "5.2"). Parent ID is the ID of the task that contains the subtask.'
+					'ID of the beat to update (format "chapterId.beatId", e.g., "5.2").'
 				),
-			prompt: z.string().describe('Information to add to the subtask'),
+			prompt: z
+				.string()
+				.describe('Information to append (research findings, revision notes, etc.)'),
 			research: z
 				.boolean()
 				.optional()
-				.describe('Use Perplexity AI for research-backed updates'),
+				.describe('Enable lore/genre-aware context before appending'),
 			file: z.string().optional().describe('Absolute path to the tasks file'),
 			projectRoot: z
 				.string()

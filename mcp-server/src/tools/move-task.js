@@ -12,7 +12,7 @@ import {
 import {
 	moveTaskDirect,
 	moveTaskCrossTagDirect
-} from '../core/task-master-core.js';
+} from '../core/novel-master-core.js';
 import { findTasksPath } from '../core/utils/path-utils.js';
 import { resolveTag } from '../../../scripts/modules/utils.js';
 
@@ -23,7 +23,7 @@ import { resolveTag } from '../../../scripts/modules/utils.js';
 export function registerMoveTaskTool(server) {
 	server.addTool({
 		name: 'move_task',
-		description: 'Move a task or subtask to a new position',
+		description: 'Move a task or subtask to a new position within the same tag, or move tasks between different tag contexts. For novel workflows, use cross-tag moves to transfer chapters between contexts (e.g., move completed chapters from "character-protagonist" to "draft", or move revised chapters from "rev-1" to "rev-2"). Example: Move chapter 5 from draft to revision with fromTag="draft", toTag="rev-1", and from="5".',
 		parameters: z.object({
 			from: z
 				.string()

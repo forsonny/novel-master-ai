@@ -1,23 +1,23 @@
-Clear all subtasks from all tasks globally.
+Clear all scenes from all chapters globally.
 
-## Global Subtask Clearing
+## Global Scene Clearing
 
-Remove all subtasks across the entire project. Use with extreme caution.
+Remove all scenes across the entire project. Use with extreme caution.
 
 ## Execution
 
 ```bash
-task-master clear-subtasks --all
+novel-master clear-subtasks --all
 ```
 
 ## Pre-Clear Analysis
 
 1. **Project-Wide Summary**
    ```
-   Global Subtask Summary
+   Global Scene Summary
    ━━━━━━━━━━━━━━━━━━━━
-   Total parent tasks: 12
-   Total subtasks: 47
+   Total parent chapters: 12
+   Total scenes: 47
    - Completed: 15
    - In-progress: 8
    - Pending: 24
@@ -26,22 +26,22 @@ task-master clear-subtasks --all
    ```
 
 2. **Critical Warnings**
-   - In-progress subtasks that will lose work
-   - Completed subtasks with valuable history
+   - In-progress scenes that will lose work
+   - Completed scenes with valuable history
    - Complex dependency chains
-   - Integration test results
+   - Continuity check results
 
 ## Double Confirmation
 
 ```
 ⚠️  DESTRUCTIVE OPERATION WARNING ⚠️
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-This will remove ALL 47 subtasks from your project
-Including 8 in-progress and 15 completed subtasks
+This will remove ALL 47 scenes from your project
+Including 8 in-progress and 15 completed scenes
 
 This action CANNOT be undone
 
-Type 'CLEAR ALL SUBTASKS' to confirm:
+Type 'CLEAR ALL SCENES' to confirm:
 ```
 
 ## Smart Safeguards
@@ -57,7 +57,7 @@ Valid reasons for global clear:
 - Project restructuring
 - Major pivot in approach
 - Starting fresh breakdown
-- Switching to different task organization
+- Switching to different chapter organization
 
 ## Process
 
@@ -71,23 +71,23 @@ Valid reasons for global clear:
 ## Alternative Suggestions
 
 Before clearing all:
-- Export subtasks to file
-- Clear only pending subtasks
-- Clear by task category
+- Export scenes to file
+- Clear only pending scenes
+- Clear by chapter category
 - Archive instead of delete
 
 ## Post-Clear Report
 
 ```
-Global Subtask Clear Complete
-━━━━━━━━━━━━━━━━━━━━━━━━━━━
-Removed: 47 subtasks from 12 tasks
-Backup saved: .taskmaster/backup/subtasks-20240115.json
-Parent tasks updated: 12
+Global Scene Clear Complete
+━━━━━━━━━━━━━━━━━━━━━━━━━
+Removed: 47 scenes from 12 chapters
+Backup saved: .novelmaster/backup/scenes-20240115.json
+Parent chapters updated: 12
 Time estimates adjusted: Yes
 
 Next steps:
-- Review updated task list
-- Re-expand complex tasks as needed
+- Review updated chapter list
+- Re-expand complex chapters as needed
 - Check project timeline
 ```

@@ -36,7 +36,7 @@ jest.unstable_mockModule(
 
 // Mock path utils
 jest.unstable_mockModule('../../../../../src/utils/path-utils.js', () => ({
-	findConfigPath: jest.fn(() => '/test/path/.taskmaster/config.json')
+	findConfigPath: jest.fn(() => '/test/path/.novelmaster/config.json')
 }));
 
 // Mock utils

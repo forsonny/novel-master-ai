@@ -206,7 +206,7 @@ export class AuthDomain {
 		// Default to file storage display
 		return {
 			storageType: 'file',
-			filePath: path.join('.taskmaster', 'tasks', 'tasks.json')
+			filePath: path.join('.novelmaster', 'tasks', 'tasks.json')
 		};
 	}
 

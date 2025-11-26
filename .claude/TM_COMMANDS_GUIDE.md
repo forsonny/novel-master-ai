@@ -1,15 +1,15 @@
-# Task Master Commands for Claude Code
+# Novel Master Commands for Claude Code
 
-Complete guide to using Task Master through Claude Code's slash commands.
+Complete guide to using Novel Master through Claude Code's slash commands.
 
 ## Overview
 
-All Task Master functionality is available through the `/project:tm/` namespace with natural language support and intelligent features.
+All Novel Master functionality is available through the `/project:tm/` namespace with natural language support and intelligent features.
 
 ## Quick Start
 
 ```bash
-# Install Task Master
+# Install Novel Master
 /project:tm/setup/quick-install
 
 # Initialize project
@@ -24,7 +24,7 @@ All Task Master functionality is available through the `/project:tm/` namespace 
 
 ## Command Structure
 
-Commands are organized hierarchically to match Task Master's CLI:
+Commands are organized hierarchically to match Novel Master's CLI:
 - Main commands at `/project:tm/[command]`
 - Subcommands for specific operations `/project:tm/[command]/[subcommand]`
 - Natural language arguments accepted throughout
@@ -134,8 +134,8 @@ Commands analyze project state and provide intelligent suggestions based on:
 
 | Old | New |
 |-----|-----|
-| `/project:task-master:list` | `/project:tm/list` |
-| `/project:task-master:complete` | `/project:tm/set-status/to-done` |
+| `/project:novel-master:list` | `/project:tm/list` |
+| `/project:novel-master:complete` | `/project:tm/set-status/to-done` |
 | `/project:workflows:auto-implement` | `/project:tm/workflows/auto-implement` |
 
 ## Tips

@@ -1,13 +1,13 @@
 # Configuration
 
-Taskmaster uses two primary methods for configuration:
+Novel Master uses two primary methods for configuration:
 
-1.  **`.taskmaster/config.json` File (Recommended - New Structure)**
+1.  **`.novelmaster/config.json` File (Recommended - New Structure)**
 
     - This JSON file stores most configuration settings, including AI model selections, parameters, logging levels, and project defaults.
-    - **Location:** This file is created in the `.taskmaster/` directory when you run the `task-master models --setup` interactive setup or initialize a new project with `task-master init`.
-    - **Migration:** Existing projects with `.taskmasterconfig` in the root will continue to work, but should be migrated to the new structure using `task-master migrate`.
-    - **Management:** Use the `task-master models --setup` command (or `models` MCP tool) to interactively create and manage this file. You can also set specific models directly using `task-master models --set-<role>=<model_id>`, adding `--ollama` or `--openrouter` flags for custom models. Manual editing is possible but not recommended unless you understand the structure.
+    - **Location:** This file is created in the `.novelmaster/` directory when you run the `novel-master models --setup` interactive setup or initialize a new project with `novel-master init`.
+    - **Migration:** Existing projects with `.novelmasterconfig` in the root will continue to work, but should be migrated to the new structure using `novel-master migrate`.
+    - **Management:** Use the `novel-master models --setup` command (or `models` MCP tool) to interactively create and manage this file. You can also set specific models directly using `novel-master models --set-<role>=<model_id>`, adding `--ollama` or `--openrouter` flags for custom models. Manual editing is possible but not recommended unless you understand the structure.
     - **Example Structure:**
       ```json
       {
@@ -52,36 +52,36 @@ Taskmaster uses two primary methods for configuration:
 
 > For MCP-specific setup and troubleshooting, see [Provider-Specific Configuration](#provider-specific-configuration).
 
-2.  **Legacy `.taskmasterconfig` File (Backward Compatibility)**
+2.  **Legacy `.novelmasterconfig` File (Backward Compatibility)**
 
     - For projects that haven't migrated to the new structure yet.
     - **Location:** Project root directory.
-    - **Migration:** Use `task-master migrate` to move this to `.taskmaster/config.json`.
+    - **Migration:** Use `novel-master migrate` to move this to `.novelmaster/config.json`.
     - **Deprecation:** While still supported, you'll see warnings encouraging migration to the new structure.
 
 ## MCP Tool Loading Configuration
 
-### TASK_MASTER_TOOLS Environment Variable
+### NOVEL_MASTER_TOOLS Environment Variable
 
-The `TASK_MASTER_TOOLS` environment variable controls which tools are loaded by the Task Master MCP server. This allows you to optimize token usage based on your workflow needs.
+The `NOVEL_MASTER_TOOLS` environment variable controls which tools are loaded by the Novel Master MCP server. This allows you to optimize token usage based on your workflow needs.
 
 > Note
-> Prefer setting `TASK_MASTER_TOOLS` in your MCP client's `env` block (e.g., `.cursor/mcp.json`) or in CI/deployment env. The `.env` file is reserved for API keys/endpoints; avoid persisting non-secret settings there.
+> Prefer setting `NOVEL_MASTER_TOOLS` in your MCP client's `env` block (e.g., `.cursor/mcp.json`) or in CI/deployment env. The `.env` file is reserved for API keys/endpoints; avoid persisting non-secret settings there.
 
 #### Configuration Options
 
 - **`all`** (default): Loads all 36 available tools (~21,000 tokens)
   - Best for: Users who need the complete feature set
-  - Use when: Working with complex projects requiring all Task Master features
+  - Use when: Working with complex projects requiring all Novel Master features
   - Backward compatibility: This is the default to maintain compatibility with existing installations
 
 - **`standard`**: Loads 15 commonly used tools (~10,000 tokens, 50% reduction)
-  - Best for: Regular task management workflows
-  - Tools included: All core tools plus project initialization, complexity analysis, task generation, and more
+  - Best for: Regular novel writing workflows
+  - Tools included: All core tools plus project initialization, complexity analysis, chapter generation, and more
   - Use when: You need a balanced set of features with reduced token usage
 
 - **`core`** (or `lean`): Loads 7 essential tools (~5,000 tokens, 70% reduction)
-  - Best for: Daily development with minimal token overhead
+  - Best for: Daily writing with minimal token overhead
   - Tools included: `get_tasks`, `next_task`, `get_task`, `set_task_status`, `update_subtask`, `parse_prd`, `expand_task`
   - Use when: Working in large contexts where token usage is critical
   - Note: "lean" is an alias for "core" (same tools, token estimate and recommended use). You can refer to it as either "core" or "lean" when configuring.
@@ -98,9 +98,9 @@ The `TASK_MASTER_TOOLS` environment variable controls which tools are loaded by 
    ```jsonc
    {
      "mcpServers": {
-       "task-master-ai": {
+       "novel-master-ai": {
          "env": {
-           "TASK_MASTER_TOOLS": "standard",  // Set tool loading mode
+           "NOVEL_MASTER_TOOLS": "standard",  // Set tool loading mode
            // API keys can still use .env for security
          }
        }
@@ -111,20 +111,20 @@ The `TASK_MASTER_TOOLS` environment variable controls which tools are loaded by 
 2. **Via Claude Code CLI**:
 
    ```bash
-   claude mcp add task-master-ai --scope user \
-     --env TASK_MASTER_TOOLS="core" \
-     -- npx -y task-master-ai@latest
+   claude mcp add novel-master-ai --scope user \
+     --env NOVEL_MASTER_TOOLS="core" \
+     -- npx -y novel-master-ai@latest
    ```
 
 3. **In CI/deployment environment variables**:
    ```bash
-   export TASK_MASTER_TOOLS="standard"
+   export NOVEL_MASTER_TOOLS="standard"
    node mcp-server/server.js
    ```
 
 #### Tool Loading Behavior
 
-- When `TASK_MASTER_TOOLS` is unset or empty, the system defaults to `"all"`
+- When `NOVEL_MASTER_TOOLS` is unset or empty, the system defaults to `"all"`
 - Invalid tool names in a user-specified list are ignored (a warning is emitted for each)
 - If every tool name in a custom list is invalid, the system falls back to `"all"`
 - Tool names are case-insensitive (e.g., `"CORE"`, `"core"`, and `"Core"` are treated identically)
@@ -145,7 +145,7 @@ The `TASK_MASTER_TOOLS` environment variable controls which tools are loaded by 
   - `OPENROUTER_API_KEY`: Your OpenRouter API key.
   - `XAI_API_KEY`: Your X-AI API key.
 - **Optional Endpoint Overrides:**
-  - **Per-role `baseURL` in `.taskmasterconfig`:** You can add a `baseURL` property to any model role (`main`, `research`, `fallback`) to override the default API endpoint for that provider. If omitted, the provider's standard endpoint is used.
+  - **Per-role `baseURL` in `.novelmasterconfig`:** You can add a `baseURL` property to any model role (`main`, `research`, `fallback`) to override the default API endpoint for that provider. If omitted, the provider's standard endpoint is used.
   - **Environment Variable Overrides (`<PROVIDER>_BASE_URL`):** For greater flexibility, especially with third-party services, you can set an environment variable like `OPENAI_BASE_URL` or `MISTRAL_BASE_URL`. This will override any `baseURL` set in the configuration file for that provider. This is the recommended way to connect to OpenAI-compatible APIs.
   - `AZURE_OPENAI_ENDPOINT`: Required if using Azure OpenAI key (can also be set as `baseURL` for the Azure model role).
   - `OLLAMA_BASE_URL`: Override the default Ollama API URL (Default: `http://localhost:11434/api`).
@@ -153,11 +153,11 @@ The `TASK_MASTER_TOOLS` environment variable controls which tools are loaded by 
   - `VERTEX_LOCATION`: Google Cloud region for Vertex AI (e.g., 'us-central1'). Default is 'us-central1'.
   - `GOOGLE_APPLICATION_CREDENTIALS`: Path to service account credentials JSON file for Google Cloud auth (alternative to API key for Vertex AI).
 
-**Important:** Settings like model ID selections (`main`, `research`, `fallback`), `maxTokens`, `temperature`, `logLevel`, `defaultSubtasks`, `defaultPriority`, and `projectName` are **managed in `.taskmaster/config.json`** (or `.taskmasterconfig` for unmigrated projects), not environment variables.
+**Important:** Settings like model ID selections (`main`, `research`, `fallback`), `maxTokens`, `temperature`, `logLevel`, `defaultSubtasks`, `defaultPriority`, and `projectName` are **managed in `.novelmaster/config.json`** (or `.novelmasterconfig` for unmigrated projects), not environment variables.
 
 ## Tagged Task Lists Configuration (v0.17+)
 
-Taskmaster includes a tagged task lists system for multi-context task management.
+Novel Master includes a tagged task lists system for multi-context task management.
 
 ### Global Tag Settings
 
@@ -171,15 +171,15 @@ Taskmaster includes a tagged task lists system for multi-context task management
 
 ### Git Integration
 
-Task Master provides manual git integration through the `--from-branch` option:
+Novel Master provides manual git integration through the `--from-branch` option:
 
-- **Manual Tag Creation**: Use `task-master add-tag --from-branch` to create a tag based on your current git branch name
+- **Manual Tag Creation**: Use `novel-master add-tag --from-branch` to create a tag based on your current git branch name
 - **User Control**: No automatic tag switching - you control when and how tags are created
 - **Flexible Workflow**: Supports any git workflow without imposing rigid branch-tag mappings
 
 ## State Management File
 
-Taskmaster uses `.taskmaster/state.json` to track tagged system runtime information:
+Novel Master uses `.novelmaster/state.json` to track tagged system runtime information:
 
 ```json
 {
@@ -198,7 +198,7 @@ This file is automatically created during tagged system migration and should not
 ## Example `.env` File (for API Keys)
 
 ```
-# Required API keys for providers configured in .taskmaster/config.json
+# Required API keys for providers configured in .novelmaster/config.json
 ANTHROPIC_API_KEY=sk-ant-api03-your-key-here
 PERPLEXITY_API_KEY=pplx-your-key-here
 # OPENAI_API_KEY=sk-your-key-here
@@ -222,23 +222,23 @@ PERPLEXITY_API_KEY=pplx-your-key-here
 
 ### Configuration Errors
 
-- If Task Master reports errors about missing configuration or cannot find the config file, run `task-master models --setup` in your project root to create or repair the file.
-- For new projects, config will be created at `.taskmaster/config.json`. For legacy projects, you may want to use `task-master migrate` to move to the new structure.
+- If Novel Master reports errors about missing configuration or cannot find the config file, run `novel-master models --setup` in your project root to create or repair the file.
+- For new projects, config will be created at `.novelmaster/config.json`. For legacy projects, you may want to use `novel-master migrate` to move to the new structure.
 - Ensure API keys are correctly placed in your `.env` file (for CLI) or `.cursor/mcp.json` (for MCP) and are valid for the providers selected in your config file.
 
-### If `task-master init` doesn't respond:
+### If `novel-master init` doesn't respond:
 
 Try running it with Node directly:
 
 ```bash
-node node_modules/claude-task-master/scripts/init.js
+node node_modules/claude-novel-master/scripts/init.js
 ```
 
 Or clone the repository and run:
 
 ```bash
-git clone https://github.com/eyaltoledano/claude-task-master.git
-cd claude-task-master
+git clone https://github.com/eyaltoledano/claude-novel-master.git
+cd claude-novel-master
 node scripts/init.js
 ```
 
@@ -292,13 +292,13 @@ node scripts/init.js
 7. **Setup Commands**:
    ```bash
    # Set MCP provider for main role
-   task-master models set-main --provider mcp --model claude-3-5-sonnet-20241022
+   novel-master models set-main --provider mcp --model claude-3-5-sonnet-20241022
 
    # Set MCP provider for research role
-   task-master models set-research --provider mcp --model claude-3-opus-20240229
+   novel-master models set-research --provider mcp --model claude-3-opus-20240229
 
    # Verify configuration
-   task-master models list
+   novel-master models list
    ```
 
 8. **Troubleshooting**:
@@ -307,7 +307,7 @@ node scripts/init.js
 
 ### MCP Timeout Configuration
 
-Long-running AI operations in taskmaster-ai can exceed the default 60-second MCP timeout. Operations like `parse_prd`, `expand_task`, `research`, and `analyze_project_complexity` may take 2-5 minutes to complete.
+Long-running AI operations in novelmaster-ai can exceed the default 60-second MCP timeout. Operations like `parse_prd`, `expand_task`, `research`, and `analyze_project_complexity` may take 2-5 minutes to complete.
 
 #### Adding Timeout Configuration
 
@@ -316,9 +316,9 @@ Add a `timeout` parameter to your MCP configuration to extend the timeout limit.
 ```json
 {
   "mcpServers": {
-    "task-master-ai": {
+    "novel-master-ai": {
       "command": "npx",
-      "args": ["-y", "--package=task-master-ai", "task-master-ai"],
+      "args": ["-y", "--package=novel-master-ai", "novel-master-ai"],
       "timeout": 300,
       "env": {
         "ANTHROPIC_API_KEY": "your-anthropic-api-key"
@@ -336,14 +336,14 @@ Add a `timeout` parameter to your MCP configuration to extend the timeout limit.
 
 #### Automatic Setup
 
-When adding taskmaster rules for supported editors, the timeout configuration is automatically included:
+When adding novelmaster rules for supported editors, the timeout configuration is automatically included:
 
 ```bash
 # Automatically includes timeout configuration
-task-master rules add cursor
-task-master rules add roo
-task-master rules add windsurf
-task-master rules add vscode
+novel-master rules add cursor
+novel-master rules add roo
+novel-master rules add windsurf
+novel-master rules add vscode
 ```
 
 #### Troubleshooting Timeouts
@@ -391,7 +391,7 @@ Google Vertex AI is Google Cloud's enterprise AI platform and requires specific 
    VERTEX_LOCATION=us-central1
    ```
 
-5. **In .taskmaster/config.json**:
+5. **In .novelmaster/config.json**:
    ```json
    "global": {
      "vertexProjectId": "my-gcp-project-123",
@@ -417,7 +417,7 @@ Azure OpenAI provides enterprise-grade OpenAI models through Microsoft's Azure c
 
    **Option 1: Using Global Azure Base URL (affects all Azure models)**
    ```json
-   // In .taskmaster/config.json
+   // In .novelmaster/config.json
    {
      "models": {
        "main": {
@@ -441,7 +441,7 @@ Azure OpenAI provides enterprise-grade OpenAI models through Microsoft's Azure c
 
    **Option 2: Using Per-Model Base URLs (recommended for flexibility)**
    ```json
-   // In .taskmaster/config.json
+   // In .novelmaster/config.json
    {
      "models": {
        "main": {
@@ -502,7 +502,7 @@ Azure OpenAI provides enterprise-grade OpenAI models through Microsoft's Azure c
 
 ### Codex CLI Provider
 
-The Codex CLI provider integrates Task Master with OpenAI's Codex CLI, allowing you to use ChatGPT subscription models via OAuth authentication.
+The Codex CLI provider integrates Novel Master with OpenAI's Codex CLI, allowing you to use ChatGPT subscription models via OAuth authentication.
 
 1. **Prerequisites**:
    - Node.js >= 18
@@ -518,7 +518,7 @@ The Codex CLI provider integrates Task Master with OpenAI's Codex CLI, allowing 
    ```bash
    codex login
    ```
-   This will open a browser window for OAuth authentication with your ChatGPT account. Once authenticated, Task Master will automatically use these credentials.
+   This will open a browser window for OAuth authentication with your ChatGPT account. Once authenticated, Novel Master will automatically use these credentials.
 
 4. **Optional API Key Method**:
    While OAuth is the primary and recommended authentication method, you can optionally set an OpenAI API key:
@@ -530,7 +530,7 @@ The Codex CLI provider integrates Task Master with OpenAI's Codex CLI, allowing 
 
 5. **Configuration**:
    ```json
-   // In .taskmaster/config.json
+   // In .novelmaster/config.json
    {
      "models": {
        "main": {
@@ -584,7 +584,7 @@ The Codex CLI provider integrates Task Master with OpenAI's Codex CLI, allowing 
    - **`env`** (object, optional): Additional environment variables for Codex CLI
 
 8. **Command-Specific Settings** (optional):
-   You can override settings for specific Task Master commands:
+   You can override settings for specific Novel Master commands:
    ```json
    {
      "codexCli": {
@@ -609,13 +609,13 @@ The Codex CLI provider integrates Task Master with OpenAI's Codex CLI, allowing 
 10. **Setup Commands**:
     ```bash
     # Set Codex CLI for main role
-    task-master models --set-main gpt-5-codex --codex-cli
+    novel-master models --set-main gpt-5-codex --codex-cli
 
     # Set Codex CLI for fallback role
-    task-master models --set-fallback gpt-5 --codex-cli
+    novel-master models --set-fallback gpt-5 --codex-cli
 
     # Verify configuration
-    task-master models
+    novel-master models
     ```
 
 11. **Troubleshooting**:

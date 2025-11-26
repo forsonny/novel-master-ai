@@ -1,12 +1,12 @@
-# Task Master Documentation
+# Novel Master Documentation
 
-Welcome to the Task Master documentation. This documentation site provides comprehensive guides for getting started with Task Master.
+Welcome to the Novel Master documentation. This documentation site provides comprehensive guides for getting started with Novel Master.
 
 ## Getting Started
 
 - [Quick Start Guide](/getting-started/quick-start) - Complete setup and first-time usage guide
 - [Requirements](/getting-started/quick-start/requirements) - What you need to get started
-- [Installation](/getting-started/quick-start/installation) - How to install Task Master
+- [Installation](/getting-started/quick-start/installation) - How to install Novel Master
 
 ## Core Capabilities
 
@@ -21,4 +21,4 @@ Welcome to the Task Master documentation. This documentation site provides compr
 
 ## Need More Help?
 
-If you can't find what you're looking for in these docs, please check the root README.md or visit our [GitHub repository](https://github.com/eyaltoledano/claude-task-master).
+If you can't find what you're looking for in these docs, please check the root README.md or visit our [GitHub repository](https://github.com/eyaltoledano/claude-novel-master).

@@ -111,7 +111,7 @@ import fsMocked from 'fs';
 const MOCK_PROJECT_ROOT = '/mock/project';
 const MOCK_CONFIG_PATH = path.join(
 	MOCK_PROJECT_ROOT,
-	'.taskmaster/config.json'
+	'.novelmaster/config.json'
 );
 
 // Updated DEFAULT_CONFIG reflecting the implementation
@@ -142,7 +142,7 @@ const DEFAULT_CONFIG = {
 		defaultNumTasks: 10,
 		defaultSubtasks: 5,
 		defaultPriority: 'medium',
-		projectName: 'Task Master',
+		projectName: 'Novel Master',
 		ollamaBaseURL: 'http://localhost:11434/api',
 		bedrockBaseURL: 'https://bedrock.us-east-1.amazonaws.com',
 		enableCodebaseAnalysis: true,
@@ -308,7 +308,7 @@ beforeEach(() => {
 			// Return the REAL file content stringified
 			return REAL_SUPPORTED_MODELS_CONTENT;
 		} else if (filePath === MOCK_CONFIG_PATH) {
-			// Still mock the .taskmasterconfig reads
+			// Still mock the .novelmasterconfig reads
 			return JSON.stringify(DEFAULT_CONFIG); // Default behavior
 		}
 		// For Jest internal files or other unexpected files, return empty string instead of throwing
@@ -554,7 +554,7 @@ describe('Claude Code Getter Functions', () => {
 
 // --- getConfig Tests ---
 describe('getConfig Tests', () => {
-	test('should return default config if .taskmasterconfig does not exist', () => {
+	test('should return default config if .novelmasterconfig does not exist', () => {
 		// Arrange
 		fsExistsSyncSpy.mockReturnValue(false);
 		// findProjectRoot mock is set in beforeEach
@@ -565,9 +565,9 @@ describe('getConfig Tests', () => {
 		// Assert
 		expect(config).toEqual(DEFAULT_CONFIG);
 		expect(mockFindProjectRoot).not.toHaveBeenCalled(); // Explicit root provided
-		// The implementation checks for .taskmaster directory first
+		// The implementation checks for .novelmaster directory first
 		expect(fsExistsSyncSpy).toHaveBeenCalledWith(
-			path.join(MOCK_PROJECT_ROOT, '.taskmaster')
+			path.join(MOCK_PROJECT_ROOT, '.novelmaster')
 		);
 		expect(fsReadFileSyncSpy).not.toHaveBeenCalled(); // No read if file doesn't exist
 		expect(consoleWarnSpy).toHaveBeenCalledWith(

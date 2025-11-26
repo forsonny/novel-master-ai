@@ -249,7 +249,7 @@ export function convertAllRulesToProfileRules(projectRoot, profile) {
 				const targetFilename = profile.fileMap[sourceFile];
 				const targetPath = path.join(targetDir, targetFilename);
 
-				// Ensure target subdirectory exists (for rules like taskmaster/dev_workflow.md)
+				// Ensure target subdirectory exists (for rules like novelmaster/dev_workflow.md)
 				const targetFileDir = path.dirname(targetPath);
 				if (!fs.existsSync(targetFileDir)) {
 					fs.mkdirSync(targetFileDir, { recursive: true });
@@ -323,7 +323,7 @@ export function convertAllRulesToProfileRules(projectRoot, profile) {
 }
 
 /**
- * Remove only Task Master specific files from a profile, leaving other existing rules intact
+ * Remove only Novel Master specific files from a profile, leaving other existing rules intact
  * @param {string} projectRoot - Target project directory
  * @param {Object} profile - Profile configuration
  * @returns {Object} Result object
@@ -426,7 +426,7 @@ export function removeProfileRules(projectRoot, profile) {
 					})
 					.map((file) => file.toString()); // Ensure it's a string
 
-				// Remove only Task Master files
+				// Remove only Novel Master files
 				for (const taskMasterFile of taskMasterFiles) {
 					const filePath = path.join(targetDir, taskMasterFile);
 					if (fs.existsSync(filePath)) {
@@ -435,7 +435,7 @@ export function removeProfileRules(projectRoot, profile) {
 							result.filesRemoved.push(taskMasterFile);
 							log(
 								'debug',
-								`[Rule Transformer] Removed Task Master file: ${taskMasterFile}`
+								`[Rule Transformer] Removed Novel Master file: ${taskMasterFile}`
 							);
 						} catch (error) {
 							log(
@@ -446,7 +446,7 @@ export function removeProfileRules(projectRoot, profile) {
 					}
 				}
 
-				// Check for other (non-Task Master) files
+				// Check for other (non-Novel Master) files
 				const remainingFiles = allFilePaths.filter(
 					(file) => !taskMasterFiles.includes(file)
 				);
@@ -467,7 +467,7 @@ export function removeProfileRules(projectRoot, profile) {
 			}
 		}
 
-		// 3. Handle MCP configuration - only remove Task Master, preserve other servers
+		// 3. Handle MCP configuration - only remove Novel Master, preserve other servers
 		if (profile.mcpConfig !== false) {
 			try {
 				result.mcpResult = removeTaskMasterMCPConfiguration(
@@ -526,7 +526,7 @@ export function removeProfileRules(projectRoot, profile) {
 		result.success = true;
 		log(
 			'debug',
-			`[Rule Transformer] Successfully removed ${profile.profileName} Task Master files from ${projectRoot}`
+			`[Rule Transformer] Successfully removed ${profile.profileName} Novel Master files from ${projectRoot}`
 		);
 	} catch (error) {
 		result.error = error.message;

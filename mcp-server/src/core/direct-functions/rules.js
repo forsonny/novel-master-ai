@@ -1,6 +1,6 @@
 /**
  * rules.js
- * Direct function implementation for adding or removing rules
+ * Direct function implementation for managing Novel Master Cursor rules (guidelines for AI agents on novel-writing workflows)
  */
 
 import {
@@ -23,10 +23,10 @@ import path from 'path';
 import fs from 'fs';
 
 /**
- * Direct function wrapper for adding or removing rules.
+ * Direct function wrapper for managing Novel Master Cursor rules (guidelines for AI agents on novel-writing workflows).
  * @param {Object} args - Command arguments
- * @param {"add"|"remove"} args.action - Action to perform: add or remove rules
- * @param {string[]} args.profiles - List of profiles to add or remove
+ * @param {"add"|"remove"} args.action - Action to perform: add or remove rule profiles
+ * @param {string[]} args.profiles - List of rule profiles to add or remove (e.g., ["cursor"])
  * @param {string} args.projectRoot - Absolute path to the project root
  * @param {boolean} [args.yes=true] - Run non-interactively
  * @param {Object} log - Logger object
@@ -97,7 +97,7 @@ export async function rulesDirect(args, log, context = {}) {
 
 			let summary = '';
 			if (successes.length > 0) {
-				summary += `Successfully removed Task Master rules: ${successes.join(', ')}.`;
+				summary += `Successfully removed Novel Master rules: ${successes.join(', ')}.`;
 			}
 			if (skipped.length > 0) {
 				summary += `Skipped (default or protected): ${skipped.join(', ')}.`;

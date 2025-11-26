@@ -269,7 +269,7 @@ Examples:
 		} else {
 			console.log(chalk.yellow('✗ Not authenticated'));
 			console.log(
-				chalk.gray('\n  Run "task-master auth login" to authenticate')
+				chalk.gray('\n  Run "novel-master auth login" to authenticate')
 			);
 
 			return {
@@ -350,7 +350,7 @@ Examples:
 	 * Perform interactive authentication
 	 */
 	private async performInteractiveAuth(yes?: boolean): Promise<AuthResult> {
-		ui.displayBanner('Task Master Authentication');
+		ui.displayBanner('Novel Master Authentication');
 		const isAuthenticated = await this.authManager.hasValidSession();
 
 		// Check if already authenticated (skip if --yes is used)
@@ -524,7 +524,7 @@ Examples:
 		token: string,
 		yes?: boolean
 	): Promise<AuthResult> {
-		ui.displayBanner('Task Master Authentication');
+		ui.displayBanner('Novel Master Authentication');
 
 		try {
 			// Authenticate with the token

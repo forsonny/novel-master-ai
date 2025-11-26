@@ -32,17 +32,32 @@ export class EnvironmentConfigProvider {
 	 */
 	private static readonly DEFAULT_MAPPINGS: EnvMapping[] = [
 		{
-			env: 'TASKMASTER_STORAGE_TYPE',
+			env: 'NOVELMASTER_STORAGE_TYPE',
 			path: ['storage', 'type'],
 			validate: (v: string) => ['file', 'api'].includes(v)
 		},
-		{ env: 'TASKMASTER_API_ENDPOINT', path: ['storage', 'apiEndpoint'] },
-		{ env: 'TASKMASTER_API_TOKEN', path: ['storage', 'apiAccessToken'] },
-		{ env: 'TASKMASTER_MODEL_MAIN', path: ['models', 'main'] },
-		{ env: 'TASKMASTER_MODEL_RESEARCH', path: ['models', 'research'] },
-		{ env: 'TASKMASTER_MODEL_FALLBACK', path: ['models', 'fallback'] },
+		{ 
+			env: 'NOVELMASTER_API_ENDPOINT', 
+			path: ['storage', 'apiEndpoint']
+		},
+		{ 
+			env: 'NOVELMASTER_API_TOKEN', 
+			path: ['storage', 'apiAccessToken']
+		},
+		{ 
+			env: 'NOVELMASTER_MODEL_MAIN', 
+			path: ['models', 'main']
+		},
+		{ 
+			env: 'NOVELMASTER_MODEL_RESEARCH', 
+			path: ['models', 'research']
+		},
+		{ 
+			env: 'NOVELMASTER_MODEL_FALLBACK', 
+			path: ['models', 'fallback']
+		},
 		{
-			env: 'TASKMASTER_RESPONSE_LANGUAGE',
+			env: 'NOVELMASTER_RESPONSE_LANGUAGE',
 			path: ['custom', 'responseLanguage']
 		}
 	];
@@ -51,7 +66,11 @@ export class EnvironmentConfigProvider {
 	 * Runtime state mappings (separate from configuration)
 	 */
 	private static readonly RUNTIME_STATE_MAPPINGS: EnvMapping[] = [
-		{ env: 'TASKMASTER_TAG', path: ['activeTag'], isRuntimeState: true }
+		{ 
+			env: 'NOVELMASTER_TAG', 
+			path: ['activeTag'], 
+			isRuntimeState: true
+		}
 	];
 
 	private mappings: EnvMapping[];
@@ -140,9 +159,9 @@ export class EnvironmentConfigProvider {
 	/**
 	 * Get all environment variables that match our prefix
 	 */
-	getAllTaskmasterEnvVars(): Record<string, string> {
+	getAllNovelMasterEnvVars(): Record<string, string> {
 		const vars: Record<string, string> = {};
-		const prefix = 'TASKMASTER_';
+		const prefix = 'NOVELMASTER_';
 
 		for (const [key, value] of Object.entries(process.env)) {
 			if (key.startsWith(prefix) && value !== undefined) {

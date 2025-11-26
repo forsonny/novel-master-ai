@@ -31,29 +31,29 @@ describe('findProjectRoot', () => {
 		}
 	});
 
-	describe('Task Master marker detection', () => {
-		it('should find .taskmaster directory in current directory', () => {
-			const taskmasterDir = path.join(tempDir, '.taskmaster');
-			fs.mkdirSync(taskmasterDir);
+	describe('Novel Master marker detection', () => {
+		it('should find .novelmaster directory in current directory', () => {
+			const novelmasterDir = path.join(tempDir, '.novelmaster');
+			fs.mkdirSync(novelmasterDir);
 
 			const result = findProjectRoot(tempDir);
 			expect(result).toBe(tempDir);
 		});
 
-		it('should find .taskmaster directory in parent directory', () => {
+		it('should find .novelmaster directory in parent directory', () => {
 			const parentDir = tempDir;
 			const childDir = path.join(tempDir, 'child');
-			const taskmasterDir = path.join(parentDir, '.taskmaster');
+			const novelmasterDir = path.join(parentDir, '.novelmaster');
 
-			fs.mkdirSync(taskmasterDir);
+			fs.mkdirSync(novelmasterDir);
 			fs.mkdirSync(childDir);
 
 			const result = findProjectRoot(childDir);
 			expect(result).toBe(parentDir);
 		});
 
-		it('should find .taskmaster/config.json marker', () => {
-			const configDir = path.join(tempDir, '.taskmaster');
+		it('should find .novelmaster/config.json marker', () => {
+			const configDir = path.join(tempDir, '.novelmaster');
 			fs.mkdirSync(configDir);
 			fs.writeFileSync(path.join(configDir, 'config.json'), '{}');
 
@@ -61,8 +61,8 @@ describe('findProjectRoot', () => {
 			expect(result).toBe(tempDir);
 		});
 
-		it('should find .taskmaster/tasks/tasks.json marker', () => {
-			const tasksDir = path.join(tempDir, '.taskmaster', 'tasks');
+		it('should find .novelmaster/tasks/tasks.json marker', () => {
+			const tasksDir = path.join(tempDir, '.novelmaster', 'tasks');
 			fs.mkdirSync(tasksDir, { recursive: true });
 			fs.writeFileSync(path.join(tasksDir, 'tasks.json'), '{}');
 
@@ -70,24 +70,24 @@ describe('findProjectRoot', () => {
 			expect(result).toBe(tempDir);
 		});
 
-		it('should find .taskmasterconfig (legacy) marker', () => {
-			fs.writeFileSync(path.join(tempDir, '.taskmasterconfig'), '{}');
+		it('should find .novelmasterconfig (legacy) marker', () => {
+			fs.writeFileSync(path.join(tempDir, '.novelmasterconfig'), '{}');
 
 			const result = findProjectRoot(tempDir);
 			expect(result).toBe(tempDir);
 		});
 	});
 
-	describe('Monorepo behavior - Task Master markers take precedence', () => {
-		it('should find .taskmaster in parent when starting from apps subdirectory', () => {
+	describe('Monorepo behavior - Novel Master markers take precedence', () => {
+		it('should find .novelmaster in parent when starting from apps subdirectory', () => {
 			// Simulate exact user scenario:
-			// /project/.taskmaster exists
+			// /project/.novelmaster exists
 			// Starting from /project/apps
 			const projectRoot = tempDir;
 			const appsDir = path.join(tempDir, 'apps');
-			const taskmasterDir = path.join(projectRoot, '.taskmaster');
+			const novelmasterDir = path.join(projectRoot, '.novelmaster');
 
-			fs.mkdirSync(taskmasterDir);
+			fs.mkdirSync(novelmasterDir);
 			fs.mkdirSync(appsDir);
 
 			// When called from apps directory
@@ -96,31 +96,31 @@ describe('findProjectRoot', () => {
 			expect(result).toBe(projectRoot);
 		});
 
-		it('should prioritize .taskmaster in parent over .git in child', () => {
-			// Create structure: /parent/.taskmaster and /parent/child/.git
+		it('should prioritize .novelmaster in parent over .git in child', () => {
+			// Create structure: /parent/.novelmaster and /parent/child/.git
 			const parentDir = tempDir;
 			const childDir = path.join(tempDir, 'child');
 			const gitDir = path.join(childDir, '.git');
-			const taskmasterDir = path.join(parentDir, '.taskmaster');
+			const novelmasterDir = path.join(parentDir, '.novelmaster');
 
-			fs.mkdirSync(taskmasterDir);
+			fs.mkdirSync(novelmasterDir);
 			fs.mkdirSync(childDir);
 			fs.mkdirSync(gitDir);
 
 			// When called from child directory
 			const result = findProjectRoot(childDir);
-			// Should return parent (with .taskmaster), not child (with .git)
+			// Should return parent (with .novelmaster), not child (with .git)
 			expect(result).toBe(parentDir);
 		});
 
-		it('should prioritize .taskmaster in grandparent over package.json in child', () => {
-			// Create structure: /grandparent/.taskmaster and /grandparent/parent/child/package.json
+		it('should prioritize .novelmaster in grandparent over package.json in child', () => {
+			// Create structure: /grandparent/.novelmaster and /grandparent/parent/child/package.json
 			const grandparentDir = tempDir;
 			const parentDir = path.join(tempDir, 'parent');
 			const childDir = path.join(parentDir, 'child');
-			const taskmasterDir = path.join(grandparentDir, '.taskmaster');
+			const novelmasterDir = path.join(grandparentDir, '.novelmaster');
 
-			fs.mkdirSync(taskmasterDir);
+			fs.mkdirSync(novelmasterDir);
 			fs.mkdirSync(parentDir);
 			fs.mkdirSync(childDir);
 			fs.writeFileSync(path.join(childDir, 'package.json'), '{}');
@@ -129,13 +129,13 @@ describe('findProjectRoot', () => {
 			expect(result).toBe(grandparentDir);
 		});
 
-		it('should prioritize .taskmaster over multiple other project markers', () => {
+		it('should prioritize .novelmaster over multiple other project markers', () => {
 			// Create structure with many markers
 			const parentDir = tempDir;
 			const childDir = path.join(tempDir, 'packages', 'my-package');
-			const taskmasterDir = path.join(parentDir, '.taskmaster');
+			const novelmasterDir = path.join(parentDir, '.novelmaster');
 
-			fs.mkdirSync(taskmasterDir);
+			fs.mkdirSync(novelmasterDir);
 			fs.mkdirSync(childDir, { recursive: true });
 
 			// Add multiple other project markers in child
@@ -145,12 +145,12 @@ describe('findProjectRoot', () => {
 			fs.writeFileSync(path.join(childDir, 'Cargo.toml'), '');
 
 			const result = findProjectRoot(childDir);
-			// Should still return parent with .taskmaster
+			// Should still return parent with .novelmaster
 			expect(result).toBe(parentDir);
 		});
 	});
 
-	describe('Other project marker detection (when no Task Master markers)', () => {
+	describe('Other project marker detection (when no Novel Master markers)', () => {
 		it('should find .git directory', () => {
 			const gitDir = path.join(tempDir, '.git');
 			fs.mkdirSync(gitDir);
@@ -221,24 +221,24 @@ describe('findProjectRoot', () => {
 });
 
 describe('normalizeProjectRoot', () => {
-	it('should remove .taskmaster from path', () => {
-		const result = normalizeProjectRoot('/project/.taskmaster');
+	it('should remove .novelmaster from path', () => {
+		const result = normalizeProjectRoot('/project/.novelmaster');
 		expect(result).toBe('/project');
 	});
 
-	it('should remove .taskmaster/subdirectory from path', () => {
-		const result = normalizeProjectRoot('/project/.taskmaster/tasks');
+	it('should remove .novelmaster/subdirectory from path', () => {
+		const result = normalizeProjectRoot('/project/.novelmaster/tasks');
 		expect(result).toBe('/project');
 	});
 
-	it('should return unchanged path if no .taskmaster', () => {
+	it('should return unchanged path if no .novelmaster', () => {
 		const result = normalizeProjectRoot('/project/src');
 		expect(result).toBe('/project/src');
 	});
 
 	it('should handle paths with native separators', () => {
 		// Use native path separators for the test
-		const testPath = ['project', '.taskmaster', 'tasks'].join(path.sep);
+		const testPath = ['project', '.novelmaster', 'tasks'].join(path.sep);
 		const expectedPath = 'project';
 		const result = normalizeProjectRoot(testPath);
 		expect(result).toBe(expectedPath);
@@ -259,9 +259,9 @@ describe('normalizeProjectRoot', () => {
 		expect(result).toBe('');
 	});
 
-	it('should handle root .taskmaster', () => {
+	it('should handle root .novelmaster', () => {
 		const sep = path.sep;
-		const result = normalizeProjectRoot(`${sep}.taskmaster`);
+		const result = normalizeProjectRoot(`${sep}.novelmaster`);
 		expect(result).toBe(sep);
 	});
 });

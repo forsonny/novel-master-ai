@@ -1,6 +1,6 @@
 /**
  * next-task.js
- * Direct function implementation for finding the next task to work on
+ * Direct function implementation for finding the next chapter/scene/beat to work on
  */
 
 import { findNextTask } from '../../../../scripts/modules/task-manager.js';
@@ -14,15 +14,15 @@ import {
 } from '../../../../scripts/modules/utils.js';
 
 /**
- * Direct function wrapper for finding the next task to work on with error handling and caching.
+ * Direct function wrapper for finding the next chapter/scene/beat to work on with error handling and caching.
  *
  * @param {Object} args - Command arguments
  * @param {string} args.tasksJsonPath - Explicit path to the tasks.json file.
- * @param {string} args.reportPath - Path to the report file.
+ * @param {string} args.reportPath - Path to the complexity/pacing report file.
  * @param {string} args.projectRoot - Project root path (for MCP/env fallback)
- * @param {string} args.tag - Tag for the task (optional)
+ * @param {string} args.tag - Tag context (outline, draft, revision) for the task (optional)
  * @param {Object} log - Logger object
- * @returns {Promise<Object>} - Next task result { success: boolean, data?: any, error?: { code: string, message: string } }
+ * @returns {Promise<Object>} - Next chapter/scene result { success: boolean, data?: any, error?: { code: string, message: string } }
  */
 export async function nextTaskDirect(args, log, context = {}) {
 	// Destructure expected args
@@ -35,7 +35,7 @@ export async function nextTaskDirect(args, log, context = {}) {
 			success: false,
 			error: {
 				code: 'MISSING_ARGUMENT',
-				message: 'tasksJsonPath is required'
+				message: 'Tasks file path is required to find the next chapter/scene'
 			}
 		};
 	}
@@ -46,7 +46,7 @@ export async function nextTaskDirect(args, log, context = {}) {
 			// Enable silent mode to prevent console logs from interfering with JSON response
 			enableSilentMode();
 
-			log.info(`Finding next task from ${tasksJsonPath}`);
+			log.info(`Finding next chapter/scene from ${tasksJsonPath}`);
 
 			// Read tasks data using the provided path
 			const data = readJSON(tasksJsonPath, projectRoot, tag);
@@ -56,7 +56,7 @@ export async function nextTaskDirect(args, log, context = {}) {
 					success: false,
 					error: {
 						code: 'INVALID_TASKS_FILE',
-						message: `No valid tasks found in ${tasksJsonPath}`
+						message: `No valid chapters found in ${tasksJsonPath}`
 					}
 				};
 			}
@@ -69,53 +69,53 @@ export async function nextTaskDirect(args, log, context = {}) {
 
 			if (!nextTask) {
 				log.info(
-					'No eligible next task found. All tasks are either completed or have unsatisfied dependencies'
+					'No eligible next chapter/scene found. All chapters are either completed or have unsatisfied dependencies'
 				);
 				return {
 					success: true,
 					data: {
 						message:
-							'No eligible next task found. All tasks are either completed or have unsatisfied dependencies',
+							'No eligible next chapter/scene found. All chapters are either completed or have unsatisfied dependencies',
 						nextTask: null
 					}
 				};
 			}
 
-			// Check if it's a subtask
+			// Check if it's a beat/scene (subtask)
 			const isSubtask =
 				typeof nextTask.id === 'string' && nextTask.id.includes('.');
 
-			const taskOrSubtask = isSubtask ? 'subtask' : 'task';
+			const taskOrSubtask = isSubtask ? 'beat/scene' : 'chapter';
 
 			const additionalAdvice = isSubtask
-				? 'Subtasks can be updated with timestamped details as you implement them. This is useful for tracking progress, marking milestones and insights (of successful or successive falures in attempting to implement the subtask). Research can be used when updating the subtask to collect up-to-date information, and can be helpful to solve a repeating problem the agent is unable to solve. It is a good idea to get-task the parent task to collect the overall context of the task, and to get-task the subtask to collect the specific details of the subtask.'
-				: 'Tasks can be updated to reflect a change in the direction of the task, or to reformulate the task per your prompt. Research can be used when updating the task to collect up-to-date information. It is best to update subtasks as you work on them, and to update the task for more high-level changes that may affect pending subtasks or the general direction of the task.';
+				? 'Beats/scenes can be updated with timestamped narrative notes as you draft them. This is useful for tracking progress, marking milestones, and capturing insights (successful approaches or challenges encountered). Research can be used when updating the beat to collect worldbuilding facts, genre conventions, or continuity information. It is a good idea to get-task the parent chapter to collect the overall story context, and to get-task the beat to collect the specific scene details.'
+				: 'Chapters can be updated to reflect changes in story direction, tone shifts, POV changes, or plot adjustments. Research can be used when updating the chapter to collect lore, genre conventions, or historical context. It is best to update beats/scenes as you draft them, and to update the chapter for more high-level changes that may affect pending scenes or the general narrative direction.';
 
 			// Restore normal logging
 			disableSilentMode();
 
-			// Return the next task data with the full tasks array for reference
+			// Return the next chapter/scene data with the full tasks array for reference
 			log.info(
-				`Successfully found next task ${nextTask.id}: ${nextTask.title}. Is subtask: ${isSubtask}`
+				`Successfully found next ${taskOrSubtask} ${nextTask.id}: ${nextTask.title}. Is beat/scene: ${isSubtask}`
 			);
 			return {
 				success: true,
 				data: {
 					nextTask,
 					isSubtask,
-					nextSteps: `When ready to work on the ${taskOrSubtask}, use set-status to set the status to "in progress" ${additionalAdvice}`
+					nextSteps: `When ready to work on the ${taskOrSubtask}, use set-status to set the status to "in-progress" ${additionalAdvice}`
 				}
 			};
 		} catch (error) {
 			// Make sure to restore normal logging even if there's an error
 			disableSilentMode();
 
-			log.error(`Error finding next task: ${error.message}`);
+			log.error(`Error finding next chapter/scene: ${error.message}`);
 			return {
 				success: false,
 				error: {
 					code: 'CORE_FUNCTION_ERROR',
-					message: error.message || 'Failed to find next task'
+					message: error.message || 'Failed to find next chapter/scene'
 				}
 			};
 		}

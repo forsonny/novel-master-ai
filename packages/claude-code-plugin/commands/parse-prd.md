@@ -1,49 +1,49 @@
-Parse a PRD document to generate tasks.
+Parse an NRD document to generate chapters.
 
-Arguments: $ARGUMENTS (PRD file path)
+Arguments: $ARGUMENTS (NRD file path)
 
-## Intelligent PRD Parsing
+## Intelligent NRD Parsing
 
-Analyzes your requirements document and generates a complete task breakdown.
+Analyzes your Novel Requirements Document and generates a complete chapter breakdown.
 
 ## Execution
 
 ```bash
-task-master parse-prd --input=$ARGUMENTS
+novel-master parse-prd --input=$ARGUMENTS
 ```
 
 ## Parsing Process
 
 1. **Document Analysis**
-   - Extract key requirements
-   - Identify technical components
-   - Detect dependencies
-   - Estimate complexity
+   - Extract key narrative requirements
+   - Identify story arcs and character development
+   - Detect story dependencies
+   - Estimate narrative complexity
 
-2. **Task Generation**
-   - Create 10-15 tasks by default
-   - Include implementation tasks
-   - Add testing tasks
-   - Include documentation tasks
-   - Set logical dependencies
+2. **Chapter Generation**
+   - Create 10-15 chapters by default
+   - Include drafting chapters
+   - Add revision chapters
+   - Include character development chapters
+   - Set logical story dependencies
 
 3. **Smart Enhancements**
-   - Group related functionality
+   - Group related story arcs
    - Set appropriate priorities
-   - Add acceptance criteria
-   - Include test strategies
+   - Add narrative requirements
+   - Include continuity/pacing strategies
 
 ## Options
 
 Parse arguments for modifiers:
-- Number after filename → `--num-tasks`
-- `research` → Use research mode
-- `comprehensive` → Generate more tasks
+- Number after filename → `--num-tasks` (target chapter count)
+- `research` → Use research mode for worldbuilding
+- `comprehensive` → Generate more chapters
 
 ## Post-Generation
 
 After parsing:
-1. Display task summary
-2. Show dependency graph
-3. Suggest task expansion for complex items
-4. Recommend sprint planning
+1. Display chapter summary
+2. Show story dependency graph
+3. Suggest chapter expansion for complex arcs
+4. Recommend story arc planning

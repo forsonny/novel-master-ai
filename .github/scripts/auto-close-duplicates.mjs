@@ -53,7 +53,7 @@ async function closeIssueAsDuplicate(
 
 If this is incorrect, please re-open this issue or create a new one.
 
-🤖 Generated with [Task Master Bot]`
+🤖 Generated with [Novel Master Bot]`
 		}
 	);
 }
@@ -68,7 +68,7 @@ async function autoCloseDuplicates() {
 	console.log('[DEBUG] GitHub token found');
 
 	const owner = process.env.GITHUB_REPOSITORY_OWNER || 'eyaltoledano';
-	const repo = process.env.GITHUB_REPOSITORY_NAME || 'claude-task-master';
+	const repo = process.env.GITHUB_REPOSITORY_NAME || 'claude-novel-master';
 	console.log(`[DEBUG] Repository: ${owner}/${repo}`);
 
 	const threeDaysAgo = new Date();

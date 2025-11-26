@@ -1,6 +1,6 @@
 /**
  * research.js
- * Direct function implementation for AI-powered research queries
+ * Direct function implementation for AI-powered narrative research (worldbuilding, genre conventions, writing techniques)
  */
 
 import path from 'path';
@@ -12,19 +12,20 @@ import {
 import { createLogWrapper } from '../../tools/utils.js';
 
 /**
- * Direct function wrapper for performing AI-powered research with project context.
+ * Direct function wrapper for performing AI-powered narrative research with project context.
+ * Focuses on worldbuilding, genre conventions, writing techniques, and continuity.
  *
  * @param {Object} args - Command arguments
- * @param {string} args.query - Research query/prompt (required)
- * @param {string} [args.taskIds] - Comma-separated list of task/subtask IDs for context
- * @param {string} [args.filePaths] - Comma-separated list of file paths for context
- * @param {string} [args.customContext] - Additional custom context text
- * @param {boolean} [args.includeProjectTree=false] - Include project file tree in context
- * @param {string} [args.detailLevel='medium'] - Detail level: 'low', 'medium', 'high'
- * @param {string} [args.saveTo] - Automatically save to task/subtask ID (e.g., "15" or "15.2")
- * @param {boolean} [args.saveToFile=false] - Save research results to .taskmaster/docs/research/ directory
+ * @param {string} args.query - Research query/prompt (e.g., "Solar punk energy shortages", "1930s speakeasy slang") (required)
+ * @param {string} [args.taskIds] - Comma-separated list of chapter/beat IDs for context (e.g., "4,7.2")
+ * @param {string} [args.filePaths] - Comma-separated list of manuscript or lore files for context
+ * @param {string} [args.customContext] - Additional narrative context (tone, character arcs, editorial directives)
+ * @param {boolean} [args.includeProjectTree=false] - Include project file tree in context (handy for large lore directories)
+ * @param {string} [args.detailLevel='medium'] - Detail level: 'low' (quick facts), 'medium', 'high' (deep dives)
+ * @param {string} [args.saveTo] - Automatically save to chapter/beat ID (e.g., "15" or "15.2")
+ * @param {boolean} [args.saveToFile=false] - Save research results to .novelmaster/docs/research/ directory for long-term lore tracking
  * @param {string} [args.projectRoot] - Project root path
- * @param {string} [args.tag] - Tag for the task (optional)
+ * @param {string} [args.tag] - Tag context (outline, draft, revision) for the task (optional)
  * @param {Object} log - Logger object
  * @param {Object} context - Additional context (session)
  * @returns {Promise<Object>} - Result object { success: boolean, data?: any, error?: { code: string, message: string } }
@@ -61,7 +62,7 @@ export async function researchDirect(args, log, context = {}) {
 				error: {
 					code: 'MISSING_PARAMETER',
 					message:
-						'The query parameter is required and must be a non-empty string'
+						'Research query is required and must be a non-empty string (e.g., "Solar punk energy shortages", "1930s speakeasy slang", "Symptoms of decompression sickness")'
 				}
 			};
 		}
@@ -151,14 +152,14 @@ export async function researchDirect(args, log, context = {}) {
 ${result.result}`;
 
 				if (isSubtask) {
-					// Save to subtask
+					// Save to beat/scene
 					const { updateSubtaskById } = await import(
 						'../../../../scripts/modules/task-manager/update-subtask-by-id.js'
 					);
 
 					const tasksPath = path.join(
 						projectRoot,
-						'.taskmaster',
+						'.novelmaster',
 						'tasks',
 						'tasks.json'
 					);
@@ -178,9 +179,9 @@ ${result.result}`;
 						'json'
 					);
 
-					log.info(`Research saved to subtask ${saveTo}`);
+					log.info(`Research saved to beat/scene ${saveTo}`);
 				} else {
-					// Save to task
+					// Save to chapter
 					const updateTaskById = (
 						await import(
 							'../../../../scripts/modules/task-manager/update-task-by-id.js'
@@ -190,7 +191,7 @@ ${result.result}`;
 					const taskIdNum = parseInt(saveTo, 10);
 					const tasksPath = path.join(
 						projectRoot,
-						'.taskmaster',
+						'.novelmaster',
 						'tasks',
 						'tasks.json'
 					);
@@ -211,7 +212,7 @@ ${result.result}`;
 						true // appendMode = true
 					);
 
-					log.info(`Research saved to task ${saveTo}`);
+					log.info(`Research saved to chapter ${saveTo}`);
 				}
 			} catch (saveError) {
 				log.warn(`Error saving research to task/subtask: ${saveError.message}`);

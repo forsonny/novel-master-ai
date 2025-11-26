@@ -258,7 +258,7 @@ export interface WorkflowSettings {
 	includeCoAuthor: boolean;
 	/** Co-author name for commit messages */
 	coAuthorName: string;
-	/** Co-author email for commit messages (defaults to taskmaster@tryhamster.com) */
+	/** Co-author email for commit messages (defaults to novelmaster@tryhamster.com) */
 	coAuthorEmail: string;
 	/** Test result thresholds for phase validation */
 	testThresholds: {
@@ -303,7 +303,7 @@ export interface WorkflowSettings {
 }
 
 /**
- * Main configuration interface for Task Master core
+ * Main configuration interface for Novel Master core
  */
 export interface IConfiguration {
 	/** Project root path */
@@ -541,7 +541,7 @@ export const DEFAULT_CONFIG_VALUES = {
 		AUTO_STAGE_CHANGES: true,
 		INCLUDE_CO_AUTHOR: true,
 		CO_AUTHOR_NAME: 'TaskMaster AI',
-		CO_AUTHOR_EMAIL: 'taskmaster@tryhamster.com',
+		CO_AUTHOR_EMAIL: 'novelmaster@tryhamster.com',
 		MIN_TESTS: 1,
 		MAX_FAILURES_IN_GREEN: 0,
 		COMMIT_MESSAGE_TEMPLATE:
@@ -557,7 +557,7 @@ export const DEFAULT_CONFIG_VALUES = {
 		DEFAULT_COMMIT_TYPE: 'feat' as CommitType,
 		OPERATION_TIMEOUT: 60000,
 		ENABLE_ACTIVITY_LOGGING: true,
-		ACTIVITY_LOG_PATH: '.taskmaster/logs/workflow-activity.log',
+		ACTIVITY_LOG_PATH: '.novelmaster/logs/workflow-activity.log',
 		ENABLE_STATE_BACKUP: true,
 		MAX_STATE_BACKUPS: 5,
 		ABORT_ON_MAX_ATTEMPTS: false

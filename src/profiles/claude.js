@@ -42,31 +42,31 @@ function onAddRulesProfile(targetDir, assetsDir) {
 	// Legacy .claude directory copying has been deprecated
 	log(
 		'info',
-		'[Claude] Commands and agents are now available via the Task Master plugin'
+		'[Claude] Commands and agents are now available via the Novel Master plugin'
 	);
-	log('info', '[Claude] Install with: /plugin marketplace add taskmaster');
-	log('info', '[Claude] Then: /plugin install taskmaster@taskmaster');
+	log('info', '[Claude] Install with: /plugin marketplace add novelmaster');
+	log('info', '[Claude] Then: /plugin install novelmaster@novelmaster');
 
 	// Handle CLAUDE.md import for non-destructive integration
 	const sourceFile = path.join(assetsDir, 'AGENTS.md');
 	const userClaudeFile = path.join(targetDir, 'CLAUDE.md');
-	const taskMasterClaudeFile = path.join(targetDir, '.taskmaster', 'CLAUDE.md');
-	const importLine = '@./.taskmaster/CLAUDE.md';
-	const importSection = `\n## Task Master AI Instructions\n**Import Task Master's development workflow commands and guidelines, treat as if import is in the main CLAUDE.md file.**\n${importLine}`;
+	const taskMasterClaudeFile = path.join(targetDir, '.novelmaster', 'CLAUDE.md');
+	const importLine = '@./.novelmaster/CLAUDE.md';
+	const importSection = `\n## Novel Master AI Instructions\n**Import Novel Master's development workflow commands and guidelines, treat as if import is in the main CLAUDE.md file.**\n${importLine}`;
 
 	if (fs.existsSync(sourceFile)) {
 		try {
-			// Ensure .taskmaster directory exists
-			const taskMasterDir = path.join(targetDir, '.taskmaster');
+			// Ensure .novelmaster directory exists
+			const taskMasterDir = path.join(targetDir, '.novelmaster');
 			if (!fs.existsSync(taskMasterDir)) {
 				fs.mkdirSync(taskMasterDir, { recursive: true });
 			}
 
-			// Copy Task Master instructions to .taskmaster/CLAUDE.md
+			// Copy Novel Master instructions to .novelmaster/CLAUDE.md
 			fs.copyFileSync(sourceFile, taskMasterClaudeFile);
 			log(
 				'debug',
-				`[Claude] Created Task Master instructions at ${taskMasterClaudeFile}`
+				`[Claude] Created Novel Master instructions at ${taskMasterClaudeFile}`
 			);
 
 			// Handle user's CLAUDE.md
@@ -79,12 +79,12 @@ function onAddRulesProfile(targetDir, assetsDir) {
 					fs.writeFileSync(userClaudeFile, updatedContent);
 					log(
 						'info',
-						`[Claude] Added Task Master import to existing ${userClaudeFile}`
+						`[Claude] Added Novel Master import to existing ${userClaudeFile}`
 					);
 				} else {
 					log(
 						'info',
-						`[Claude] Task Master import already present in ${userClaudeFile}`
+						`[Claude] Novel Master import already present in ${userClaudeFile}`
 					);
 				}
 			} else {
@@ -93,7 +93,7 @@ function onAddRulesProfile(targetDir, assetsDir) {
 				fs.writeFileSync(userClaudeFile, minimalContent);
 				log(
 					'info',
-					`[Claude] Created ${userClaudeFile} with Task Master import`
+					`[Claude] Created ${userClaudeFile} with Novel Master import`
 				);
 			}
 		} catch (err) {
@@ -110,16 +110,16 @@ function onRemoveRulesProfile(targetDir) {
 	// We no longer remove them here - users should uninstall the plugin separately
 	log(
 		'info',
-		'[Claude] To remove Task Master commands/agents, uninstall the plugin with: /plugin uninstall taskmaster'
+		'[Claude] To remove Novel Master commands/agents, uninstall the plugin with: /plugin uninstall novelmaster'
 	);
 
 	// Clean up CLAUDE.md import
 	const userClaudeFile = path.join(targetDir, 'CLAUDE.md');
-	const taskMasterClaudeFile = path.join(targetDir, '.taskmaster', 'CLAUDE.md');
-	const importLine = '@./.taskmaster/CLAUDE.md';
+	const taskMasterClaudeFile = path.join(targetDir, '.novelmaster', 'CLAUDE.md');
+	const importLine = '@./.novelmaster/CLAUDE.md';
 
 	try {
-		// Remove Task Master CLAUDE.md from .taskmaster
+		// Remove Novel Master CLAUDE.md from .novelmaster
 		if (fs.existsSync(taskMasterClaudeFile)) {
 			fs.rmSync(taskMasterClaudeFile, { force: true });
 			log('debug', `[Claude] Removed ${taskMasterClaudeFile}`);
@@ -132,15 +132,15 @@ function onRemoveRulesProfile(targetDir) {
 			const filteredLines = [];
 			let skipNextLines = 0;
 
-			// Remove the Task Master section
+			// Remove the Novel Master section
 			for (let i = 0; i < lines.length; i++) {
 				if (skipNextLines > 0) {
 					skipNextLines--;
 					continue;
 				}
 
-				// Check if this is the start of our Task Master section
-				if (lines[i].includes('## Task Master AI Instructions')) {
+				// Check if this is the start of our Novel Master section
+				if (lines[i].includes('## Novel Master AI Instructions')) {
 					// Skip this line and the next two lines (bold text and import)
 					skipNextLines = 2;
 					continue;
@@ -173,7 +173,7 @@ function onRemoveRulesProfile(targetDir) {
 				fs.writeFileSync(userClaudeFile, updatedContent + '\n');
 				log(
 					'debug',
-					`[Claude] Removed Task Master import from ${userClaudeFile}`
+					`[Claude] Removed Novel Master import from ${userClaudeFile}`
 				);
 			}
 		}
@@ -265,7 +265,7 @@ export const claudeProfile = createProfile({
 	mcpConfigName: '.mcp.json', // Place MCP config in project root
 	includeDefaultRules: false,
 	fileMap: {
-		'AGENTS.md': '.taskmaster/CLAUDE.md'
+		'AGENTS.md': '.novelmaster/CLAUDE.md'
 	},
 	onAdd: onAddRulesProfile,
 	onRemove: onRemoveRulesProfile,

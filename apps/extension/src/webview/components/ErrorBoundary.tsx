@@ -70,7 +70,7 @@ export class ErrorBoundary extends React.Component<
 							Something went wrong
 						</h2>
 						<p className="text-vscode-foreground/70 mb-4">
-							The Task Master Kanban board encountered an unexpected error.
+							The Novel Master Kanban board encountered an unexpected error.
 						</p>
 						<div className="space-y-2">
 							<button

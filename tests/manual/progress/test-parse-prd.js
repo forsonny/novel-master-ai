@@ -195,18 +195,18 @@ function createTestConfig() {
 			debug: false,
 			defaultSubtasks: 5,
 			defaultPriority: 'medium',
-			projectName: 'Task Master Test',
+			projectName: 'Novel Master Test',
 			ollamaBaseURL: 'http://localhost:11434/api',
 			bedrockBaseURL: 'https://bedrock.us-east-1.amazonaws.com'
 		}
 	};
 
-	const taskmasterDir = path.join(__dirname, '.taskmaster');
-	const configPath = path.join(taskmasterDir, 'config.json');
+	const novelmasterDir = path.join(__dirname, '.novelmaster');
+	const configPath = path.join(novelmasterDir, 'config.json');
 
-	// Create .taskmaster directory if it doesn't exist
-	if (!fs.existsSync(taskmasterDir)) {
-		fs.mkdirSync(taskmasterDir, { recursive: true });
+	// Create .novelmaster directory if it doesn't exist
+	if (!fs.existsSync(novelmasterDir)) {
+		fs.mkdirSync(novelmasterDir, { recursive: true });
 	}
 
 	fs.writeFileSync(configPath, JSON.stringify(testConfig, null, 2));
@@ -498,7 +498,7 @@ async function main() {
 	const testType = args[0] || 'streaming';
 	const numTasks = parseInt(args[1]) || 8;
 
-	console.log(chalk.bold.cyan('🚀 Task Master PRD Streaming Tests\n'));
+	console.log(chalk.bold.cyan('🚀 Novel Master PRD Streaming Tests\n'));
 	console.log(chalk.blue(`Test type: ${testType}`));
 	console.log(chalk.blue(`Number of tasks: ${numTasks}\n`));
 

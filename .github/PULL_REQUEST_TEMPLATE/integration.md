@@ -13,7 +13,7 @@
 ### Setup
 
 ```bash
-task-master rules add [name]
+novel-master rules add [name]
 # Any other setup steps
 ```
 

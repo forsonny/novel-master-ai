@@ -13,7 +13,7 @@ import { jest } from '@jest/globals';
 
 // Mock EVERYTHING
 const mockExpandAllTasksDirect = jest.fn();
-jest.mock('../../../../mcp-server/src/core/task-master-core.js', () => ({
+jest.mock('../../../../mcp-server/src/core/novel-master-core.js', () => ({
 	expandAllTasksDirect: mockExpandAllTasksDirect
 }));
 
@@ -62,7 +62,7 @@ const registerExpandAllTool = (server) => {
 	// Create simplified version of the tool config
 	const toolConfig = {
 		name: 'expand_all',
-		description: 'Use Taskmaster to expand all eligible pending tasks',
+		description: 'Use Novel Master to expand all eligible pending tasks',
 		parameters: mockZod,
 
 		// Create a simplified mock of the execute function

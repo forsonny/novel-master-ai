@@ -1,6 +1,6 @@
 /**
  * generate-task-files.js
- * Direct function implementation for generating task files from tasks.json
+ * Direct function implementation for generating manuscript files (chapters, scenes, compiled manuscript) from tasks.json
  */
 
 import { generateTaskFiles } from '../../../../scripts/modules/task-manager.js';
@@ -10,92 +10,84 @@ import {
 } from '../../../../scripts/modules/utils.js';
 
 /**
- * Direct function wrapper for generateTaskFiles with error handling.
+ * Direct function wrapper for generating manuscript files (chapter markdown, compiled manuscript, summary) with error handling.
  *
  * @param {Object} args - Command arguments containing tasksJsonPath and outputDir.
  * @param {string} args.tasksJsonPath - Path to the tasks.json file.
- * @param {string} args.outputDir - Path to the output directory.
- * @param {string} args.projectRoot - Project root path (for MCP/env fallback)
- * @param {string} args.tag - Tag for the task (optional)
- * @param {Object} log - Logger object.
+	 * @param {string} args.outputDir - Path to the output directory (default: .novelmaster/manuscript/<tag>).
+	 * @param {string} args.projectRoot - Project root path (for MCP/env fallback)
+	 * @param {string} args.tag - Tag context (outline, draft, revision) for the manuscript (optional)
+	 * @param {string} [args.format='md'] - Export format for compiled manuscript: 'md' (markdown) or 'txt' (plain text)
+	 * @param {Object} log - Logger object.
  * @returns {Promise<Object>} - Result object with success status and data/error information.
  */
 export async function generateTaskFilesDirect(args, log) {
 	// Destructure expected args
-	const { tasksJsonPath, outputDir, projectRoot, tag } = args;
+	const { tasksJsonPath, outputDir, projectRoot, tag, format = 'md' } = args;
 	try {
 		log.info(`Generating task files with args: ${JSON.stringify(args)}`);
 
 		// Check if paths were provided
 		if (!tasksJsonPath) {
-			const errorMessage = 'tasksJsonPath is required but was not provided.';
+			const errorMessage = 'Tasks file path is required to generate manuscript files.';
 			log.error(errorMessage);
 			return {
 				success: false,
 				error: { code: 'MISSING_ARGUMENT', message: errorMessage }
 			};
 		}
+		// outputDir is optional - will use default .novelmaster/manuscript/<tag> if not provided
 		if (!outputDir) {
-			const errorMessage = 'outputDir is required but was not provided.';
-			log.error(errorMessage);
-			return {
-				success: false,
-				error: { code: 'MISSING_ARGUMENT', message: errorMessage }
-			};
+			log.info('No output directory specified, using default manuscript directory');
 		}
 
 		// Use the provided paths
 		const tasksPath = tasksJsonPath;
 		const resolvedOutputDir = outputDir;
 
-		log.info(`Generating task files from ${tasksPath} to ${resolvedOutputDir}`);
+		log.info(`Generating manuscript files from ${tasksPath} to ${resolvedOutputDir || 'default location'}`);
 
-		// Execute core generateTaskFiles function in a separate try/catch
+		let generationResult;
 		try {
-			// Enable silent mode to prevent logs from being written to stdout
 			enableSilentMode();
 
-			// Pass projectRoot and tag so the core respects context
-			generateTaskFiles(tasksPath, resolvedOutputDir, {
+			generationResult = generateTaskFiles(tasksPath, resolvedOutputDir, {
 				projectRoot,
 				tag,
+				format,
 				mcpLog: log
 			});
 
-			// Restore normal logging after task generation
 			disableSilentMode();
 		} catch (genError) {
-			// Make sure to restore normal logging even if there's an error
 			disableSilentMode();
 
-			log.error(`Error in generateTaskFiles: ${genError.message}`);
+			log.error(`Error generating manuscript files: ${genError.message}`);
 			return {
 				success: false,
 				error: { code: 'GENERATE_FILES_ERROR', message: genError.message }
 			};
 		}
 
-		// Return success with file paths
 		return {
 			success: true,
 			data: {
-				message: `Successfully generated task files`,
-				tasksPath: tasksPath,
+				message: `Successfully generated manuscript assets (chapters, compiled manuscript, summary) for tag '${tag}'`,
+				tasksPath,
 				outputDir: resolvedOutputDir,
-				taskFiles:
-					'Individual task files have been generated in the output directory'
+				result: generationResult
 			}
 		};
 	} catch (error) {
 		// Make sure to restore normal logging if an outer error occurs
 		disableSilentMode();
 
-		log.error(`Error generating task files: ${error.message}`);
+		log.error(`Error generating manuscript files: ${error.message}`);
 		return {
 			success: false,
 			error: {
 				code: 'GENERATE_TASKS_ERROR',
-				message: error.message || 'Unknown error generating task files'
+				message: error.message || 'Unknown error generating manuscript files'
 			}
 		};
 	}

@@ -1,6 +1,6 @@
 /**
  * expand-task.js
- * Direct function implementation for expanding a task into subtasks
+ * Direct function implementation for expanding a chapter into scenes/beats
  */
 
 import expandTask from '../../../../scripts/modules/task-manager/expand-task.js';
@@ -16,21 +16,21 @@ import fs from 'fs';
 import { createLogWrapper } from '../../tools/utils.js';
 
 /**
- * Direct function wrapper for expanding a task into subtasks with error handling.
+ * Direct function wrapper for expanding a chapter into scenes/beats with error handling.
  *
  * @param {Object} args - Command arguments
  * @param {string} args.tasksJsonPath - Explicit path to the tasks.json file.
- * @param {string} args.id - The ID of the task to expand.
- * @param {number|string} [args.num] - Number of subtasks to generate.
- * @param {boolean} [args.research] - Enable research role for subtask generation.
- * @param {string} [args.prompt] - Additional context to guide subtask generation.
- * @param {boolean} [args.force] - Force expansion even if subtasks exist.
+ * @param {string} args.id - The ID of the chapter to expand.
+ * @param {number|string} [args.num] - Number of scenes/beats to generate.
+ * @param {boolean} [args.research] - Enable research role for lore/genre-aware beat generation.
+ * @param {string} [args.prompt] - Additional narrative context to guide beat generation (tone, POV, stakes).
+ * @param {boolean} [args.force] - Force expansion even if beats already exist.
  * @param {string} [args.projectRoot] - Project root directory.
- * @param {string} [args.tag] - Tag for the task
+ * @param {string} [args.tag] - Tag context (outline, draft, revision) for the chapter
  * @param {Object} log - Logger object
  * @param {Object} context - Context object containing session
  * @param {Object} [context.session] - MCP Session object
- * @returns {Promise<Object>} - Task expansion result { success: boolean, data?: any, error?: { code: string, message: string } }
+ * @returns {Promise<Object>} - Chapter expansion result { success: boolean, data?: any, error?: { code: string, message: string } }
  */
 export async function expandTaskDirect(args, log, context = {}) {
 	const { session } = context; // Extract session
@@ -64,7 +64,7 @@ export async function expandTaskDirect(args, log, context = {}) {
 			success: false,
 			error: {
 				code: 'MISSING_ARGUMENT',
-				message: 'tasksJsonPath is required'
+				message: 'Tasks file path is required to expand a chapter'
 			}
 		};
 	}
@@ -74,15 +74,15 @@ export async function expandTaskDirect(args, log, context = {}) {
 
 	log.info(`[expandTaskDirect] Using tasksPath: ${tasksPath}`);
 
-	// Validate task ID
+	// Validate chapter ID
 	const taskId = id ? parseInt(id, 10) : null;
 	if (!taskId) {
-		log.error('Task ID is required');
+		log.error('Chapter ID is required');
 		return {
 			success: false,
 			error: {
 				code: 'INPUT_VALIDATION_ERROR',
-				message: 'Task ID is required'
+				message: 'Chapter ID is required'
 			}
 		};
 	}
@@ -113,47 +113,47 @@ export async function expandTaskDirect(args, log, context = {}) {
 				success: false,
 				error: {
 					code: 'INVALID_TASKS_FILE',
-					message: `No valid tasks found in ${tasksPath}. readJSON returned: ${JSON.stringify(data)}`
+					message: `No valid chapters found in ${tasksPath}. readJSON returned: ${JSON.stringify(data)}`
 				}
 			};
 		}
 
-		// Find the specific task
-		log.info(`[expandTaskDirect] Searching for task ID ${taskId} in data`);
+		// Find the specific chapter
+		log.info(`[expandTaskDirect] Searching for chapter ID ${taskId} in data`);
 		const task = data.tasks.find((t) => t.id === taskId);
-		log.info(`[expandTaskDirect] Task found: ${task ? 'Yes' : 'No'}`);
+		log.info(`[expandTaskDirect] Chapter found: ${task ? 'Yes' : 'No'}`);
 
 		if (!task) {
 			return {
 				success: false,
 				error: {
 					code: 'TASK_NOT_FOUND',
-					message: `Task with ID ${taskId} not found`
+					message: `Chapter with ID ${taskId} not found`
 				}
 			};
 		}
 
-		// Check if task is completed
+		// Check if chapter is completed
 		if (task.status === 'done' || task.status === 'completed') {
 			return {
 				success: false,
 				error: {
 					code: 'TASK_COMPLETED',
-					message: `Task ${taskId} is already marked as ${task.status} and cannot be expanded`
+					message: `Chapter ${taskId} is already marked as ${task.status} and cannot be expanded`
 				}
 			};
 		}
 
-		// Check for existing subtasks and force flag
+		// Check for existing beats and force flag
 		const hasExistingSubtasks = task.subtasks && task.subtasks.length > 0;
 		if (hasExistingSubtasks && !forceFlag) {
 			log.info(
-				`Task ${taskId} already has ${task.subtasks.length} subtasks. Use --force to overwrite.`
+				`Chapter ${taskId} already has ${task.subtasks.length} beats/scenes. Use --force to overwrite.`
 			);
 			return {
 				success: true,
 				data: {
-					message: `Task ${taskId} already has subtasks. Expansion skipped.`,
+					message: `Chapter ${taskId} already has beats/scenes. Expansion skipped.`,
 					task,
 					subtasksAdded: 0,
 					hasExistingSubtasks
@@ -161,10 +161,10 @@ export async function expandTaskDirect(args, log, context = {}) {
 			};
 		}
 
-		// If force flag is set, clear existing subtasks
+		// If force flag is set, clear existing beats
 		if (hasExistingSubtasks && forceFlag) {
 			log.info(
-				`Force flag set. Clearing existing subtasks for task ${taskId}.`
+				`Force flag set. Clearing existing beats for chapter ${taskId}.`
 			);
 			task.subtasks = [];
 		}
@@ -226,7 +226,7 @@ export async function expandTaskDirect(args, log, context = {}) {
 
 			// Return the result, including telemetryData
 			log.info(
-				`Successfully expanded task ${taskId} with ${subtasksAdded} new subtasks`
+				`Successfully expanded chapter ${taskId} with ${subtasksAdded} new beats/scenes`
 			);
 			return {
 				success: true,
@@ -242,22 +242,22 @@ export async function expandTaskDirect(args, log, context = {}) {
 			// Make sure to restore normal logging even if there's an error
 			if (!wasSilent && isSilentMode()) disableSilentMode();
 
-			log.error(`Error expanding task: ${error.message}`);
+			log.error(`Error expanding chapter: ${error.message}`);
 			return {
 				success: false,
 				error: {
 					code: 'CORE_FUNCTION_ERROR',
-					message: error.message || 'Failed to expand task'
+					message: error.message || 'Failed to expand chapter into beats/scenes'
 				}
 			};
 		}
 	} catch (error) {
-		log.error(`Error expanding task: ${error.message}`);
+		log.error(`Error expanding chapter: ${error.message}`);
 		return {
 			success: false,
 			error: {
 				code: 'CORE_FUNCTION_ERROR',
-				message: error.message || 'Failed to expand task'
+				message: error.message || 'Failed to expand chapter into beats/scenes'
 			}
 		};
 	}

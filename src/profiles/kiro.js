@@ -21,9 +21,9 @@ export const kiroProfile = createProfile({
 		// 'rules/cursor_rules.mdc': 'kiro_rules.md'
 		// 'rules/dev_workflow.mdc': 'dev_workflow.md'
 		// 'rules/self_improve.mdc': 'self_improve.md'
-		// 'rules/taskmaster.mdc': 'taskmaster.md'
+		// 'rules/novelmaster.mdc': 'novelmaster.md'
 		// We can add additional custom mappings here if needed
-		'rules/taskmaster_hooks_workflow.mdc': 'taskmaster_hooks_workflow.md'
+		'rules/novelmaster_hooks_workflow.mdc': 'novelmaster_hooks_workflow.md'
 	},
 	customReplacements: [
 		// Core Kiro directory structure changes
@@ -77,7 +77,7 @@ export const kiroProfile = createProfile({
 			if (hookFiles.length > 0) {
 				log(
 					'info',
-					`[Kiro] Installed ${hookFiles.length} Taskmaster hooks in .kiro/hooks/`
+					`[Kiro] Installed ${hookFiles.length} Novel Master hooks in .kiro/hooks/`
 				);
 			}
 		}

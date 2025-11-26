@@ -106,7 +106,7 @@ export class ConfigManager {
 		}
 
 		// Update VS Code settings
-		const vsConfig = vscode.workspace.getConfiguration('taskmaster');
+		const vsConfig = vscode.workspace.getConfiguration('novelmaster');
 
 		if (updates.mcp) {
 			if (updates.mcp.command !== undefined) {
@@ -329,7 +329,7 @@ export class ConfigManager {
 	 * Load configuration from VS Code settings
 	 */
 	private loadConfig(): TaskMasterConfig {
-		const vsConfig = vscode.workspace.getConfiguration('taskmaster');
+		const vsConfig = vscode.workspace.getConfiguration('novelmaster');
 		const defaultConfig = this.getDefaultConfig();
 
 		return {
@@ -430,7 +430,7 @@ export class ConfigManager {
 		return {
 			mcp: {
 				command: 'npx',
-				args: ['task-master-ai'],
+				args: ['novel-master-ai'],
 				cwd: vscode.workspace.rootPath || '',
 				env: undefined,
 				timeout: 30000,
@@ -469,8 +469,8 @@ export class ConfigManager {
 	 */
 	private setupConfigWatcher(): void {
 		vscode.workspace.onDidChangeConfiguration((event) => {
-			if (event.affectsConfiguration('taskmaster')) {
-				logger.log('Task Master configuration changed, reloading...');
+			if (event.affectsConfiguration('novelmaster')) {
+				logger.log('Novel Master configuration changed, reloading...');
 				this.config = this.loadConfig();
 				this.notifyConfigChange();
 			}

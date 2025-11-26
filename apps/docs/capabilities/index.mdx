@@ -5,15 +5,15 @@ sidebarTitle: "Technical Capabilities"
 
 # Capabilities (Technical)
 
-Discover the technical capabilities of Task Master, including supported models, integrations, and more. 
+Discover the technical capabilities of Novel Master, including supported models, integrations, and more. 
 
 # CLI Interface Synopsis
 
-This document outlines the command-line interface (CLI) for the Task Master application, as defined in `bin/task-master.js` and the `scripts/modules/commands.js` file (which I will assume exists based on the context). This guide is intended for those writing user-facing documentation to understand how users interact with the application from the command line.
+This document outlines the command-line interface (CLI) for the Novel Master application, as defined in `bin/novel-master.js` and the `scripts/modules/commands.js` file (which I will assume exists based on the context). This guide is intended for those writing user-facing documentation to understand how users interact with the application from the command line.
 
 ## Entry Point
 
-The main entry point for the CLI is the `task-master` command, which is an executable script that spawns the main application logic in `scripts/dev.js`.
+The main entry point for the CLI is the `novel-master` command, which is an executable script that spawns the main application logic in `scripts/dev.js`.
 
 ## Global Options
 
@@ -70,8 +70,8 @@ The CLI is organized into a series of commands, each with its own set of options
 
 ### 3. Task Analysis and Expansion
 
--   **`parse-prd`**: Parses a PRD to generate tasks.
-    -   `--file <file>`: The path to the PRD file.
+-   **`parse-prd`**: Parses an NRD (Novel Requirements Document) to generate story arcs and chapters.
+    -   `--file <file>`: The path to the NRD file.
     -   `--num-tasks <numTasks>`: The number of tasks to generate.
 -   **`expand`**: Expands a task into subtasks.
     -   `--id <taskId>`: The ID of the task to expand.
@@ -95,7 +95,7 @@ This synopsis provides a comprehensive overview of the CLI commands and their op
 
 # Core Implementation Synopsis
 
-This document provides a high-level overview of the core implementation of the Task Master application, focusing on the functionalities exposed through `scripts/modules/task-manager.js`. This serves as a guide for understanding the application's capabilities when writing user-facing documentation.
+This document provides a high-level overview of the core implementation of the Novel Master application, focusing on the functionalities exposed through `scripts/modules/task-manager.js`. This serves as a guide for understanding the application's capabilities when writing user-facing documentation.
 
 ## Core Concepts
 
@@ -151,7 +151,7 @@ These functions are used to retrieve information about tasks and manage their st
 
 These functions leverage AI to analyze and break down tasks.
 
--   **`parsePRD(prdPath, numTasks)`**: Parses a Product Requirements Document (PRD) to generate an initial set of tasks.
+-   **`parsePRD(prdPath, numTasks)`**: Parses a Novel Requirements Document (NRD) to generate an initial set of story arcs and chapters.
 -   **`expandTask(taskId, numSubtasks)`**: Expands a task into a specified number of subtasks using AI.
 -   **`expandAllTasks(numSubtasks)`**: Expands all eligible pending or in-progress tasks.
 -   **`analyzeTaskComplexity(options)`**: Analyzes the complexity of tasks and generates recommendations for expansion.
@@ -168,7 +168,7 @@ These functions are crucial for managing the relationships between tasks.
 These functions are for managing the project and its configuration.
 
 -   **`generateTaskFiles()`**: Generates individual task files from `tasks.json`.
--   **`migrateProject()`**: Migrates the project to the new `.taskmaster` directory structure.
+-   **`migrateProject()`**: Migrates the project to the new `.novelmaster` directory structure.
 -   **`performResearch(query, options)`**: Performs AI-powered research with project context.
 
 This overview should provide a solid foundation for creating user-facing documentation. For more detailed information on each function, refer to the source code in `scripts/modules/task-manager/`.
@@ -176,11 +176,11 @@ This overview should provide a solid foundation for creating user-facing documen
 
 # MCP Interface Synopsis
 
-This document provides an overview of the MCP (Machine-to-Machine Communication Protocol) interface for the Task Master application. The MCP interface is defined in the `mcp-server/` directory and exposes the application's core functionalities as a set of tools that can be called remotely.
+This document provides an overview of the MCP (Machine-to-Machine Communication Protocol) interface for the Novel Master application. The MCP interface is defined in the `mcp-server/` directory and exposes the application's core functionalities as a set of tools that can be called remotely.
 
 ## Core Concepts
 
-The MCP interface is built on top of the `fastmcp` library and registers a set of tools that correspond to the core functionalities of the Task Master application. These tools are defined in the `mcp-server/src/tools/` directory and are registered with the MCP server in `mcp-server/src/tools/index.js`.
+The MCP interface is built on top of the `fastmcp` library and registers a set of tools that correspond to the core functionalities of the Novel Master application. These tools are defined in the `mcp-server/src/tools/` directory and are registered with the MCP server in `mcp-server/src/tools/index.js`.
 
 Each tool is defined with a name, a description, and a set of parameters that are validated using the `zod` library. The `execute` function of each tool calls the corresponding core logic function from `scripts/modules/task-manager.js`.
 
@@ -209,7 +209,7 @@ The MCP tools can be categorized in the same way as the core functionalities:
 
 ### 3. Task Analysis and Expansion
 
--   **`parse_prd`**: Parses a PRD to generate tasks.
+-   **`parse_prd`**: Parses an NRD (Novel Requirements Document) to generate story arcs and chapters.
 -   **`expand_task`**: Expands a task into subtasks.
 -   **`expand_all`**: Expands all eligible tasks.
 -   **`analyze_project_complexity`**: Analyzes task complexity.
@@ -238,4 +238,4 @@ The MCP tools can be categorized in the same way as the core functionalities:
 -   **`rename_tag`**: Renames a tag.
 -   **`copy_tag`**: Copies a tag.
 
-This synopsis provides a clear overview of the MCP interface and its available tools, which will be valuable for anyone writing documentation for developers who need to interact with the Task Master application programmatically.
+This synopsis provides a clear overview of the MCP interface and its available tools, which will be valuable for anyone writing documentation for developers who need to interact with the Novel Master application programmatically.

@@ -1,6 +1,6 @@
 /**
  * set-task-status.js
- * Direct function implementation for setting task status
+ * Direct function implementation for setting chapter/scene/beat status
  */
 
 import { setTaskStatus } from '../../../../scripts/modules/task-manager.js';
@@ -11,14 +11,14 @@ import {
 } from '../../../../scripts/modules/utils.js';
 import { nextTaskDirect } from './next-task.js';
 /**
- * Direct function wrapper for setTaskStatus with error handling.
+ * Direct function wrapper for setting chapter/scene/beat status with error handling.
  *
  * @param {Object} args - Command arguments containing id, status, tasksJsonPath, and projectRoot.
- * @param {string} args.id - The ID of the task to update.
- * @param {string} args.status - The new status to set for the task.
+ * @param {string} args.id - The ID of the chapter/scene/beat to update (e.g., '12' or '12.3').
+ * @param {string} args.status - The new status to set (pending, in-progress, draft, revision, done, deferred).
  * @param {string} args.tasksJsonPath - Path to the tasks.json file.
  * @param {string} args.projectRoot - Project root path (for MCP/env fallback)
- * @param {string} args.tag - Tag for the task (optional)
+ * @param {string} args.tag - Tag context (outline, draft, revision) for the task (optional)
  * @param {Object} log - Logger object.
  * @param {Object} context - Additional context (session)
  * @returns {Promise<Object>} - Result object with success status and data/error information.
@@ -44,7 +44,7 @@ export async function setTaskStatusDirect(args, log, context = {}) {
 		// Check required parameters (id and status)
 		if (!id) {
 			const errorMessage =
-				'No task ID specified. Please provide a task ID to update.';
+				'No chapter/scene ID specified. Please provide a chapter or beat ID to update (e.g., "12" or "12.3").';
 			log.error(errorMessage);
 			return {
 				success: false,
@@ -54,7 +54,7 @@ export async function setTaskStatusDirect(args, log, context = {}) {
 
 		if (!status) {
 			const errorMessage =
-				'No status specified. Please provide a new status value.';
+				'No status specified. Please provide a new status value (pending, in-progress, draft, revision, done, deferred).';
 			log.error(errorMessage);
 			return {
 				success: false,
@@ -69,7 +69,7 @@ export async function setTaskStatusDirect(args, log, context = {}) {
 		const taskId = id;
 		const newStatus = status;
 
-		log.info(`Setting task ${taskId} status to "${newStatus}"`);
+		log.info(`Setting chapter/scene ${taskId} status to "${newStatus}"`);
 
 		// Call the core function with proper silent mode handling
 		enableSilentMode(); // Enable silent mode before calling core function
@@ -82,23 +82,23 @@ export async function setTaskStatusDirect(args, log, context = {}) {
 				tag
 			});
 
-			log.info(`Successfully set task ${taskId} status to ${newStatus}`);
+			log.info(`Successfully set chapter/scene ${taskId} status to ${newStatus}`);
 
 			// Return success data
 			const result = {
 				success: true,
 				data: {
-					message: `Successfully updated task ${taskId} status to "${newStatus}"`,
+					message: `Successfully updated chapter/scene ${taskId} status to "${newStatus}"`,
 					taskId,
 					status: newStatus,
 					tasksPath: tasksPath // Return the path used
 				}
 			};
 
-			// If the task was completed, attempt to fetch the next task
+			// If the chapter/scene was completed, attempt to fetch the next one
 			if (result.data.status === 'done') {
 				try {
-					log.info(`Attempting to fetch next task for task ${taskId}`);
+					log.info(`Attempting to fetch next chapter/scene after ${taskId}`);
 					const nextResult = await nextTaskDirect(
 						{
 							tasksJsonPath: tasksJsonPath,

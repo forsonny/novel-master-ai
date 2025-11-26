@@ -1,6 +1,6 @@
 /**
  * rename-tag.js
- * Direct function implementation for renaming a tag
+ * Direct function implementation for renaming a tag context (e.g., "draft" → "draft-v2")
  */
 
 import { renameTag } from '../../../../scripts/modules/task-manager/tag-management.js';
@@ -11,11 +11,11 @@ import {
 import { createLogWrapper } from '../../tools/utils.js';
 
 /**
- * Direct function wrapper for renaming a tag with error handling.
+ * Direct function wrapper for renaming a tag context (e.g., "draft" → "draft-v2") with error handling.
  *
  * @param {Object} args - Command arguments
- * @param {string} args.oldName - Current name of the tag to rename
- * @param {string} args.newName - New name for the tag
+ * @param {string} args.oldName - Current name of the tag context to rename (e.g., "draft")
+ * @param {string} args.newName - New name for the tag context (e.g., "draft-v2")
  * @param {string} [args.tasksJsonPath] - Path to the tasks.json file (resolved by tool)
  * @param {string} [args.projectRoot] - Project root path
  * @param {Object} log - Logger object
@@ -42,7 +42,7 @@ export async function renameTagDirect(args, log, context = {}) {
 				success: false,
 				error: {
 					code: 'MISSING_ARGUMENT',
-					message: 'tasksJsonPath is required'
+					message: 'Tasks file path is required to rename a tag context'
 				}
 			};
 		}
@@ -55,7 +55,7 @@ export async function renameTagDirect(args, log, context = {}) {
 				success: false,
 				error: {
 					code: 'MISSING_PARAMETER',
-					message: 'Old tag name is required and must be a string'
+					message: 'Old tag context name is required and must be a string (e.g., "draft")'
 				}
 			};
 		}
@@ -67,12 +67,12 @@ export async function renameTagDirect(args, log, context = {}) {
 				success: false,
 				error: {
 					code: 'MISSING_PARAMETER',
-					message: 'New tag name is required and must be a string'
+					message: 'New tag context name is required and must be a string (e.g., "draft-v2")'
 				}
 			};
 		}
 
-		log.info(`Renaming tag from "${oldName}" to "${newName}"`);
+		log.info(`Renaming tag context from "${oldName}" to "${newName}"`);
 
 		// Call the renameTag function
 		const result = await renameTag(
@@ -97,9 +97,9 @@ export async function renameTagDirect(args, log, context = {}) {
 				oldName: result.oldName,
 				newName: result.newName,
 				renamed: result.renamed,
-				taskCount: result.taskCount,
+				chapterCount: result.taskCount,
 				wasCurrentTag: result.wasCurrentTag,
-				message: `Successfully renamed tag from "${result.oldName}" to "${result.newName}"`
+				message: `Successfully renamed tag context from "${result.oldName}" to "${result.newName}"`
 			}
 		};
 	} catch (error) {

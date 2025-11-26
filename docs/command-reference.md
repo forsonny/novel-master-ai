@@ -1,4 +1,4 @@
-# Task Master Command Reference
+# Novel Master Command Reference
 
 Here's a comprehensive reference of all available commands:
 
@@ -6,55 +6,55 @@ Here's a comprehensive reference of all available commands:
 
 ```bash
 # Parse a PRD file and generate tasks
-task-master parse-prd <prd-file.txt>
+novel-master parse-prd <prd-file.txt>
 
 # Limit the number of tasks generated (default is 10)
-task-master parse-prd <prd-file.txt> --num-tasks=5
+novel-master parse-prd <prd-file.txt> --num-tasks=5
 
 # Allow task master to determine the number of tasks based on complexity
-task-master parse-prd <prd-file.txt> --num-tasks=0
+novel-master parse-prd <prd-file.txt> --num-tasks=0
 ```
 
 ## List Tasks
 
 ```bash
 # List all tasks
-task-master list
+novel-master list
 
 # List tasks with a specific status
-task-master list --status=<status>
+novel-master list --status=<status>
 
 # List tasks with subtasks
-task-master list --with-subtasks
+novel-master list --with-subtasks
 
 # List tasks with a specific status and include subtasks
-task-master list --status=<status> --with-subtasks
+novel-master list --status=<status> --with-subtasks
 ```
 
 ## Show Next Task
 
 ```bash
 # Show the next task to work on based on dependencies and status
-task-master next
+novel-master next
 ```
 
 ## Show Specific Task
 
 ```bash
 # Show details of a specific task
-task-master show <id>
+novel-master show <id>
 # or
-task-master show --id=<id>
+novel-master show --id=<id>
 
 # View multiple tasks with comma-separated IDs
-task-master show 1,3,5
-task-master show 44,55
+novel-master show 1,3,5
+novel-master show 44,55
 
 # View a specific subtask (e.g., subtask 2 of task 1)
-task-master show 1.2
+novel-master show 1.2
 
 # Mix parent tasks and subtasks
-task-master show 44,44.1,55,55.2
+novel-master show 44,44.1,55,55.2
 ```
 
 **Multiple Task Display:**
@@ -72,33 +72,33 @@ task-master show 44,44.1,55,55.2
 
 ```bash
 # Update tasks from a specific ID and provide context
-task-master update --from=<id> --prompt="<prompt>"
+novel-master update --from=<id> --prompt="<prompt>"
 
 # Update tasks using research role
-task-master update --from=<id> --prompt="<prompt>" --research
+novel-master update --from=<id> --prompt="<prompt>" --research
 ```
 
 ## Update a Specific Task
 
 ```bash
 # Update a single task by ID with new information
-task-master update-task --id=<id> --prompt="<prompt>"
+novel-master update-task --id=<id> --prompt="<prompt>"
 
 # Use research-backed updates
-task-master update-task --id=<id> --prompt="<prompt>" --research
+novel-master update-task --id=<id> --prompt="<prompt>" --research
 ```
 
 ## Update a Subtask
 
 ```bash
 # Append additional information to a specific subtask
-task-master update-subtask --id=<parentId.subtaskId> --prompt="<prompt>"
+novel-master update-subtask --id=<parentId.subtaskId> --prompt="<prompt>"
 
 # Example: Add details about API rate limiting to subtask 2 of task 5
-task-master update-subtask --id=5.2 --prompt="Add rate limiting of 100 requests per minute"
+novel-master update-subtask --id=5.2 --prompt="Add rate limiting of 100 requests per minute"
 
 # Use research-backed updates
-task-master update-subtask --id=<parentId.subtaskId> --prompt="<prompt>" --research
+novel-master update-subtask --id=<parentId.subtaskId> --prompt="<prompt>" --research
 ```
 
 Unlike the `update-task` command which replaces task information, the `update-subtask` command _appends_ new information to the existing subtask details, marking it with a timestamp. This is useful for iteratively enhancing subtasks while preserving the original content.
@@ -107,20 +107,20 @@ Unlike the `update-task` command which replaces task information, the `update-su
 
 ```bash
 # Generate individual task files from tasks.json
-task-master generate
+novel-master generate
 ```
 
 ## Set Task Status
 
 ```bash
 # Set status of a single task
-task-master set-status --id=<id> --status=<status>
+novel-master set-status --id=<id> --status=<status>
 
 # Set status for multiple tasks
-task-master set-status --id=1,2,3 --status=<status>
+novel-master set-status --id=1,2,3 --status=<status>
 
 # Set status for subtasks
-task-master set-status --id=1.1,1.2 --status=<status>
+novel-master set-status --id=1.1,1.2 --status=<status>
 ```
 
 When marking a task as "done", all of its subtasks will automatically be marked as "done" as well.
@@ -129,173 +129,173 @@ When marking a task as "done", all of its subtasks will automatically be marked 
 
 ```bash
 # Expand a specific task with subtasks
-task-master expand --id=<id> --num=<number>
+novel-master expand --id=<id> --num=<number>
 
 # Expand a task with a dynamic number of subtasks (ignoring complexity report)
-task-master expand --id=<id> --num=0
+novel-master expand --id=<id> --num=0
 
 # Expand with additional context
-task-master expand --id=<id> --prompt="<context>"
+novel-master expand --id=<id> --prompt="<context>"
 
 # Expand all pending tasks
-task-master expand --all
+novel-master expand --all
 
 # Force regeneration of subtasks for tasks that already have them
-task-master expand --all --force
+novel-master expand --all --force
 
 # Research-backed subtask generation for a specific task
-task-master expand --id=<id> --research
+novel-master expand --id=<id> --research
 
 # Research-backed generation for all tasks
-task-master expand --all --research
+novel-master expand --all --research
 ```
 
 ## Clear Subtasks
 
 ```bash
 # Clear subtasks from a specific task
-task-master clear-subtasks --id=<id>
+novel-master clear-subtasks --id=<id>
 
 # Clear subtasks from multiple tasks
-task-master clear-subtasks --id=1,2,3
+novel-master clear-subtasks --id=1,2,3
 
 # Clear subtasks from all tasks
-task-master clear-subtasks --all
+novel-master clear-subtasks --all
 ```
 
 ## Analyze Task Complexity
 
 ```bash
 # Analyze complexity of all tasks
-task-master analyze-complexity
+novel-master analyze-complexity
 
 # Save report to a custom location
-task-master analyze-complexity --output=my-report.json
+novel-master analyze-complexity --output=my-report.json
 
 # Use a specific LLM model
-task-master analyze-complexity --model=claude-3-opus-20240229
+novel-master analyze-complexity --model=claude-3-opus-20240229
 
 # Set a custom complexity threshold (1-10)
-task-master analyze-complexity --threshold=6
+novel-master analyze-complexity --threshold=6
 
 # Use an alternative tasks file
-task-master analyze-complexity --file=custom-tasks.json
+novel-master analyze-complexity --file=custom-tasks.json
 
 # Use Perplexity AI for research-backed complexity analysis
-task-master analyze-complexity --research
+novel-master analyze-complexity --research
 ```
 
 ## View Complexity Report
 
 ```bash
 # Display the task complexity analysis report
-task-master complexity-report
+novel-master complexity-report
 
 # View a report at a custom location
-task-master complexity-report --file=my-report.json
+novel-master complexity-report --file=my-report.json
 ```
 
 ## Managing Task Dependencies
 
 ```bash
 # Add a dependency to a task
-task-master add-dependency --id=<id> --depends-on=<id>
+novel-master add-dependency --id=<id> --depends-on=<id>
 
 # Remove a dependency from a task
-task-master remove-dependency --id=<id> --depends-on=<id>
+novel-master remove-dependency --id=<id> --depends-on=<id>
 
 # Validate dependencies without fixing them
-task-master validate-dependencies
+novel-master validate-dependencies
 
 # Find and fix invalid dependencies automatically
-task-master fix-dependencies
+novel-master fix-dependencies
 ```
 
 ## Move Tasks
 
 ```bash
 # Move a task or subtask to a new position
-task-master move --from=<id> --to=<id>
+novel-master move --from=<id> --to=<id>
 
 # Examples:
 # Move task to become a subtask
-task-master move --from=5 --to=7
+novel-master move --from=5 --to=7
 
 # Move subtask to become a standalone task
-task-master move --from=5.2 --to=7
+novel-master move --from=5.2 --to=7
 
 # Move subtask to a different parent
-task-master move --from=5.2 --to=7.3
+novel-master move --from=5.2 --to=7.3
 
 # Reorder subtasks within the same parent
-task-master move --from=5.2 --to=5.4
+novel-master move --from=5.2 --to=5.4
 
 # Move a task to a new ID position (creates placeholder if doesn't exist)
-task-master move --from=5 --to=25
+novel-master move --from=5 --to=25
 
 # Move multiple tasks at once (must have the same number of IDs)
-task-master move --from=10,11,12 --to=16,17,18
+novel-master move --from=10,11,12 --to=16,17,18
 ```
 
 ## Add a New Task
 
 ```bash
 # Add a new task using AI (main role)
-task-master add-task --prompt="Description of the new task"
+novel-master add-task --prompt="Description of the new task"
 
 # Add a new task using AI (research role)
-task-master add-task --prompt="Description of the new task" --research
+novel-master add-task --prompt="Description of the new task" --research
 
 # Add a task with dependencies
-task-master add-task --prompt="Description" --dependencies=1,2,3
+novel-master add-task --prompt="Description" --dependencies=1,2,3
 
 # Add a task with priority
-task-master add-task --prompt="Description" --priority=high
+novel-master add-task --prompt="Description" --priority=high
 ```
 
 ## Tag Management
 
-Task Master supports tagged task lists for multi-context task management. Each tag represents a separate, isolated context for tasks.
+Novel Master supports tagged task lists for multi-context task management. Each tag represents a separate, isolated context for tasks.
 
 ```bash
 # List all available tags with task counts and status
-task-master tags
+novel-master tags
 
 # List tags with detailed metadata
-task-master tags --show-metadata
+novel-master tags --show-metadata
 
 # Create a new empty tag
-task-master add-tag <tag-name>
+novel-master add-tag <tag-name>
 
 # Create a new tag with a description
-task-master add-tag <tag-name> --description="Feature development tasks"
+novel-master add-tag <tag-name> --description="Feature development tasks"
 
 # Create a tag based on current git branch name
-task-master add-tag --from-branch
+novel-master add-tag --from-branch
 
 # Create a new tag by copying tasks from the current tag
-task-master add-tag <new-tag> --copy-from-current
+novel-master add-tag <new-tag> --copy-from-current
 
 # Create a new tag by copying from a specific tag
-task-master add-tag <new-tag> --copy-from=<source-tag>
+novel-master add-tag <new-tag> --copy-from=<source-tag>
 
 # Switch to a different tag context
-task-master use-tag <tag-name>
+novel-master use-tag <tag-name>
 
 # Rename an existing tag
-task-master rename-tag <old-name> <new-name>
+novel-master rename-tag <old-name> <new-name>
 
 # Copy an entire tag to create a new one
-task-master copy-tag <source-tag> <target-tag>
+novel-master copy-tag <source-tag> <target-tag>
 
 # Copy a tag with a description
-task-master copy-tag <source-tag> <target-tag> --description="Copied for testing"
+novel-master copy-tag <source-tag> <target-tag> --description="Copied for testing"
 
 # Delete a tag and all its tasks (with confirmation)
-task-master delete-tag <tag-name>
+novel-master delete-tag <tag-name>
 
 # Delete a tag without confirmation prompt
-task-master delete-tag <tag-name> --yes
+novel-master delete-tag <tag-name> --yes
 ```
 
 **Tag Context:**
@@ -306,11 +306,11 @@ task-master delete-tag <tag-name> --yes
 ## Initialize a Project
 
 ```bash
-# Initialize a new project with Task Master structure
-task-master init
+# Initialize a new project with Novel Master structure
+novel-master init
 
 # Initialize a new project applying specific rules
-task-master init --rules cursor,windsurf,vscode
+novel-master init --rules cursor,windsurf,vscode
 ```
 
 - The `--rules` flag allows you to specify one or more rule profiles (e.g., `cursor`, `roo`, `windsurf`, `cline`) to apply during initialization.
@@ -322,17 +322,17 @@ task-master init --rules cursor,windsurf,vscode
 ```bash
 # Add rule profiles to your project
 # (e.g., .roo/rules, .windsurf/rules)
-task-master rules add <profile1,profile2,...>
+novel-master rules add <profile1,profile2,...>
 
 # Remove rule sets from your project
-task-master rules remove <profile1,profile2,...>
+novel-master rules remove <profile1,profile2,...>
 
 # Remove rule sets bypassing safety check (dangerous)
-task-master rules remove <profile1,profile2,...> --force
+novel-master rules remove <profile1,profile2,...> --force
 
 # Launch interactive rules setup to select rules
 # (does not re-initialize project or ask about shell aliases)
-task-master rules setup
+novel-master rules setup
 ```
 
 - Adding rules creates the profile and rules directory (e.g., `.roo/rules`) and copies/initializes the rules.
@@ -344,9 +344,9 @@ task-master rules setup
 **Examples:**
 
 ```bash
-task-master rules add windsurf,roo,vscode
-task-master rules remove windsurf
-task-master rules setup
+novel-master rules add windsurf,roo,vscode
+novel-master rules remove windsurf
+novel-master rules setup
 ```
 
 ### Interactive Rules Setup
@@ -354,7 +354,7 @@ task-master rules setup
 You can launch the interactive rules setup at any time with:
 
 ```bash
-task-master rules setup
+novel-master rules setup
 ```
 
 This command opens a prompt where you can select which rule profiles (e.g., Cursor, Roo, Windsurf) you want to add to your project. This does **not** re-initialize your project or ask about shell aliases; it only manages rules.
@@ -366,71 +366,71 @@ This command opens a prompt where you can select which rule profiles (e.g., Curs
 
 ```bash
 # View current AI model configuration and API key status
-task-master models
+novel-master models
 
 # Set the primary model for generation/updates (provider inferred if known)
-task-master models --set-main=claude-3-opus-20240229
+novel-master models --set-main=claude-3-opus-20240229
 
 # Set the research model
-task-master models --set-research=sonar-pro
+novel-master models --set-research=sonar-pro
 
 # Set the fallback model
-task-master models --set-fallback=claude-3-haiku-20240307
+novel-master models --set-fallback=claude-3-haiku-20240307
 
 # Set a custom Ollama model for the main role
-task-master models --set-main=my-local-llama --ollama
+novel-master models --set-main=my-local-llama --ollama
 
 # Set a custom OpenRouter model for the research role
-task-master models --set-research=google/gemini-pro --openrouter
+novel-master models --set-research=google/gemini-pro --openrouter
 
 # Set Codex CLI model for the main role (uses ChatGPT subscription via OAuth)
-task-master models --set-main=gpt-5-codex --codex-cli
+novel-master models --set-main=gpt-5-codex --codex-cli
 
 # Set Codex CLI model for the fallback role
-task-master models --set-fallback=gpt-5 --codex-cli
+novel-master models --set-fallback=gpt-5 --codex-cli
 
 # Run interactive setup to configure models, including custom ones
-task-master models --setup
+novel-master models --setup
 ```
 
-Configuration is stored in `.taskmaster/config.json` in your project root (legacy `.taskmasterconfig` files are automatically migrated). API keys are still managed via `.env` or MCP configuration. Use `task-master models` without flags to see available built-in models. Use `--setup` for a guided experience.
+Configuration is stored in `.novelmaster/config.json` in your project root (legacy `.novelmasterconfig` files are automatically migrated). API keys are still managed via `.env` or MCP configuration. Use `novel-master models` without flags to see available built-in models. Use `--setup` for a guided experience.
 
-State is stored in `.taskmaster/state.json` in your project root. It maintains important information like the current tag. Do not manually edit this file.
+State is stored in `.novelmaster/state.json` in your project root. It maintains important information like the current tag. Do not manually edit this file.
 
 ## Research Fresh Information
 
 ```bash
 # Perform AI-powered research with fresh, up-to-date information
-task-master research "What are the latest best practices for JWT authentication in Node.js?"
+novel-master research "What are the latest best practices for JWT authentication in Node.js?"
 
 # Research with specific task context
-task-master research "How to implement OAuth 2.0?" --id=15,16
+novel-master research "How to implement OAuth 2.0?" --id=15,16
 
 # Research with file context for code-aware suggestions
-task-master research "How can I optimize this API implementation?" --files=src/api.js,src/auth.js
+novel-master research "How can I optimize this API implementation?" --files=src/api.js,src/auth.js
 
 # Research with custom context and project tree
-task-master research "Best practices for error handling" --context="We're using Express.js" --tree
+novel-master research "Best practices for error handling" --context="We're using Express.js" --tree
 
 # Research with different detail levels
-task-master research "React Query v5 migration guide" --detail=high
+novel-master research "React Query v5 migration guide" --detail=high
 
 # Disable interactive follow-up questions (useful for scripting, is the default for MCP)
 # Use a custom tasks file location
-task-master research "How to implement this feature?" --file=custom-tasks.json
+novel-master research "How to implement this feature?" --file=custom-tasks.json
 
 # Research within a specific tag context
-task-master research "Database optimization strategies" --tag=feature-branch
+novel-master research "Database optimization strategies" --tag=feature-branch
 
-# Save research conversation to .taskmaster/docs/research/ directory (for later reference)
-task-master research "Database optimization techniques" --save-file
+# Save research conversation to .novelmaster/docs/research/ directory (for later reference)
+novel-master research "Database optimization techniques" --save-file
 
 # Save key findings directly to a task or subtask (recommended for actionable insights)
-task-master research "How to implement OAuth?" --save-to=15
-task-master research "API optimization strategies" --save-to=15.2
+novel-master research "How to implement OAuth?" --save-to=15
+novel-master research "API optimization strategies" --save-to=15.2
 
 # Combine context gathering with automatic saving of findings
-task-master research "Best practices for this implementation" --id=15,16 --files=src/auth.js --save-to=15.3
+novel-master research "Best practices for this implementation" --id=15,16 --files=src/auth.js --save-to=15.3
 ```
 
 **The research command is a powerful exploration tool that provides:**

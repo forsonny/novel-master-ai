@@ -69,7 +69,7 @@ jobs:
         if: steps.changes.outputs.changesets == 'true'
         run: |
           # Validate that changesets only reference public packages
-          # This catches issues like using @tm/cli instead of task-master-ai
+          # This catches issues like using @tm/cli instead of novel-master-ai
           node .github/scripts/validate-changesets.mjs
         env:
           FORCE_COLOR: 1

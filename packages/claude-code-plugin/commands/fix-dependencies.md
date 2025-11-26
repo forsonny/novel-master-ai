@@ -7,27 +7,27 @@ Intelligently fixes common dependency problems while preserving project logic.
 ## Execution
 
 ```bash
-task-master fix-dependencies
+novel-master fix-dependencies
 ```
 
 ## What Gets Fixed
 
 ### 1. **Auto-Fixable Issues**
-- Remove references to deleted tasks
+- Remove references to deleted chapters
 - Break simple circular dependencies
 - Remove self-dependencies
 - Clean up duplicate dependencies
 
 ### 2. **Smart Resolutions**
 - Reorder dependencies to maintain logic
-- Suggest task merging for over-dependent tasks
+- Suggest chapter merging for over-dependent chapters
 - Flatten unnecessary dependency chains
 - Remove redundant transitive dependencies
 
 ### 3. **Manual Review Required**
 - Complex circular dependencies
 - Critical path modifications
-- Business logic dependencies
+- Story logic dependencies
 - High-impact changes
 
 ## Fix Process
@@ -40,7 +40,7 @@ task-master fix-dependencies
 2. **Execution Phase**
    - Apply automatic fixes
    - Log all changes made
-   - Preserve task relationships
+   - Preserve chapter relationships
 
 3. **Verification Phase**
    - Re-validate after fixes
@@ -49,7 +49,7 @@ task-master fix-dependencies
 
 ## Smart Features
 
-- Preserves intended task flow
+- Preserves intended chapter flow
 - Minimal disruption approach
 - Creates fix history/log
 - Suggests manual interventions
@@ -60,17 +60,17 @@ task-master fix-dependencies
 Dependency Auto-Fix Report
 ━━━━━━━━━━━━━━━━━━━━━━━━
 Fixed Automatically:
-✅ Removed 2 references to deleted tasks
+✅ Removed 2 references to deleted chapters
 ✅ Resolved 1 self-dependency
 ✅ Cleaned 3 redundant dependencies
 
 Manual Review Needed:
 ⚠️ Complex circular dependency: #12 → #15 → #18 → #12
   Suggestion: Make #15 not depend on #12
-⚠️ Task #45 has 8 dependencies
-  Suggestion: Break into subtasks
+⚠️ Chapter #45 has 8 dependencies
+  Suggestion: Break into scenes
 
-Run '/taskmaster:validate-dependencies' to verify fixes
+Run '/novelmaster:validate-dependencies' to verify fixes
 ```
 
 ## Safety

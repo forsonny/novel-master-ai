@@ -78,7 +78,7 @@ dev-debug.log
 # NPMRC
 .npmrc
 
-# Added by Task Master AI
+# Added by Novel Master AI
 # Editor directories and files
 .idea
 .vscode
@@ -98,7 +98,7 @@ apps/extension/vsix-build/
 # turbo
 .turbo
 
-# TaskMaster Workflow State (now stored in ~/.taskmaster/sessions/)
+# TaskMaster Workflow State (now stored in ~/.novelmaster/sessions/)
 # No longer needed in .gitignore as state is stored globally
 
 .scannerwork

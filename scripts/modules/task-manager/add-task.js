@@ -122,7 +122,7 @@ async function addTask(
 	}
 
 	logFn.info(
-		`Adding new task with prompt: "${prompt}", Priority: ${effectivePriority}, Dependencies: ${dependencies.join(', ') || 'None'}, Research: ${useResearch}, ProjectRoot: ${projectRoot}`
+		`Adding new narrative task with prompt: "${prompt}", Priority: ${effectivePriority}, Dependencies: ${dependencies.join(', ') || 'None'}, Research: ${useResearch}, ProjectRoot: ${projectRoot}`
 	);
 	if (tag) {
 		logFn.info(`Using tag context: ${tag}`);
@@ -662,15 +662,15 @@ async function addTask(
 						chalk.white.bold('Next Steps:') +
 						'\n' +
 						chalk.cyan(
-							`1. Run ${chalk.yellow(`task-master show ${newTaskId}`)} to see complete task details`
+							`1. Run ${chalk.yellow(`novel-master show ${newTaskId}`)} to see complete task details`
 						) +
 						'\n' +
 						chalk.cyan(
-							`2. Run ${chalk.yellow(`task-master set-status --id=${newTaskId} --status=in-progress`)} to start working on it`
+							`2. Run ${chalk.yellow(`novel-master set-status --id=${newTaskId} --status=in-progress`)} to start working on it`
 						) +
 						'\n' +
 						chalk.cyan(
-							`3. Run ${chalk.yellow(`task-master expand --id=${newTaskId}`)} to break it down into subtasks`
+							`3. Run ${chalk.yellow(`novel-master expand --id=${newTaskId}`)} to break it down into subtasks`
 						),
 					{ padding: 1, borderColor: 'green', borderStyle: 'round' }
 				)

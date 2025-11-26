@@ -9,12 +9,12 @@ Multi-dimensional analysis based on requested focus area.
 ### 1. **Analysis Modes**
 
 Based on $ARGUMENTS:
-- "velocity" → Sprint velocity and trends
-- "quality" → Code quality metrics
+- "velocity" → Writing velocity and trends
+- "quality" → Prose quality metrics
 - "risk" → Risk assessment and mitigation
 - "dependencies" → Dependency graph analysis
 - "team" → Workload and skill distribution
-- "architecture" → System design coherence
+- "structure" → Story structure coherence
 - Default → Full spectrum analysis
 
 ### 2. **Velocity Analytics**
@@ -22,28 +22,28 @@ Based on $ARGUMENTS:
 ```
 📊 Velocity Analysis
 ━━━━━━━━━━━━━━━━━━━
-Current Sprint: 24 points/week ↗️ +20%
-Rolling Average: 20 points/week
-Efficiency: 85% (17/20 tasks on time)
+Current Story Arc: 24 chapters/week ↗️ +20%
+Rolling Average: 20 chapters/week
+Efficiency: 85% (17/20 chapters on time)
 
 Bottlenecks Detected:
-- Code review delays (avg 4h wait)
-- Test environment availability
-- Dependency on external team
+- Continuity review delays (avg 4h wait)
+- Beta reader availability
+- Dependency on research completion
 
 Recommendations:
 1. Implement parallel review process
-2. Add staging environment
-3. Mock external dependencies
+2. Add continuity checking automation
+3. Mock research dependencies
 ```
 
 ### 3. **Risk Assessment**
 
-**Technical Risks**
-- High complexity tasks without backup assignee
-- Single points of failure in architecture
-- Insufficient test coverage in critical paths
-- Technical debt accumulation rate
+**Narrative Risks**
+- High complexity chapters without backup writer
+- Single points of failure in story structure
+- Insufficient continuity coverage in critical paths
+- Story arc debt accumulation rate
 
 **Project Risks**
 - Critical path dependencies
@@ -65,15 +65,15 @@ Time Saved: 3 days
 
 ### 5. **Quality Metrics**
 
-**Code Quality**
-- Test coverage trends
+**Prose Quality**
+- Continuity coverage trends
 - Complexity scores
-- Technical debt ratio
+- Story arc debt ratio
 - Review feedback patterns
 
 **Process Quality**
 - Rework frequency
-- Bug introduction rate
+- Continuity error introduction rate
 - Time to resolution
 - Knowledge distribution
 

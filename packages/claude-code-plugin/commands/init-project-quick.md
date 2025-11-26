@@ -2,17 +2,17 @@ Quick initialization with auto-confirmation.
 
 Arguments: $ARGUMENTS
 
-Initialize a Task Master project without prompts, accepting all defaults.
+Initialize a Novel Master project without prompts, accepting all defaults.
 
 ## Quick Setup
 
 ```bash
-task-master init -y
+novel-master init -y
 ```
 
 ## What It Does
 
-1. Creates `.taskmaster/` directory structure
+1. Creates `.novelmaster/` directory structure
 2. Initializes empty `tasks.json`
 3. Sets up default configuration
 4. Uses directory name as project name
@@ -21,26 +21,26 @@ task-master init -y
 ## Smart Defaults
 
 - Project name: Current directory name
-- Description: "Task Master Project"
+- Description: "Novel Master Project"
 - Model config: Existing environment vars
-- Task structure: Standard format
+- Chapter structure: Standard format
 
 ## Next Steps
 
 After quick init:
 1. Configure AI models if needed:
    ```
-   /taskmaster:models/setup
+   /novelmaster:models/setup
    ```
 
-2. Parse PRD if available:
+2. Parse NRD if available:
    ```
-   /taskmaster:parse-prd <file>
+   /novelmaster:parse-prd <file>
    ```
 
-3. Or create first task:
+3. Or create first chapter:
    ```
-   /taskmaster:add-task create initial setup
+   /novelmaster:add-task create initial chapter
    ```
 
 Perfect for rapid project setup!

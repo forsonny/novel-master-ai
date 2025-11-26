@@ -43,7 +43,7 @@ export interface NotificationPreferences {
 
 export class NotificationPreferencesManager {
 	private static instance: NotificationPreferencesManager | null = null;
-	private readonly configSection = 'taskMasterKanban';
+	private readonly configSection = 'novelMasterKanban';
 
 	private constructor() {}
 
@@ -241,7 +241,7 @@ export class NotificationPreferencesManager {
 			vscode.ConfigurationTarget.Global
 		);
 
-		logger.log('Task Master Kanban notification preferences reset to defaults');
+		logger.log('Novel Master Kanban notification preferences reset to defaults');
 	}
 
 	/**
@@ -291,7 +291,7 @@ export class NotificationPreferencesManager {
 				notificationType: NotificationType.VSCODE_ERROR,
 				logToConsole: true
 			},
-			[ErrorCategory.TASK_MASTER_API]: {
+			[ErrorCategory.NOVEL_MASTER_API]: {
 				showToUser: true,
 				notificationType: NotificationType.TOAST_ERROR,
 				logToConsole: true

@@ -33,7 +33,7 @@ const getBuildTimeEnvs = () => {
 export default defineConfig(
 	mergeConfig(baseConfig, {
 		entry: {
-			'task-master': 'scripts/dev.js',
+			'novel-master': 'scripts/dev.js',
 			'mcp-server': 'mcp-server/server.js'
 		},
 		outDir: 'dist',

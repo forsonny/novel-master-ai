@@ -40,7 +40,7 @@ describe('Selective Rules Removal', () => {
 		console.log = jest.fn();
 
 		// Create temp directory for testing
-		tempDir = fs.mkdtempSync(path.join(os.tmpdir(), 'task-master-test-'));
+		tempDir = fs.mkdtempSync(path.join(os.tmpdir(), 'novel-master-test-'));
 
 		// Set up spies on fs methods
 		mockExistsSync = jest.spyOn(fs, 'existsSync');
@@ -53,8 +53,8 @@ describe('Selective Rules Removal', () => {
 		mockMkdirSync = jest.spyOn(fs, 'mkdirSync').mockImplementation(() => {});
 		mockStatSync = jest.spyOn(fs, 'statSync').mockImplementation((filePath) => {
 			// Mock stat objects for files and directories
-			if (filePath.includes('taskmaster') && !filePath.endsWith('.mdc')) {
-				// This is the taskmaster directory
+			if (filePath.includes('novelmaster') && !filePath.endsWith('.mdc')) {
+				// This is the novelmaster directory
 				return { isDirectory: () => true, isFile: () => false };
 			} else {
 				// This is a file
@@ -79,7 +79,7 @@ describe('Selective Rules Removal', () => {
 	});
 
 	describe('removeProfileRules - Selective File Removal', () => {
-		it('should only remove Task Master files, preserving existing rules', () => {
+		it('should only remove Novel Master files, preserving existing rules', () => {
 			const projectRoot = '/test/project';
 			const cursorProfile = getRulesProfile('cursor');
 
@@ -94,9 +94,9 @@ describe('Selective Rules Removal', () => {
 			// Mock MCP config file
 			const mockMcpConfig = {
 				mcpServers: {
-					'task-master-ai': {
+					'novel-master-ai': {
 						command: 'npx',
-						args: ['task-master-ai']
+						args: ['novel-master-ai']
 					}
 				}
 			};
@@ -106,16 +106,16 @@ describe('Selective Rules Removal', () => {
 			mockReaddirSync
 				// First call - get initial directory contents (rules directory)
 				.mockReturnValueOnce([
-					'cursor_rules.mdc', // Task Master file
-					'taskmaster', // Task Master subdirectory
-					'self_improve.mdc', // Task Master file
-					'custom_rule.mdc', // Existing file (not Task Master)
-					'my_company_rules.mdc' // Existing file (not Task Master)
+					'cursor_rules.mdc', // Novel Master file
+					'novelmaster', // Novel Master subdirectory
+					'self_improve.mdc', // Novel Master file
+					'custom_rule.mdc', // Existing file (not Novel Master)
+					'my_company_rules.mdc' // Existing file (not Novel Master)
 				])
-				// Second call - get taskmaster subdirectory contents
+				// Second call - get novelmaster subdirectory contents
 				.mockReturnValueOnce([
-					'dev_workflow.mdc', // Task Master file in subdirectory
-					'taskmaster.mdc' // Task Master file in subdirectory
+					'dev_workflow.mdc', // Novel Master file in subdirectory
+					'novelmaster.mdc' // Novel Master file in subdirectory
 				])
 				// Third call - check remaining files after removal
 				.mockReturnValueOnce([
@@ -135,9 +135,9 @@ describe('Selective Rules Removal', () => {
 			// The function should succeed in removing files even if the final directory check fails
 			expect(result.filesRemoved).toEqual([
 				'cursor_rules.mdc',
-				'taskmaster/dev_workflow.mdc',
+				'novelmaster/dev_workflow.mdc',
 				'self_improve.mdc',
-				'taskmaster/taskmaster.mdc'
+				'novelmaster/novelmaster.mdc'
 			]);
 			expect(result.notice).toContain('Preserved 2 existing rule files');
 
@@ -151,13 +151,13 @@ describe('Selective Rules Removal', () => {
 				expect(result.filesRemoved.length).toBeGreaterThan(0);
 			}
 
-			// Verify only Task Master files were removed
+			// Verify only Novel Master files were removed
 			expect(mockRmSync).toHaveBeenCalledWith(
 				path.join(projectRoot, '.cursor/rules/cursor_rules.mdc'),
 				{ force: true }
 			);
 			expect(mockRmSync).toHaveBeenCalledWith(
-				path.join(projectRoot, '.cursor/rules/taskmaster/dev_workflow.mdc'),
+				path.join(projectRoot, '.cursor/rules/novelmaster/dev_workflow.mdc'),
 				{ force: true }
 			);
 			expect(mockRmSync).toHaveBeenCalledWith(
@@ -165,7 +165,7 @@ describe('Selective Rules Removal', () => {
 				{ force: true }
 			);
 			expect(mockRmSync).toHaveBeenCalledWith(
-				path.join(projectRoot, '.cursor/rules/taskmaster/taskmaster.mdc'),
+				path.join(projectRoot, '.cursor/rules/novelmaster/novelmaster.mdc'),
 				{ force: true }
 			);
 
@@ -182,7 +182,7 @@ describe('Selective Rules Removal', () => {
 			);
 		});
 
-		it('should remove empty rules directory if only Task Master files existed', () => {
+		it('should remove empty rules directory if only Novel Master files existed', () => {
 			const projectRoot = '/test/project';
 			const cursorProfile = getRulesProfile('cursor');
 
@@ -197,9 +197,9 @@ describe('Selective Rules Removal', () => {
 			// Mock MCP config file
 			const mockMcpConfig = {
 				mcpServers: {
-					'task-master-ai': {
+					'novel-master-ai': {
 						command: 'npx',
-						args: ['task-master-ai']
+						args: ['novel-master-ai']
 					}
 				}
 			};
@@ -210,11 +210,11 @@ describe('Selective Rules Removal', () => {
 				// First call - get initial directory contents (rules directory)
 				.mockReturnValueOnce([
 					'cursor_rules.mdc',
-					'taskmaster', // subdirectory
+					'novelmaster', // subdirectory
 					'self_improve.mdc'
 				])
-				// Second call - get taskmaster subdirectory contents
-				.mockReturnValueOnce(['dev_workflow.mdc', 'taskmaster.mdc'])
+				// Second call - get novelmaster subdirectory contents
+				.mockReturnValueOnce(['dev_workflow.mdc', 'novelmaster.mdc'])
 				// Third call - check remaining files after removal (should be empty)
 				.mockReturnValueOnce([]) // Empty after removal
 				// Fourth call - check profile directory contents
@@ -225,9 +225,9 @@ describe('Selective Rules Removal', () => {
 			// The function should succeed in removing files even if the final directory check fails
 			expect(result.filesRemoved).toEqual([
 				'cursor_rules.mdc',
-				'taskmaster/dev_workflow.mdc',
+				'novelmaster/dev_workflow.mdc',
 				'self_improve.mdc',
-				'taskmaster/taskmaster.mdc'
+				'novelmaster/novelmaster.mdc'
 			]);
 
 			// The function may fail due to directory reading issues in the test environment,
@@ -249,13 +249,13 @@ describe('Selective Rules Removal', () => {
 					{ force: true }
 				);
 				expect(mockRmSync).toHaveBeenCalledWith(
-					path.join(projectRoot, '.cursor/rules/taskmaster/dev_workflow.mdc'),
+					path.join(projectRoot, '.cursor/rules/novelmaster/dev_workflow.mdc'),
 					{ force: true }
 				);
 			}
 		});
 
-		it('should remove entire profile directory if completely empty and all rules were Task Master rules and MCP config deleted', () => {
+		it('should remove entire profile directory if completely empty and all rules were Novel Master rules and MCP config deleted', () => {
 			const projectRoot = '/test/project';
 			const cursorProfile = getRulesProfile('cursor');
 
@@ -267,18 +267,18 @@ describe('Selective Rules Removal', () => {
 				return false;
 			});
 
-			// Mock sequence: rules dir has only Task Master files, then empty, then profile dir empty
+			// Mock sequence: rules dir has only Novel Master files, then empty, then profile dir empty
 			mockReaddirSync
-				.mockReturnValueOnce(['cursor_rules.mdc']) // Only Task Master files
+				.mockReturnValueOnce(['cursor_rules.mdc']) // Only Novel Master files
 				.mockReturnValueOnce([]) // rules dir empty after removal
 				.mockReturnValueOnce([]); // profile dir empty after all cleanup
 
-			// Mock MCP config with only Task Master (will be completely deleted)
+			// Mock MCP config with only Novel Master (will be completely deleted)
 			const mockMcpConfig = {
 				mcpServers: {
-					'task-master-ai': {
+					'novel-master-ai': {
 						command: 'npx',
-						args: ['task-master-ai']
+						args: ['novel-master-ai']
 					}
 				}
 			};
@@ -315,12 +315,12 @@ describe('Selective Rules Removal', () => {
 				.mockReturnValueOnce(['my_custom_rule.mdc']) // Custom rule remains
 				.mockReturnValueOnce(['rules', 'mcp.json']); // Profile dir has remaining content
 
-			// Mock MCP config with only Task Master (will be completely deleted)
+			// Mock MCP config with only Novel Master (will be completely deleted)
 			const mockMcpConfig = {
 				mcpServers: {
-					'task-master-ai': {
+					'novel-master-ai': {
 						command: 'npx',
-						args: ['task-master-ai']
+						args: ['novel-master-ai']
 					}
 				}
 			};
@@ -339,7 +339,7 @@ describe('Selective Rules Removal', () => {
 			);
 		});
 
-		it('should NOT remove profile directory if MCP config has other servers, even if all rules were Task Master rules', () => {
+		it('should NOT remove profile directory if MCP config has other servers, even if all rules were Novel Master rules', () => {
 			const projectRoot = '/test/project';
 			const cursorProfile = getRulesProfile('cursor');
 
@@ -351,18 +351,18 @@ describe('Selective Rules Removal', () => {
 				return false;
 			});
 
-			// Mock sequence: only Task Master rules, rules dir removed, but profile dir not empty due to MCP
+			// Mock sequence: only Novel Master rules, rules dir removed, but profile dir not empty due to MCP
 			mockReaddirSync
-				.mockReturnValueOnce(['cursor_rules.mdc']) // Only Task Master files
+				.mockReturnValueOnce(['cursor_rules.mdc']) // Only Novel Master files
 				.mockReturnValueOnce(['my_custom_rule.mdc']) // rules dir has other files remaining
 				.mockReturnValueOnce(['rules', 'mcp.json']); // Profile dir has rules and MCP config remaining
 
-			// Mock MCP config with multiple servers (Task Master will be removed, others preserved)
+			// Mock MCP config with multiple servers (Novel Master will be removed, others preserved)
 			const mockMcpConfig = {
 				mcpServers: {
-					'task-master-ai': {
+					'novel-master-ai': {
 						command: 'npx',
-						args: ['task-master-ai']
+						args: ['novel-master-ai']
 					},
 					'other-server': {
 						command: 'node',
@@ -398,19 +398,19 @@ describe('Selective Rules Removal', () => {
 				return false;
 			});
 
-			// Mock sequence: only Task Master rules, rules dir removed, but profile dir has other files/folders
+			// Mock sequence: only Novel Master rules, rules dir removed, but profile dir has other files/folders
 			mockReaddirSync
-				.mockReturnValueOnce(['cursor_rules.mdc']) // Only Task Master files (initial check)
-				.mockReturnValueOnce(['cursor_rules.mdc']) // Task Master files list for filtering
+				.mockReturnValueOnce(['cursor_rules.mdc']) // Only Novel Master files (initial check)
+				.mockReturnValueOnce(['cursor_rules.mdc']) // Novel Master files list for filtering
 				.mockReturnValueOnce([]) // Rules dir empty after removal (not used since no remaining files)
 				.mockReturnValueOnce(['workflows', 'custom-config.json']); // Profile dir has other files/folders
 
-			// Mock MCP config with only Task Master (will be completely deleted)
+			// Mock MCP config with only Novel Master (will be completely deleted)
 			const mockMcpConfig = {
 				mcpServers: {
-					'task-master-ai': {
+					'novel-master-ai': {
 						command: 'npx',
-						args: ['task-master-ai']
+						args: ['novel-master-ai']
 					}
 				}
 			};
@@ -432,16 +432,16 @@ describe('Selective Rules Removal', () => {
 	});
 
 	describe('removeTaskMasterMCPConfiguration - Selective MCP Removal', () => {
-		it('should only remove Task Master from MCP config, preserving other servers', () => {
+		it('should only remove Novel Master from MCP config, preserving other servers', () => {
 			const projectRoot = '/test/project';
 			const mcpConfigPath = '.cursor/mcp.json';
 
 			// Mock MCP config with multiple servers
 			const mockMcpConfig = {
 				mcpServers: {
-					'task-master-ai': {
+					'novel-master-ai': {
 						command: 'npx',
-						args: ['task-master-ai']
+						args: ['novel-master-ai']
 					},
 					'other-server': {
 						command: 'node',
@@ -478,20 +478,20 @@ describe('Selective Rules Removal', () => {
 			);
 			expect(mockWriteFileSync).toHaveBeenCalledWith(
 				path.join(projectRoot, mcpConfigPath),
-				expect.not.stringContaining('task-master-ai')
+				expect.not.stringContaining('novel-master-ai')
 			);
 		});
 
-		it('should delete entire MCP config if Task Master is the only server', () => {
+		it('should delete entire MCP config if Novel Master is the only server', () => {
 			const projectRoot = '/test/project';
 			const mcpConfigPath = '.cursor/mcp.json';
 
-			// Mock MCP config with only Task Master
+			// Mock MCP config with only Novel Master
 			const mockMcpConfig = {
 				mcpServers: {
-					'task-master-ai': {
+					'novel-master-ai': {
 						command: 'npx',
-						args: ['task-master-ai']
+						args: ['novel-master-ai']
 					}
 				}
 			};
@@ -517,16 +517,16 @@ describe('Selective Rules Removal', () => {
 			expect(mockWriteFileSync).not.toHaveBeenCalled();
 		});
 
-		it('should handle MCP config with Task Master in server args', () => {
+		it('should handle MCP config with Novel Master in server args', () => {
 			const projectRoot = '/test/project';
 			const mcpConfigPath = '.cursor/mcp.json';
 
-			// Mock MCP config with Task Master referenced in args
+			// Mock MCP config with Novel Master referenced in args
 			const mockMcpConfig = {
 				mcpServers: {
-					'taskmaster-wrapper': {
+					'novelmaster-wrapper': {
 						command: 'npx',
-						args: ['-y', 'task-master-ai']
+						args: ['-y', 'novel-master-ai']
 					},
 					'other-server': {
 						command: 'node',
@@ -547,14 +547,14 @@ describe('Selective Rules Removal', () => {
 			expect(result.removed).toBe(true);
 			expect(result.hasOtherServers).toBe(true);
 
-			// Verify only the server with task-master-ai in args was removed
+			// Verify only the server with novel-master-ai in args was removed
 			expect(mockWriteFileSync).toHaveBeenCalledWith(
 				path.join(projectRoot, mcpConfigPath),
 				expect.stringContaining('other-server')
 			);
 			expect(mockWriteFileSync).toHaveBeenCalledWith(
 				path.join(projectRoot, mcpConfigPath),
-				expect.not.stringContaining('taskmaster-wrapper')
+				expect.not.stringContaining('novelmaster-wrapper')
 			);
 		});
 
@@ -586,21 +586,21 @@ describe('Selective Rules Removal', () => {
 			const projectRoot = '/test/project';
 			const cursorProfile = getRulesProfile('cursor');
 
-			// Mock mixed scenario: some Task Master files, some existing files, other MCP servers
+			// Mock mixed scenario: some Novel Master files, some existing files, other MCP servers
 			mockExistsSync.mockImplementation((filePath) => {
 				// Only .cursor directories exist
 				if (filePath === path.join(projectRoot, '.cursor')) return true;
 				if (filePath === path.join(projectRoot, '.cursor/rules')) return true;
 				if (filePath === path.join(projectRoot, '.cursor/mcp.json'))
 					return true;
-				// Only cursor_rules.mdc exists, not the other taskmaster files
+				// Only cursor_rules.mdc exists, not the other novelmaster files
 				if (
 					filePath === path.join(projectRoot, '.cursor/rules/cursor_rules.mdc')
 				)
 					return true;
 				if (
 					filePath ===
-					path.join(projectRoot, '.cursor/rules/taskmaster/dev_workflow.mdc')
+					path.join(projectRoot, '.cursor/rules/novelmaster/dev_workflow.mdc')
 				)
 					return false;
 				if (
@@ -609,7 +609,7 @@ describe('Selective Rules Removal', () => {
 					return false;
 				if (
 					filePath ===
-					path.join(projectRoot, '.cursor/rules/taskmaster/taskmaster.mdc')
+					path.join(projectRoot, '.cursor/rules/novelmaster/novelmaster.mdc')
 				)
 					return false;
 				return false;
@@ -627,7 +627,7 @@ describe('Selective Rules Removal', () => {
 			// Mock MCP config with multiple servers
 			const mockMcpConfig = {
 				mcpServers: {
-					'task-master-ai': { command: 'npx', args: ['task-master-ai'] },
+					'novel-master-ai': { command: 'npx', args: ['novel-master-ai'] },
 					'other-server': { command: 'node', args: ['other.js'] }
 				}
 			};

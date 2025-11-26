@@ -6,7 +6,7 @@ import { createLogWrapper } from '../../../mcp-server/src/tools/utils.js';
 import { findProjectRoot } from '../utils.js';
 import {
 	LEGACY_CONFIG_FILE,
-	TASKMASTER_CONFIG_FILE
+	NOVELMASTER_CONFIG_FILE
 } from '../../../src/constants/paths.js';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -29,11 +29,11 @@ export async function migrateProject(options = {}) {
 
 	log.info(`Starting migration in: ${projectRoot}`);
 
-	// Check if .taskmaster directory already exists
-	const taskmasterDir = path.join(projectRoot, '.taskmaster');
-	if (fs.existsSync(taskmasterDir) && !options.force) {
+	// Check if .novelmaster directory already exists
+	const novelmasterDir = path.join(projectRoot, '.novelmaster');
+	if (fs.existsSync(novelmasterDir) && !options.force) {
 		log.warn(
-			'.taskmaster directory already exists. Use --force to overwrite or skip migration.'
+			'.novelmaster directory already exists. Use --force to overwrite or skip migration.'
 		);
 		return;
 	}
@@ -85,7 +85,7 @@ export async function migrateProject(options = {}) {
 	try {
 		await performMigration(projectRoot, migrationPlan, options);
 		log.success('Migration completed successfully!');
-		log.info('You can now use the new .taskmaster directory structure.');
+		log.info('You can now use the new .novelmaster directory structure.');
 		if (!options.cleanup) {
 			log.info(
 				'Old files were preserved. Use --cleanup to remove them after verification.'
@@ -112,7 +112,7 @@ function analyzeMigrationNeeds(projectRoot) {
 		for (const file of tasksFiles) {
 			migrationPlan.push({
 				from: path.join('tasks', file),
-				to: path.join('.taskmaster', 'tasks', file),
+				to: path.join('.novelmaster', 'tasks', file),
 				type: 'task'
 			});
 		}
@@ -136,21 +136,21 @@ function analyzeMigrationNeeds(projectRoot) {
 					lowerFile.includes('sample')
 				) {
 					// Template/example files go to templates (including example_prd.txt)
-					destination = path.join('.taskmaster', 'templates', file);
+					destination = path.join('.novelmaster', 'templates', file);
 				} else if (
 					lowerFile.includes('complexity') &&
 					lowerFile.includes('report') &&
 					lowerFile.endsWith('.json')
 				) {
 					// Only actual complexity reports go to reports
-					destination = path.join('.taskmaster', 'reports', file);
+					destination = path.join('.novelmaster', 'reports', file);
 				} else if (
 					lowerFile.includes('prd') ||
 					lowerFile.endsWith('.md') ||
 					lowerFile.endsWith('.txt')
 				) {
 					// Documentation files go to docs (but not examples or reports)
-					destination = path.join('.taskmaster', 'docs', file);
+					destination = path.join('.novelmaster', 'docs', file);
 				} else {
 					// Other files stay in scripts or get skipped - don't force everything into templates
 					log.warn(
@@ -168,12 +168,12 @@ function analyzeMigrationNeeds(projectRoot) {
 		}
 	}
 
-	// Check for .taskmasterconfig
+	// Check for .novelmasterconfig
 	const oldConfig = path.join(projectRoot, LEGACY_CONFIG_FILE);
 	if (fs.existsSync(oldConfig)) {
 		migrationPlan.push({
 			from: LEGACY_CONFIG_FILE,
-			to: TASKMASTER_CONFIG_FILE,
+			to: NOVELMASTER_CONFIG_FILE,
 			type: 'config'
 		});
 	}
@@ -188,10 +188,10 @@ function analyzeMigrationNeeds(projectRoot) {
  * @param {Object} options - Migration options
  */
 async function performMigration(projectRoot, migrationPlan, options) {
-	// Create .taskmaster directory
-	const taskmasterDir = path.join(projectRoot, '.taskmaster');
-	if (!fs.existsSync(taskmasterDir)) {
-		fs.mkdirSync(taskmasterDir, { recursive: true });
+	// Create .novelmaster directory
+	const novelmasterDir = path.join(projectRoot, '.novelmaster');
+	if (!fs.existsSync(novelmasterDir)) {
+		fs.mkdirSync(novelmasterDir, { recursive: true });
 	}
 
 	// Group migration items by destination directory to create only needed subdirs
@@ -212,7 +212,7 @@ async function performMigration(projectRoot, migrationPlan, options) {
 
 	// Create backup if requested
 	if (options.backup) {
-		const backupDir = path.join(projectRoot, '.taskmaster-migration-backup');
+		const backupDir = path.join(projectRoot, '.novelmaster-migration-backup');
 		log.info(`Creating backup in: ${backupDir}`);
 		if (fs.existsSync(backupDir)) {
 			fs.rmSync(backupDir, { recursive: true, force: true });
@@ -234,7 +234,7 @@ async function performMigration(projectRoot, migrationPlan, options) {
 		if (options.backup) {
 			const backupPath = path.join(
 				projectRoot,
-				'.taskmaster-migration-backup',
+				'.novelmaster-migration-backup',
 				item.from
 			);
 			const backupDir = path.dirname(backupPath);

@@ -1223,7 +1223,7 @@ async function copyTag(
  */
 async function switchCurrentTag(projectRoot, tagName) {
 	try {
-		const statePath = path.join(projectRoot, '.taskmaster', 'state.json');
+		const statePath = path.join(projectRoot, '.novelmaster', 'state.json');
 
 		// Read current state or create default
 		let state = {};
@@ -1261,7 +1261,7 @@ async function switchCurrentTag(projectRoot, tagName) {
  */
 async function updateBranchTagMapping(projectRoot, branchName, tagName) {
 	try {
-		const statePath = path.join(projectRoot, '.taskmaster', 'state.json');
+		const statePath = path.join(projectRoot, '.novelmaster', 'state.json');
 
 		// Read current state or create default
 		let state = {};
@@ -1294,7 +1294,7 @@ async function updateBranchTagMapping(projectRoot, branchName, tagName) {
  */
 async function getTagForBranch(projectRoot, branchName) {
 	try {
-		const statePath = path.join(projectRoot, '.taskmaster', 'state.json');
+		const statePath = path.join(projectRoot, '.novelmaster', 'state.json');
 
 		if (!fs.existsSync(statePath)) {
 			return null;
@@ -1568,7 +1568,7 @@ async function autoSwitchTagForBranch(
 async function checkAndAutoSwitchTag(projectRoot, tasksPath, context = {}) {
 	try {
 		// Read configuration
-		const configPath = path.join(projectRoot, '.taskmaster', 'config.json');
+		const configPath = path.join(projectRoot, '.novelmaster', 'config.json');
 		if (!fs.existsSync(configPath)) {
 			return null;
 		}
@@ -1592,6 +1592,106 @@ async function checkAndAutoSwitchTag(projectRoot, tasksPath, context = {}) {
 	}
 }
 
+/**
+ * Create a revision tag with standard naming convention
+ * @param {string} tasksPath - Path to tasks.json
+ * @param {number} revNumber - Revision number (1, 2, 3, etc.)
+ * @param {Object} options - Options object
+ * @param {boolean} [options.copyFromCurrent=true] - Copy tasks from current tag
+ * @param {string} [options.description] - Optional description
+ * @param {Object} context - Context object
+ * @param {string} outputFormat - Output format
+ * @returns {Promise<Object>} Result object
+ */
+async function createRevisionTag(
+	tasksPath,
+	revNumber,
+	options = {},
+	context = {},
+	outputFormat = 'text'
+) {
+	const tagName = `rev-${revNumber}`;
+	const description =
+		options.description || `Revision pass ${revNumber} - global manuscript revision`;
+	return createTag(tasksPath, tagName, { copyFromCurrent: true, ...options, description }, context, outputFormat);
+}
+
+/**
+ * Create a character-specific tag for POV or character arc work
+ * @param {string} tasksPath - Path to tasks.json
+ * @param {string} characterName - Name of the character
+ * @param {Object} options - Options object
+ * @param {number} [options.revNumber] - Optional revision number (e.g., "rev-1-character-mina")
+ * @param {string} [options.description] - Optional description
+ * @param {Object} context - Context object
+ * @param {string} outputFormat - Output format
+ * @returns {Promise<Object>} Result object
+ */
+async function createCharacterTag(
+	tasksPath,
+	characterName,
+	options = {},
+	context = {},
+	outputFormat = 'text'
+) {
+	const { revNumber, description, ...restOptions } = options;
+	const tagName = revNumber
+		? `rev-${revNumber}-character-${characterName.toLowerCase()}`
+		: `character-${characterName.toLowerCase()}`;
+	const desc =
+		description ||
+		revNumber
+			? `Revision ${revNumber} focusing on ${characterName}'s POV and character arc`
+			: `Character-specific work for ${characterName}`;
+	return createTag(tasksPath, tagName, { ...restOptions, description: desc }, context, outputFormat);
+}
+
+/**
+ * Create a timeline-specific tag for managing story timeline periods
+ * @param {string} tasksPath - Path to tasks.json
+ * @param {string} period - Timeline period identifier (e.g., "act-1", "days-1-30", "summer")
+ * @param {Object} options - Options object
+ * @param {string} [options.description] - Optional description
+ * @param {Object} context - Context object
+ * @param {string} outputFormat - Output format
+ * @returns {Promise<Object>} Result object
+ */
+async function createTimelineTag(
+	tasksPath,
+	period,
+	options = {},
+	context = {},
+	outputFormat = 'text'
+) {
+	const tagName = `timeline-${period.toLowerCase().replace(/\s+/g, '-')}`;
+	const description =
+		options.description || `Timeline-specific work for period: ${period}`;
+	return createTag(tasksPath, tagName, { ...options, description }, context, outputFormat);
+}
+
+/**
+ * Create a worldbuilding-focused tag for consistency passes
+ * @param {string} tasksPath - Path to tasks.json
+ * @param {string} topic - Worldbuilding topic (e.g., "magic-system", "technology", "politics")
+ * @param {Object} options - Options object
+ * @param {string} [options.description] - Optional description
+ * @param {Object} context - Context object
+ * @param {string} outputFormat - Output format
+ * @returns {Promise<Object>} Result object
+ */
+async function createWorldbuildingTag(
+	tasksPath,
+	topic,
+	options = {},
+	context = {},
+	outputFormat = 'text'
+) {
+	const tagName = `worldbuilding-${topic.toLowerCase().replace(/\s+/g, '-')}`;
+	const description =
+		options.description || `Worldbuilding consistency review for: ${topic}`;
+	return createTag(tasksPath, tagName, { ...options, description }, context, outputFormat);
+}
+
 // Export all tag management functions
 export {
 	createTag,
@@ -1605,5 +1705,10 @@ export {
 	getTagForBranch,
 	createTagFromBranch,
 	autoSwitchTagForBranch,
-	checkAndAutoSwitchTag
+	checkAndAutoSwitchTag,
+	// Narrative-specific helpers
+	createRevisionTag,
+	createCharacterTag,
+	createTimelineTag,
+	createWorldbuildingTag
 };

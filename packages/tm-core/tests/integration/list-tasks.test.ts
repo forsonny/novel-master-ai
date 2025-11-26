@@ -111,8 +111,8 @@ describe('TaskMasterCore - listTasks E2E', () => {
 		// Create temp directory for testing
 		tmpDir = await fs.mkdtemp(path.join(os.tmpdir(), 'tm-core-test-'));
 
-		// Create .taskmaster/tasks directory
-		const tasksDir = path.join(tmpDir, '.taskmaster', 'tasks');
+		// Create .novelmaster/tasks directory
+		const tasksDir = path.join(tmpDir, '.novelmaster', 'tasks');
 		await fs.mkdir(tasksDir, { recursive: true });
 
 		// Write sample tasks.json
@@ -326,7 +326,7 @@ describe('TaskMasterCore - listTasks E2E', () => {
 			const invalidDir = await fs.mkdtemp(
 				path.join(os.tmpdir(), 'tm-invalid-')
 			);
-			const tasksDir = path.join(invalidDir, '.taskmaster', 'tasks');
+			const tasksDir = path.join(invalidDir, '.novelmaster', 'tasks');
 			await fs.mkdir(tasksDir, { recursive: true });
 
 			const invalidData = {
@@ -386,7 +386,7 @@ describe('TaskMasterCore - listTasks E2E', () => {
 
 			const tagFile = path.join(
 				tmpDir,
-				'.taskmaster',
+				'.novelmaster',
 				'tasks',
 				'feature-branch.json'
 			);

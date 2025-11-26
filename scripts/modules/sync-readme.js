@@ -13,13 +13,13 @@ import listTasks from './task-manager/list-tasks.js';
 function createBasicReadme(projectName) {
 	return `# ${projectName}
 
-This project is managed using Task Master.
+This project is managed using Novel Master.
 
 `;
 }
 
 /**
- * Create UTM tracking URL for task-master.dev
+ * Create UTM tracking URL for novel-master.dev
  * @param {string} projectRoot - The project root path
  * @returns {string} - UTM tracked URL
  */
@@ -41,7 +41,7 @@ function createTaskMasterUrl(projectRoot) {
 		utm_content: 'task-export-link'
 	});
 
-	return `https://task-master.dev?${utmParams.toString()}`;
+	return `https://novel-master.dev?${utmParams.toString()}`;
 }
 
 /**
@@ -60,13 +60,13 @@ function createStartMarker(options) {
 
 	// Create the export info content
 	const exportInfo =
-		`🎯 **Taskmaster Export** - ${timestamp}\n` +
+		`🎯 **Novel Master Export** - ${timestamp}\n` +
 		`📋 Export: ${subtasksText} • ${statusText}\n` +
-		`🔗 Powered by [Task Master](${createTaskMasterUrl(projectRoot)})`;
+		`🔗 Powered by [Novel Master](${createTaskMasterUrl(projectRoot)})`;
 
 	// Create a markdown box using code blocks and emojis to mimic our UI style
 	const boxContent =
-		`<!-- TASKMASTER_EXPORT_START -->\n` +
+		`<!-- NOVELMASTER_EXPORT_START -->\n` +
 		`> ${exportInfo.split('\n').join('\n> ')}\n\n`;
 
 	return boxContent;
@@ -78,8 +78,8 @@ function createStartMarker(options) {
  */
 function createEndMarker() {
 	return (
-		`\n> 📋 **End of Taskmaster Export** - Tasks are synced from your project using the \`sync-readme\` command.\n` +
-		`<!-- TASKMASTER_EXPORT_END -->\n`
+		`\n> 📋 **End of Novel Master Export** - Tasks are synced from your project using the \`sync-readme\` command.\n` +
+		`<!-- NOVELMASTER_EXPORT_END -->\n`
 	);
 }
 
@@ -101,7 +101,7 @@ export async function syncTasksToReadme(projectRoot = null, options = {}) {
 		// Get current tasks using the list-tasks functionality with markdown-readme format
 		const tasksOutput = await listTasks(
 			tasksPath ||
-				path.join(actualProjectRoot, '.taskmaster', 'tasks', 'tasks.json'),
+				path.join(actualProjectRoot, '.novelmaster', 'tasks', 'tasks.json'),
 			status,
 			null,
 			withSubtasks,
@@ -147,8 +147,8 @@ export async function syncTasksToReadme(projectRoot = null, options = {}) {
 		}
 
 		// Check if export markers exist and replace content between them
-		const startComment = '<!-- TASKMASTER_EXPORT_START -->';
-		const endComment = '<!-- TASKMASTER_EXPORT_END -->';
+		const startComment = '<!-- NOVELMASTER_EXPORT_START -->';
+		const endComment = '<!-- NOVELMASTER_EXPORT_END -->';
 
 		let updatedContent;
 		const startIndex = readmeContent.indexOf(startComment);

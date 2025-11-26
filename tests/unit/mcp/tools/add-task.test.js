@@ -17,7 +17,7 @@ import {
 
 // Mock EVERYTHING
 const mockAddTaskDirect = jest.fn();
-jest.mock('../../../../mcp-server/src/core/task-master-core.js', () => ({
+jest.mock('../../../../mcp-server/src/core/novel-master-core.js', () => ({
 	addTaskDirect: mockAddTaskDirect
 }));
 
@@ -36,7 +36,7 @@ jest.mock('../../../../mcp-server/src/tools/utils.js', () => ({
 		success: true,
 		data: content
 	})),
-	executeTaskMasterCommand: jest.fn()
+	executeNovelMasterCommand: jest.fn()
 }));
 
 // Mock the z object from zod

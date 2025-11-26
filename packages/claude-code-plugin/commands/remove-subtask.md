@@ -1,84 +1,84 @@
-Remove a subtask from its parent task.
+Remove a scene from its parent chapter.
 
 Arguments: $ARGUMENTS
 
-Parse subtask ID to remove, with option to convert to standalone task.
+Parse scene ID to remove, with option to convert to standalone chapter.
 
-## Removing Subtasks
+## Removing Scenes
 
-Remove a subtask and optionally convert it back to a standalone task.
+Remove a scene and optionally convert it back to a standalone chapter.
 
 ## Argument Parsing
 
-- "remove subtask 5.1"
+- "remove scene 5.1"
 - "delete 5.1"
-- "convert 5.1 to task" → remove and convert
+- "convert 5.1 to chapter" → remove and convert
 - "5.1 standalone" → convert to standalone
 
 ## Execution Options
 
-### 1. Delete Subtask
+### 1. Delete Scene
 ```bash
-task-master remove-subtask --id=<parentId.subtaskId>
+novel-master remove-subtask --id=<parentId.sceneId>
 ```
 
 ### 2. Convert to Standalone
 ```bash
-task-master remove-subtask --id=<parentId.subtaskId> --convert
+novel-master remove-subtask --id=<parentId.sceneId> --convert
 ```
 
 ## Pre-Removal Checks
 
-1. **Validate Subtask**
-   - Verify subtask exists
+1. **Validate Scene**
+   - Verify scene exists
    - Check completion status
    - Review dependencies
 
 2. **Impact Analysis**
-   - Other subtasks that depend on it
-   - Parent task implications
+   - Other scenes that depend on it
+   - Parent chapter implications
    - Data that will be lost
 
 ## Removal Process
 
 ### For Deletion:
-1. Confirm if subtask has work done
-2. Update parent task estimates
-3. Remove subtask and its data
+1. Confirm if scene has work done
+2. Update parent chapter estimates
+3. Remove scene and its data
 4. Clean up dependencies
 
 ### For Conversion:
-1. Assign new standalone task ID
-2. Preserve all task data
+1. Assign new standalone chapter ID
+2. Preserve all chapter data
 3. Update dependency references
-4. Maintain task history
+4. Maintain chapter history
 
 ## Smart Features
 
-- Warn if subtask is in-progress
-- Show impact on parent task
+- Warn if scene is in-progress
+- Show impact on parent chapter
 - Preserve important data
 - Update related estimates
 
 ## Example Flows
 
 ```
-/taskmaster:remove-subtask 5.1
-→ Warning: Subtask #5.1 is in-progress
-→ This will delete all subtask data
-→ Parent task #5 will be updated
+/novelmaster:remove-subtask 5.1
+→ Warning: Scene #5.1 is in-progress
+→ This will delete all scene data
+→ Parent chapter #5 will be updated
 Confirm deletion? (y/n)
 
-/taskmaster:remove-subtask 5.1 convert
-→ Converting subtask #5.1 to standalone task #89
-→ Preserved: All task data and history
+/novelmaster:remove-subtask 5.1 convert
+→ Converting scene #5.1 to standalone chapter #89
+→ Preserved: All chapter data and history
 → Updated: 2 dependency references
-→ New task #89 is now independent
+→ New chapter #89 is now independent
 ```
 
 ## Post-Removal
 
-- Update parent task status
+- Update parent chapter status
 - Recalculate estimates
 - Show updated hierarchy
 - Suggest next actions

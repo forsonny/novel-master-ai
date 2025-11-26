@@ -1,32 +1,32 @@
-Update multiple tasks starting from a specific ID.
+Update multiple chapters starting from a specific ID.
 
 Arguments: $ARGUMENTS
 
-Parse starting task ID and update context.
+Parse starting chapter ID and update context.
 
-## Bulk Task Updates
+## Bulk Chapter Updates
 
-Update multiple related tasks based on new requirements or context changes.
+Update multiple related chapters based on new requirements or context changes.
 
 ## Argument Parsing
 
-- "from 5: add security requirements"
-- "5 onwards: update API endpoints"
-- "starting at 5: change to use new framework"
+- "from 5: add emotional depth requirements"
+- "5 onwards: update character arcs"
+- "starting at 5: change to use new POV"
 
 ## Execution
 
 ```bash
-task-master update --from=<id> --prompt="<context>"
+novel-master update --from=<id> --prompt="<context>"
 ```
 
 ## Update Process
 
-### 1. **Task Selection**
+### 1. **Chapter Selection**
 Starting from specified ID:
-- Include the task itself
-- Include all dependent tasks
-- Include related subtasks
+- Include the chapter itself
+- Include all dependent chapters
+- Include related scenes
 - Smart boundary detection
 
 ### 2. **Context Application**
@@ -38,15 +38,15 @@ AI analyzes the update context and:
 
 ### 3. **Intelligent Updates**
 - Modify descriptions appropriately
-- Update test strategies
+- Update continuity/pacing strategies
 - Adjust time estimates
 - Revise dependencies if needed
 
 ## Smart Features
 
 1. **Scope Detection**
-   - Find natural task groupings
-   - Identify related features
+   - Find natural chapter groupings
+   - Identify related story arcs
    - Stop at logical boundaries
    - Avoid over-updating
 
@@ -54,21 +54,21 @@ AI analyzes the update context and:
    - Keep naming conventions
    - Preserve relationships
    - Update cross-references
-   - Maintain task flow
+   - Maintain narrative flow
 
 3. **Change Preview**
    ```
    Bulk Update Preview
    ━━━━━━━━━━━━━━━━━━
-   Starting from: Task #5
-   Tasks to update: 8 tasks + 12 subtasks
+   Starting from: Chapter #5
+   Chapters to update: 8 chapters + 12 scenes
    
-   Context: "add security requirements"
+   Context: "add emotional depth requirements"
    
    Changes will include:
-   - Add security sections to descriptions
-   - Update test strategies for security
-   - Add security-related subtasks where needed
+   - Add emotional beat sections to descriptions
+   - Update continuity/pacing strategies for emotional arcs
+   - Add emotional development scenes where needed
    - Adjust time estimates (+20% average)
    
    Continue? (y/n)
@@ -77,19 +77,19 @@ AI analyzes the update context and:
 ## Example Updates
 
 ```
-/taskmaster:update/from-id 5: change database to PostgreSQL
-→ Analyzing impact starting from task #5
-→ Found 6 related tasks to update
+/novelmaster:update/from-id 5: change POV to first person
+→ Analyzing impact starting from chapter #5
+→ Found 6 related chapters to update
 → Updates will maintain consistency
 → Preview changes? (y/n)
 
 Applied updates:
-✓ Task #5: Updated connection logic references
-✓ Task #6: Changed migration approach
-✓ Task #7: Updated query syntax notes
-✓ Task #8: Revised testing strategy
-✓ Task #9: Updated deployment steps
-✓ Task #12: Changed backup procedures
+✓ Chapter #5: Updated POV references
+✓ Chapter #6: Changed narrative approach
+✓ Chapter #7: Updated character voice notes
+✓ Chapter #8: Revised continuity strategy
+✓ Chapter #9: Updated drafting steps
+✓ Chapter #12: Changed character development notes
 ```
 
 ## Safety Features
@@ -104,5 +104,5 @@ Applied updates:
 
 - Summary of changes
 - Consistency verification
-- Suggest review tasks
+- Suggest review chapters
 - Update timeline if needed

@@ -295,7 +295,7 @@ export class ErrorHandler {
 				``,
 				`**Environment:**`,
 				`- VS Code Version: ${vscode.version}`,
-				`- Extension Version: ${vscode.extensions.getExtension('Hamster.taskmaster')?.packageJSON.version || 'Unknown'}`,
+				`- Extension Version: ${vscode.extensions.getExtension('Hamster.novelmaster')?.packageJSON.version || 'Unknown'}`,
 				``,
 				`**Steps to Reproduce:**`,
 				`1. [Please describe the steps that led to this error]`,
@@ -307,7 +307,7 @@ export class ErrorHandler {
 				.join('\n')
 		);
 
-		return `https://github.com/eyaltoledano/claude-task-master/issues/new?title=${title}&body=${body}`;
+		return `https://github.com/eyaltoledano/claude-novel-master/issues/new?title=${title}&body=${body}`;
 	}
 
 	/**

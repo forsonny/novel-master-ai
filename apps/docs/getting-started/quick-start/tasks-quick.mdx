@@ -15,7 +15,7 @@ Expand all tasks into subtasks.
 ```
 The agent will execute
 ```bash
-task-master expand --all
+novel-master expand --all
 ```
 ## List/Show Tasks
 
@@ -28,7 +28,7 @@ List all pending tasks so I can review.
 ```
 To see all tasks in the CLI you can use:
 ```bash
-task-master list
+novel-master list
 ```
 
 To see all implementation details of an individual task, including subtasks and testing strategy, you can use Show Task:
@@ -38,7 +38,7 @@ Show task 2 so I can review.
 ```
 
 ```bash
-task-master show --id=<##>
+novel-master show --id=<##>
 ```
 
 ## Update Tasks
@@ -51,11 +51,11 @@ Update Task 2 to use Postgres instead of MongoDB and remove the sharding subtask
 Or this CLI command:
 
 ```bash
-task-master update-task --id=2 --prompt="use Postgres instead of MongoDB and remove the sharding subtask"
+novel-master update-task --id=2 --prompt="use Postgres instead of MongoDB and remove the sharding subtask"
 ```
 ## Analyze complexity
 
-Task Master can provide a complexity report which can be helpful to read before you begin. If you didn't already expand all your tasks, it could help identify which could be broken down further with subtasks.
+Novel Master can provide a complexity report which can be helpful to read before you begin. If you didn't already expand all your tasks, it could help identify which could be broken down further with subtasks.
 
 ```
 Can you analyze the complexity of our tasks to help me understand which ones need to be broken down further?
@@ -63,16 +63,16 @@ Can you analyze the complexity of our tasks to help me understand which ones nee
 
 The agent will use the `analyze_project_complexity` MCP tool, or you can run it directly with the CLI command:
 ```bash
-task-master analyze-complexity
+novel-master analyze-complexity
 ```
 
 For more comprehensive analysis using your configured research model, you can use:
 ```bash
-task-master analyze-complexity --research
+novel-master analyze-complexity --research
 ```
 
 <Tip>
-The `--research` flag uses whatever research model you have configured in `.taskmaster/config.json` (configurable via `task-master models --setup`) for research-backed complexity analysis, providing more informed recommendations.
+The `--research` flag uses whatever research model you have configured in `.novelmaster/config.json` (configurable via `novel-master models --setup`) for research-backed complexity analysis, providing more informed recommendations.
 </Tip>
 
 You can view the report in a friendly table using:

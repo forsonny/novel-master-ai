@@ -218,8 +218,8 @@ Use the .mdc extension for all rule files.`;
 			'rules/cursor_rules.mdc': 'kiro_rules.md',
 			'rules/dev_workflow.mdc': 'dev_workflow.md',
 			'rules/self_improve.mdc': 'self_improve.md',
-			'rules/taskmaster.mdc': 'taskmaster.md',
-			'rules/taskmaster_hooks_workflow.mdc': 'taskmaster_hooks_workflow.md'
+			'rules/novelmaster.mdc': 'novelmaster.md',
+			'rules/novelmaster_hooks_workflow.mdc': 'novelmaster_hooks_workflow.md'
 		});
 	});
 

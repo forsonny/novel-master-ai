@@ -1,0 +1,544 @@
+---
+description: Comprehensive reference for Novel Master MCP tools and CLI commands.
+globs: **/*
+alwaysApply: true
+---
+# Novel Master Tool & Command Reference
+
+This document provides a detailed reference for interacting with Novel Master, covering both the recommended MCP tools, suitable for integrations like Cursor, and the corresponding `novel-master` CLI commands, designed for direct user interaction or fallback.
+
+**Note:** For interacting with Novel Master programmatically or via integrated tools, using the **MCP tools is strongly recommended** due to better performance, structured data, and error handling. The CLI commands serve as a user-friendly alternative and fallback. 
+
+**Important:** Several MCP tools involve AI processing... The AI-powered tools include `parse_prd`, `analyze_project_complexity`, `update_subtask`, `update_task`, `update`, `expand_all`, `expand_task`, and `add_task`.
+
+**🏷️ Tagged Task Lists System:** Novel Master now supports **tagged task lists** for multi-context task management. This allows you to maintain separate, isolated lists of tasks for different features, branches, or experiments. Existing projects are seamlessly migrated to use a default "master" tag. Most commands now support a `--tag <name>` flag to specify which context to operate on. If omitted, commands use the currently active tag.
+
+---
+
+## Initialization & Setup
+
+### 1. Initialize Project (`init`)
+
+*   **MCP Tool:** `initialize_project`
+*   **CLI Command:** `novel-master init [options]`
+*   **Description:** `Set up the basic Novel Master file structure and configuration in the current directory for a new project.`
+*   **Key CLI Options:**
+    *   `--name <name>`: `Set the name for your project in Novel Master's configuration.`
+    *   `--description <text>`: `Provide a brief description for your project.`
+    *   `--version <version>`: `Set the initial version for your project, e.g., '0.1.0'.`
+    *   `--no-git`: `Skip initializing a Git repository entirely.`
+    *   `-y, --yes`: `Initialize Novel Master quickly using default settings without interactive prompts.`
+*   **Usage:** Run this once at the beginning of a new project.
+*   **MCP Variant Description:** `Set up the basic Novel Master file structure and configuration in the current directory for a new project by running the 'novel-master init' command.`
+*   **Key MCP Parameters/Options:**
+    *   `projectName`: `Set the name for your project.` (CLI: `--name <name>`)
+    *   `projectDescription`: `Provide a brief description for your project.` (CLI: `--description <text>`)
+    *   `projectVersion`: `Set the initial version for your project, e.g., '0.1.0'.` (CLI: `--version <version>`)
+    *   `authorName`: `Author name.` (CLI: `--author <author>`)
+    *   `skipInstall`: `Skip installing dependencies. Default is false.` (CLI: `--skip-install`)
+    *   `addAliases`: `Add shell aliases tm and novelmaster. Default is false.` (CLI: `--aliases`)
+    *   `noGit`: `Skip initializing a Git repository entirely. Default is false.` (CLI: `--no-git`)
+    *   `yes`: `Skip prompts and use defaults/provided arguments. Default is false.` (CLI: `-y, --yes`)
+*   **Usage:** Run this once at the beginning of a new project, typically via an integrated tool like Cursor. Operates on the current working directory of the MCP server. 
+*   **Important:** Once complete, you *MUST* parse an NRD (Novel Requirements Document) to generate your first outline tasks. The next step after initializing should be to create an NRD using one of the examples in `.novelmaster/templates/` (e.g., `example_nrd.md`).
+*   **Tagging:** Use the `--tag` option to parse the NRD into a specific, non-default tag context. If the tag doesn't exist, it will be created automatically. Example: `novel-master parse-prd docs/nrd.txt --tag=outline`.
+
+### 2. Parse NRD (`parse_prd`)
+
+*   **MCP Tool:** `parse_prd`
+*   **CLI Command:** `novel-master parse-prd [file] [options]`
+*   **Description:** `Parse a Novel Requirements Document (outline, beat sheet, synopsis) to automatically generate act/chapter tasks in tasks.json.`
+*   **Key Parameters/Options:**
+    *   `input`: `Path to your NRD text/markdown file (premise, act structure, character sheets).` (CLI: `[file]` positional or `-i, --input <file>`)
+    *   `output`: `Where Novel Master should save the generated 'tasks.json'. Defaults to '.novelmaster/tasks/tasks.json'.` (CLI: `-o, --output <file>`)
+    *   `numTasks`: `Approximate number of top-level narrative tasks (acts/initiatives) to generate.` (CLI: `-n, --num-tasks <number>`)
+    *   `force`: `Overwrite an existing tasks.json without confirmation.` (CLI: `-f, --force`)
+*   **Usage:** Bootstraps a story outline from an NRD covering premise, act beats, character arcs, and world rules.
+*   **Notes:** Novel Master preserves explicit NRD constraints (POV plans, tone, genre tropes, word-count budgets) while filling in pacing/continuity guidance. Generated tasks focus on translating the NRD into actionable story arcs and scenes.
+*   **Important:** This MCP tool makes AI calls and can take up to a minute to complete. If the user lacks an NRD, collaborate to fill the `example_nrd.md` template, then run `parse-prd`.
+
+---
+
+## AI Model Configuration
+
+### 2. Manage Models (`models`)
+*   **MCP Tool:** `models`
+*   **CLI Command:** `novel-master models [options]`
+*   **Description:** `View the current AI model configuration or set specific models for different roles (main, research, fallback). Allows setting custom model IDs for Ollama and OpenRouter.`
+*   **Key MCP Parameters/Options:**
+    *   `setMain <model_id>`: `Set the primary model ID for task generation/updates.` (CLI: `--set-main <model_id>`)
+    *   `setResearch <model_id>`: `Set the model ID for research-backed operations.` (CLI: `--set-research <model_id>`)
+    *   `setFallback <model_id>`: `Set the model ID to use if the primary fails.` (CLI: `--set-fallback <model_id>`)
+    *   `ollama <boolean>`: `Indicates the set model ID is a custom Ollama model.` (CLI: `--ollama`)
+    *   `openrouter <boolean>`: `Indicates the set model ID is a custom OpenRouter model.` (CLI: `--openrouter`)
+    *   `listAvailableModels <boolean>`: `If true, lists available models not currently assigned to a role.` (CLI: No direct equivalent; CLI lists available automatically)
+    *   `projectRoot <string>`: `Optional. Absolute path to the project root directory.` (CLI: Determined automatically)
+*   **Key CLI Options:**
+    *   `--set-main <model_id>`: `Set the primary model.`
+    *   `--set-research <model_id>`: `Set the research model.`
+    *   `--set-fallback <model_id>`: `Set the fallback model.`
+    *   `--ollama`: `Specify that the provided model ID is for Ollama (use with --set-*).`
+    *   `--openrouter`: `Specify that the provided model ID is for OpenRouter (use with --set-*). Validates against OpenRouter API.`
+    *   `--bedrock`: `Specify that the provided model ID is for AWS Bedrock (use with --set-*).`
+    *   `--setup`: `Run interactive setup to configure models, including custom Ollama/OpenRouter IDs.`
+*   **Usage (MCP):** Call without set flags to get current config. Use `setMain`, `setResearch`, or `setFallback` with a valid model ID to update the configuration. Use `listAvailableModels: true` to get a list of unassigned models. To set a custom model, provide the model ID and set `ollama: true` or `openrouter: true`.
+*   **Usage (CLI):** Run without flags to view current configuration and available models. Use set flags to update specific roles. Use `--setup` for guided configuration, including custom models. To set a custom model via flags, use `--set-<role>=<model_id>` along with either `--ollama` or `--openrouter`.
+*   **Notes:** Configuration is stored in `.novelmaster/config.json` in the project root. This command/tool modifies that file. Use `listAvailableModels` or `novel-master models` to see internally supported models. OpenRouter custom models are validated against their live API. Ollama custom models are not validated live.
+*   **API note:** API keys for selected AI providers (based on their model) need to exist in the mcp.json file to be accessible in MCP context. The API keys must be present in the local .env file for the CLI to be able to read them.
+*   **Model costs:** The costs in supported models are expressed in dollars. An input/output value of 3 is $3.00. A value of 0.8 is $0.80. 
+*   **Warning:** DO NOT MANUALLY EDIT THE .novelmaster/config.json FILE. Use the included commands either in the MCP or CLI format as needed. Always prioritize MCP tools when available and use the CLI as a fallback.
+
+---
+
+## Task Listing & Viewing
+
+### 3. Get Tasks (`get_tasks`)
+
+*   **MCP Tool:** `get_tasks`
+*   **CLI Command:** `novel-master list [options]`
+*   **Description:** `List your Novel Master tasks, optionally filtering by status and showing subtasks.`
+*   **Key Parameters/Options:**
+    *   `status`: `Show only Novel Master tasks matching this status (or multiple statuses, comma-separated), e.g., 'pending' or 'done,in-progress'.` (CLI: `-s, --status <status>`)
+    *   `withSubtasks`: `Include subtasks indented under their parent tasks in the list.` (CLI: `--with-subtasks`)
+    *   `tag`: `Specify which tag context to list tasks from. Defaults to the current active tag.` (CLI: `--tag <name>`)
+    *   `file`: `Path to your Novel Master 'tasks.json' file. Default relies on auto-detection.` (CLI: `-f, --file <file>`)
+*   **Usage:** Get an overview of the project status, often used at the start of a work session.
+
+### 4. Get Next Task (`next_task`)
+
+*   **MCP Tool:** `next_task`
+*   **CLI Command:** `novel-master next [options]`
+*   **Description:** `Ask Novel Master to show the next available task you can work on, based on status and completed dependencies.`
+*   **Key Parameters/Options:**
+    *   `file`: `Path to your Novel Master 'tasks.json' file. Default relies on auto-detection.` (CLI: `-f, --file <file>`)
+    *   `tag`: `Specify which tag context to use. Defaults to the current active tag.` (CLI: `--tag <name>`)
+*   **Usage:** Identify what to work on next according to the plan.
+
+### 5. Get Task Details (`get_task`)
+
+*   **MCP Tool:** `get_task`
+*   **CLI Command:** `novel-master show [id] [options]`
+*   **Description:** `Display detailed information for one or more specific Novel Master tasks or subtasks by ID.`
+*   **Key Parameters/Options:**
+    *   `id`: `Required. The ID of the Novel Master task (e.g., '15'), subtask (e.g., '15.2'), or a comma-separated list of IDs ('1,5,10.2') you want to view.` (CLI: `[id]` positional or `-i, --id <id>`)
+    *   `tag`: `Specify which tag context to get the task(s) from. Defaults to the current active tag.` (CLI: `--tag <name>`)
+    *   `file`: `Path to your Novel Master 'tasks.json' file. Default relies on auto-detection.` (CLI: `-f, --file <file>`)
+*   **Usage:** Understand the full details for a specific task. When multiple IDs are provided, a summary table is shown.
+*   **CRITICAL INFORMATION** If you need to collect information from multiple tasks, use comma-separated IDs (i.e. 1,2,3) to receive an array of tasks. Do not needlessly get tasks one at a time if you need to get many as that is wasteful.
+
+---
+
+## Task Creation & Modification
+
+### 6. Add Task (`add_task`)
+
+*   **MCP Tool:** `add_task`
+*   **CLI Command:** `novel-master add-task [options]`
+*   **Description:** `Add a new story task (act/chapter/scene) by describing it; Novel Master turns your NRD prompt into a structured outline entry.`
+*   **Key Parameters/Options:**
+    *   `prompt`: `Required when not using manual fields. Describe the narrative beat you want to add (e.g., "Act II Midpoint – betrayal at the orbital bazaar").` (CLI: `-p, --prompt <text>`)
+    *   `title`, `description`, `details`: `Manual creation fields for quick scene entries (details are great for emotional beats, sensory cues, or research hooks).`
+    *   `dependencies`: `Comma-separated IDs of prerequisite arcs/scenes that must happen first.` (CLI: `-d, --dependencies <ids>`)
+    *   `priority`: `Use 'high' for plot-critical beats, 'low' for optional vignettes. Default is 'medium'.` (CLI: `--priority <priority>`)
+    *   `research`: `Enable the research role to pull in lore/genre references while generating the new outline step.` (CLI: `-r, --research`)
+    *   `tag`: `Specify which tag (outline, draft, revision) receives the new task. Defaults to the active tag.` (CLI: `--tag <name>`)
+    *   `file`: `Path to your Novel Master 'tasks.json'. Default auto-detects.` (CLI: `-f, --file <file>`)
+*   **Usage:** Rapidly capture new story ideas—either freeform (“add a heist in Act II”) or explicitly (“title + description”). Novel Master auto-injects POV, stakes, and follow-up notes based on your prompt.
+*   **Important:** This MCP tool makes AI calls and may take up to a minute. Let writers know to hold tight while the new outline entry is generated.
+
+### 7. Add Beat/Subscene (`add_subtask`)
+
+*   **MCP Tool:** `add_subtask`
+*   **CLI Command:** `novel-master add-subtask [options]`
+*   **Description:** `Add a new beat under an existing chapter/scene task—or convert an existing task into a beat—without needing AI expansion.`
+*   **Key Parameters/Options:**
+    *   `id` / `parent`: `Required. The chapter/scene ID that will receive the new beat.` (MCP: `id`, CLI: `-p, --parent <id>`)
+    *   `taskId`: `Convert an existing top-level task into a beat beneath the parent.` (CLI: `-i, --task-id <id>`)
+    *   `title`, `description`, `details`: `Manual beat metadata (title, summary, sensory notes, research hooks).`
+    *   `dependencies`: `Comma-separated list of prerequisite beats/chapters (e.g., '7,8.2').`
+    *   `status`: `Initial status for the beat (pending, in-progress, done, etc.).`
+    *   `generate`: `Regenerate chapter Markdown packets after adding the beat.`
+    *   `tag`, `file`: `Specify the outline/draft tag and/or custom tasks file if needed.`
+*   **Usage:** Quick way to slot a new beat beneath a chapter without re-running `expand`. Great for manual tweaks or converting stray tasks into structured beats.
+
+### 8. Update Tasks (`update`)
+
+*   **MCP Tool:** `update`
+*   **CLI Command:** `novel-master update [options]`
+*   **Description:** `Batch-update upcoming outline tasks (ID ≥ --from) when the story plan changes—tone shifts, new stakes, POV swaps, etc.`
+*   **Key Parameters/Options:**
+    *   `from`: `Required. First chapter/scene ID to update; every task with ID ≥ this value is refreshed unless marked done.` (CLI: `--from <id>`)
+    *   `prompt`: `Required. Describe the new narrative direction (e.g., "Act II now focuses on Mina's POV; update beats to reflect distrust.").` (CLI: `-p, --prompt <text>`)
+    *   `research`: `Enable the research model so updates reference accurate lore/tone.` (CLI: `-r, --research`)
+    *   `tag`, `file`: `Target a specific outline/draft tag or custom tasks file if needed.`
+*   **Usage:** Perfect after feedback or plot pivots when many upcoming beats must be realigned. Novel Master applies the new guidance to every eligible task in order.
+*   **Important:** AI-powered; allow up to a minute for large outline sections.
+
+### 9. Update Task (`update_task`)
+
+*   **MCP Tool:** `update_task`
+*   **CLI Command:** `novel-master update-task [options]`
+*   **Description:** `Revise a single chapter/scene task by ID when that beat’s outline needs to change.`
+*   **Key Parameters/Options:**
+    *   `id`: `Required. Chapter/scene ID to update (e.g., '12' or '12.3').` (CLI: `-i, --id <id>`)
+    *   `prompt`: `Required. Describe the new angle (tone shift, POV, stakes change) for that beat.` (CLI: `-p, --prompt <text>`)
+    *   `append`: `If true, append the prompt to the beat’s details with a timestamp instead of replacing them (good for progress logs).` (CLI: `--append`)
+    *   `research`: `Use the research model before rewriting the beat (genre, history, science).` (CLI: `-r, --research`)
+    *   `tag`, `file`: `Target a specific outline/draft tag or custom tasks file if needed.`
+*   **Usage:** Ideal when beta feedback or new ideas affect a single beat—update the existing outline entry without touching surrounding arcs.
+*   **Important:** This MCP tool makes AI calls and can take up to a minute to complete. Please inform users to hang tight while the operation is in progress.
+
+### 10. Update Beat (`update_subtask`)
+
+*   **MCP Tool:** `update_subtask`
+*   **CLI Command:** `novel-master update-subtask [options]`
+*   **Description:** `Append timestamped notes to a beat/subscene (e.g., new research, sensory inspiration, editorial feedback) without overwriting existing details.`
+*   **Key Parameters/Options:**
+    *   `id`: `Required. Beat ID, e.g., '5.2', to append notes to.` (CLI: `-i, --id <id>`)
+    *   `prompt`: `Required. The note you want to append (drafting notes, research findings, etc.).` (CLI: `-p, --prompt <text>`)
+    *   `research`: `Enable the research model before appending (useful when logging factual discoveries).` (CLI: `-r, --research`)
+    *   `tag`, `file`: `Target a specific outline/draft tag or tasks file if needed.`
+*   **Usage:** Ideal for ongoing drafting—log progress on each beat with timestamps so future reviewers understand how the scene evolved.
+*   **Important:** This MCP tool makes AI calls and can take up to a minute to complete. Please inform users to hang tight while the operation is in progress.
+
+### 11. Set Task Status (`set_task_status`)
+
+*   **MCP Tool:** `set_task_status`
+*   **CLI Command:** `novel-master set-status [options]`
+*   **Description:** `Update the status of chapters/scenes/beats (pending, drafting, revised, done) to reflect where they are in the writing pipeline.`
+*   **Key Parameters/Options:**
+    *   `id`: `Required. One or more IDs (e.g., '12', '12.2', '15,16.1') to update.` (CLI: `-i, --id <id>`)
+    *   `status`: `Required. New status (e.g., pending, in-progress, draft, revision, done, deferred).` (CLI: `-s, --status <status>`)
+    *   `tag`, `file`: `Select a specific outline/draft tag or tasks file if needed.`
+*   **Usage:** Keep your outline board accurate—mark beats as in-progress when drafting, shift completed scenes to done, or flag stretches as deferred.
+
+### 12. Remove Task (`remove_task`)
+
+*   **MCP Tool:** `remove_task`
+*   **CLI Command:** `novel-master remove-task [options]`
+*   **Description:** `Permanently delete a chapter/scene task (or beat) from the outline when it no longer fits the story.`
+*   **Key Parameters/Options:**
+    *   `id`: `Required. Task ID(s) (e.g., '5' or '5,7,8.3') to remove.` (CLI: `-i, --id <id>`)
+    *   `yes`: `Skip confirmation (useful for automated cleanup).` (CLI: `-y, --yes`)
+    *   `tag`, `file`: `Select the tag or tasks file if different from the default.`
+*   **Usage:** Use sparingly—prefer status changes like “deferred” or “cut” if you might want to revisit the idea later. Removing a task also cleans up dependency references automatically.
+
+---
+
+## Task Structure & Breakdown
+
+### 13. Expand Task (`expand_task`)
+
+*   **MCP Tool:** `expand_task`
+*   **CLI Command:** `novel-master expand [options]`
+*   **Description:** `Use Novel Master’s AI to turn a high-level chapter/scene task into a sequence of beats, sensory cues, and research hooks. Beats are appended by default.`
+*   **Key Parameters/Options:**
+    *   `id`: `The chapter/scene ID to expand into beats.` (CLI: `-i, --id <id>`)
+    *   `num`: `Optional: Target number of beats to generate. Falls back to complexity analysis if omitted.` (CLI: `-n, --num <number>`)
+    *   `research`: `Enable the research role so generated beats reference accurate lore, genre tropes, or world details.` (CLI: `-r, --research`)
+    *   `prompt`: `Optional: Extra guidance (tone goals, POV constraints, sensory motifs, stakes).` (CLI: `-p, --prompt <text>`)
+    *   `force`: `If true, clears existing beats before regenerating. Default appends.` (CLI: `--force`)
+    *   `tag`: `Specify which tag context (outline/draft/revision) to use. Defaults to active tag.` (CLI: `--tag <name>`)
+    *   `file`: `Path to your Novel Master 'tasks.json'. Default auto-detects.` (CLI: `-f, --file <file>`)
+*   **Usage:** Run this when an act/chapter task needs more detailed beats before drafting. If a complexity report exists, `expand` automatically uses its recommendations to focus on overloaded arcs.
+*   **Important:** This MCP tool makes AI calls and may take up to a minute. Let users know to wait while beats are generated.
+
+### 14. Expand All Narrative Tasks (`expand_all`)
+
+*   **MCP Tool:** `expand_all`
+*   **CLI Command:** `novel-master expand --all [options]`
+*   **Description:** `Automatically expand every pending outline task that the complexity report flagged as needing more beats. Appends beats by default.`
+*   **Key Parameters/Options:**
+    *   `num`: `Optional: Target number of beats per chapter. Falls back to per-task recommendations.` (CLI: `-n, --num <number>`)
+    *   `research`: `Enable lore/genre-aware beat generation.` (CLI: `-r, --research`)
+    *   `prompt`: `Optional: Global context (e.g., “Keep tension simmering,” “Lean into solarpunk optimism”).` (CLI: `-p, --prompt <text>`)
+    *   `force`: `If true, clears existing beats for each task before regenerating.` (CLI: `--force`)
+    *   `tag`: `Specify which tag context (outline, draft, revision) to expand.` (CLI: `--tag <name>`)
+    *   `file`: `Path to your Novel Master 'tasks.json'. Default auto-detects.` (CLI: `-f, --file <file>`)
+*   **Usage:** After running `analyze-complexity`, use this to flesh out every overloaded chapter in a single pass.
+*   **Important:** This MCP tool makes AI calls and may take up to a minute per batch. Advise users to hold tight.
+
+### 15. Clear Beats (`clear_subtasks`)
+
+*   **MCP Tool:** `clear_subtasks`
+*   **CLI Command:** `novel-master clear-subtasks [options]`
+*   **Description:** `Remove all beats from one or more parent chapters so you can regenerate them fresh (e.g., before re-running expand).`
+*   **Key Parameters/Options:**
+    *   `id`: `One or more parent task IDs (e.g., '5' or '5,6,7') whose beats should be removed. Required unless using --all.` (CLI: `-i, --id <ids>`)
+    *   `all`: `Remove beats from every parent task in the current tag.` (CLI: `--all`)
+    *   `tag`, `file`: `Target a specific outline/draft tag or tasks file if needed.`
+*   **Usage:** Run when you want to wipe a chapter’s beats clean (maybe after major plot surgery) before expanding again.
+
+### 16. Remove Beat (`remove_subtask`)
+
+*   **MCP Tool:** `remove_subtask`
+*   **CLI Command:** `novel-master remove-subtask [options]`
+*   **Description:** `Delete one or more beats from their parent chapter, or convert them back into standalone tasks if you want to reuse them elsewhere.`
+*   **Key Parameters/Options:**
+    *   `id`: `Required. Beat IDs to remove (e.g., '12.2' or '12.2,12.3').` (CLI: `-i, --id <id>`)
+    *   `convert`: `Instead of deleting, promote the beat to a top-level task (useful when relocating scenes).` (CLI: `-c, --convert`)
+    *   `generate`: `Regenerate chapter Markdown files after removal.` (CLI: `--generate`)
+    *   `tag`, `file`: `Target specific tags or tasks files if necessary.`
+*   **Usage:** Clean up beats that no longer serve the story or extract a beat to become its own chapter task.
+
+### 17. Move Task (`move_task`)
+
+*   **MCP Tool:** `move_task`
+*   **CLI Command:** `novel-master move [options]`
+*   **Description:** `Move a task or subtask to a new position within the task hierarchy.`
+*   **Key Parameters/Options:**
+    *   `from`: `Required. ID of the task/subtask to move (e.g., "5" or "5.2"). Can be comma-separated for multiple tasks.` (CLI: `--from <id>`)
+    *   `to`: `Required. ID of the destination (e.g., "7" or "7.3"). Must match the number of source IDs if comma-separated.` (CLI: `--to <id>`)
+    *   `tag`: `Specify which tag context to operate on. Defaults to the current active tag.` (CLI: `--tag <name>`)
+    *   `file`: `Path to your Novel Master 'tasks.json' file. Default relies on auto-detection.` (CLI: `-f, --file <file>`)
+*   **Usage:** Reorganize tasks by moving them within the hierarchy. Supports various scenarios like:
+    *   Moving a task to become a subtask
+    *   Moving a subtask to become a standalone task
+    *   Moving a subtask to a different parent
+    *   Reordering subtasks within the same parent
+    *   Moving a task to a new, non-existent ID (automatically creates placeholders)
+    *   Moving multiple tasks at once with comma-separated IDs
+*   **Validation Features:**
+    *   Allows moving tasks to non-existent destination IDs (creates placeholder tasks)
+    *   Prevents moving to existing task IDs that already have content (to avoid overwriting)
+    *   Validates that source tasks exist before attempting to move them
+    *   Maintains proper parent-child relationships
+*   **Example CLI:** `novel-master move --from=5.2 --to=7.3` to move subtask 5.2 to become subtask 7.3.
+*   **Example Multi-Move:** `novel-master move --from=10,11,12 --to=16,17,18` to move multiple tasks to new positions.
+*   **Common Use:** Resolving merge conflicts in tasks.json when multiple team members create tasks on different branches.
+
+---
+
+## Dependency Management
+
+### 18. Add Dependency (`add_dependency`)
+
+*   **MCP Tool:** `add_dependency`
+*   **CLI Command:** `novel-master add-dependency [options]`
+*   **Description:** `Define a dependency in Novel Master, making one task a prerequisite for another.`
+*   **Key Parameters/Options:**
+    *   `id`: `Required. The ID of the Novel Master task that will depend on another.` (CLI: `-i, --id <id>`)
+    *   `dependsOn`: `Required. The ID of the Novel Master task that must be completed first, the prerequisite.` (CLI: `-d, --depends-on <id>`)
+    *   `tag`: `Specify which tag context to operate on. Defaults to the current active tag.` (CLI: `--tag <name>`)
+    *   `file`: `Path to your Novel Master 'tasks.json' file. Default relies on auto-detection.` (CLI: `-f, --file <path>`)
+*   **Usage:** Establish the correct order of execution between tasks.
+
+### 19. Remove Dependency (`remove_dependency`)
+
+*   **MCP Tool:** `remove_dependency`
+*   **CLI Command:** `novel-master remove-dependency [options]`
+*   **Description:** `Remove a dependency relationship between two Novel Master tasks.`
+*   **Key Parameters/Options:**
+    *   `id`: `Required. The ID of the Novel Master task you want to remove a prerequisite from.` (CLI: `-i, --id <id>`)
+    *   `dependsOn`: `Required. The ID of the Novel Master task that should no longer be a prerequisite.` (CLI: `-d, --depends-on <id>`)
+    *   `tag`: `Specify which tag context to operate on. Defaults to the current active tag.` (CLI: `--tag <name>`)
+    *   `file`: `Path to your Novel Master 'tasks.json' file. Default relies on auto-detection.` (CLI: `-f, --file <file>`)
+*   **Usage:** Update task relationships when the order of execution changes.
+
+### 20. Validate Dependencies (`validate_dependencies`)
+
+*   **MCP Tool:** `validate_dependencies`
+*   **CLI Command:** `novel-master validate-dependencies [options]`
+*   **Description:** `Check your Novel Master tasks for dependency issues (like circular references or links to non-existent tasks) without making changes.`
+*   **Key Parameters/Options:**
+    *   `tag`: `Specify which tag context to validate. Defaults to the current active tag.` (CLI: `--tag <name>`)
+    *   `file`: `Path to your Novel Master 'tasks.json' file. Default relies on auto-detection.` (CLI: `-f, --file <file>`)
+*   **Usage:** Audit the integrity of your task dependencies.
+
+### 21. Fix Dependencies (`fix_dependencies`)
+
+*   **MCP Tool:** `fix_dependencies`
+*   **CLI Command:** `novel-master fix-dependencies [options]`
+*   **Description:** `Automatically fix dependency issues (like circular references or links to non-existent tasks) in your Novel Master tasks.`
+*   **Key Parameters/Options:**
+    *   `tag`: `Specify which tag context to fix dependencies in. Defaults to the current active tag.` (CLI: `--tag <name>`)
+    *   `file`: `Path to your Novel Master 'tasks.json' file. Default relies on auto-detection.` (CLI: `-f, --file <file>`)
+*   **Usage:** Clean up dependency errors automatically.
+
+---
+
+## Analysis & Reporting
+
+### 22. Analyze Narrative Complexity (`analyze_project_complexity`)
+
+*   **MCP Tool:** `analyze_project_complexity`
+*   **CLI Command:** `novel-master analyze-complexity [options]`
+*   **Description:** `Ask Novel Master to review your outline/draft tasks to spot overloaded chapters (too many POV shifts, research hooks, or dependencies) and recommend where to deepen or split scenes.`
+*   **Key Parameters/Options:**
+    *   `output`: `Where to save the pacing/complexity report. Default is '.novelmaster/reports/task-complexity-report.json' (tag suffix added automatically).` (CLI: `-o, --output <file>`)
+    *   `threshold`: `Minimum complexity score (1–10) before Novel Master suggests expanding a scene/arc.` (CLI: `-t, --threshold <number>`)
+    *   `research`: `Use the research role for genre/lore-aware suggestions. Requires a research-model API key.` (CLI: `-r, --research`)
+    *   `tag`: `Specify which tag context (outline, draft, rev-pass) to analyze. Defaults to the active tag.` (CLI: `--tag <name>`)
+    *   `file`: `Path to your Novel Master 'tasks.json' file. Default relies on auto-detection.` (CLI: `-f, --file <file>`)
+*   **Usage:** Run this before expanding chapters to understand pacing pressure, POV load, or continuity debt so you tackle the most fragile sections first.
+*   **Important:** This MCP tool makes AI calls and can take up to a minute to complete. Please inform users to hang tight while the operation is in progress.
+
+### 23. View Complexity Report (`complexity_report`)
+
+*   **MCP Tool:** `complexity_report`
+*   **CLI Command:** `novel-master complexity-report [options]`
+*   **Description:** `Render the pacing/complexity report in a readable format so you can see which arcs need expansion.`
+*   **Key Parameters/Options:**
+    *   `tag`: `Specify which tag context to show the report for. Defaults to the current active tag.` (CLI: `--tag <name>`)
+    *   `file`: `Path to the report (default: '.novelmaster/reports/task-complexity-report.json', tag-aware).` (CLI: `-f, --file <file>`)
+*   **Usage:** Use this after `analyze-complexity` to decide which chapters/scenes to expand or split before drafting.
+
+---
+
+## File Management
+
+### 24. Generate Task Files (`generate`)
+
+*   **MCP Tool:** `generate`
+*   **CLI Command:** `novel-master generate [options]`
+*   **Description:** `Create or update chapter/scene Markdown files, a manuscript summary (word counts + status), and a compiled manuscript for the selected tag.`
+*   **Key Parameters/Options:**
+    *   `output`: `Directory where manuscript artifacts should land (default: '.novelmaster/manuscript' inside the project, tag-aware subfolders).` (CLI: `-o, --output <directory>`)
+    *   `tag`: `Specify which tag context (outline, draft, revision) to export. Defaults to the current active tag.` (CLI: `--tag <name>`)
+    *   `file`: `Path to your Novel Master 'tasks.json'. Default auto-detects.` (CLI: `-f, --file <file>`)
+    *   `compile`: `Generated by default. Pass \`--no-compile\` to skip building the combined manuscript file (useful when you only want chapter packets).`
+    *   `format`: `Export format for compiled manuscript: "md" (markdown) or "txt" (plain text). Default: "md".` (CLI: `--format <md|txt>`, MCP: `format` parameter)
+*   **Usage:** Run after expanding or editing tasks to refresh the per-scene Markdown files you hand off to beta readers or drafting tools. Generation is manual—run it whenever you want updated packets. **Note:** After updating tasks via `update_task` or `update_subtask`, run `generate` to sync manuscript files with the latest task changes. If `autoRegenerateManuscript` is enabled in config, manuscript files will regenerate automatically after task updates.
+*   **Artifacts:** `chapters/chapter-###.md` (managed metadata + beats + draft anchors), `manuscript-summary.json` (target vs. drafted words, status counts, completion percentages, global progress), `compiled/manuscript-<tag>.md` or `.txt` (concatenated draft suitable for exporting).
+
+---
+
+## AI-Powered Research
+
+### 25. Research (`research`)
+
+*   **MCP Tool:** `research`
+*   **CLI Command:** `novel-master research [options]`
+*   **Description:** `Perform AI-powered narrative research to gather worldbuilding facts, timeline references, sensory palettes, or genre conventions directly inside your manuscript workflow.`
+*   **Key Parameters/Options:**
+    *   `query`: `Required. Research prompt (e.g., "Solar punk energy shortages", "1930s speakeasy slang", "Symptoms of decompression sickness").` (CLI: `[query]` positional)
+    *   `taskIds`: `Comma-separated chapter/scene IDs to ground the research in a specific part of the outline (e.g., "4,7.2").` (CLI: `-i, --id <ids>`)
+    *   `filePaths`: `Comma-separated manuscript or lore files to include for context (e.g., "manuscript/03-chapter.md,lore/technology.md").` (CLI: `-f, --files <paths>`)
+    *   `customContext`: `Additional notes such as tone, character arcs, or editorial directives to steer the research.` (CLI: `-c, --context <text>`)
+    *   `includeProjectTree`: `Include a project file tree (handy for large lore directories or multi-act drafts).` (CLI: `--tree`)
+    *   `detailLevel`: `Detail level for the response: 'low' (quick facts), 'medium', 'high' (deep dives).` (CLI: `--detail <level>`)
+    *   `saveTo`: `Chapter/scene ID (e.g., "8", "8.3") to automatically append the research transcript to.` (CLI: `--save-to <id>`)
+    *   `saveFile`: `Also save the research transcript to '.novelmaster/docs/research/' for long-term lore tracking.` (CLI: `--save-file`)
+    *   `noFollowup`: `Disable the CLI follow-up helper when you only need a single answer.` (CLI: `--no-followup`)
+    *   `tag`: `Specify which tag context (outline, draft, revision) to use when gathering task context. Defaults to active tag.` (CLI: `--tag <name>`)
+*   **Usage:** **Use this constantly** to keep the manuscript grounded in accurate details and vibrant sensory cues:
+    *   Validate science/magic systems and keep terminology consistent
+    *   Explore genre tropes, dialogue rhythms, or historical customs
+    *   Bridge timeline gaps or continuity questions between chapters
+    *   Pull fresh sensory palettes and metaphor ideas for new scenes
+    *   Capture lore research directly into the relevant chapter task
+*   **Research + Action Pattern:**
+    *   Run `research` with the relevant chapter IDs/files
+    *   Use `update_subtask` to append the findings with timestamps
+    *   Use `update_task` if the research changes the plan for that arc
+    *   Use `add_task --research` when the research reveals new beats to outline
+*   **Important:** This tool makes live AI calls and may take up to a minute. The answers incorporate current, real-world references so your fiction stays grounded and fresh.
+
+---
+
+## Tag Management
+
+This new suite of commands allows you to manage different task contexts (tags).
+
+### 26. List Tags (`tags`)
+
+*   **MCP Tool:** `list_tags`
+*   **CLI Command:** `novel-master tags [options]`
+*   **Description:** `List all available tags with task counts, completion status, and other metadata.`
+*   **Key Parameters/Options:**
+    *   `file`: `Path to your Novel Master 'tasks.json' file. Default relies on auto-detection.` (CLI: `-f, --file <file>`)
+    *   `--show-metadata`: `Include detailed metadata in the output (e.g., creation date, description).` (CLI: `--show-metadata`)
+
+### 27. Add Tag (`add_tag`)
+
+*   **MCP Tool:** `add_tag`
+*   **CLI Command:** `novel-master add-tag <tagName> [options]`
+*   **Description:** `Create a new, empty tag context, or copy tasks from another tag.`
+*   **Key Parameters/Options:**
+    *   `tagName`: `Name of the new tag to create (alphanumeric, hyphens, underscores).` (CLI: `<tagName>` positional)
+    *   `--from-branch`: `Creates a tag with a name derived from the current git branch, ignoring the <tagName> argument.` (CLI: `--from-branch`)
+    *   `--copy-from-current`: `Copy tasks from the currently active tag to the new tag.` (CLI: `--copy-from-current`)
+    *   `--copy-from <tag>`: `Copy tasks from a specific source tag to the new tag.` (CLI: `--copy-from <tag>`)
+    *   `--description <text>`: `Provide an optional description for the new tag.` (CLI: `-d, --description <text>`)
+    *   `file`: `Path to your Novel Master 'tasks.json' file. Default relies on auto-detection.` (CLI: `-f, --file <file>`)
+
+### 28. Delete Tag (`delete_tag`)
+
+*   **MCP Tool:** `delete_tag`
+*   **CLI Command:** `novel-master delete-tag <tagName> [options]`
+*   **Description:** `Permanently delete a tag and all of its associated tasks.`
+*   **Key Parameters/Options:**
+    *   `tagName`: `Name of the tag to delete.` (CLI: `<tagName>` positional)
+    *   `--yes`: `Skip the confirmation prompt.` (CLI: `-y, --yes`)
+    *   `file`: `Path to your Novel Master 'tasks.json' file. Default relies on auto-detection.` (CLI: `-f, --file <file>`)
+
+### 29. Use Tag (`use_tag`)
+
+*   **MCP Tool:** `use_tag`
+*   **CLI Command:** `novel-master use-tag <tagName>`
+*   **Description:** `Switch your active task context to a different tag.`
+*   **Key Parameters/Options:**
+    *   `tagName`: `Name of the tag to switch to.` (CLI: `<tagName>` positional)
+    *   `file`: `Path to your Novel Master 'tasks.json' file. Default relies on auto-detection.` (CLI: `-f, --file <file>`)
+
+### 30. Rename Tag (`rename_tag`)
+
+*   **MCP Tool:** `rename_tag`
+*   **CLI Command:** `novel-master rename-tag <oldName> <newName>`
+*   **Description:** `Rename an existing tag.`
+*   **Key Parameters/Options:**
+    *   `oldName`: `The current name of the tag.` (CLI: `<oldName>` positional)
+    *   `newName`: `The new name for the tag.` (CLI: `<newName>` positional)
+    *   `file`: `Path to your Novel Master 'tasks.json' file. Default relies on auto-detection.` (CLI: `-f, --file <file>`)
+
+### 31. Copy Tag (`copy_tag`)
+
+*   **MCP Tool:** `copy_tag`
+*   **CLI Command:** `novel-master copy-tag <sourceName> <targetName> [options]`
+*   **Description:** `Copy an entire tag context, including all its tasks and metadata, to a new tag.`
+*   **Key Parameters/Options:**
+    *   `sourceName`: `Name of the tag to copy from.` (CLI: `<sourceName>` positional)
+    *   `targetName`: `Name of the new tag to create.` (CLI: `<targetName>` positional)
+    *   `--description <text>`: `Optional description for the new tag.` (CLI: `-d, --description <text>`)
+
+---
+
+## Miscellaneous
+
+### 32. Sync Readme (`sync-readme`) -- experimental
+
+*   **MCP Tool:** N/A
+*   **CLI Command:** `novel-master sync-readme [options]`
+*   **Description:** `Exports your task list to your project's README.md file, useful for showcasing progress.`
+*   **Key Parameters/Options:**
+    *   `status`: `Filter tasks by status (e.g., 'pending', 'done').` (CLI: `-s, --status <status>`)
+    *   `withSubtasks`: `Include subtasks in the export.` (CLI: `--with-subtasks`)
+    *   `tag`: `Specify which tag context to export from. Defaults to the current active tag.` (CLI: `--tag <name>`)
+
+---
+
+## Environment Variables Configuration (Updated)
+
+Novel Master primarily uses the **`.novelmaster/config.json`** file (in project root) for configuration (models, parameters, logging level, etc.), managed via `novel-master models --setup`.
+
+Environment variables are used **only** for sensitive API keys related to AI providers and specific overrides like the Ollama base URL:
+
+*   **API Keys (Required for corresponding provider):**
+    *   `ANTHROPIC_API_KEY`
+    *   `PERPLEXITY_API_KEY`
+    *   `OPENAI_API_KEY`
+    *   `GOOGLE_API_KEY`
+    *   `MISTRAL_API_KEY`
+    *   `AZURE_OPENAI_API_KEY` (Requires `AZURE_OPENAI_ENDPOINT` too)
+    *   `OPENROUTER_API_KEY`
+    *   `XAI_API_KEY`
+    *   `OLLAMA_API_KEY` (Requires `OLLAMA_BASE_URL` too)
+*   **Endpoints (Optional/Provider Specific inside .novelmaster/config.json):**
+    *   `AZURE_OPENAI_ENDPOINT`
+    *   `OLLAMA_BASE_URL` (Default: `http://localhost:11434/api`)
+
+**Set API keys** in your **`.env`** file in the project root (for CLI use) or within the `env` section of your **`.cursor/mcp.json`** file (for MCP/Cursor integration). All other settings (model choice, max tokens, temperature, log level, custom endpoints) are managed in `.novelmaster/config.json` via `novel-master models` command or `models` MCP tool.
+
+---
+
+For details on how these commands fit into the development process, see the [Development Workflow Guide](mdc:.cursor/rules/dev_workflow.mdc).

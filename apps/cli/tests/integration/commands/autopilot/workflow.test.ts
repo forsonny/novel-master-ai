@@ -205,7 +205,7 @@ describe('Autopilot Workflow Integration Tests', () => {
 			};
 
 			mockFileSystem.set(
-				`${projectRoot}/.taskmaster/workflow-state.json`,
+				`${projectRoot}/.novelmaster/workflow-state.json`,
 				JSON.stringify(mockState)
 			);
 
@@ -254,7 +254,7 @@ describe('Autopilot Workflow Integration Tests', () => {
 			};
 
 			mockFileSystem.set(
-				`${projectRoot}/.taskmaster/workflow-state.json`,
+				`${projectRoot}/.novelmaster/workflow-state.json`,
 				JSON.stringify(mockState)
 			);
 		});
@@ -328,7 +328,7 @@ describe('Autopilot Workflow Integration Tests', () => {
 			};
 
 			mockFileSystem.set(
-				`${projectRoot}/.taskmaster/workflow-state.json`,
+				`${projectRoot}/.novelmaster/workflow-state.json`,
 				JSON.stringify(mockState)
 			);
 		});
@@ -378,7 +378,7 @@ describe('Autopilot Workflow Integration Tests', () => {
 			};
 
 			mockFileSystem.set(
-				`${projectRoot}/.taskmaster/workflow-state.json`,
+				`${projectRoot}/.novelmaster/workflow-state.json`,
 				JSON.stringify(mockState)
 			);
 		});
@@ -432,7 +432,7 @@ describe('Autopilot Workflow Integration Tests', () => {
 			};
 
 			mockFileSystem.set(
-				`${projectRoot}/.taskmaster/workflow-state.json`,
+				`${projectRoot}/.novelmaster/workflow-state.json`,
 				JSON.stringify(mockState)
 			);
 		});
@@ -508,7 +508,7 @@ describe('Autopilot Workflow Integration Tests', () => {
 			};
 
 			mockFileSystem.set(
-				`${projectRoot}/.taskmaster/workflow-state.json`,
+				`${projectRoot}/.novelmaster/workflow-state.json`,
 				JSON.stringify(mockState)
 			);
 		});

@@ -91,7 +91,7 @@ export class NotificationPreferences {
 	 * Get user's notification level preference
 	 */
 	private getNotificationLevel(): NotificationLevel {
-		const config = vscode.workspace.getConfiguration('taskmaster');
+		const config = vscode.workspace.getConfiguration('novelmaster');
 		return config.get<NotificationLevel>(
 			'notifications.level',
 			NotificationLevel.ERRORS_ONLY
