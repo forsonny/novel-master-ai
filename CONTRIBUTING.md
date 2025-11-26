@@ -321,8 +321,8 @@ Include:
 ## 💬 Getting Help
 
 - **Discord**: [Join our community](https://discord.gg/novelmasterai)
-- **Issues**: [GitHub Issues](https://github.com/eyaltoledano/claude-novel-master/issues)
-- **Discussions**: [GitHub Discussions](https://github.com/eyaltoledano/claude-novel-master/discussions)
+- **Issues**: [GitHub Issues](https://github.com/forsonny/novel-master-ai/issues)
+- **Discussions**: [GitHub Discussions](https://github.com/forsonny/novel-master-ai/discussions)
 
 ## 📄 License
 
