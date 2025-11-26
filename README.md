@@ -1,7 +1,7 @@
 <a name="readme-top"></a>
 
 <div align="center">
-  <img src="./images/logo.png?raw=true" alt="Novel Master logo" width="280" />
+  <img src="" alt="Novel Master logo" width="280" />
 </div>
 
 <p align="center">
