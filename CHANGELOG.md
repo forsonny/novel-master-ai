@@ -1,5 +1,11 @@
 # novel-master-ai
 
+## 0.33.7
+
+### Patch Changes
+
+- Update CLI banner attribution to forsonny
+
 ## 0.33.6
 
 ### Patch Changes

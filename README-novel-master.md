@@ -1,6 +1,6 @@
 # Novel Master
 
-### by [@eyaltoledano](https://x.com/eyaltoledano)
+### by [@forsonny](https://github.com/forsonny)
 
 A task management system for AI-driven development with Claude, designed to work seamlessly with Cursor AI.
 
