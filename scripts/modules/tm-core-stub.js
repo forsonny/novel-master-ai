@@ -39,14 +39,50 @@ export const CUSTOM_PROVIDERS_ARRAY = Object.values(CUSTOM_PROVIDERS);
 export const ALL_PROVIDERS = [...VALIDATED_PROVIDERS, ...CUSTOM_PROVIDERS_ARRAY];
 
 // TmCore stub - returns a minimal interface for task operations
-export const createTmCore = (options = {}) => {
+export const createTmCore = async (options = {}) => {
+	const { projectPath } = options;
+	
 	// This is a stub - actual implementations are in the legacy scripts
+	// The interface matches what list-tasks.js expects (tmCore.tasks.list())
 	return {
+		// Legacy methods (kept for backward compatibility)
 		getTasks: async () => [],
 		getTask: async () => null,
 		addTask: async () => null,
 		updateTask: async () => null,
-		deleteTask: async () => false
+		deleteTask: async () => false,
+		
+		// Tasks domain with list method (expected by list-tasks.js)
+		tasks: {
+			list: async ({ tag } = {}) => {
+				// Import readJSON from utils.js to read the tasks file
+				const { readJSON } = await import('./utils.js');
+				const path = await import('node:path');
+				
+				// Determine tasks path
+				const tasksPath = path.join(
+					projectPath || process.cwd(),
+					'.novelmaster',
+					'tasks',
+					'tasks.json'
+				);
+				
+				// Read tasks using tag-aware readJSON
+				const data = readJSON(tasksPath, projectPath, tag);
+				
+				if (!data || !data.tasks) {
+					return {
+						tasks: [],
+						storageType: 'file'
+					};
+				}
+				
+				return {
+					tasks: data.tasks,
+					storageType: 'file'
+				};
+			}
+		}
 	};
 };
 
