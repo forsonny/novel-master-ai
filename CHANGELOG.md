@@ -1,5 +1,11 @@
 # novel-master-ai
 
+## 0.33.9
+
+### Patch Changes
+
+- Fix "Invalid tasks data" error in generate command by passing correct data structure to validateAndFixDependencies
+
 ## 0.33.8
 
 ### Patch Changes

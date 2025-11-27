@@ -1,6 +1,36 @@
 {
-	"currentTag": "outline",
-	"lastSwitched": null,
-	"branchTagMapping": {},
-	"migrationNoticeShown": false
+  "currentTag": "outline",
+  "lastSwitched": null,
+  "branchTagMapping": {},
+  "migrationNoticeShown": false,
+  "manuscriptProgress": {
+    "outline": {
+      "totalChapters": 3,
+      "totalWords": 0,
+      "targetWords": 100000,
+      "completedChapters": 0,
+      "lastGenerated": "2025-11-27T02:34:34.306Z",
+      "chapterStatus": {
+        "1": {
+          "status": "pending",
+          "wordCount": 0,
+          "targetWordCount": 25000,
+          "progress": 0
+        },
+        "2": {
+          "status": "pending",
+          "wordCount": 0,
+          "targetWordCount": 55000,
+          "progress": 0
+        },
+        "3": {
+          "status": "pending",
+          "wordCount": 0,
+          "targetWordCount": 20000,
+          "progress": 0
+        }
+      },
+      "lastUpdated": "2025-11-27T02:34:34.310Z"
+    }
+  }
 }

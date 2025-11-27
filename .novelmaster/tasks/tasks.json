@@ -23,7 +23,9 @@
           "wordCountTarget": "25k",
           "sensoryNotes": "Ozone, hum of failing mirrors",
           "researchHook": "Orbital maintenance routines",
-          "continuityCheck": "Sister Mina referenced subtly"
+          "continuityCheck": "Sister Mina referenced subtly",
+          "draftWordCount": 0,
+          "progress": 0
         }
       },
       {
@@ -31,7 +33,9 @@
         "title": "Act II – Fracture & Discovery",
         "description": "Parallel investigations, cult reveal, and escalating sabotage impacting lower decks.",
         "status": "pending",
-        "dependencies": [1],
+        "dependencies": [
+          1
+        ],
         "priority": "high",
         "details": "Structure as braided POV with cliffhanger mini-endings. Ensure Mina’s involvement lands at midpoint.",
         "testStrategy": "Check pacing (pinch → midpoint → pinch). Keep alternating POV cadence consistent.",
@@ -43,7 +47,9 @@
           "wordCountTarget": "55k",
           "sensoryNotes": "Steam, algae tang, static-laden comms",
           "researchHook": "Eco-fascist rhetoric + cult deprogramming",
-          "continuityCheck": "Map sabotage clues to Act III payoff"
+          "continuityCheck": "Map sabotage clues to Act III payoff",
+          "draftWordCount": 0,
+          "progress": 0
         }
       },
       {
@@ -51,7 +57,10 @@
         "title": "Act III – Confluence & Choice",
         "description": "Dual heist finale, blackout crisis, and emotional resolution between sisters.",
         "status": "pending",
-        "dependencies": [1, 2],
+        "dependencies": [
+          1,
+          2
+        ],
         "priority": "high",
         "details": "Intercut ticking-clock scenes. Give each POV a specific action + sacrifice.",
         "testStrategy": "Word-count target 20k; climax resolves external + internal conflicts; set sequel hook.",
@@ -63,16 +72,28 @@
           "wordCountTarget": "20k",
           "sensoryNotes": "Emergency sirens, freezing condensation",
           "researchHook": "Energy redistribution physics",
-          "continuityCheck": "Ensure mirror network state matches epilogue"
+          "continuityCheck": "Ensure mirror network state matches epilogue",
+          "draftWordCount": 0,
+          "progress": 0
         }
       }
-    ]
+    ],
+    "metadata": {
+      "created": "2025-11-27T02:34:34.303Z",
+      "updated": "2025-11-27T02:34:34.303Z",
+      "description": "Tasks for outline context"
+    }
   },
   "draft": {
     "meta": {
       "name": "Draft",
       "description": "Working chapter/scene tasks once outlining is approved"
     },
-    "tasks": []
+    "tasks": [],
+    "metadata": {
+      "created": "2025-11-27T02:34:34.303Z",
+      "updated": "2025-11-27T02:34:34.303Z",
+      "description": "Tasks for draft context"
+    }
   }
 }

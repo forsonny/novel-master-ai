@@ -1,0 +1,46 @@
+{
+  "tag": "outline",
+  "generatedAt": "2025-11-27T02:34:34.305Z",
+  "totals": {
+    "chapters": 3,
+    "targetWords": 100000,
+    "draftedWords": 0,
+    "averageTarget": 33333,
+    "averageDraft": 0,
+    "completion": 0,
+    "globalTarget": null,
+    "globalProgress": null
+  },
+  "statusCounts": {
+    "pending": 3
+  },
+  "chapters": [
+    {
+      "id": 1,
+      "title": "Act I – Spark the Sabotage",
+      "status": "pending",
+      "wordCountTarget": 25000,
+      "draftWordCount": 0,
+      "progress": 0,
+      "path": "D:\\mcp\\STORYWRITER\\novel-master\\.novelmaster\\manuscript\\outline\\chapters\\chapter-001.md"
+    },
+    {
+      "id": 2,
+      "title": "Act II – Fracture & Discovery",
+      "status": "pending",
+      "wordCountTarget": 55000,
+      "draftWordCount": 0,
+      "progress": 0,
+      "path": "D:\\mcp\\STORYWRITER\\novel-master\\.novelmaster\\manuscript\\outline\\chapters\\chapter-002.md"
+    },
+    {
+      "id": 3,
+      "title": "Act III – Confluence & Choice",
+      "status": "pending",
+      "wordCountTarget": 20000,
+      "draftWordCount": 0,
+      "progress": 0,
+      "path": "D:\\mcp\\STORYWRITER\\novel-master\\.novelmaster\\manuscript\\outline\\chapters\\chapter-003.md"
+    }
+  ]
+}

@@ -216,7 +216,8 @@ function generateTaskFiles(tasksPath, outputDir, options = {}) {
 		throw new Error(`Tag '${tag}' not found or contains no tasks.`);
 	}
 
-	validateAndFixDependencies(rawData, tasksPath, projectRoot, tag);
+	// Pass tagData (which has .tasks) instead of rawData (which has tag keys)
+	validateAndFixDependencies(tagData, tasksPath, projectRoot, tag);
 
 	const baseOutputDir = outputDir
 		? path.isAbsolute(outputDir)
