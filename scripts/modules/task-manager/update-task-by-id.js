@@ -31,7 +31,7 @@ import {
 import { getPromptManager } from '../prompt-manager.js';
 import { ContextGatherer } from '../utils/contextGatherer.js';
 import { FuzzyTaskSearch } from '../utils/fuzzyTaskSearch.js';
-import { tryUpdateViaRemote } from '@tm/bridge';
+import { tryUpdateViaRemote } from '../tm-bridge-stub.js';
 import { createBridgeLogger } from '../bridge-utils.js';
 import { getAutoRegenerateManuscript } from '../config-manager.js';
 import generateTaskFiles from './generate-task-files.js';

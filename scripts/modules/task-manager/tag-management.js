@@ -22,7 +22,7 @@ import {
 	tryListTagsViaRemote,
 	tryUseTagViaRemote,
 	tryAddTagViaRemote
-} from '@tm/bridge';
+} from '../tm-bridge-stub.js';
 
 /**
  * Create a new tag context

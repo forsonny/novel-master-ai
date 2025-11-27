@@ -197,7 +197,7 @@ async function performResearch(
 		const promptManager = getPromptManager();
 
 		const promptParams = {
-			query: query,
+			prompt: query, // Must be 'prompt' to match the research.json template parameter
 			gatheredContext: gatheredContext || '',
 			detailLevel: detailLevel,
 			projectInfo: {

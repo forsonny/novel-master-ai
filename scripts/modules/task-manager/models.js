@@ -23,7 +23,7 @@ import {
 } from '../config-manager.js';
 import { findConfigPath } from '../../../src/utils/path-utils.js';
 import { log } from '../utils.js';
-import { CUSTOM_PROVIDERS } from '@tm/core';
+import { CUSTOM_PROVIDERS } from '../tm-core-stub.js';
 
 // Constants
 const CONFIG_MISSING_ERROR =

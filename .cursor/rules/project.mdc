@@ -1,0 +1,125 @@
+---
+description: Project metadata including GitHub repository, npm package, and publishing information
+globs: **/*
+alwaysApply: true
+---
+
+# Novel Master AI - Project Information
+
+This rule provides essential project metadata for the Novel Master AI package.
+
+---
+
+## Package Identity
+
+- **Package Name**: `novel-master-ai`
+- **Version**: `0.33.0`
+- **Author**: AnimeX Developer (forsonny)
+- **License**: MIT WITH Commons-Clause
+
+---
+
+## Repository Links
+
+### GitHub Repository
+
+- **URL**: https://github.com/forsonny/novel-master-ai
+- **Clone (HTTPS)**: `git clone https://github.com/forsonny/novel-master-ai.git`
+- **Clone (SSH)**: `git clone git@github.com:forsonny/novel-master-ai.git`
+- **Issues**: https://github.com/forsonny/novel-master-ai/issues
+
+### npm Package
+
+- **Registry URL**: https://www.npmjs.com/package/novel-master-ai
+- **Install (global)**: `npm install -g novel-master-ai`
+- **Install (local)**: `npm install novel-master-ai`
+- **Run via npx**: `npx novel-master-ai`
+
+---
+
+## Attribution
+
+This project is based on [`claude-task-master`](https://github.com/eyaltoledano/claude-task-master) by Eyal Toledano, rebuilt and customized specifically for fiction and narrative projects.
+
+### Key Differences from Original
+
+- **NRD (Novel Requirements Document)** replaces PRD for story outlines
+- **Narrative-focused task types**: Acts, chapters, scenes, beats
+- **Genre-aware AI prompts** for worldbuilding and character development
+- **Manuscript generation** with chapter packets and compiled output
+
+---
+
+## Development Commands
+
+```bash
+# Install dependencies
+npm install
+
+# Build the project
+npm run build
+
+# Run locally (development)
+npm run dev
+
+# Run tests
+npm test
+
+# Publish to npm (requires authentication)
+npm publish --access public
+```
+
+---
+
+## MCP Server Configuration
+
+For Cursor integration, add to `.cursor/mcp.json`:
+
+```json
+{
+  "mcpServers": {
+    "novel-master-ai": {
+      "command": "npx",
+      "args": ["-y", "novel-master-ai@latest", "--mcp"],
+      "env": {
+        "GOOGLE_API_KEY": "your-api-key-here"
+      }
+    }
+  }
+}
+```
+
+---
+
+## File Structure Overview
+
+```
+novel-master/
+├── .cursor/           # Cursor IDE configuration
+│   ├── mcp.json       # MCP server config
+│   └── rules/         # Cursor rules (this file)
+├── .novelmaster/      # Project-specific Novel Master data
+│   ├── config.json    # AI model configuration
+│   ├── tasks/         # Task JSON files
+│   ├── manuscript/    # Generated chapter files
+│   └── docs/          # NRDs and notes
+├── mcp-server/        # MCP server implementation
+├── scripts/           # CLI command modules
+├── src/               # Core source code
+├── dist/              # Built distribution files
+└── package.json       # Package metadata
+```
+
+---
+
+## Support & Contributing
+
+- **Issues**: https://github.com/forsonny/novel-master-ai/issues
+- **Discussions**: https://github.com/forsonny/novel-master-ai/discussions
+- **Contributing**: See [CONTRIBUTING.md](mdc:CONTRIBUTING.md)
+
+When reporting bugs or requesting features, please include:
+1. Novel Master version (`novel-master --version`)
+2. Node.js version (`node --version`)
+3. Operating system
+4. Steps to reproduce

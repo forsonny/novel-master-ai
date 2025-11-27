@@ -11,7 +11,7 @@ import fs from 'fs';
 import inquirer from 'inquirer';
 
 import { log, readJSON } from './utils.js';
-// Import command registry and utilities from @tm/cli
+// Import command registry and utilities from local stub (replaces @tm/cli)
 import {
 	registerAllCommands,
 	checkForUpdate,
@@ -20,7 +20,7 @@ import {
 	restartWithNewVersion,
 	displayError,
 	runInteractiveSetup
-} from '@tm/cli';
+} from './tm-cli-stub.js';
 
 import {
 	parsePRD,
@@ -45,6 +45,11 @@ import {
 	scopeDownTask,
 	validateStrength
 } from './task-manager.js';
+
+// Import additional task management functions for CLI commands
+import listTasks from './task-manager/list-tasks.js';
+import setTaskStatus from './task-manager/set-task-status.js';
+import findNextTask from './task-manager/find-next-task.js';
 
 import { moveTasksBetweenTags } from './task-manager/move-task.js';
 
@@ -72,7 +77,7 @@ import {
 	getDefaultNumTasks
 } from './config-manager.js';
 
-import { CUSTOM_PROVIDERS } from '@tm/core';
+import { CUSTOM_PROVIDERS } from './tm-core-stub.js';
 
 import {
 	COMPLEXITY_REPORT_FILE,
@@ -1366,6 +1371,7 @@ function registerCommands(programInstance) {
 			'Save research results to `.novelmaster/docs/research/` for long-term lore reference'
 		)
 		.option('--tag <tag>', 'Specify tag context for task operations')
+		.option('--no-followup', 'Disable follow-up question prompts after research')
 		.action(async (prompt, options) => {
 			// Initialize TaskMaster
 			const initOptions = {
@@ -1524,7 +1530,7 @@ function registerCommands(programInstance) {
 				includeProjectTree: !!options.tree,
 				saveTarget: options.save ? options.save.trim() : null,
 				saveToId: options.saveTo ? options.saveTo.trim() : null,
-				allowFollowUp: true, // Always allow follow-up in CLI
+				allowFollowUp: options.followup !== false, // Allow follow-up unless --no-followup is set
 				detailLevel: options.detail ? options.detail.toLowerCase() : 'medium',
 				tasksPath: taskMaster.getTasksPath(),
 				projectRoot: taskMaster.getProjectRoot()
@@ -1892,6 +1898,321 @@ ${result.result}
 				if (error.details) {
 					console.error(chalk.red(error.details));
 				}
+				process.exit(1);
+			}
+		});
+
+	// list command - Display all tasks
+	programInstance
+		.command('list')
+		.alias('ls')
+		.description('List all tasks with status and priority')
+		.option(
+			'-f, --file <file>',
+			'Path to the tasks file',
+			NOVELMASTER_TASKS_FILE
+		)
+		.option('-s, --status <status>', 'Filter by status (e.g., pending, in-progress, done)')
+		.option('--subtasks', 'Include subtasks in the listing')
+		.option('--format <format>', 'Output format: text, json, compact', 'text')
+		.option('--tag <tag>', 'Specify tag context for task operations')
+		.action(async (options) => {
+			const initOptions = {
+				tasksPath: options.file || true,
+				tag: options.tag
+			};
+
+			// Initialize TaskMaster
+			const taskMaster = initNovelMaster(initOptions);
+			const tag = taskMaster.getCurrentTag();
+			const projectRoot = taskMaster.getProjectRoot();
+
+			// Show current tag context
+			displayCurrentTagIndicator(tag);
+
+			try {
+				const complexityReportPath = path.join(
+					projectRoot,
+					'.novelmaster',
+					'tasks',
+					tag,
+					COMPLEXITY_REPORT_FILE
+				);
+
+				const result = await listTasks(
+					taskMaster.getTasksPath(),
+					options.status || null,
+					complexityReportPath,
+					!!options.subtasks,
+					options.format || 'text',
+					{ projectRoot, tag }
+				);
+
+				// For JSON format, output the result
+				if (options.format === 'json' && result) {
+					console.log(JSON.stringify(result, null, 2));
+				}
+			} catch (error) {
+				console.error(chalk.red(`Error listing tasks: ${error.message}`));
+				process.exit(1);
+			}
+		});
+
+	// show command - Show task details
+	programInstance
+		.command('show <id>')
+		.description('Show detailed information about a task')
+		.option(
+			'-f, --file <file>',
+			'Path to the tasks file',
+			NOVELMASTER_TASKS_FILE
+		)
+		.option('--tag <tag>', 'Specify tag context for task operations')
+		.action(async (id, options) => {
+			const initOptions = {
+				tasksPath: options.file || true,
+				tag: options.tag
+			};
+
+			// Initialize TaskMaster
+			const taskMaster = initNovelMaster(initOptions);
+			const tag = taskMaster.getCurrentTag();
+			const projectRoot = taskMaster.getProjectRoot();
+
+			// Show current tag context
+			displayCurrentTagIndicator(tag);
+
+			try {
+				const data = readJSON(
+					taskMaster.getTasksPath(),
+					projectRoot,
+					tag
+				);
+
+				if (!data || !data.tasks) {
+					console.error(chalk.red('No tasks found'));
+					process.exit(1);
+				}
+
+				// Handle subtask IDs (e.g., "1.2")
+				let task = null;
+				let subtask = null;
+
+				if (id.includes('.')) {
+					const [parentId, subtaskId] = id.split('.').map((i) => parseInt(i, 10));
+					const parentTask = data.tasks.find((t) => t.id === parentId);
+					if (parentTask && parentTask.subtasks) {
+						subtask = parentTask.subtasks.find((st) => st.id === subtaskId);
+						if (subtask) {
+							task = { ...subtask, parentId: parentId, parentTitle: parentTask.title };
+						}
+					}
+				} else {
+					task = data.tasks.find((t) => t.id === parseInt(id, 10));
+				}
+
+				if (!task) {
+					console.error(chalk.red(`Task with ID ${id} not found`));
+					process.exit(1);
+				}
+
+				// Display task details in a formatted box
+				const isSubtask = !!task.parentId;
+				const title = isSubtask 
+					? `Subtask ${id}: ${task.title}`
+					: `Task ${task.id}: ${task.title}`;
+
+				let content = chalk.white.bold(title) + '\n\n';
+				
+				if (isSubtask) {
+					content += `${chalk.cyan('Parent Task:')} ${task.parentId} - ${task.parentTitle}\n`;
+				}
+				
+				content += `${chalk.cyan('Status:')} ${getStatusWithColor(task.status || 'pending', true)}\n`;
+				
+				if (task.priority) {
+					const priorityColors = { high: chalk.red, medium: chalk.yellow, low: chalk.gray };
+					const priorityColor = priorityColors[task.priority] || chalk.white;
+					content += `${chalk.cyan('Priority:')} ${priorityColor(task.priority)}\n`;
+				}
+
+				if (task.dependencies && task.dependencies.length > 0) {
+					content += `${chalk.cyan('Dependencies:')} ${task.dependencies.join(', ')}\n`;
+				}
+
+				content += '\n' + chalk.cyan('Description:') + '\n';
+				content += task.description || 'No description available';
+
+				if (task.details) {
+					content += '\n\n' + chalk.cyan('Details:') + '\n';
+					content += task.details;
+				}
+
+				// Show subtasks if this is a parent task
+				if (!isSubtask && task.subtasks && task.subtasks.length > 0) {
+					content += '\n\n' + chalk.cyan('Subtasks:') + '\n';
+					task.subtasks.forEach((st) => {
+						const stStatus = getStatusWithColor(st.status || 'pending', true);
+						content += `  ${chalk.cyan(`${task.id}.${st.id}`)} [${stStatus}] ${st.title}\n`;
+					});
+				}
+
+				console.log(
+					boxen(content, {
+						padding: 1,
+						borderColor: 'blue',
+						borderStyle: 'round',
+						margin: { top: 1, bottom: 1 }
+					})
+				);
+			} catch (error) {
+				console.error(chalk.red(`Error showing task: ${error.message}`));
+				process.exit(1);
+			}
+		});
+
+	// set-status command - Update task status
+	programInstance
+		.command('set-status')
+		.description('Update the status of a task')
+		.requiredOption('--id <id>', 'Task ID (or subtask ID like 1.2)')
+		.requiredOption('--status <status>', 'New status (pending, in-progress, done, blocked, deferred, cancelled)')
+		.option(
+			'-f, --file <file>',
+			'Path to the tasks file',
+			NOVELMASTER_TASKS_FILE
+		)
+		.option('--tag <tag>', 'Specify tag context for task operations')
+		.action(async (options) => {
+			const initOptions = {
+				tasksPath: options.file || true,
+				tag: options.tag
+			};
+
+			// Initialize TaskMaster
+			const taskMaster = initNovelMaster(initOptions);
+			const tag = taskMaster.getCurrentTag();
+			const projectRoot = taskMaster.getProjectRoot();
+
+			// Show current tag context
+			displayCurrentTagIndicator(tag);
+
+			try {
+				await setTaskStatus(
+					taskMaster.getTasksPath(),
+					options.id,
+					options.status,
+					{ projectRoot, tag }
+				);
+			} catch (error) {
+				console.error(chalk.red(`Error setting task status: ${error.message}`));
+				process.exit(1);
+			}
+		});
+
+	// next command - Show next task to work on
+	programInstance
+		.command('next')
+		.description('Show the next recommended task to work on')
+		.option(
+			'-f, --file <file>',
+			'Path to the tasks file',
+			NOVELMASTER_TASKS_FILE
+		)
+		.option('--tag <tag>', 'Specify tag context for task operations')
+		.action(async (options) => {
+			const initOptions = {
+				tasksPath: options.file || true,
+				tag: options.tag
+			};
+
+			// Initialize TaskMaster
+			const taskMaster = initNovelMaster(initOptions);
+			const tag = taskMaster.getCurrentTag();
+			const projectRoot = taskMaster.getProjectRoot();
+
+			// Show current tag context
+			displayCurrentTagIndicator(tag);
+
+			try {
+				const data = readJSON(
+					taskMaster.getTasksPath(),
+					projectRoot,
+					tag
+				);
+
+				if (!data || !data.tasks) {
+					console.error(chalk.red('No tasks found'));
+					process.exit(1);
+				}
+
+				const nextItem = findNextTask(data.tasks);
+
+				if (!nextItem) {
+					console.log(
+						boxen(
+							chalk.yellow('No eligible next task found') +
+								'\n\n' +
+								'All pending tasks have unsatisfied dependencies, or all tasks are complete.',
+							{
+								padding: 1,
+								borderColor: 'yellow',
+								borderStyle: 'round',
+								title: '⚡ NEXT TASK',
+								titleAlignment: 'center'
+							}
+						)
+					);
+					return;
+				}
+
+				// Build content for the next task box
+				const priorityColors = { high: chalk.red, medium: chalk.yellow, low: chalk.gray };
+				const priorityColor = priorityColors[nextItem.priority || 'medium'] || chalk.white;
+
+				let content = chalk.hex('#FF8800').bold(
+					`🔥 Next Task: #${nextItem.id} - ${nextItem.title}`
+				) + '\n\n';
+
+				content += `${chalk.white('Priority:')} ${priorityColor(nextItem.priority || 'medium')}   `;
+				content += `${chalk.white('Status:')} ${getStatusWithColor(nextItem.status || 'pending', true)}\n`;
+
+				if (nextItem.dependencies && nextItem.dependencies.length > 0) {
+					content += `${chalk.white('Dependencies:')} ${nextItem.dependencies.join(', ')}\n`;
+				}
+
+				// Get description from original task if it's a subtask
+				if (nextItem.parentId) {
+					const parentTask = data.tasks.find((t) => t.id === nextItem.parentId);
+					const subtask = parentTask?.subtasks?.find(
+						(st) => `${parentTask.id}.${st.id}` === nextItem.id
+					);
+					if (subtask?.description) {
+						content += '\n' + chalk.white('Description:') + ' ' + subtask.description;
+					}
+				} else {
+					const task = data.tasks.find((t) => String(t.id) === String(nextItem.id));
+					if (task?.description) {
+						content += '\n' + chalk.white('Description:') + ' ' + task.description;
+					}
+				}
+
+				content += '\n\n';
+				content += `${chalk.cyan('Start working:')} ${chalk.yellow(`novel-master set-status --id=${nextItem.id} --status=in-progress`)}\n`;
+				content += `${chalk.cyan('View details:')} ${chalk.yellow(`novel-master show ${nextItem.id}`)}`;
+
+				console.log(
+					boxen(content, {
+						padding: { left: 2, right: 2, top: 1, bottom: 1 },
+						borderColor: '#FF8800',
+						borderStyle: 'round',
+						margin: { top: 1, bottom: 1 },
+						title: '⚡ RECOMMENDED NEXT TASK ⚡',
+						titleAlignment: 'center'
+					})
+				);
+			} catch (error) {
+				console.error(chalk.red(`Error finding next task: ${error.message}`));
 				process.exit(1);
 			}
 		});

@@ -20,7 +20,7 @@ import { getPromptManager } from '../prompt-manager.js';
 import { findProjectRoot, flattenTasksWithSubtasks } from '../utils.js';
 import { ContextGatherer } from '../utils/contextGatherer.js';
 import { FuzzyTaskSearch } from '../utils/fuzzyTaskSearch.js';
-import { tryExpandViaRemote } from '@tm/bridge';
+import { tryExpandViaRemote } from '../tm-bridge-stub.js';
 import { createBridgeLogger } from '../bridge-utils.js';
 
 /**

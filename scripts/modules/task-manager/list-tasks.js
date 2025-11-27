@@ -18,7 +18,7 @@ import {
 	getComplexityWithColor,
 	createProgressBar
 } from '../ui.js';
-import { createTmCore } from '@tm/core';
+import { createTmCore } from '../tm-core-stub.js';
 
 /**
  * List all tasks

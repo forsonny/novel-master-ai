@@ -13,7 +13,7 @@ import {
 	disableSilentMode
 } from '../../../../scripts/modules/utils.js';
 import { createLogWrapper } from '../../tools/utils.js';
-import { CUSTOM_PROVIDERS_ARRAY } from '@tm/core';
+import { CUSTOM_PROVIDERS_ARRAY } from '../../../../scripts/modules/tm-core-stub.js';
 
 // Define supported roles for model setting
 const MODEL_ROLES = ['main', 'research', 'fallback'];

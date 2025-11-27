@@ -22,7 +22,7 @@ import { getLoggerOrDefault } from './logger-utils.js';
 import {
 	findProjectRoot as findProjectRootCore,
 	normalizeProjectRoot as normalizeProjectRootCore
-} from '@tm/core';
+} from '../../scripts/modules/tm-core-stub.js';
 
 /**
  * Normalize project root to ensure it doesn't end with .novelmaster

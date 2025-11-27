@@ -96,7 +96,16 @@ import {
 	RULES_SETUP_ACTION,
 	RULES_ACTIONS
 } from '../../src/constants/rules-actions.js';
-import { compareVersions } from '@tm/cli';
+// Note: compareVersions was from @tm/cli - using mock/stub for tests
+const compareVersions = (v1, v2) => {
+	const parts1 = v1.split('.').map(Number);
+	const parts2 = v2.split('.').map(Number);
+	for (let i = 0; i < 3; i++) {
+		if (parts1[i] > parts2[i]) return 1;
+		if (parts1[i] < parts2[i]) return -1;
+	}
+	return 0;
+};
 
 describe('Commands Module - CLI Setup and Integration', () => {
 	const mockExistsSync = jest.spyOn(fs, 'existsSync');

@@ -44,7 +44,7 @@ import { registerValidateNRDComplianceTool } from './validate-nrd-compliance.js'
 import { registerCompareTagsTool } from './compare-tags.js';
 import { registerEstimateWorkflowCostTool } from './estimate-workflow-cost.js';
 
-// Import TypeScript tools from apps/mcp
+// Import TypeScript tools from local stub (replaces @tm/mcp)
 import {
 	registerAutopilotStartTool,
 	registerAutopilotResumeTool,
@@ -56,7 +56,7 @@ import {
 	registerAutopilotAbortTool,
 	registerGetTasksTool,
 	registerGetTaskTool
-} from '@tm/mcp';
+} from './tm-mcp-stub.js';
 
 /**
  * Comprehensive tool registry mapping all 44 tool names to their registration functions
