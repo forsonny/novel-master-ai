@@ -1,5 +1,13 @@
 # novel-master-ai
 
+## 0.33.6
+
+### Patch Changes
+
+- Fix TmCore stub missing tasks.list() method causing list command to fail with "Cannot read properties of undefined (reading 'list')" error
+  - Updated createTmCore stub to include proper tasks.list() method
+  - The stub now properly reads from tasks.json with tag-aware support
+
 ## 0.33.4
 
 ### Patch Changes
