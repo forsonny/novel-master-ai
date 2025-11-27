@@ -1,5 +1,11 @@
 # novel-master-ai
 
+## 0.33.8
+
+### Patch Changes
+
+- Rebuild to ensure TmCore stub fix is included in distribution
+
 ## 0.33.7
 
 ### Patch Changes
