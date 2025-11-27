@@ -133,6 +133,10 @@
 	},
 	"files": [
 		"dist/**",
+		"apps/cli/dist/**",
+		"packages/tm-core/dist/**",
+		"packages/tm-bridge/dist/**",
+		"packages/ai-sdk-provider-grok-cli/dist/**",
 		"README-novel-master.md",
 		"README.md",
 		"LICENSE",

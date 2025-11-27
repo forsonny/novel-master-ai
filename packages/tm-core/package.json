@@ -3,22 +3,67 @@
 	"private": true,
 	"description": "Core library for Novel Master - TypeScript task management system",
 	"type": "module",
-	"types": "./src/index.ts",
+	"types": "./dist/index.d.ts",
 	"main": "./dist/index.js",
 	"exports": {
-		".": "./src/index.ts",
-		"./auth": "./src/auth/index.ts",
-		"./storage": "./src/storage/index.ts",
-		"./config": "./src/config/index.ts",
-		"./providers": "./src/providers/index.ts",
-		"./services": "./src/services/index.ts",
-		"./errors": "./src/errors/index.ts",
-		"./logger": "./src/logger/index.ts",
-		"./types": "./src/types/index.ts",
-		"./interfaces": "./src/interfaces/index.ts",
-		"./utils": "./src/utils/index.ts"
+		".": {
+			"types": "./dist/index.d.ts",
+			"import": "./dist/index.js",
+			"default": "./dist/index.js"
+		},
+		"./auth": {
+			"types": "./dist/auth/index.d.ts",
+			"import": "./dist/auth/index.js",
+			"default": "./dist/auth/index.js"
+		},
+		"./storage": {
+			"types": "./dist/storage/index.d.ts",
+			"import": "./dist/storage/index.js",
+			"default": "./dist/storage/index.js"
+		},
+		"./config": {
+			"types": "./dist/config/index.d.ts",
+			"import": "./dist/config/index.js",
+			"default": "./dist/config/index.js"
+		},
+		"./providers": {
+			"types": "./dist/providers/index.d.ts",
+			"import": "./dist/providers/index.js",
+			"default": "./dist/providers/index.js"
+		},
+		"./services": {
+			"types": "./dist/services/index.d.ts",
+			"import": "./dist/services/index.js",
+			"default": "./dist/services/index.js"
+		},
+		"./errors": {
+			"types": "./dist/errors/index.d.ts",
+			"import": "./dist/errors/index.js",
+			"default": "./dist/errors/index.js"
+		},
+		"./logger": {
+			"types": "./dist/logger/index.d.ts",
+			"import": "./dist/logger/index.js",
+			"default": "./dist/logger/index.js"
+		},
+		"./types": {
+			"types": "./dist/types/index.d.ts",
+			"import": "./dist/types/index.js",
+			"default": "./dist/types/index.js"
+		},
+		"./interfaces": {
+			"types": "./dist/interfaces/index.d.ts",
+			"import": "./dist/interfaces/index.js",
+			"default": "./dist/interfaces/index.js"
+		},
+		"./utils": {
+			"types": "./dist/common/utils/index.d.ts",
+			"import": "./dist/common/utils/index.js",
+			"default": "./dist/common/utils/index.js"
+		}
 	},
 	"scripts": {
+		"build": "tsc",
 		"test": "vitest run",
 		"test:watch": "vitest",
 		"test:coverage": "vitest run --coverage",

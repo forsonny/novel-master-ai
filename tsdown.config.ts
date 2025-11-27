@@ -37,9 +37,15 @@ export default defineConfig(
 			'mcp-server': 'mcp-server/server.js'
 		},
 		outDir: 'dist',
-		copy: ['assets'],
+		copy: ['assets', 'scripts', 'mcp-server', 'src', 'package.json'],
 		ignoreWatch: ['node_modules', 'dist', 'tests', 'apps/extension'],
-		// Bundle only our workspace packages, keep npm dependencies external
+		// Only externalize npm packages (not @tm/* or relative imports)
+		// This overrides the base config's external setting
+		external: [
+			// Externalize bare npm imports (no @ prefix, no . or / prefix)
+			/^(?![@./])(?!node:)[a-zA-Z]/
+		],
+		// Force bundling of our workspace packages
 		noExternal: [/^@tm\//],
 		env: getBuildTimeEnvs()
 	})
